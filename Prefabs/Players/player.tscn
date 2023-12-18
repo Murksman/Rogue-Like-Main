@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://3g2csvxtsxcl"]
+
+[ext_resource type="Texture2D" uid="uid://doir3iyhjuyva" path="res://Sprites/Player.png" id="1_fhpbk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
+radius = 24.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+motion_mode = 1
+wall_min_slide_angle = 0.0872665
+
+[node name="Player2" type="Sprite2D" parent="."]
+z_index = 10
+texture = ExtResource("1_fhpbk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xmfay")
