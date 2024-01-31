@@ -1,0 +1,114 @@
+[gd_scene load_steps=10 format=3 uid="uid://f4h3g48vgn4t"]
+
+[ext_resource type="Texture2D" uid="uid://y4lmqvx0tinf" path="res://Sprites/Backround.png" id="1_udcee"]
+[ext_resource type="Script" path="res://Scenes/Player.gd" id="2_27oen"]
+[ext_resource type="Texture2D" uid="uid://doir3iyhjuyva" path="res://Sprites/Player.png" id="3_v3h0x"]
+[ext_resource type="Script" path="res://Scenes/Weapon Holder.gd" id="4_dvffw"]
+[ext_resource type="Script" path="res://Scenes/GunClass.gd" id="5_e8b8e"]
+[ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/Objects/ball_test.tscn" id="6_3j6k3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
+radius = 24.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_xicsm"]
+size = Vector2(30, 1050)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iyfd5"]
+size = Vector2(30, 1050)
+
+[node name="World" type="Node2D"]
+
+[node name="Backround" type="Sprite2D" parent="."]
+scale = Vector2(8, 8)
+texture = ExtResource("1_udcee")
+
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("bulletContainer")]
+collision_layer = 0
+wall_min_slide_angle = 0.0872665
+script = ExtResource("2_27oen")
+acceleration = 30.0
+drag = 6.0
+staticDrag = 9.0
+bulletMaxTime = 10.0
+bulletVelocity = 20.0
+bulletDamage = 10.0
+bulletContainer = NodePath("../Bullet Container")
+
+[node name="Player2" type="Sprite2D" parent="Player"]
+z_index = 10
+texture = ExtResource("3_v3h0x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_xmfay")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(1.5, 1.5)
+
+[node name="Weapon Holder" type="Node2D" parent="Player"]
+script = ExtResource("4_dvffw")
+weaponSlots = 4.0
+
+[node name="Weapon Slot 1" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Weapon" type="Node2D" parent="Player/Weapon Holder/Weapon Slot 1" node_paths=PackedStringArray("projectileContainer")]
+position = Vector2(11, -526)
+rotation = 1.5708
+script = ExtResource("5_e8b8e")
+projectileObjectResource = ExtResource("6_3j6k3")
+projectileHitObjectResource = ExtResource("6_3j6k3")
+projectileContainer = NodePath("../../../../Bullet Container")
+
+[node name="Weapon Slot 2" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Weapon Slot 3" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Weapon Slot 4" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Map"]
+position = Vector2(-100.726, -369.002)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Map"]
+position = Vector2(-506, 4)
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="Map"]
+position = Vector2(528, 4)
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D2"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D2/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D3" type="MeshInstance2D" parent="Map"]
+position = Vector2(20, 515)
+rotation = 1.5708
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D3"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D3/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D4" type="MeshInstance2D" parent="Map"]
+position = Vector2(11, -526)
+rotation = 1.5708
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D4"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D4/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="Bullet Container" type="Node" parent="."]

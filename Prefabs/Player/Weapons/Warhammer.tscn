@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://1akksb317ea8"]
+
+[ext_resource type="Script" path="res://Scripts/Class Scripts/MeleeClass.gd" id="1_kea20"]
+[ext_resource type="Texture2D" uid="uid://bqajo6451qqyj" path="res://Sprites/Player Objects/Warhammer.png" id="2_hcgon"]
+
+[sub_resource type="Curve" id="Curve_6xs7e"]
+_data = [Vector2(0, 0), 0.0, 1.85904, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_i3rbh"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.99999, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_3osio"]
+_data = [Vector2(0, 0), 0.0, 0.569895, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xcwai"]
+size = Vector2(88, 40)
+
+[node name="Warhammer" type="Node2D" node_paths=PackedStringArray("weaponStrikeObject", "weaponAnimAnchor")]
+script = ExtResource("1_kea20")
+baseDamage = 120.0
+weight = 1.0
+swingForceCurve = SubResource("Curve_6xs7e")
+swingForceMaxAngle = 0.1
+swingDrag = 1.0
+maximumMomentum = 10.0
+holsterCurve = SubResource("Curve_i3rbh")
+unholsterSpeed = 1.0
+holsterSpeed = 1.0
+holsterPositions = Vector2(0, 1)
+holsterRotations = Vector2(0, 1.5)
+weaponDragTiltCurve = SubResource("Curve_3osio")
+maxTiltMomentum = 1.0
+weaponStrikeObject = NodePath("Node2D/Warhammer/StaticBody2D/CollisionShape2D")
+weaponAnimAnchor = NodePath("Node2D")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Warhammer" type="Sprite2D" parent="Node2D"]
+z_index = 5
+position = Vector2(32, 0)
+rotation = 1.5708
+scale = Vector2(4, 4)
+texture = ExtResource("2_hcgon")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Node2D/Warhammer"]
+position = Vector2(0, 1.5)
+scale = Vector2(0.25, 0.25)
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Warhammer/StaticBody2D"]
+position = Vector2(0, -42)
+shape = SubResource("RectangleShape2D_xcwai")

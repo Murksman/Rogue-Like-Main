@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dur7x3pa2aveo"]
-
-[ext_resource type="Texture2D" uid="uid://2icoedat8vmb" path="res://Sprites/Ball Test.png" id="1_vfkii"]
-
-[node name="BallTest" type="Sprite2D"]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("1_vfkii")

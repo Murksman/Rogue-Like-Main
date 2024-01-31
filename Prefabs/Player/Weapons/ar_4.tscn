@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpbt73tb7fxf5"]
+
+[ext_resource type="Script" path="res://Scripts/Class Scripts/GunClass.gd" id="1_vsr31"]
+[ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="2_x7lud"]
+
+[node name="AR-4" type="Node2D"]
+process_priority = 5
+rotation = 1.5708
+script = ExtResource("1_vsr31")
+baseProjectiles = 5.0
+spreadRange = 0.1
+fireRate = 0.1
+projectileVelocity = 10.0
+projRandVelocityRange = Vector2(-1, 1)
+projectileObjectResource = ExtResource("2_x7lud")
+projectileHitObjectResource = ExtResource("2_x7lud")

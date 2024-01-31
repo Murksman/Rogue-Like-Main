@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://dl14te25g3ahr"]
+
+[ext_resource type="Script" path="res://Scripts/Class Scripts/GunClass.gd" id="1_u7hij"]
+[ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="2_vrpfg"]
+[ext_resource type="Texture2D" uid="uid://djjcnxr7061h7" path="res://Sprites/Player Objects/ShotGun 800.png" id="3_7wh0r"]
+
+[node name="Weapon" type="Node2D"]
+z_index = 5
+script = ExtResource("1_u7hij")
+fireMode = "Semi Auto"
+baseProjectiles = 3.0
+spreadRange = 0.01
+fireRate = 0.1
+projectileVelocity = 10.0
+continuousReload = true
+reloadSpeed = 1.0
+magazineSize = 1
+bulletsPerReload = 1
+projectileObjectResource = ExtResource("2_vrpfg")
+projectileHitObjectResource = ExtResource("2_vrpfg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(30, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("3_7wh0r")

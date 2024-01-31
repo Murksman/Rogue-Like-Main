@@ -1,0 +1,154 @@
+[gd_scene load_steps=13 format=3 uid="uid://f4h3g48vgn4t"]
+
+[ext_resource type="Texture2D" uid="uid://y4lmqvx0tinf" path="res://Sprites/Backround.png" id="1_udcee"]
+[ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="2_qmgp6"]
+[ext_resource type="Script" path="res://Scripts/Player Scripts/Weapon Holder.gd" id="4_atujb"]
+[ext_resource type="PackedScene" uid="uid://bpbt73tb7fxf5" path="res://Prefabs/Player/Weapons/ar_4.tscn" id="4_psdiv"]
+[ext_resource type="PackedScene" uid="uid://dl14te25g3ahr" path="res://Prefabs/Player/Weapons/Shotgun 800.tscn" id="5_u0ew3"]
+[ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="6_jw3hv"]
+[ext_resource type="Texture2D" uid="uid://qhlyvw0biw1l" path="res://Sprites/Generic Objects/Generic Static Enemy.png" id="7_tul2l"]
+[ext_resource type="Script" path="res://Scenes/Enemy.gd" id="7_vaecs"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
+radius = 14.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_xicsm"]
+size = Vector2(30, 1050)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iyfd5"]
+size = Vector2(30, 1050)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y2nlk"]
+radius = 16.0
+
+[node name="World" type="Node2D"]
+
+[node name="Backround" type="Sprite2D" parent="."]
+scale = Vector2(8, 8)
+texture = ExtResource("1_udcee")
+
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("bulletContainer")]
+collision_layer = 16
+wall_min_slide_angle = 0.0872665
+script = ExtResource("2_qmgp6")
+acceleration = 30.0
+drag = 6.0
+staticDrag = 9.0
+bulletMaxTime = 10.0
+bulletVelocity = 20.0
+bulletDamage = 10.0
+bulletContainer = NodePath("../Bullet Container")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_xmfay")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(1.5, 1.5)
+
+[node name="PlayerV2" type="Sprite2D" parent="Player"]
+z_index = 10
+position = Vector2(2, 0)
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_jw3hv")
+
+[node name="Weapon Holder" type="Node2D" parent="Player" node_paths=PackedStringArray("parentPlayer", "slotArray")]
+script = ExtResource("4_atujb")
+weaponSlots = 4
+parentPlayer = NodePath("..")
+slotArray = [NodePath("Weapon Slot 1"), NodePath("Weapon Slot 2"), NodePath("Weapon Slot 3"), NodePath("Weapon Slot 4")]
+
+[node name="Weapon Slot 1" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="AR-4" parent="Player/Weapon Holder/Weapon Slot 1" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("4_psdiv")]
+baseProjectiles = 1.0
+isSpreadRandom = true
+spreadRange = 0.01
+projectileVelocity = 25.0
+numberOfBounces = 1
+continuousReload = true
+reloadSpeed = 1.0
+magazineSize = 30
+totalAmmoCapacity = 120
+startingAmmo = 120
+bulletsPerReload = 30
+projectileContainer = NodePath("../../../../Bullet Container")
+
+[node name="Weapon Slot 2" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Shotgun 800" parent="Player/Weapon Holder/Weapon Slot 2" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("5_u0ew3")]
+baseProjectiles = 16.0
+isSpreadRandom = true
+spreadRange = 0.05
+fireRate = 0.33
+projectileVelocity = 20.0
+projRandVelocityRange = Vector2(-4, 4)
+magazineSize = 8
+totalAmmoCapacity = 120
+startingAmmo = 120
+projectileContainer = NodePath("../../../../Bullet Container")
+
+[node name="Weapon Slot 3" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Weapon Slot 4" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Map" type="Node2D" parent="."]
+z_index = 20
+
+[node name="Node2D" type="Node2D" parent="Map"]
+position = Vector2(-100.726, -369.002)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Map"]
+position = Vector2(-506, 4)
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="Map"]
+position = Vector2(528, 4)
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D2"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D2/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D3" type="MeshInstance2D" parent="Map"]
+position = Vector2(20, 515)
+rotation = 1.5708
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D3"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D3/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D4" type="MeshInstance2D" parent="Map"]
+position = Vector2(11, -526)
+rotation = 1.5708
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/MeshInstance2D4"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/MeshInstance2D4/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="Bullet Container" type="Node" parent="."]
+
+[node name="Static Enemy" type="StaticBody2D" parent="."]
+position = Vector2(240, 0)
+collision_layer = 6
+script = ExtResource("7_vaecs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Static Enemy"]
+shape = SubResource("CircleShape2D_y2nlk")
+
+[node name="GenericStaticEnemy" type="Sprite2D" parent="Static Enemy"]
+texture = ExtResource("7_tul2l")

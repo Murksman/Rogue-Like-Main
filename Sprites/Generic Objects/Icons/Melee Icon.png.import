@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2icoedat8vmb"
-path="res://.godot/imported/Ball Test.png-c60f4d03e190af12cf2c4e4c72d6c04c.ctex"
+uid="uid://cmpdu2kvxq4es"
+path="res://.godot/imported/Melee Icon.png-03f5e0b748d831b9d019557cf229e61f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Ball Test.png"
-dest_files=["res://.godot/imported/Ball Test.png-c60f4d03e190af12cf2c4e4c72d6c04c.ctex"]
+source_file="res://Sprites/Generic Objects/Icons/Melee Icon.png"
+dest_files=["res://.godot/imported/Melee Icon.png-03f5e0b748d831b9d019557cf229e61f.ctex"]
 
 [params]
 

@@ -1,0 +1,200 @@
+[gd_scene load_steps=19 format=3 uid="uid://f4h3g48vgn4t"]
+
+[ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
+[ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_gwtnp"]
+[ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="2_okf5t"]
+[ext_resource type="Script" path="res://Scripts/Enemy Scripts/Enemy Spawner.gd" id="3_es58c"]
+[ext_resource type="Script" path="res://Scripts/Player Scripts/Weapon Holder.gd" id="3_jx5vc"]
+[ext_resource type="PackedScene" uid="uid://bpbt73tb7fxf5" path="res://Prefabs/Player/Weapons/ar_4.tscn" id="4_6pfpc"]
+[ext_resource type="PackedScene" uid="uid://bvyemdc74njma" path="res://Prefabs/Enemies/enemy.tscn" id="4_qqm31"]
+[ext_resource type="PackedScene" uid="uid://dl14te25g3ahr" path="res://Prefabs/Player/Weapons/Shotgun 800.tscn" id="5_ijoow"]
+[ext_resource type="Texture2D" uid="uid://y4lmqvx0tinf" path="res://Sprites/Backround.png" id="6_muig6"]
+[ext_resource type="PackedScene" uid="uid://1akksb317ea8" path="res://Prefabs/Player/Weapons/Warhammer.tscn" id="10_gbiq5"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_syyhp"]
+vertices = PackedVector2Array(503, 490, -481, 490, -481, -501, 503, -501)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-503, -524, -503, 508, 529, 510, 527, -530)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iyfd5"]
+size = Vector2(30, 1050)
+
+[sub_resource type="QuadMesh" id="QuadMesh_xicsm"]
+size = Vector2(30, 1050)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lo851"]
+size = Vector2(128, 128)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
+radius = 14.0
+
+[sub_resource type="Curve" id="Curve_4abao"]
+_data = [Vector2(0, 0), 0.0, 2.38771, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5atad"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_uq4nt"]
+
+[node name="World" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+z_index = 20
+
+[node name="Node2D" type="Node2D" parent="Map"]
+position = Vector2(-100.726, -369.002)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="Map"]
+navigation_polygon = SubResource("NavigationPolygon_syyhp")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Map/NavigationRegion2D"]
+position = Vector2(-506, 4)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/NavigationRegion2D/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Map/NavigationRegion2D/StaticBody2D4"]
+position = Vector2(-6.10352e-05, 0)
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Map/NavigationRegion2D"]
+position = Vector2(20, 515)
+rotation = 1.5708
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/NavigationRegion2D/StaticBody2D2"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D3" type="MeshInstance2D" parent="Map/NavigationRegion2D/StaticBody2D2"]
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/NavigationRegion2D"]
+position = Vector2(11, -526)
+rotation = 1.5708
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/NavigationRegion2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D4" type="MeshInstance2D" parent="Map/NavigationRegion2D/StaticBody2D"]
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Map/NavigationRegion2D"]
+position = Vector2(528, 4)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/NavigationRegion2D/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_iyfd5")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="Map/NavigationRegion2D/StaticBody2D3"]
+mesh = SubResource("QuadMesh_xicsm")
+
+[node name="Backround" type="Sprite2D" parent="Map/NavigationRegion2D"]
+z_index = -16
+scale = Vector2(8, 8)
+texture = ExtResource("6_muig6")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Map/NavigationRegion2D/Backround"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map/NavigationRegion2D/Backround/StaticBody2D"]
+shape = SubResource("RectangleShape2D_lo851")
+
+[node name="Enemy Container" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("2_gwtnp")
+player = NodePath("../Player")
+
+[node name="Enemy Spawner" type="Node2D" parent="Enemy Container"]
+position = Vector2(302, 0)
+script = ExtResource("3_es58c")
+timePerSpawn = 0.1
+enemyObjectResource = ExtResource("4_qqm31")
+spawning = false
+
+[node name="Projectile Container" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("projectileContainer")]
+collision_layer = 16
+collision_mask = 2
+wall_min_slide_angle = 0.0872665
+script = ExtResource("1_uu0qm")
+acceleration = 30.0
+drag = 6.0
+staticDrag = 9.0
+bulletMaxTime = 10.0
+bulletVelocity = 20.0
+bulletDamage = 10.0
+projectileContainer = NodePath("../Projectile Container")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_xmfay")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(1.5, 1.5)
+
+[node name="PlayerV2" type="Sprite2D" parent="Player"]
+z_index = 10
+position = Vector2(2, 0)
+rotation = 1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_okf5t")
+
+[node name="Weapon Holder" type="Node2D" parent="Player" node_paths=PackedStringArray("parentPlayer", "slotArray")]
+script = ExtResource("3_jx5vc")
+weaponSlots = 4
+parentPlayer = NodePath("..")
+slotArray = [NodePath("Weapon Slot 1"), NodePath("Weapon Slot 2"), NodePath("Weapon Slot 3"), NodePath("Weapon Slot 4")]
+
+[node name="Weapon Slot 1" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="AR-4" parent="Player/Weapon Holder/Weapon Slot 1" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("4_6pfpc")]
+baseProjectiles = 1.0
+isSpreadRandom = true
+spreadRange = 0.01
+baseDamage = 20.0
+projectileVelocity = 25.0
+numberOfBounces = 1
+continuousReload = true
+reloadSpeed = 1.0
+magazineSize = 30
+totalAmmoCapacity = 120
+startingAmmo = 120
+bulletsPerReload = 30
+projectileContainer = NodePath("../../../../Projectile Container")
+
+[node name="Weapon Slot 2" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Shotgun 800" parent="Player/Weapon Holder/Weapon Slot 2" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("5_ijoow")]
+baseProjectiles = 10.0
+isSpreadRandom = true
+spreadRange = 0.04
+fireRate = 0.33
+baseDamage = 40.0
+projectileVelocity = 22.0
+projRandVelocityRange = Vector2(-4, 4)
+projectileMaxTime = 2.0
+reloadSpeed = 0.3
+magazineSize = 8
+totalAmmoCapacity = 120
+startingAmmo = 120
+bulletsPerReload = 2
+projectileContainer = NodePath("../../../../Projectile Container")
+
+[node name="Weapon Slot 3" type="Node2D" parent="Player/Weapon Holder"]
+
+[node name="Warhammer" parent="Player/Weapon Holder/Weapon Slot 3" instance=ExtResource("10_gbiq5")]
+weight = 4.0
+swingForceCurve = SubResource("Curve_4abao")
+swingDrag = 1.0
+maximumMomentum = 1.0
+unholsterCurve = SubResource("Curve_5atad")
+holsterCurve = SubResource("Curve2D_uq4nt")
+
+[node name="Weapon Slot 4" type="Node2D" parent="Player/Weapon Holder"]
