@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwv2ff7baype5"]
+
+[ext_resource type="Texture2D" uid="uid://bj7votk3a7rb8" path="res://Sprites/World Objects/Better Wall.png" id="1_qb113"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iw3ma"]
+size = Vector2(6, 32)
+
+[node name="BetterWall" type="Sprite2D"]
+z_index = 2
+texture = ExtResource("1_qb113")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_iw3ma")

@@ -23,12 +23,15 @@ var moveDirection : Vector2 = Vector2.ZERO
 var lookDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
 
+var camera : Camera2D
+
 func _ready():
-	pass
+	camera = $Camera2D
 
 
 func _physics_process(delta):
 	Movement(delta)
+	camera.shader_orientation(lookDirection)
 
 
 func Movement(delta):
@@ -44,5 +47,4 @@ func Movement(delta):
 	else:
 		velocity -= staticDrag * velocityNorm * delta * 100
 	velocity += moveDirection * acceleration * delta * 100
-	
 	move_and_slide()

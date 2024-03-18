@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Enemy
 
 @export var baseHealth : float = 100
 @export var accel : float
@@ -17,7 +18,6 @@ func TakeDamage(damage):
 	currentHealth -= damage
 	if currentHealth <= 0:
 		self.queue_free()
-		print("dead")
 
 func _physics_process(delta):
 	look_at(player.position)
@@ -26,7 +26,3 @@ func _physics_process(delta):
 	velocity += targetDirection * accel * delta
 	velocity -= velocity * drag * delta
 	move_and_slide()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

@@ -39,7 +39,7 @@ func _physics_process(delta):
 
 
 func ProjectilePhysics(delta):
-	remainingDist = velocity
+	remainingDist = velocity * delta * 60
 	var iterations : int = 0
 	for i in 10:
 		iterations += 1
@@ -50,7 +50,7 @@ func ProjectilePhysics(delta):
 
 
 func ProjectileRaycast():
-	query = PhysicsRayQueryParameters2D.create(global_position + (direction * radius), global_position + (direction * (velocity + radius)), 6, [hitRID])
+	query = PhysicsRayQueryParameters2D.create(global_position + (direction * radius), global_position + (direction * (velocity + radius)), 7, [hitRID])
 	var hit = spaceState.intersect_ray(query)
 	var hitDead = false
 	if hit:
