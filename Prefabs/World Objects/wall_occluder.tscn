@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpvi7mljdbbmw"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_x5axy"]
+polygon = PackedVector2Array(-3, -16, -3, 16, 3, 16, 3, -16)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i01ao"]
+light_mode = 1
+
+[node name="Wall Occluder" type="Node2D"]
+visibility_layer = 256
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_x5axy")
+occluder_light_mask = 768
+
+[node name="Wall Visibility" type="ColorRect" parent="."]
+light_mask = 256
+visibility_layer = 256
+z_index = 2
+z_as_relative = false
+material = SubResource("CanvasItemMaterial_i01ao")
+offset_left = -4.0
+offset_top = -16.0
+offset_right = 4.0
+offset_bottom = 16.0

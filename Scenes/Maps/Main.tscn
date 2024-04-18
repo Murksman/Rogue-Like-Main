@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://f4h3g48vgn4t"]
+[gd_scene load_steps=33 format=3 uid="uid://f4h3g48vgn4t"]
 
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_gwtnp"]
@@ -16,9 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://dwv2ff7baype5" path="res://Prefabs/World Objects/Wall.tscn" id="13_sdh6r"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="14_6wtlq"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="14_e3326"]
+[ext_resource type="PackedScene" uid="uid://cpvi7mljdbbmw" path="res://Prefabs/World Objects/wall_occluder.tscn" id="16_rns4c"]
 [ext_resource type="Script" path="res://Scenes/Maps/Player Mimic.gd" id="17_ss7lf"]
-[ext_resource type="PackedScene" uid="uid://duq8a43rw31dt" path="res://Prefabs/World Objects/light_occluder_2d.tscn" id="19_cyoqr"]
-[ext_resource type="Texture2D" uid="uid://bj7votk3a7rb8" path="res://Sprites/World Objects/Better Wall.png" id="19_gd5s3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
 radius = 12.0
@@ -49,6 +48,7 @@ uniform float vision_horizontal_offset : hint_range(0.0, 1.0);
 uniform float peripheral_radius : hint_range(0.0, 1.0);
 uniform float peripheral_cutoff : hint_range(0.0, 1.0);
 uniform vec2 look_direction = vec2(0.0, 1.0);
+uniform vec2 mouse_offset = vec2(0.0, 0.0);
 
 uniform vec2 r_vision_displacement = vec2(3.0, 0.0);
 uniform vec2 g_vision_displacement = vec2(0.0, 2.0);
@@ -64,7 +64,7 @@ vec2 Orientate(vec2 input_uv) {
 }
 
 void fragment() {
-	vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
+	vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0) + mouse_offset;
 	vec2 rotatedUV = Orientate(uv - vec2(0.5, 0.5)) + vec2(0.5, 0.5);
 	
 	
@@ -91,9 +91,10 @@ void fragment() {
 	if (texture(vision_shape, SCREEN_UV, 0.0).g < 0.2) {distortion_effect = 1.0;}
 	
 	float blur = mix(0.0, 2.0, distortion_effect);
-	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
-	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
-	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;
+	float chrom_abrsn_effect = abs(abs(distortion_effect - 0.5) - 0.5);
+	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*chrom_abrsn_effect*look_direction), blur).r;
+	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*chrom_abrsn_effect*look_direction), blur).g;
+	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*chrom_abrsn_effect*look_direction), blur).b;
 	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
 	
 	vec3 c = vec3(r,g,b);
@@ -117,18 +118,51 @@ shader = SubResource("Shader_uxn00")
 shader_parameter/view_angle = 0.582
 shader_parameter/vision_fade_length = 0.266
 shader_parameter/vision_horizontal_offset = 0.05
-shader_parameter/peripheral_radius = 0.24
-shader_parameter/peripheral_cutoff = 0.155
+shader_parameter/peripheral_radius = 0.15
+shader_parameter/peripheral_cutoff = 0.301
 shader_parameter/look_direction = Vector2(0, 1)
-shader_parameter/r_vision_displacement = Vector2(40, 10)
-shader_parameter/g_vision_displacement = Vector2(0, 0)
-shader_parameter/b_vision_displacement = Vector2(-40, -10)
+shader_parameter/mouse_offset = Vector2(0, 0)
+shader_parameter/r_vision_displacement = Vector2(15, -7)
+shader_parameter/g_vision_displacement = Vector2(5, 15)
+shader_parameter/b_vision_displacement = Vector2(-10, -2)
 shader_parameter/vision_shape = SubResource("ViewportTexture_bp0ah")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_iw3ma"]
-size = Vector2(6, 32)
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tvm3n"]
+light_mode = 2
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qcphh"]
+blend_mode = 1
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_u5hay"]
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_7c4h6"]
+offsets = PackedFloat32Array(0.992958, 1)
+colors = PackedColorArray(0.219501, 0.219501, 0.219501, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fbkjw"]
+gradient = SubResource("Gradient_7c4h6")
+width = 320
+height = 40
+
+[sub_resource type="Gradient" id="Gradient_k63xe"]
+offsets = PackedFloat32Array(0, 0.0140845)
+colors = PackedColorArray(0, 0, 0, 1, 1, 0.392157, 0.384314, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_caike"]
+gradient = SubResource("Gradient_k63xe")
+width = 320
+height = 40
+fill_to = Vector2(0.001, 0)
 
 [node name="World" type="Node2D"]
+texture_filter = 1
 
 [node name="Main Plane Controller" type="SubViewportContainer" parent="."]
 z_index = 1
@@ -178,6 +212,7 @@ scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_okf5t")
 
 [node name="Weapon Holder" type="Node2D" parent="Main Plane Controller/Main Plane/Player" node_paths=PackedStringArray("parentPlayer", "slotArray")]
+texture_filter = 1
 script = ExtResource("3_jx5vc")
 weaponSlots = 3
 parentPlayer = NodePath("..")
@@ -221,6 +256,7 @@ projectileContainer = NodePath("../../../../Projectile Container")
 [node name="Weapon Slot 3" type="Node2D" parent="Main Plane Controller/Main Plane/Player/Weapon Holder"]
 
 [node name="Warhammer" parent="Main Plane Controller/Main Plane/Player/Weapon Holder/Weapon Slot 3" instance=ExtResource("10_gbiq5")]
+texture_filter = 1
 baseDamage = 0.0
 weight = 10.0
 velocityDamageMulti = 40.0
@@ -241,11 +277,13 @@ tiltMultiplier = 1.0
 [node name="Weapon Slot 4" type="Node2D" parent="Main Plane Controller/Main Plane/Player/Weapon Holder"]
 
 [node name="Camera2D" type="Camera2D" parent="Main Plane Controller/Main Plane/Player" node_paths=PackedStringArray("visionPlane")]
+process_priority = 1
 visibility_layer = 1023
 z_index = 10
 zoom = Vector2(2, 2)
 script = ExtResource("10_x1lwr")
 visionPlane = NodePath("../../../../Vision Plane Controller/Vision Plane")
+mousePosCamMultiplier = 0.2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Main Plane Controller/Main Plane/Player/Camera2D"]
 follow_viewport_scale = -0.66
@@ -295,7 +333,7 @@ randomConnectors = Vector2i(1, 4)
 roomMarkerResource = ExtResource("11_lm44d")
 floorResource = ExtResource("12_1bkl4")
 wallResource = ExtResource("13_sdh6r")
-occluderResource = ExtResource("19_cyoqr")
+occluderResource = ExtResource("16_rns4c")
 
 [node name="ColorRect" type="ColorRect" parent="Main Plane Controller/Main Plane"]
 z_index = -100
@@ -314,12 +352,30 @@ offset_bottom = 1080.0
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
-canvas_cull_mask = 4293919232
+canvas_cull_mask = 4293919488
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
+[node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane"]
+light_mask = 512
+visibility_layer = 512
+z_index = 10
+z_as_relative = false
+material = SubResource("CanvasItemMaterial_tvm3n")
+offset_left = -9000.0
+offset_top = -9000.0
+offset_right = 11000.0
+offset_bottom = 11000.0
+color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[node name="Map Occluders" type="Node2D" parent="Vision Plane Controller/Vision Plane"]
+visibility_layer = 768
+z_index = 4096
+z_as_relative = false
+
 [node name="Camera2D" type="Camera2D" parent="Vision Plane Controller/Vision Plane"]
-z_index = 1
+visibility_layer = 769
+z_index = 100
 z_as_relative = false
 zoom = Vector2(2, 2)
 script = ExtResource("17_ss7lf")
@@ -327,45 +383,91 @@ script = ExtResource("17_ss7lf")
 [node name="PointLight2D" type="PointLight2D" parent="Vision Plane Controller/Vision Plane/Camera2D"]
 light_mask = 512
 visibility_layer = 512
-z_index = 10
+z_index = 1
 z_as_relative = false
-energy = 49.6
-range_item_cull_mask = 512
+energy = 3.49
+range_z_min = -10
+range_z_max = 10
+range_item_cull_mask = 768
 shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.698039)
 shadow_item_cull_mask = 512
 texture = ExtResource("14_e3326")
 texture_scale = 50.0
 
-[node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane/Camera2D"]
-light_mask = 512
-visibility_layer = 512
-z_index = 100
+[node name="ColorRect2" type="ColorRect" parent="Vision Plane Controller/Vision Plane/Camera2D"]
+light_mask = 256
+visibility_layer = 256
+z_index = 4096
 z_as_relative = false
-offset_left = -3.0
-offset_top = -16.0
-offset_right = 3.0
-offset_bottom = 16.0
+material = SubResource("CanvasItemMaterial_qcphh")
+offset_left = 100.0
+offset_top = 600.0
+offset_right = 200.0
+offset_bottom = 700.0
+color = Color(1, 0, 0, 1)
 
-[node name="BetterWall" type="Sprite2D" parent="Vision Plane Controller/Vision Plane/Camera2D"]
-z_index = 111
-position = Vector2(1072.82, 571.72)
-texture = ExtResource("19_gd5s3")
+[node name="UI Elements" type="Control" parent="."]
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Vision Plane Controller/Vision Plane/Camera2D/BetterWall"]
+[node name="UI Bottom Left" type="ColorRect" parent="UI Elements"]
+layout_mode = 0
+offset_top = 1000.0
+offset_right = 400.0
+offset_bottom = 1080.0
+color = Color(0.262745, 0.262745, 0.262745, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Vision Plane Controller/Vision Plane/Camera2D/BetterWall/StaticBody2D"]
-shape = SubResource("RectangleShape2D_iw3ma")
+[node name="Health Label" type="Label" parent="UI Elements/UI Bottom Left"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 3.0
+offset_right = 260.0
+offset_bottom = 33.0
+text = "Health:  / 
+"
+label_settings = SubResource("LabelSettings_u5hay")
 
-[node name="Map Occluders" type="Node2D" parent="Vision Plane Controller/Vision Plane"]
-z_index = 10
+[node name="Health Bar" type="TextureProgressBar" parent="UI Elements/UI Bottom Left"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 30.0
+offset_right = 330.0
+offset_bottom = 70.0
+value = 50.0
+fill_mode = 1
+stretch_margin_left = 10
+stretch_margin_top = 30
+texture_under = SubResource("GradientTexture2D_fbkjw")
+texture_over = SubResource("GradientTexture2D_fbkjw")
+texture_progress = SubResource("GradientTexture2D_caike")
 
-[node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane"]
-light_mask = 512
-visibility_layer = 512
-z_index = 1
-z_as_relative = false
-offset_left = -9000.0
-offset_top = -9000.0
-offset_right = 11000.0
-offset_bottom = 11000.0
-color = Color(0.156863, 0.156863, 0.156863, 1)
+[node name="UI Bottom Right" type="ColorRect" parent="UI Elements"]
+z_index = 3
+offset_left = 1520.0
+offset_top = 1000.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.262745, 0.262745, 0.262745, 1)
+
+[node name="ProgressBar" type="ProgressBar" parent="UI Elements/UI Bottom Right"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 36.0
+offset_right = 344.0
+offset_bottom = 68.0
+value = 10.0
+show_percentage = false
+
+[node name="Ammo Label" type="Label" parent="UI Elements/UI Bottom Right"]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 3.0
+offset_right = 259.0
+offset_bottom = 33.0
+text = "Ammo:  / 
+"
+label_settings = SubResource("LabelSettings_u5hay")

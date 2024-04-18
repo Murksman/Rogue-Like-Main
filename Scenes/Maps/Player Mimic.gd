@@ -1,6 +1,7 @@
-extends Node2D
+extends Camera2D
 
-@onready var player = $"../../../Main Plane Controller/Main Plane/Player"
+@onready var cam = $"../../../Main Plane Controller/Main Plane/Player/Camera2D"
 
 func _process(delta):
-	global_position = player.global_position
+	global_position = cam.global_position
+	offset = cam.offset

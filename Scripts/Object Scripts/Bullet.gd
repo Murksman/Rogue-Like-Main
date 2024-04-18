@@ -40,9 +40,9 @@ func _physics_process(delta):
 
 func ProjectilePhysics(delta):
 	remainingDist = velocity * delta * 60
-	var iterations : int = 0
+	# var iterations : int = 0 >> iterations are not currently used but are useful for bugtesting
 	for i in 10:
-		iterations += 1
+		# iterations += 1
 		var traveled = ProjectileRaycast()
 		if traveled:
 			break
