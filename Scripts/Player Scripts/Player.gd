@@ -20,6 +20,8 @@ var velocityNorm : Vector2 = Vector2.ZERO
 
 var camera : Camera2D
 
+var health : float = 100.0
+
 func _ready():
 	camera = $Camera2D
 

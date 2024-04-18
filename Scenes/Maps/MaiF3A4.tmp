@@ -440,11 +440,12 @@ offset_top = 30.0
 offset_right = 330.0
 offset_bottom = 70.0
 value = 50.0
+fill_mode = 1
 stretch_margin_left = 10
 stretch_margin_top = 30
 texture_under = SubResource("GradientTexture2D_fbkjw")
+texture_over = SubResource("GradientTexture2D_fbkjw")
 texture_progress = SubResource("GradientTexture2D_caike")
-texture_progress_offset = Vector2(10, 0)
 
 [node name="UI Bottom Right" type="ColorRect" parent="UI Elements"]
 z_index = 3
