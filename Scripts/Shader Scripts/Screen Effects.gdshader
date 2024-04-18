@@ -6,15 +6,8 @@ uniform float brightness: hint_range(0.0, 1.0);
 uniform float contrast: hint_range(0.0, 1.0);
 uniform float saturation: hint_range(0.0, 2.0);
 
-uniform vec2 r_displacement = vec2(3.0, 0.0);
-uniform vec2 g_displacement = vec2(0.0, 0.0);
-uniform vec2 b_displacement = vec2(-3.0, 0.0);
-
 void fragment() {
-	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_displacement), 0.0).r;
-	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_displacement), 0.0).g;
-	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_displacement), 0.0).b;
-	vec3 c = vec3(r,g,b);
+	vec3 c = texture(screen_texture, SCREEN_UV, 0.0).rgb;
 	
 	c = mix(vec3(0.0), c.rgb, brightness);
 	c = mix(vec3(0.5), c.rgb, contrast);

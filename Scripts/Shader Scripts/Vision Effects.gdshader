@@ -1,6 +1,7 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D vision_shape;
 uniform float view_angle : hint_range(0.0, 1.0);
 uniform float vision_fade_length : hint_range(0.0, 1.0);
 uniform float vision_horizontal_offset : hint_range(0.0, 1.0);
@@ -41,21 +42,23 @@ void fragment() {
 	float dist = length(uv - vec2(0.5, 0.5)) - peripheral_radius;
 	float cutoffAmount = smoothstep(0.0, 1.0, (dist / peripheral_cutoff) + peripheral_cutoff);
 	
-	if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {
-		distortion_effect = 0.0;
-	}
+	if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {distortion_effect = 0.0;}
 	
 	if (rotatedUV.y > 0.5) {distortion_effect = 1.0;}
 	
 	if (distortion_effect > cutoffAmount) {distortion_effect = cutoffAmount;}
 	
-	float blur = mix(0.0, 4.0, distortion_effect);
+	if (texture(vision_shape, SCREEN_UV, 0.0).g < 0.2) {distortion_effect = 1.0;}
+	
+	float blur = mix(0.0, 2.0, distortion_effect);
 	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
 	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
 	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;
+	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
+	
 	vec3 c = vec3(r,g,b);
 	
-	COLOR.rgb = mix(c, c / 1.5, distortion_effect);
+	COLOR.rgb = mix(c, c / 3.0, distortion_effect);
 	COLOR.a = 1.0;
 }
 

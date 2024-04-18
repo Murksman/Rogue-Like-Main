@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dwavl51r2f4bi"]
 
-[ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_a0nat"]
-[ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="2_rd55g"]
+[ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_5t4cq"]
+[ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="2_ksiei"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
 radius = 15.0
@@ -9,7 +9,7 @@ radius = 15.0
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 0
 wall_min_slide_angle = 0.0872665
-script = ExtResource("1_a0nat")
+script = ExtResource("1_5t4cq")
 acceleration = 30.0
 drag = 6.0
 staticDrag = 9.0
@@ -24,4 +24,4 @@ zoom = Vector2(1.5, 1.5)
 position = Vector2(1, 0)
 rotation = 1.5708
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_rd55g")
+texture = ExtResource("2_ksiei")

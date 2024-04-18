@@ -6,7 +6,7 @@
 size = Vector2(6, 32)
 
 [node name="BetterWall" type="Sprite2D"]
-z_index = 2
+z_index = 111
 texture = ExtResource("1_qb113")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]

@@ -121,6 +121,6 @@ func Collide(delta):
 		angularMomentum *= -collisionPadding
 	for i in hit.size():
 		var hitObject = hit[i]
-		var hitObjScript = hit.get_typed_script()
 		if hitObject.name == "Enemy":
+			var hitObjScript = hit.get_typed_script()
 			hitObject.TakeDamage(baseDamage + (angularMomentum * velocityDamageMulti * 100))

@@ -1,6 +1,8 @@
 extends Node2D
 class_name MapGenerater
 
+@export_group("General")
+@export var occluderAnchor : Node2D
 
 @export_group("Map Definitions")
 @export var mapSizeRandWidth : Vector2i ## Relative to y coordinate, Width is defined as distance from top to bottom
@@ -27,6 +29,7 @@ class_name MapGenerater
 @export var roomMarkerResource : Resource ## The resource associated with the room marker object
 @export var floorResource : Resource ## The resource associated with the floor object
 @export var wallResource : Resource ## The resource associated with the wall object
+@export var occluderResource : Resource ## The resource associated with the wall object
 
 var mapSizeLength : int
 var mapSizeWidth : int
@@ -36,6 +39,7 @@ var rng = RandomNumberGenerator.new()
 var roomMarkerObject : Object
 var floorObject : Object
 var wallObject : Object
+var occluderObject : Object
 var rooms : Array[RoomGenData] = []
 var levelTileMap : Array[Array] = []
 var wallTileMap : Array[Array] = []
@@ -52,6 +56,7 @@ func _ready():
 	roomMarkerObject = load(str(roomMarkerResource.resource_path))
 	floorObject = load(str(floorResource.resource_path))
 	wallObject = load(str(wallResource.resource_path))
+	occluderObject = load(str(occluderResource.resource_path))
 	
 	Start()
 
@@ -88,6 +93,10 @@ func Initialization():
 	var tempObjectCount = $".".get_child_count()
 	for n in tempObjectCount:
 		$".".get_child(tempObjectCount - 1 - n).queue_free()
+	
+	var tempOccluderCount = occluderAnchor.get_child_count()
+	for n in tempOccluderCount:
+		occluderAnchor.get_child(tempOccluderCount - 1 - n).queue_free()
 	
 	# initializing the 2d tilemap for the level
 	mapSizeLength = rng.randi_range(mapSizeRandLength.x, mapSizeRandLength.y) + 2 * mapSizePadding
@@ -135,7 +144,6 @@ func ValidateRooms():
 	
 	# delete merged rooms
 	for i in rooms.size():
-		var checkRoom = rooms[i]
 		if mergeArray[i]:
 			tempRooms[i] = null
 	
@@ -266,7 +274,12 @@ func GenerateWalls():
 
 func SpawnWall(vertical, wallPosition):
 	var newWall = wallObject.instantiate()
+	var newOccluder = occluderObject.instantiate()
 	$".".add_child(newWall)
+	occluderAnchor.add_child(newOccluder)
 	newWall.position = wallPosition
-	if vertical: newWall.rotation = PI / 2
+	newOccluder.position = wallPosition
+	if vertical: 
+		newWall.rotation = PI / 2
+		newOccluder.rotation = PI / 2
 	return newWall

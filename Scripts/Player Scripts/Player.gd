@@ -7,11 +7,6 @@ extends CharacterBody2D
 @export var zoomMinMax : Vector2
 @export var zoomSmoothRate : float
 
-@export_category("Firing")
-@export var bulletMaxTime : float
-@export var bulletVelocity : float
-@export var bulletDamage : float
-
 @export_category("Resources")
 @export var ballTest = preload("res://Prefabs/World Objects/ball_test.tscn")
 @export var projectileContainer : Node2D

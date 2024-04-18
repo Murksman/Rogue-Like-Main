@@ -25,7 +25,7 @@ class_name Weapon
 @export_category("Resources")
 @export var projectileObjectResource : Resource
 @export var projectileHitObjectResource : Resource
-@export var projectileContainer : Node
+@export var projectileContainer : Node2D
 
 var projectileObject : Object
 var projectileHitObject : Object
@@ -42,7 +42,7 @@ var reloadTime : float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	player = get_parent().get_parent().parentPlayer
+	player = $"../..".parentPlayer
 	projectileContainer = player.projectileContainer
 	currentMagAmmo = magazineSize
 	rng.randomize()

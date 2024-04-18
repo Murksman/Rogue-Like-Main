@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://f4h3g48vgn4t"]
+[gd_scene load_steps=28 format=3 uid="uid://f4h3g48vgn4t"]
 
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_gwtnp"]
@@ -12,10 +12,13 @@
 [ext_resource type="Script" path="res://Scripts/Map Scripts/MapGenerator.gd" id="10_qsthu"]
 [ext_resource type="Script" path="res://Scenes/Maps/Shader Testing.gd" id="10_x1lwr"]
 [ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="11_lm44d"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Vision Effects.gdshader" id="11_oattb"]
 [ext_resource type="PackedScene" uid="uid://p26es1h7f0wm" path="res://Prefabs/World Objects/Floor.tscn" id="12_1bkl4"]
 [ext_resource type="PackedScene" uid="uid://dwv2ff7baype5" path="res://Prefabs/World Objects/Wall.tscn" id="13_sdh6r"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="14_6wtlq"]
+[ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="14_e3326"]
+[ext_resource type="Script" path="res://Scenes/Maps/Player Mimic.gd" id="17_ss7lf"]
+[ext_resource type="PackedScene" uid="uid://duq8a43rw31dt" path="res://Prefabs/World Objects/light_occluder_2d.tscn" id="19_cyoqr"]
+[ext_resource type="Texture2D" uid="uid://bj7votk3a7rb8" path="res://Sprites/World Objects/Better Wall.png" id="19_gd5s3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
 radius = 12.0
@@ -33,29 +36,118 @@ shader = ExtResource("14_6wtlq")
 shader_parameter/brightness = 1.0
 shader_parameter/contrast = 1.0
 shader_parameter/saturation = 1.0
-shader_parameter/r_displacement = Vector2(0, 0)
-shader_parameter/g_displacement = Vector2(0, 0)
-shader_parameter/b_displacement = Vector2(0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gwmyx"]
-shader = ExtResource("11_oattb")
-shader_parameter/view_angle = 0.578
-shader_parameter/vision_fade_length = 0.54
-shader_parameter/vision_horizontal_offset = 0.085
-shader_parameter/peripheral_radius = 0.134
-shader_parameter/peripheral_cutoff = 0.127
-shader_parameter/look_direction = Vector2(-1, 0)
-shader_parameter/r_vision_displacement = Vector2(30, -5)
-shader_parameter/g_vision_displacement = Vector2(20, 4)
-shader_parameter/b_vision_displacement = Vector2(-20, -30)
+[sub_resource type="Shader" id="Shader_uxn00"]
+code = "shader_type canvas_item;
+
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D vision_shape;
+uniform float view_angle : hint_range(0.0, 1.0);
+uniform float vision_fade_length : hint_range(0.0, 1.0);
+uniform float vision_horizontal_offset : hint_range(0.0, 1.0);
+
+uniform float peripheral_radius : hint_range(0.0, 1.0);
+uniform float peripheral_cutoff : hint_range(0.0, 1.0);
+uniform vec2 look_direction = vec2(0.0, 1.0);
+
+uniform vec2 r_vision_displacement = vec2(3.0, 0.0);
+uniform vec2 g_vision_displacement = vec2(0.0, 2.0);
+uniform vec2 b_vision_displacement = vec2(-3.0, 0.0);
+
+vec2 Orientate(vec2 input_uv) {
+	vec2 rotation_uv = vec2(-input_uv.y, -input_uv.x);
+	
+	float real_c = (rotation_uv.x * look_direction.x) + (rotation_uv.y * look_direction.y * -1.0);
+	float complex_c = (rotation_uv.x * look_direction.y) + (rotation_uv.y * look_direction.x); 
+	
+	return vec2(real_c, complex_c);
+}
+
+void fragment() {
+	vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
+	vec2 rotatedUV = Orientate(uv - vec2(0.5, 0.5)) + vec2(0.5, 0.5);
+	
+	
+	vec2 vision_cone;
+	if (rotatedUV.x > 0.5) {
+		if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {}
+		vision_cone = rotatedUV - vec2(vision_horizontal_offset, 0.0);
+	} else {
+		vision_cone = rotatedUV + vec2(vision_horizontal_offset, 0.0);
+	}
+	
+	float vision_ratio = abs(vision_cone.x - 0.5) / abs(vision_cone.y - 0.5);
+	float distortion_effect = smoothstep(0.0, 1.0, ((vision_ratio - view_angle) / vision_fade_length) + vision_fade_length);
+	
+	float dist = length(uv - vec2(0.5, 0.5)) - peripheral_radius;
+	float cutoffAmount = smoothstep(0.0, 1.0, (dist / peripheral_cutoff) + peripheral_cutoff);
+	
+	if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {distortion_effect = 0.0;}
+	
+	if (rotatedUV.y > 0.5) {distortion_effect = 1.0;}
+	
+	if (distortion_effect > cutoffAmount) {distortion_effect = cutoffAmount;}
+	
+	if (texture(vision_shape, SCREEN_UV, 0.0).g < 0.2) {distortion_effect = 1.0;}
+	
+	float blur = mix(0.0, 2.0, distortion_effect);
+	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
+	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
+	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;
+	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
+	
+	vec3 c = vec3(r,g,b);
+	
+	COLOR.rgb = mix(c, c / 3.0, distortion_effect);
+	COLOR.a = 1.0;
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bp0ah"]
+viewport_path = NodePath("Vision Plane Controller/Vision Plane")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_158ks"]
+resource_local_to_scene = true
+shader = SubResource("Shader_uxn00")
+shader_parameter/view_angle = 0.582
+shader_parameter/vision_fade_length = 0.266
+shader_parameter/vision_horizontal_offset = 0.05
+shader_parameter/peripheral_radius = 0.24
+shader_parameter/peripheral_cutoff = 0.155
+shader_parameter/look_direction = Vector2(0, 1)
+shader_parameter/r_vision_displacement = Vector2(40, 10)
+shader_parameter/g_vision_displacement = Vector2(0, 0)
+shader_parameter/b_vision_displacement = Vector2(-40, -10)
+shader_parameter/vision_shape = SubResource("ViewportTexture_bp0ah")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iw3ma"]
+size = Vector2(6, 32)
 
 [node name="World" type="Node2D"]
 
-[node name="Enemy Container" type="Node2D" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("2_gwtnp")
-player = NodePath("../Player")
+[node name="Main Plane Controller" type="SubViewportContainer" parent="."]
+z_index = 1
+offset_right = 1920.0
+offset_bottom = 1080.0
 
-[node name="Enemy Spawner" type="Node2D" parent="Enemy Container"]
+[node name="Main Plane" type="SubViewport" parent="Main Plane Controller"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Projectile Container" type="Node2D" parent="Main Plane Controller/Main Plane"]
+
+[node name="Enemy Container" type="Node2D" parent="Main Plane Controller/Main Plane"]
+script = ExtResource("2_gwtnp")
+
+[node name="Enemy Spawner" type="Node2D" parent="Main Plane Controller/Main Plane/Enemy Container"]
 position = Vector2(302, 0)
 script = ExtResource("3_es58c")
 timePerSpawn = 10.0
@@ -63,9 +155,8 @@ enemyObjectResource = ExtResource("4_qqm31")
 spawning = false
 spawnOnStart = false
 
-[node name="Projectile Container" type="Node2D" parent="."]
-
-[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("projectileContainer")]
+[node name="Player" type="CharacterBody2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("projectileContainer")]
+light_mask = 0
 position = Vector2(1000, 1000)
 collision_mask = 3
 wall_min_slide_angle = 0.0872665
@@ -73,30 +164,28 @@ script = ExtResource("1_uu0qm")
 acceleration = 30.0
 drag = 6.0
 staticDrag = 9.0
-bulletMaxTime = 10.0
-bulletVelocity = 20.0
-bulletDamage = 10.0
 projectileContainer = NodePath("../Projectile Container")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Main Plane Controller/Main Plane/Player"]
 shape = SubResource("CircleShape2D_xmfay")
 
-[node name="PlayerV2" type="Sprite2D" parent="Player"]
+[node name="PlayerV2" type="Sprite2D" parent="Main Plane Controller/Main Plane/Player"]
+light_mask = 0
 z_index = 10
 position = Vector2(2, 0)
 rotation = 1.5708
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_okf5t")
 
-[node name="Weapon Holder" type="Node2D" parent="Player" node_paths=PackedStringArray("parentPlayer", "slotArray")]
+[node name="Weapon Holder" type="Node2D" parent="Main Plane Controller/Main Plane/Player" node_paths=PackedStringArray("parentPlayer", "slotArray")]
 script = ExtResource("3_jx5vc")
 weaponSlots = 3
 parentPlayer = NodePath("..")
 slotArray = [NodePath("Weapon Slot 1"), NodePath("Weapon Slot 2"), NodePath("Weapon Slot 3"), NodePath("Weapon Slot 4")]
 
-[node name="Weapon Slot 1" type="Node2D" parent="Player/Weapon Holder"]
+[node name="Weapon Slot 1" type="Node2D" parent="Main Plane Controller/Main Plane/Player/Weapon Holder"]
 
-[node name="AR-4" parent="Player/Weapon Holder/Weapon Slot 1" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("4_6pfpc")]
+[node name="AR-4" parent="Main Plane Controller/Main Plane/Player/Weapon Holder/Weapon Slot 1" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("4_6pfpc")]
 baseProjectiles = 1.0
 isSpreadRandom = true
 spreadRange = 0.01
@@ -111,9 +200,9 @@ startingAmmo = 120
 bulletsPerReload = 30
 projectileContainer = NodePath("../../../../Projectile Container")
 
-[node name="Weapon Slot 2" type="Node2D" parent="Player/Weapon Holder"]
+[node name="Weapon Slot 2" type="Node2D" parent="Main Plane Controller/Main Plane/Player/Weapon Holder"]
 
-[node name="Shotgun 800" parent="Player/Weapon Holder/Weapon Slot 2" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("5_ijoow")]
+[node name="Shotgun 800" parent="Main Plane Controller/Main Plane/Player/Weapon Holder/Weapon Slot 2" node_paths=PackedStringArray("projectileContainer") instance=ExtResource("5_ijoow")]
 baseProjectiles = 10.0
 isSpreadRandom = true
 spreadRange = 0.04
@@ -129,9 +218,9 @@ startingAmmo = 120
 bulletsPerReload = 2
 projectileContainer = NodePath("../../../../Projectile Container")
 
-[node name="Weapon Slot 3" type="Node2D" parent="Player/Weapon Holder"]
+[node name="Weapon Slot 3" type="Node2D" parent="Main Plane Controller/Main Plane/Player/Weapon Holder"]
 
-[node name="Warhammer" parent="Player/Weapon Holder/Weapon Slot 3" instance=ExtResource("10_gbiq5")]
+[node name="Warhammer" parent="Main Plane Controller/Main Plane/Player/Weapon Holder/Weapon Slot 3" instance=ExtResource("10_gbiq5")]
 baseDamage = 0.0
 weight = 10.0
 velocityDamageMulti = 40.0
@@ -149,20 +238,23 @@ holsterRotations = Vector2(0, 1.6)
 maxTiltMomentum = 0.1
 tiltMultiplier = 1.0
 
-[node name="Weapon Slot 4" type="Node2D" parent="Player/Weapon Holder"]
+[node name="Weapon Slot 4" type="Node2D" parent="Main Plane Controller/Main Plane/Player/Weapon Holder"]
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-scale = Vector2(1, 0.937552)
+[node name="Camera2D" type="Camera2D" parent="Main Plane Controller/Main Plane/Player" node_paths=PackedStringArray("visionPlane")]
+visibility_layer = 1023
+z_index = 10
+zoom = Vector2(2, 2)
 script = ExtResource("10_x1lwr")
+visionPlane = NodePath("../../../../Vision Plane Controller/Vision Plane")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Player/Camera2D"]
+[node name="CanvasLayer" type="CanvasLayer" parent="Main Plane Controller/Main Plane/Player/Camera2D"]
 follow_viewport_scale = -0.66
 
-[node name="BackBufferCopy2" type="BackBufferCopy" parent="Player/Camera2D/CanvasLayer"]
+[node name="BackBufferCopy2" type="BackBufferCopy" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer"]
 position = Vector2(0, -480)
 rect = Rect2(0, 0, 1920, 1920)
 
-[node name="Primary" type="ColorRect" parent="Player/Camera2D/CanvasLayer/BackBufferCopy2"]
+[node name="Primary" type="ColorRect" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer/BackBufferCopy2"]
 material = SubResource("ShaderMaterial_a7v4a")
 anchors_preset = 15
 anchor_right = 1.0
@@ -170,13 +262,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="Player/Camera2D/CanvasLayer"]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer"]
 position = Vector2(0, -480)
 rect = Rect2(0, 0, 1920, 1920)
 
-[node name="Secondary" type="ColorRect" parent="Player/Camera2D/CanvasLayer/BackBufferCopy"]
+[node name="Secondary" type="ColorRect" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer/BackBufferCopy"]
 z_index = 1
-material = SubResource("ShaderMaterial_gwmyx")
+material = SubResource("ShaderMaterial_158ks")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -184,8 +276,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="MapGenerater" type="Node2D" parent="."]
+[node name="MapGenerater" type="Node2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("occluderAnchor")]
+z_index = -1
 script = ExtResource("10_qsthu")
+occluderAnchor = NodePath("../../../Vision Plane Controller/Vision Plane/Map Occluders")
 mapSizeRandWidth = Vector2i(50, 50)
 mapSizeRandLength = Vector2i(50, 50)
 mapSizePadding = 10
@@ -201,7 +295,77 @@ randomConnectors = Vector2i(1, 4)
 roomMarkerResource = ExtResource("11_lm44d")
 floorResource = ExtResource("12_1bkl4")
 wallResource = ExtResource("13_sdh6r")
+occluderResource = ExtResource("19_cyoqr")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="ColorRect" type="ColorRect" parent="Main Plane Controller/Main Plane"]
+z_index = -100
+z_as_relative = false
+offset_left = -1000.0
+offset_top = -1000.0
+offset_right = 9000.0
+offset_bottom = 9000.0
+color = Color(0.12549, 0.12549, 0.12549, 1)
+
+[node name="Vision Plane Controller" type="SubViewportContainer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="Vision Plane" type="SubViewport" parent="Vision Plane Controller"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+canvas_cull_mask = 4293919232
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="Vision Plane Controller/Vision Plane"]
+z_index = 1
+z_as_relative = false
+zoom = Vector2(2, 2)
+script = ExtResource("17_ss7lf")
+
+[node name="PointLight2D" type="PointLight2D" parent="Vision Plane Controller/Vision Plane/Camera2D"]
+light_mask = 512
+visibility_layer = 512
+z_index = 10
+z_as_relative = false
+energy = 49.6
+range_item_cull_mask = 512
+shadow_enabled = true
+shadow_item_cull_mask = 512
+texture = ExtResource("14_e3326")
+texture_scale = 50.0
+
+[node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane/Camera2D"]
+light_mask = 512
+visibility_layer = 512
+z_index = 100
+z_as_relative = false
+offset_left = -3.0
+offset_top = -16.0
+offset_right = 3.0
+offset_bottom = 16.0
+
+[node name="BetterWall" type="Sprite2D" parent="Vision Plane Controller/Vision Plane/Camera2D"]
+z_index = 111
+position = Vector2(1072.82, 571.72)
+texture = ExtResource("19_gd5s3")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Vision Plane Controller/Vision Plane/Camera2D/BetterWall"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vision Plane Controller/Vision Plane/Camera2D/BetterWall/StaticBody2D"]
+shape = SubResource("RectangleShape2D_iw3ma")
+
+[node name="Map Occluders" type="Node2D" parent="Vision Plane Controller/Vision Plane"]
+z_index = 10
+
+[node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane"]
+light_mask = 512
+visibility_layer = 512
+z_index = 1
+z_as_relative = false
+offset_left = -9000.0
+offset_top = -9000.0
+offset_right = 11000.0
+offset_bottom = 11000.0
+color = Color(0.156863, 0.156863, 0.156863, 1)
