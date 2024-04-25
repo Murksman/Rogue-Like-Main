@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://f4h3g48vgn4t"]
+[gd_scene load_steps=35 format=3 uid="uid://f4h3g48vgn4t"]
 
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_gwtnp"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://Scenes/Maps/Shader Testing.gd" id="10_x1lwr"]
 [ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="11_lm44d"]
 [ext_resource type="PackedScene" uid="uid://p26es1h7f0wm" path="res://Prefabs/World Objects/Floor.tscn" id="12_1bkl4"]
+[ext_resource type="Script" path="res://Scripts/Map Scripts/ExperimentalGenSystem.gd" id="12_d03l0"]
 [ext_resource type="PackedScene" uid="uid://dwv2ff7baype5" path="res://Prefabs/World Objects/Wall.tscn" id="13_sdh6r"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="14_6wtlq"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="14_e3326"]
@@ -314,6 +315,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
+
+[node name="ProtoMapGenerator" type="Node" parent="Main Plane Controller/Main Plane/Player"]
+script = ExtResource("12_d03l0")
 
 [node name="MapGenerater" type="Node2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("occluderAnchor")]
 z_index = -1

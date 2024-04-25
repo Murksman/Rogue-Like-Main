@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bg5xv10ucgv5u"]
+[gd_scene load_steps=2 format=3 uid="uid://duq8a43rw31dt"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_a11le"]
 polygon = PackedVector2Array(-3, -16, 3, -16, 3, 16, -3, 16)
