@@ -17,10 +17,9 @@ var query : PhysicsRayQueryParameters2D
 var moveDirection : Vector2 = Vector2.ZERO
 var lookDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
-
 var camera : Camera2D
 
-var health : float = 100.0
+var health : float = 50.0
 
 func _ready():
 	camera = $Camera2D

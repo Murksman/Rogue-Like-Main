@@ -1,5 +1,6 @@
 [gd_scene load_steps=35 format=3 uid="uid://f4h3g48vgn4t"]
 
+[ext_resource type="Script" path="res://Scenes/Maps/Master_Script.gd" id="1_i65y0"]
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_gwtnp"]
 [ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="2_okf5t"]
@@ -13,7 +14,6 @@
 [ext_resource type="Script" path="res://Scenes/Maps/Shader Testing.gd" id="10_x1lwr"]
 [ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="11_lm44d"]
 [ext_resource type="PackedScene" uid="uid://p26es1h7f0wm" path="res://Prefabs/World Objects/Floor.tscn" id="12_1bkl4"]
-[ext_resource type="Script" path="res://Scripts/Map Scripts/ExperimentalGenSystem.gd" id="12_d03l0"]
 [ext_resource type="PackedScene" uid="uid://dwv2ff7baype5" path="res://Prefabs/World Objects/Wall.tscn" id="13_sdh6r"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="14_6wtlq"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="14_e3326"]
@@ -94,9 +94,9 @@ void fragment() {
 	
 	float blur = mix(0.0, 2.0, distortion_effect);
 	float chrom_abrsn_effect = abs(abs(distortion_effect - 0.5) - 0.5);
-	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*chrom_abrsn_effect*look_direction), blur).r;
-	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*chrom_abrsn_effect*look_direction), blur).g;
-	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*chrom_abrsn_effect*look_direction), blur).b;
+	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*chrom_abrsn_effect*look_direction), 0.0).r;
+	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*chrom_abrsn_effect*look_direction), 0.0).g;
+	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*chrom_abrsn_effect*look_direction), 0.0).b;
 	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
 	
 	vec3 c = vec3(r,g,b);
@@ -165,8 +165,11 @@ fill_to = Vector2(0.001, 0)
 
 [node name="World" type="Node2D"]
 texture_filter = 1
+script = ExtResource("1_i65y0")
 
 [node name="Main Plane Controller" type="SubViewportContainer" parent="."]
+process_priority = 1
+visible = false
 z_index = 1
 offset_right = 1920.0
 offset_bottom = 1080.0
@@ -176,7 +179,7 @@ disable_3d = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Projectile Container" type="Node2D" parent="Main Plane Controller/Main Plane"]
 
@@ -316,9 +319,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="ProtoMapGenerator" type="Node" parent="Main Plane Controller/Main Plane/Player"]
-script = ExtResource("12_d03l0")
-
 [node name="MapGenerater" type="Node2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("occluderAnchor")]
 z_index = -1
 script = ExtResource("10_qsthu")
@@ -350,6 +350,8 @@ offset_bottom = 9000.0
 color = Color(0.12549, 0.12549, 0.12549, 1)
 
 [node name="Vision Plane Controller" type="SubViewportContainer" parent="."]
+process_physics_priority = 1
+z_index = 2
 offset_right = 1920.0
 offset_bottom = 1080.0
 
@@ -362,6 +364,8 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane"]
+process_priority = 2
+visible = false
 light_mask = 512
 visibility_layer = 512
 z_index = 10
