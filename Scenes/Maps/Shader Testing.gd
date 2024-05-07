@@ -10,7 +10,7 @@ var time : float = 0.0
 
 
 func shader_orientation(direction):
-	offset = (Vector2(DisplayServer.mouse_get_position()) - Vector2(960, 540)) * mousePosCamMultiplier
+	offset = ($"../..".get_mouse_position() - Vector2(960, 540)) * mousePosCamMultiplier
 	shadowCam.offset = offset
 	
 	var mouseShaderOffset = Vector2(offset.x / 540.0, offset.y / 540.0)

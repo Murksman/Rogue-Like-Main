@@ -1,5 +1,5 @@
 extends Node2D
-class_name MapGenerater
+#class_name MapGenerater
 
 @export_group("General")
 @export var occluderAnchor : Node2D

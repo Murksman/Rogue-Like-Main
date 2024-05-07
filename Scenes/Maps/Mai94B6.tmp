@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://f4h3g48vgn4t"]
+[gd_scene load_steps=35 format=3 uid="uid://f4h3g48vgn4t"]
 
 [ext_resource type="Script" path="res://Scenes/Maps/Master_Script.gd" id="1_i65y0"]
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
@@ -10,16 +10,15 @@
 [ext_resource type="PackedScene" uid="uid://bvyemdc74njma" path="res://Prefabs/Enemies/enemy.tscn" id="4_qqm31"]
 [ext_resource type="PackedScene" uid="uid://dl14te25g3ahr" path="res://Prefabs/Player/Weapons/Shotgun 800.tscn" id="5_ijoow"]
 [ext_resource type="PackedScene" uid="uid://1akksb317ea8" path="res://Prefabs/Player/Weapons/Warhammer.tscn" id="10_gbiq5"]
+[ext_resource type="Script" path="res://Scripts/Map Scripts/MapGenerator.gd" id="10_qsthu"]
 [ext_resource type="Script" path="res://Scenes/Maps/Shader Testing.gd" id="10_x1lwr"]
 [ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="11_lm44d"]
 [ext_resource type="PackedScene" uid="uid://p26es1h7f0wm" path="res://Prefabs/World Objects/Floor.tscn" id="12_1bkl4"]
-[ext_resource type="Script" path="res://Scripts/Map Scripts/MapGeneratorV2.gd" id="13_d6fp5"]
 [ext_resource type="PackedScene" uid="uid://dwv2ff7baype5" path="res://Prefabs/World Objects/Wall.tscn" id="13_sdh6r"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="14_6wtlq"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="14_e3326"]
 [ext_resource type="PackedScene" uid="uid://cpvi7mljdbbmw" path="res://Prefabs/World Objects/wall_occluder.tscn" id="16_rns4c"]
 [ext_resource type="Script" path="res://Scenes/Maps/Player Mimic.gd" id="17_ss7lf"]
-[ext_resource type="PackedScene" uid="uid://c37w1rm3odp2g" path="res://Prefabs/World Objects/room_tile_floor.tscn" id="18_1u8br"]
 [ext_resource type="Script" path="res://Scenes/Maps/UI Elements.gd" id="19_3htf3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
@@ -170,6 +169,7 @@ script = ExtResource("1_i65y0")
 
 [node name="Main Plane Controller" type="SubViewportContainer" parent="."]
 process_priority = 1
+visible = false
 z_index = 1
 offset_right = 1920.0
 offset_bottom = 1080.0
@@ -179,7 +179,7 @@ disable_3d = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Projectile Container" type="Node2D" parent="Main Plane Controller/Main Plane"]
 
@@ -196,11 +196,11 @@ spawnOnStart = false
 
 [node name="Player" type="CharacterBody2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("projectileContainer")]
 light_mask = 0
-z_index = 10
+position = Vector2(1000, 1000)
 collision_mask = 3
 wall_min_slide_angle = 0.0872665
 script = ExtResource("1_uu0qm")
-acceleration = 100.0
+acceleration = 30.0
 drag = 6.0
 staticDrag = 9.0
 projectileContainer = NodePath("../Projectile Container")
@@ -294,7 +294,6 @@ mousePosCamMultiplier = 0.2
 follow_viewport_scale = -0.66
 
 [node name="BackBufferCopy2" type="BackBufferCopy" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer"]
-visible = false
 position = Vector2(0, -480)
 rect = Rect2(0, 0, 1920, 1920)
 
@@ -307,7 +306,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer"]
-visible = false
 position = Vector2(0, -480)
 rect = Rect2(0, 0, 1920, 1920)
 
@@ -321,20 +319,27 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="MapGenerater" type="Node2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("occluderAnchor", "roomScaleObject")]
+[node name="MapGenerater" type="Node2D" parent="Main Plane Controller/Main Plane"]
 z_index = -1
-script = ExtResource("13_d6fp5")
-occluderAnchor = NodePath("../../../Vision Plane Controller/Vision Plane/Map Occluders")
-mapSizeRandWidth = Vector2i(5, 5)
-mapSizeRandLength = Vector2i(5, 5)
-mapSizePadding = 1
-fluxRoomRange = Vector2i(1, 1)
-roomSizeRange = Vector2i(2, 2)
+script = ExtResource("10_qsthu")
+mapSizeRandWidth = Vector2i(50, 50)
+mapSizeRandLength = Vector2i(50, 50)
+mapSizePadding = 10
+roomDistPadding = 2
+minRooms = 100
+maxRooms = 100
+roomSizeMax = 4
+roomSizeMin = 2
+roomSectionMin = 2
+roomSectionMax = 10
+sectionLengthWidthRange = Vector2i(2, 6)
+randomConnectors = Vector2i(1, 4)
 roomMarkerResource = ExtResource("11_lm44d")
 floorResource = ExtResource("12_1bkl4")
 wallResource = ExtResource("13_sdh6r")
 occluderResource = ExtResource("16_rns4c")
-roomScaleObject = NodePath("../Node2D")
+occluderAnchor = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":768,"z_index":4096,"z_as_relative":false,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":null)
+
 
 [node name="ColorRect" type="ColorRect" parent="Main Plane Controller/Main Plane"]
 z_index = -100
@@ -345,16 +350,9 @@ offset_right = 9000.0
 offset_bottom = 9000.0
 color = Color(0.12549, 0.12549, 0.12549, 1)
 
-[node name="Node2D" type="Node2D" parent="Main Plane Controller/Main Plane"]
-
-[node name="RoomTileFloor" parent="Main Plane Controller/Main Plane/Node2D" instance=ExtResource("18_1u8br")]
-z_index = -10
-position = Vector2(16, 16)
-scale = Vector2(1, 1)
-
 [node name="Vision Plane Controller" type="SubViewportContainer" parent="."]
 process_physics_priority = 1
-visible = false
+z_index = 2
 offset_right = 1920.0
 offset_bottom = 1080.0
 
@@ -364,10 +362,11 @@ transparent_bg = true
 handle_input_locally = false
 canvas_cull_mask = 4293919488
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
+render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="Vision Plane Controller/Vision Plane"]
 process_priority = 2
+visible = false
 light_mask = 512
 visibility_layer = 512
 z_index = 10
