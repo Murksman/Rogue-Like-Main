@@ -27,7 +27,6 @@ void fragment() {
 	vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
 	vec2 rotatedUV = Orientate(uv - vec2(0.5, 0.5)) + vec2(0.5, 0.5);
 	
-	
 	vec2 vision_cone;
 	if (rotatedUV.x > 0.5) {
 		if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {}

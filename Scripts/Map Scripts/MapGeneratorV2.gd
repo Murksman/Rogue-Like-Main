@@ -1,5 +1,5 @@
 extends Node2D
-class_name MapGenerater
+#class_name MapGenerater
 
 @export_group("General")
 @export var occluderAnchor : Node2D
@@ -60,7 +60,7 @@ func Start():
 		var performanceTimeTemp = Time.get_ticks_msec()
 		Initialization()
 		ScatterRooms()
-		ValidateRooms()
+		#ValidateRooms()
 		GenerateRooms()
 		ProcessRooms()
 		GenerateWalls()
@@ -73,18 +73,19 @@ func Start():
 	print("Total Average Time Taken:  ---  ", performanceTime / GameGenIterations, " ms  ---  (milliSeconds)")
 
 func Initialization():
+	# Initialization function cleans up objects from previous runs and instantiates arrays.
+	
 	rng.randomize()
 	rooms = []
 	currentRoomNumber = 0
 	
 	# Removing items on the board
-	var tempObjectCount = $".".get_child_count()
-	for n in tempObjectCount:
-		$".".get_child(tempObjectCount - 1 - n).queue_free()
+	for n in $".".get_child_count():
+		$".".get_child($".".get_child_count() - 1 - n).queue_free()
 	
-	var tempOccluderCount = occluderAnchor.get_child_count()
-	for n in tempOccluderCount:
-		occluderAnchor.get_child(tempOccluderCount - 1 - n).queue_free()
+	
+	for n in occluderAnchor.get_child_count():
+		occluderAnchor.get_child(occluderAnchor.get_child_count() - 1 - n).queue_free()
 	
 	# initializing the 2d tilemap for the level
 	mapSizeLength = rng.randi_range(mapSizeRandLength.x, mapSizeRandLength.y) + 2 * mapSizePadding
@@ -92,9 +93,9 @@ func Initialization():
 	
 	roomScaleObject.scale = Vector2(mapSizeLength, mapSizeWidth)
 	
+	perimeterTiles = []
 	levelTileMap = []
 	wallTileMap = []
-	perimeterTiles = []
 	
 	for i in mapSizeLength: 
 		var newLevelRow : Array[int] = []
@@ -115,19 +116,17 @@ func Initialization():
 
 func ScatterRooms():
 	var newRoom = RoomGenData.new()
+	
 	rooms.append(newRoom)
-	newRoom.roomCoordX = mapSizePadding + 1
-	newRoom.roomCoordY = mapSizePadding + 1
-	#newRoom.roomCoordX = rng.randi_range(mapSizePadding, mapSizeLength - mapSizePadding - 1)
-	#newRoom.roomCoordY = rng.randi_range(mapSizePadding, mapSizeWidth - mapSizePadding - 1)
 	newRoom.arrayPosition = 0
-	#for i in rng.randi_range(fluxRoomRange.x, fluxRoomRange.y):
-	#	var newRoom = RoomGenData.new()
-	#	rooms.append(newRoom)
-	#	newRoom.roomCoordX = rng.randi_range(mapSizePadding, mapSizeLength - mapSizePadding - 1)
-	#	newRoom.roomCoordY = rng.randi_range(mapSizePadding, mapSizeWidth - mapSizePadding - 1)
-	#	newRoom.arrayPosition = i
-
+	newRoom.roomNumber = 1
+	newRoom.startBound.x = randi_range(mapSizePadding, mapSizeLength - mapSizePadding - roomSizeRange.x)
+	newRoom.startBound.y = randi_range(mapSizePadding, mapSizeWidth - mapSizePadding - roomSizeRange.x)
+	newRoom.endBound.x = randi_range(newRoom.startBound.x + roomSizeRange.x - 1, clamp(newRoom.startBound.x + roomSizeRange.y - 1, 0, mapSizeLength - mapSizePadding - 1))
+	newRoom.endBound.y = randi_range(newRoom.startBound.y + roomSizeRange.x - 1, clamp(newRoom.startBound.y + roomSizeRange.y - 1, 0, mapSizeWidth - mapSizePadding - 1))
+	newRoom.roomSize.x = newRoom.endBound.x - newRoom.startBound.x + 1
+	newRoom.roomSize.y = newRoom.endBound.y - newRoom.startBound.y + 1
+	print(newRoom.endBound)
 
 func ValidateRooms():
 	var tempRooms : Array[RoomGenData] = []
@@ -135,18 +134,9 @@ func ValidateRooms():
 	mergeArray.resize(rooms.size())
 	mergeArray.fill(false)
 	tempRooms.resize(rooms.size())
-	for i in rooms.size():
-		var mergingRoom = rooms[i]
-		if !mergeArray[i]:
-			tempRooms[i] = mergingRoom
-			mergingRoom.upperBound = clamp(mergingRoom.roomCoordY - rng.randi_range(roomSizeRange.x, roomSizeRange.y), 0, mapSizeWidth)
-			mergingRoom.lowerBound = clamp(mergingRoom.roomCoordY + rng.randi_range(roomSizeRange.x, roomSizeRange.y), 0, mapSizeWidth)
-			mergingRoom.leftBound = clamp(mergingRoom.roomCoordX - rng.randi_range(roomSizeRange.x, roomSizeRange.y), 0, mapSizeLength)
-			mergingRoom.rightBound = clamp(mergingRoom.roomCoordX + rng.randi_range(roomSizeRange.x, roomSizeRange.y), 0, mapSizeLength)
-			for n in rooms.size():
-				var mergeSecondary = rooms[n]
-				if n != mergingRoom.arrayPosition && mergeSecondary.roomCoordX >= mergingRoom.leftBound && mergeSecondary.roomCoordX <= mergingRoom.rightBound && mergeSecondary.roomCoordY >= mergingRoom.upperBound && mergeSecondary.roomCoordY <= mergingRoom.lowerBound:
-					mergeArray[n] = true
+	for tRoom in rooms:
+		for cRoom in rooms:
+			return
 	
 	# delete merged rooms
 	for i in rooms.size():
@@ -165,55 +155,30 @@ func ValidateRooms():
 # Generates the sections in a room to generate its shape
 func GenerateRooms():
 	for i in rooms.size():
-		var generatableRoom : RoomGenData = rooms[i]
-		var roomLength = generatableRoom.rightBound - generatableRoom.leftBound + 1
-		var roomWidth = generatableRoom.lowerBound - generatableRoom.upperBound + 1
-		for n in roomLength:
+		var genRoom : RoomGenData = rooms[i]
+		for n in genRoom.roomSize.x:
 			var newRoomRow : Array[bool] = []
-			var newWallRow : Array[bool] = []
-			newWallRow.resize(roomWidth)
-			newRoomRow.resize(roomWidth)
-			newWallRow.fill(true)
+			newRoomRow.resize(genRoom.roomSize.y)
 			newRoomRow.fill(true)
-			generatableRoom.roomTileMap.append(newRoomRow)
-			generatableRoom.wallTileMap.append(newWallRow)
-		# var sections = rng.randi_range(roomSectionMin, roomSectionMax)
-		var marker = roomMarkerObject.instantiate()
-		$".".add_child(marker)
-		marker.global_position = Vector2(generatableRoom.roomCoordX, generatableRoom.roomCoordY) * 32
-		#for n in sections:
-		#	var sectionLength = rng.randi_range(sectionLengthWidthRange.x, clamp(sectionLengthWidthRange.y, 0, roomLength))
-		#	var sectionWidth = rng.randi_range(sectionLengthWidthRange.x, clamp(sectionLengthWidthRange.y, 0, roomWidth))
-		#	var sectionX = rng.randi_range(0, roomLength - sectionLength)
-		#	var sectionY = rng.randi_range(0, roomWidth - sectionWidth)
+			genRoom.roomTileMap.append(newRoomRow)
 
 
-# Processes the rooms dimensions into actual tiles on the tilemap
 func ProcessRooms():
 	for i in rooms.size():
-		#var randRedShift = randf_range(0, 1)
-		#var randGreenShift = randf_range(0, 1)
-		#var randBlueShift = randf_range(0, 1)
-		var createRoom = rooms[i]
-		var roomTempLength = createRoom.rightBound - createRoom.leftBound + 1
-		var roomTempWidth = createRoom.lowerBound - createRoom.upperBound + 1
-		for x in roomTempLength:
-			for y in roomTempWidth:
-				var floorX = x + createRoom.leftBound + 1
-				var floorY = y + createRoom.upperBound
-				#if createRoom.roomTileMap[x][y] && levelTileMap[x + createRoom.leftBound][y + createRoom.upperBound] == 0:
-				levelTileMap[floorX + createRoom.leftBound][floorY + createRoom.upperBound] = createRoom.roomNumber
+		var cRoom = rooms[i]
+		for x in cRoom.roomSize.x:
+			for y in cRoom.roomSize.y:
+				var floorX = x + cRoom.startBound.x
+				var floorY = y + cRoom.startBound.y
 				
-				MakePerimeter()
+				levelTileMap[floorX][floorY] = cRoom.roomNumber
 				
-				#if perimeterTiles[x + createRoom.leftBound][y + createRoom.upperBound]:
-				if levelTileMap[x + createRoom.leftBound][y + createRoom.upperBound] > 0:
+				#MakePerimeter()
+				
+				if levelTileMap[x + cRoom.startBound.x][y + cRoom.startBound.y] > 0:
 					var newFloor = floorObject.instantiate()
 					$".".add_child(newFloor)
 					newFloor.global_position = Vector2(floorX + 0.5, floorY + 0.5) * 32
-					#if createRoom.wallTileMap.size() > 0 && !creatsdeRoom.wallTileMap[x][y]: newFloor.modulate = Color(randRedShift, randGreenShift, randBlueShift, 1)
-					#else: newFloor.modulate = Color(0.1, 0.1, 0.1, 1)
-	print($".".get_child_count())
 
 
 func GenerateWalls():

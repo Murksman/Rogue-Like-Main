@@ -1,9 +1,8 @@
-[gd_scene load_steps=38 format=3 uid="uid://f4h3g48vgn4t"]
+[gd_scene load_steps=34 format=3 uid="uid://f4h3g48vgn4t"]
 
 [ext_resource type="Script" path="res://Scenes/Maps/Master_Script.gd" id="1_i65y0"]
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="1_uu0qm"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_gwtnp"]
-[ext_resource type="Script" path="res://Scenes/Maps/Projectile Container.gd" id="2_kvtth"]
 [ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="2_okf5t"]
 [ext_resource type="Script" path="res://Scripts/Enemy Scripts/Enemy Spawner.gd" id="3_es58c"]
 [ext_resource type="Script" path="res://Scripts/Player Scripts/Weapon Holder.gd" id="3_jx5vc"]
@@ -14,12 +13,9 @@
 [ext_resource type="Script" path="res://Scenes/Maps/Shader Testing.gd" id="10_x1lwr"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="14_6wtlq"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="14_e3326"]
-[ext_resource type="Texture2D" uid="uid://bt4264jlpghjq" path="res://Sprites/World Objects/Tileset 1.png" id="14_udag1"]
-[ext_resource type="Script" path="res://Scripts/Map Scripts/MapGeneratorV3.gd" id="16_8eii5"]
+[ext_resource type="Texture2D" uid="uid://y4lmqvx0tinf" path="res://Sprites/Backround.png" id="14_qc4l6"]
 [ext_resource type="Script" path="res://Scenes/Maps/Player Mimic.gd" id="17_ss7lf"]
-[ext_resource type="Script" path="res://Scenes/Maps/ImageTextTest.gd" id="17_vc7w3"]
 [ext_resource type="PackedScene" uid="uid://c37w1rm3odp2g" path="res://Prefabs/World Objects/room_tile_floor.tscn" id="18_1u8br"]
-[ext_resource type="Texture2D" uid="uid://2icoedat8vmb" path="res://Sprites/World Objects/Ball Test.png" id="18_jpvbv"]
 [ext_resource type="Script" path="res://Scenes/Maps/UI Elements.gd" id="19_3htf3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
@@ -130,172 +126,66 @@ shader_parameter/g_vision_displacement = Vector2(5, 15)
 shader_parameter/b_vision_displacement = Vector2(-10, -2)
 shader_parameter/vision_shape = SubResource("ViewportTexture_bp0ah")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x8o80"]
-texture = ExtResource("14_udag1")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0jqbg"]
+texture = ExtResource("14_qc4l6")
 texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 1:0/0 = 0
-1:0/0/terrain_set = 0
-1:0/0/terrain = 0
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-1:0/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-1:0/0/physics_layer_1/angular_velocity = 0.0
-1:0/0/terrains_peering_bit/bottom_side = 0
-0:1/0 = 0
-0:1/0/terrain_set = 0
-0:1/0/terrain = 0
-0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:1/0/physics_layer_0/angular_velocity = 0.0
-0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-0:1/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-0:1/0/physics_layer_1/angular_velocity = 0.0
-0:1/0/terrains_peering_bit/right_side = 0
-1:1/0 = 0
-1:1/0/terrain_set = 0
-1:1/0/terrain = 0
-1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-1:1/0/physics_layer_0/angular_velocity = 0.0
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-1:1/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-1:1/0/physics_layer_1/angular_velocity = 0.0
-1:1/0/terrains_peering_bit/right_side = 0
-1:1/0/terrains_peering_bit/bottom_side = 0
-1:1/0/terrains_peering_bit/left_side = 0
-1:1/0/terrains_peering_bit/top_side = 0
-2:1/0 = 0
-2:1/0/terrain_set = 0
-2:1/0/terrain = 0
-2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-2:1/0/physics_layer_0/angular_velocity = 0.0
-2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-2:1/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-2:1/0/physics_layer_1/angular_velocity = 0.0
-2:1/0/terrains_peering_bit/right_side = 0
-2:1/0/terrains_peering_bit/left_side = 0
-3:1/0 = 0
-3:1/0/terrain_set = 0
-3:1/0/terrain = 0
-3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-3:1/0/physics_layer_0/angular_velocity = 0.0
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-3:1/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-3:1/0/physics_layer_1/angular_velocity = 0.0
-3:1/0/terrains_peering_bit/left_side = 0
-1:2/0 = 0
-1:2/0/terrain_set = 0
-1:2/0/terrain = 0
-1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-1:2/0/physics_layer_0/angular_velocity = 0.0
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-1:2/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-1:2/0/physics_layer_1/angular_velocity = 0.0
-1:2/0/terrains_peering_bit/bottom_side = 0
-1:2/0/terrains_peering_bit/top_side = 0
-2:2/0 = 0
-2:2/0/terrain_set = 0
-2:2/0/terrain = 0
-2:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-2:2/0/physics_layer_0/angular_velocity = 0.0
-2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-2:2/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-2:2/0/physics_layer_1/angular_velocity = 0.0
-2:2/0/terrains_peering_bit/right_side = 0
-2:2/0/terrains_peering_bit/bottom_side = 0
-3:2/0 = 0
-3:2/0/terrain_set = 0
-3:2/0/terrain = 0
-3:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-3:2/0/physics_layer_0/angular_velocity = 0.0
-3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-3:2/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-3:2/0/physics_layer_1/angular_velocity = 0.0
-3:2/0/terrains_peering_bit/bottom_side = 0
-3:2/0/terrains_peering_bit/left_side = 0
-1:3/0 = 0
-1:3/0/terrain_set = 0
-1:3/0/terrain = 0
-1:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-1:3/0/physics_layer_0/angular_velocity = 0.0
-1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-1:3/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-1:3/0/physics_layer_1/angular_velocity = 0.0
-1:3/0/terrains_peering_bit/top_side = 0
-2:3/0 = 0
-2:3/0/terrain_set = 0
-2:3/0/terrain = 0
-2:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-2:3/0/physics_layer_0/angular_velocity = 0.0
-2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-2:3/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-2:3/0/physics_layer_1/angular_velocity = 0.0
-2:3/0/terrains_peering_bit/right_side = 0
-2:3/0/terrains_peering_bit/top_side = 0
-3:3/0 = 0
-3:3/0/terrain_set = 0
-3:3/0/terrain = 0
-3:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-3:3/0/physics_layer_0/angular_velocity = 0.0
-3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-3:3/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-3:3/0/physics_layer_1/angular_velocity = 0.0
-3:3/0/terrains_peering_bit/left_side = 0
-3:3/0/terrains_peering_bit/top_side = 0
 2:0/0 = 0
-2:0/0/terrain_set = 0
-2:0/0/terrain = 0
 2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 2:0/0/physics_layer_0/angular_velocity = 0.0
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-2:0/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-2:0/0/physics_layer_1/angular_velocity = 0.0
-2:0/0/terrains_peering_bit/right_side = 0
-2:0/0/terrains_peering_bit/left_side = 0
-2:0/0/terrains_peering_bit/top_side = 0
 3:0/0 = 0
-3:0/0/terrain_set = 0
-3:0/0/terrain = 0
 3:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 3:0/0/physics_layer_0/angular_velocity = 0.0
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-3:0/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-3:0/0/physics_layer_1/angular_velocity = 0.0
-3:0/0/terrains_peering_bit/right_side = 0
-3:0/0/terrains_peering_bit/bottom_side = 0
-3:0/0/terrains_peering_bit/left_side = 0
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+2:1/0 = 0
+2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:1/0/physics_layer_0/angular_velocity = 0.0
+3:1/0 = 0
+3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:1/0/physics_layer_0/angular_velocity = 0.0
 0:2/0 = 0
-0:2/0/terrain_set = 0
-0:2/0/terrain = 0
 0:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:2/0/physics_layer_0/angular_velocity = 0.0
-0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-0:2/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-0:2/0/physics_layer_1/angular_velocity = 0.0
-0:2/0/terrains_peering_bit/bottom_side = 0
-0:2/0/terrains_peering_bit/left_side = 0
-0:2/0/terrains_peering_bit/top_side = 0
+1:2/0 = 0
+1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:2/0/physics_layer_0/angular_velocity = 0.0
+2:2/0 = 0
+2:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:2/0/physics_layer_0/angular_velocity = 0.0
+3:2/0 = 0
+3:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:2/0/physics_layer_0/angular_velocity = 0.0
 0:3/0 = 0
-0:3/0/terrain_set = 0
-0:3/0/terrain = 0
 0:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:3/0/physics_layer_0/angular_velocity = 0.0
-0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-0:3/0/physics_layer_1/linear_velocity = Vector2(0, 0)
-0:3/0/physics_layer_1/angular_velocity = 0.0
-0:3/0/terrains_peering_bit/right_side = 0
-0:3/0/terrains_peering_bit/bottom_side = 0
-0:3/0/terrains_peering_bit/top_side = 0
+1:3/0 = 0
+1:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:3/0/physics_layer_0/angular_velocity = 0.0
+2:3/0 = 0
+2:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:3/0/physics_layer_0/angular_velocity = 0.0
+3:3/0 = 0
+3:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:3/0/physics_layer_0/angular_velocity = 0.0
 
-[sub_resource type="TileSet" id="TileSet_vl3l2"]
+[sub_resource type="TileSet" id="TileSet_yrm0s"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-physics_layer_1/collision_layer = 1
-terrain_set_0/mode = 2
-terrain_set_0/terrain_0/name = "Test Terrain"
-terrain_set_0/terrain_0/color = Color(0.298039, 1, 0.25098, 1)
-terrain_set_0/terrain_1/name = "Terrain 1"
-terrain_set_0/terrain_1/color = Color(0.5, 0.4375, 0.25, 1)
-sources/2 = SubResource("TileSetAtlasSource_x8o80")
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Terrain 0"
+terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+sources/2 = SubResource("TileSetAtlasSource_0jqbg")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tvm3n"]
 light_mode = 2
@@ -349,7 +239,6 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="Projectile Container" type="Node2D" parent="Main Plane Controller/Main Plane"]
-script = ExtResource("2_kvtth")
 
 [node name="Enemy Container" type="Node2D" parent="Main Plane Controller/Main Plane"]
 script = ExtResource("2_gwtnp")
@@ -365,7 +254,6 @@ spawnOnStart = false
 [node name="Player" type="CharacterBody2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("projectileContainer")]
 light_mask = 0
 z_index = 10
-texture_filter = 1
 collision_mask = 3
 wall_min_slide_angle = 0.0872665
 script = ExtResource("1_uu0qm")
@@ -468,7 +356,6 @@ position = Vector2(0, -480)
 rect = Rect2(0, 0, 1920, 1920)
 
 [node name="Primary" type="ColorRect" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer/BackBufferCopy2"]
-visible = false
 material = SubResource("ShaderMaterial_a7v4a")
 anchors_preset = 15
 anchor_right = 1.0
@@ -482,7 +369,6 @@ position = Vector2(0, -480)
 rect = Rect2(0, 0, 1920, 1920)
 
 [node name="Secondary" type="ColorRect" parent="Main Plane Controller/Main Plane/Player/Camera2D/CanvasLayer/BackBufferCopy"]
-visible = false
 z_index = 1
 material = SubResource("ShaderMaterial_158ks")
 anchors_preset = 15
@@ -501,38 +387,26 @@ offset_right = 9000.0
 offset_bottom = 9000.0
 color = Color(0.12549, 0.12549, 0.12549, 1)
 
-[node name="Testing Floor" type="Node2D" parent="Main Plane Controller/Main Plane"]
+[node name="Node2D" type="Node2D" parent="Main Plane Controller/Main Plane"]
+visible = false
 
-[node name="RoomTileFloor" parent="Main Plane Controller/Main Plane/Testing Floor" instance=ExtResource("18_1u8br")]
+[node name="RoomTileFloor" parent="Main Plane Controller/Main Plane/Node2D" instance=ExtResource("18_1u8br")]
 z_index = -10
 position = Vector2(16, 16)
 scale = Vector2(1, 1)
 
 [node name="TileMap" type="TileMap" parent="Main Plane Controller/Main Plane"]
-texture_filter = 1
-tile_set = SubResource("TileSet_vl3l2")
+tile_set = SubResource("TileSet_yrm0s")
 format = 2
 layer_0/name = "Ground"
-layer_0/tile_data = PackedInt32Array(-65536, 2, 1, -65535, 131074, 1, -65534, 131074, 1, -65533, 196610, 2, 2, 131074, 2, 65538, 65538, 1, 65539, 65538, 1, 131075, 65538, 1, 131074, 65538, 1, 196610, 65538, 1, 65537, 131074, 2, 131073, 65538, 1, 131076, 65538, 1, 4, 196610, 0, 5, 196610, 2, 65541, 65538, 1, 65542, 196610, 2, 131078, 65538, 1, 196614, 65538, 1, 196615, 65538, 1, 196613, 65538, 1, 196612, 65538, 1, 65544, 131074, 2, 65545, 196610, 0, 131081, 65538, 1, 131082, 131074, 0, 131083, 131074, 0, 65547, 196610, 0, 65546, 196610, 0, 131084, 131074, 0, 131080, 65538, 1, 65548, 196610, 0, 65549, 196610, 2, 131085, 196610, 3, 65540, 65538, 1, 131077, 65538, 1, 196611, 65538, 1, 196609, 65538, 1, 262147, 65538, 1, 262148, 65538, 1, 262149, 65538, 1, 262150, 65538, 1, 262151, 65538, 1, 262152, 65538, 1, 196616, 65538, 1, 262145, 2, 3, 327681, 131074, 3, 327682, 65538, 1, 327683, 65538, 1, 393219, 131074, 0, 393220, 131074, 0, 393221, 131074, 0, 393222, 131074, 0, 393223, 131074, 0, 327688, 65538, 1, 327689, 65538, 1, 262153, 65538, 1, 262146, 65538, 1, 393218, 131074, 3, 393224, 131074, 0, 393225, 131074, 0, 327690, 2, 2, 262154, 196610, 2, 196617, 2, 2, 393226, 196610, 3, 327684, 65538, 1, 327686, 65538, 1, 327687, 65538, 1, 327685, 65538, 1, 3, 65538, 1, 131072, 131074, 2, 196608, 131074, 3, 131079, 196610, 0)
+layer_0/tile_data = PackedInt32Array(2, 65538, 0, 65538, 65538, 0, 1, 65538, 0, 65537, 65538, 0, 0, 65538, 0, 65536, 65538, 0)
 layer_1/name = "Wall"
-layer_1/tile_data = PackedInt32Array(65540, 131074, 2, 131076, 2, 3, 131077, 65538, 1, 65541, 196610, 2, 131078, 196610, 0, 131079, 196610, 0, 131080, 196610, 2, 196616, 2, 2, 196615, 65538, 1, 196614, 65538, 1, 196613, 65538, 1, 196612, 2, 3, 262148, 131074, 3, 262149, 65538, 1, 262150, 65538, 1, 262151, 65538, 1, 262152, 196610, 3, 327687, 196610, 3, 327686, 131074, 0, 327685, 131074, 3)
-
-[node name="Map Generator" type="Node2D" parent="Main Plane Controller/Main Plane" node_paths=PackedStringArray("tileMap")]
-script = ExtResource("16_8eii5")
-tileMap = NodePath("../TileMap")
-
-[node name="Node2D" type="Node2D" parent="Main Plane Controller/Main Plane/Map Generator" node_paths=PackedStringArray("img_array")]
-script = ExtResource("17_vc7w3")
-src_image = ExtResource("18_jpvbv")
-partition_size = 32
-img_array = [NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath("")]
+layer_1/tile_data = PackedInt32Array(3, 2, 0, 65539, 2, 0, 131075, 2, 0, 131073, 2, 0, 131072, 2, 0, 131074, 2, 0)
 
 [node name="Vision Plane Controller" type="SubViewportContainer" parent="."]
 process_physics_priority = 1
-offset_left = 22.0
-offset_top = 23.0
-offset_right = 1942.0
-offset_bottom = 1103.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="Vision Plane" type="SubViewport" parent="Vision Plane Controller"]
 disable_3d = true
@@ -595,6 +469,7 @@ offset_bottom = 700.0
 color = Color(1, 0, 0, 1)
 
 [node name="UI Elements" type="Control" parent="."]
+visible = false
 z_index = 2
 layout_mode = 3
 anchors_preset = 0
