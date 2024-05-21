@@ -1,8 +1,6 @@
 @tool
 extends Node2D
-class_name MapGenerator
 
-@export var tileMap : TileMap
 @export var src_image : CompressedTexture2D
 @export var partition_size : int
 @export var Generate_Images : bool:
@@ -11,17 +9,10 @@ class_name MapGenerator
 	set(arg): 
 		GenerateImages()
 
-@export var Generate_Map : bool:
-	get: 
-		return false
-	set(arg):
-		TestFunc()
 @export var img_array : Array[Sprite2D]
 
 
 func GenerateImages():
-	for x in get_child_count():
-		get_child(get_child_count() - x - 1).queue_free()
 	img_array = []
 	
 	var img : Image = src_image.get_image()
@@ -41,10 +32,5 @@ func GenerateImages():
 			$".".add_child(new_sprite)
 			new_sprite.position = Vector2(x,y) * partition_size
 			new_sprite.owner = get_tree().edited_scene_root
-			new_sprite.name = "Sprite2D_" + str(x) + "_" + str(y)
 			img_array.append(new_sprite)
-
-
-func TestFunc():
-	if tileMap != null:
-		print("test")
+	
