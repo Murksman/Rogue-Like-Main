@@ -58,8 +58,7 @@ func ProjectileRaycast():
 	if hit:
 		var hitCollider = hit.collider
 		if hitCollider.get_class() == "TileMap":
-			print(parent_container.tileMapCells)
-			var test1 = hitCollider.get_pattern(0, [Vector2i(0,0), Vector2i(1,0), Vector2i(2,0), Vector2i(3,0), Vector2i(4,0)]).get_size()
+			pass
 		elif hitCollider.get_collision_layer_value(3):
 			if hitCollider.currentHealth > 0:
 				hitCollider.TakeDamage(damage)

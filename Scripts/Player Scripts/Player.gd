@@ -8,7 +8,7 @@ extends CharacterBody2D
 @export var zoomSmoothRate : float
 
 @export_category("Resources")
-@export var ballTest = preload("res://Prefabs/World Objects/ball_test.tscn")
+@export var ballTest = preload("res://Prefabs/World Objects/Misc/ball_test.tscn")
 @export var projectileContainer : Node2D
 
 var spaceState : PhysicsDirectSpaceState2D

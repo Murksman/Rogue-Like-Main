@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dur7x3pa2aveo"]
+
+[ext_resource type="Texture2D" uid="uid://2icoedat8vmb" path="res://Sprites/World Objects/Ball Test.png" id="1_6f5tw"]
+[ext_resource type="Script" path="res://Scripts/Object Scripts/Bullet.gd" id="2_4p0p3"]
+
+[node name="BallTest" type="Sprite2D"]
+z_index = 10
+scale = Vector2(0.061, 0.061)
+texture = ExtResource("1_6f5tw")
+script = ExtResource("2_4p0p3")

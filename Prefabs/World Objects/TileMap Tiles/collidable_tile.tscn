@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bbeifspcue10f"]
+
+[node name="Collidable Tile" type="Sprite2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(-16, -16)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(0, 0, 0, 32, 32, 32, 32, 0)

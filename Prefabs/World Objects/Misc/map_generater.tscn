@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c17vx7j2bf42r"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/MapGeneratorV2.gd" id="1_gl20h"]
-[ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/ball_test.tscn" id="2_nh6w0"]
+[ext_resource type="PackedScene" uid="uid://dur7x3pa2aveo" path="res://Prefabs/World Objects/Misc/ball_test.tscn" id="2_nh6w0"]
 [ext_resource type="PackedScene" uid="uid://p26es1h7f0wm" path="res://Prefabs/World Objects/Floor.tscn" id="3_ah23x"]
 [ext_resource type="PackedScene" uid="uid://dwv2ff7baype5" path="res://Prefabs/World Objects/Wall.tscn" id="4_2646q"]
 [ext_resource type="PackedScene" uid="uid://cpvi7mljdbbmw" path="res://Prefabs/World Objects/wall_occluder.tscn" id="5_ulhod"]

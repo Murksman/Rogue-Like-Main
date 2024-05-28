@@ -2,8 +2,9 @@
 extends Node2D
 class_name MapGenerator
 
+@export_group("Settings")
+@export var Source_Image : CompressedTexture2D
 @export var tileMap : TileMap
-@export var src_image : CompressedTexture2D
 @export var partition_size : int
 @export var Generate_Images : bool:
 	get:
@@ -16,37 +17,73 @@ class_name MapGenerator
 		return false
 	set(arg):
 		if tileMap != null:
-			TestFunc()
+			CompileMap()
 
-@export var img_array : Array[Sprite2D]
+@export var Clear_Tiles : bool:
+	get: 
+		return false
+	set(arg):
+		ClearChildren()
 
+@export_group("Tile Resources")
+@export var image_array : Array[ImageTexture]
+
+@export var collidable_tile : Resource
+@export var non_collidable_tile : Resource
+
+var loaded_collidable : Object
+var loaded_non_collidable : Object
+
+var partitions_col : int
+var partitions_row : int
 
 func GenerateImages():
-	for x in get_child_count():
-		get_child(get_child_count() - x - 1).queue_free()
+	ClearChildren()
+	image_array = []
 	
-	img_array = []
-	
-	var img : Image = src_image.get_image()
+	var img : Image = Source_Image.get_image()
 	var imgSize : Vector2i = img.get_size()
 	
-	var partitions_col : int = floor(imgSize.y / partition_size)
-	var partitions_row : int = floor(imgSize.x / partition_size)
+	partitions_col = floor(imgSize.y / partition_size)
+	partitions_row = floor(imgSize.x / partition_size)
 	
 	for y in partitions_col:
 		for x in partitions_row:
 			var curr_img_pos = Vector2i(x,y) * partition_size
 			var new_img = img.get_region(Rect2i(curr_img_pos, Vector2i(partition_size, partition_size)))
+			image_array.append(ImageTexture.create_from_image(new_img))
+
+
+func ClearChildren():
+	for x in get_child_count():
+		get_child(get_child_count() - x - 1).queue_free()
+
+func CompileMap():
+	loaded_collidable = load(str(collidable_tile.resource_path))
+	loaded_non_collidable = load(str(non_collidable_tile.resource_path))
+	ClearChildren()
+	for layer in tileMap.get_layers_count():
+		var usedTiles = tileMap.get_used_cells(layer)
+		for i in usedTiles:
+			print(i)
+			var tile_data = tileMap.get_cell_tile_data(layer,i)
+			var target_image = ImageMap(tileMap.get_cell_atlas_coords(layer,i))
+			var newTile
+			if tile_data.get_custom_data("Collidable"):
+				newTile = loaded_collidable.instantiate()
+				newTile.get_child(0).get_child(0).polygon = tile_data.get_collision_polygon_points(layer, 0)
+				newTile.texture = target_image
+				newTile.name = "Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer: " + str(layer)
+			else:
+				newTile = loaded_non_collidable.instantiate()
+				newTile.texture = target_image
+				newTile.name = "Non-Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer: " + str(layer)
+			add_child(newTile)
+			newTile.owner = get_tree().edited_scene_root
+			newTile.position = Vector2(i * 32)
 			
-			var new_sprite : Sprite2D = Sprite2D.new()
-			new_sprite.texture = ImageTexture.create_from_image(new_img)
-			$".".add_child(new_sprite)
-			new_sprite.owner = get_tree().edited_scene_root
-			new_sprite.position = Vector2(x,y) * partition_size
-			new_sprite.name = "Sprite2D_" + str(x) + "_" + str(y)
-			img_array.append(new_sprite)
 
 
-func TestFunc():
-	tileMap.get_used_cells(0)
-	print("test")
+func ImageMap(atlas_coords):
+	var img_pos = (atlas_coords.y * partitions_row) + atlas_coords.x
+	return image_array[img_pos]
