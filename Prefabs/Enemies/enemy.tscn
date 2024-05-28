@@ -4,14 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://qhlyvw0biw1l" path="res://Sprites/Generic Objects/Generic Static Enemy.png" id="2_pxhbq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_y2nlk"]
-radius = 16.0
+radius = 8.0
 
 [node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("agent")]
 collision_layer = 4
-collision_mask = 2
 script = ExtResource("1_kmqa2")
-accel = 120.0
-drag = 1.0
+accel = 2000.0
+drag = 10.0
 agent = NodePath("NavigationAgent2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -22,3 +21,5 @@ z_index = 5
 texture = ExtResource("2_pxhbq")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 5.0
+target_desired_distance = 32.0

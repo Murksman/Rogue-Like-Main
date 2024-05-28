@@ -6,13 +6,8 @@ class_name Enemy
 @export var drag : float
 @export var agent : NavigationAgent2D
 
-var player : CharacterBody2D
-var currentHealth : float
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	currentHealth = baseHealth
-	player = $"../..".player
+@onready var player : CharacterBody2D = $"../..".player
+@onready var currentHealth : float = baseHealth
 
 func TakeDamage(damage):
 	currentHealth -= damage

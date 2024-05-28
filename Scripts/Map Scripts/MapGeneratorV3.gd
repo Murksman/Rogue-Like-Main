@@ -23,7 +23,14 @@ class_name MapGenerator
 	get: 
 		return false
 	set(arg):
-		ClearChildren()
+		Clear()
+
+@export var Bake_Nav_Mesh : bool:
+	get: 
+		return false
+	set(arg):
+		$"..".bake_navigation_polygon(true)
+
 
 @export_group("Tile Resources")
 @export var image_array : Array[ImageTexture]
@@ -38,7 +45,6 @@ var partitions_col : int
 var partitions_row : int
 
 func GenerateImages():
-	ClearChildren()
 	image_array = []
 	
 	var img : Image = Source_Image.get_image()
@@ -54,24 +60,24 @@ func GenerateImages():
 			image_array.append(ImageTexture.create_from_image(new_img))
 
 
-func ClearChildren():
+func Clear():
 	for x in get_child_count():
 		get_child(get_child_count() - x - 1).queue_free()
 
 func CompileMap():
 	loaded_collidable = load(str(collidable_tile.resource_path))
 	loaded_non_collidable = load(str(non_collidable_tile.resource_path))
-	ClearChildren()
 	for layer in tileMap.get_layers_count():
 		var usedTiles = tileMap.get_used_cells(layer)
 		for i in usedTiles:
-			print(i)
 			var tile_data = tileMap.get_cell_tile_data(layer,i)
 			var target_image = ImageMap(tileMap.get_cell_atlas_coords(layer,i))
 			var newTile
 			if tile_data.get_custom_data("Collidable"):
 				newTile = loaded_collidable.instantiate()
-				newTile.get_child(0).get_child(0).polygon = tile_data.get_collision_polygon_points(layer, 0)
+				var polygon = tile_data.get_collision_polygon_points(0, 0)
+				newTile.get_child(0).get_child(0).polygon = polygon
+				newTile.get_child(1).occluder.polygon = polygon
 				newTile.texture = target_image
 				newTile.name = "Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer: " + str(layer)
 			else:
@@ -81,7 +87,6 @@ func CompileMap():
 			add_child(newTile)
 			newTile.owner = get_tree().edited_scene_root
 			newTile.position = Vector2(i * 32)
-			
 
 
 func ImageMap(atlas_coords):
