@@ -8,6 +8,7 @@ uniform float vision_horizontal_offset : hint_range(0.0, 1.0);
 uniform float peripheral_radius : hint_range(0.0, 1.0);
 uniform float peripheral_cutoff : hint_range(0.0, 1.0);
 uniform vec2 look_direction = vec2(0.0, 1.0);
+uniform vec2 player_offset = vec2(0.0, 0.0);
 
 uniform vec2 r_vision_displacement = vec2(3.0, 0.0);
 uniform vec2 g_vision_displacement = vec2(0.0, 2.0);
@@ -16,18 +17,18 @@ uniform vec2 b_vision_displacement = vec2(-3.0, 0.0);
 vec2 Orientate(vec2 input_uv) {
 	vec2 rotation_uv = vec2(-input_uv.y, -input_uv.x);
 	
-	float real_c = (rotation_uv.x * look_direction.x) + (rotation_uv.y * look_direction.y * -1.0);
+	float real_c = (rotation_uv.x * look_direction.x) - (rotation_uv.y * look_direction.y);
 	float complex_c = (rotation_uv.x * look_direction.y) + (rotation_uv.y * look_direction.x); 
 	
 	return vec2(real_c, complex_c);
 }
 
-void light() {
-	/*vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
+void fragment() {
+	vec2 uv = (SCREEN_UV + player_offset) * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
 	vec2 rotatedUV = Orientate(uv - vec2(0.5, 0.5)) + vec2(0.5, 0.5);
 	vec2 vision_cone;
 	if (rotatedUV.x > 0.5) {
-		if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {}
+		// if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {}
 		vision_cone = rotatedUV - vec2(vision_horizontal_offset, 0.0);
 	} else {
 		vision_cone = rotatedUV + vec2(vision_horizontal_offset, 0.0);
@@ -45,21 +46,14 @@ void light() {
 	
 	if (distortion_effect > cutoffAmount) {distortion_effect = cutoffAmount;}
 	
-	distortion_effect = 1.0;
-	
 	float blur = mix(0.0, 2.0, distortion_effect);
-	float r = texture(screen_texture, SCREEN_UV + vec2(TEXTURE_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction)).r;
-	float g = texture(screen_texture, SCREEN_UV + vec2(TEXTURE_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction)).g;
-	float b = texture(screen_texture, SCREEN_UV + vec2(TEXTURE_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction)).b;
+	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
+	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
+	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;
+	float a = texture(screen_texture, SCREEN_UV, blur).a;
 	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
 	
 	vec3 c = vec3(r,g,b);
-	*/
-	SHADOW_MODULATE = texture(screen_texture, SCREEN_UV, 1) ;
-	LIGHT = texture(screen_texture, SCREEN_UV, 0) * LIGHT_ENERGY;
+	c = mix(c, c / 8.0, distortion_effect);
+	COLOR = vec4(c.x,c.y,c.z,a);
 }
-
-//void light() {
-	// Called for every pixel for every light affecting the CanvasItem.
-	// Uncomment to replace the default light processing function with this one.
-//}
