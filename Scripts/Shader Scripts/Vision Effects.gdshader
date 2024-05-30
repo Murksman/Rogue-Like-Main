@@ -1,7 +1,6 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
-uniform sampler2D vision_shape;
 uniform float view_angle : hint_range(0.0, 1.0);
 uniform float vision_fade_length : hint_range(0.0, 1.0);
 uniform float vision_horizontal_offset : hint_range(0.0, 1.0);
@@ -23,10 +22,9 @@ vec2 Orientate(vec2 input_uv) {
 	return vec2(real_c, complex_c);
 }
 
-void fragment() {
-	vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
+void light() {
+	/*vec2 uv = SCREEN_UV * vec2(1.77777, 1.0) - vec2(0.388888, 0.0);
 	vec2 rotatedUV = Orientate(uv - vec2(0.5, 0.5)) + vec2(0.5, 0.5);
-	
 	vec2 vision_cone;
 	if (rotatedUV.x > 0.5) {
 		if (rotatedUV.x > 0.5 - vision_horizontal_offset && rotatedUV.x < 0.5 + vision_horizontal_offset) {}
@@ -47,18 +45,18 @@ void fragment() {
 	
 	if (distortion_effect > cutoffAmount) {distortion_effect = cutoffAmount;}
 	
-	if (texture(vision_shape, SCREEN_UV, 0.0).r < 0.2) {distortion_effect = 1.0;}
+	distortion_effect = 1.0;
 	
 	float blur = mix(0.0, 2.0, distortion_effect);
-	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
-	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
-	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;
+	float r = texture(screen_texture, SCREEN_UV + vec2(TEXTURE_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction)).r;
+	float g = texture(screen_texture, SCREEN_UV + vec2(TEXTURE_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction)).g;
+	float b = texture(screen_texture, SCREEN_UV + vec2(TEXTURE_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction)).b;
 	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
 	
 	vec3 c = vec3(r,g,b);
-	
-	COLOR.rgb = mix(c, c / 3.0, distortion_effect);
-	COLOR.a = 1.0;
+	*/
+	SHADOW_MODULATE = texture(screen_texture, SCREEN_UV, 1) ;
+	LIGHT = texture(screen_texture, SCREEN_UV, 0) * LIGHT_ENERGY;
 }
 
 //void light() {
