@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://ogc7uqallucc"]
+
+[ext_resource type="Texture2D" uid="uid://cxrs476rfgmg8" path="res://Sprites/Particles & Effects/Bullet Projectile.png" id="1_mfefc"]
+[ext_resource type="Script" path="res://Scripts/Object Scripts/Bullet.gd" id="2_ew5pv"]
+
+[node name="Bullet" type="Sprite2D"]
+z_index = 10
+texture = ExtResource("1_mfefc")
+offset = Vector2(0, 0.5)
+script = ExtResource("2_ew5pv")

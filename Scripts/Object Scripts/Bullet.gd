@@ -57,11 +57,11 @@ func ProjectileRaycast():
 	var hitDead = false
 	if hit:
 		var hitCollider = hit.collider
-		if hitCollider.get_class() == "TileMap":
-			pass
+		if hitCollider.get_collision_layer_value(4):
+			hitCollider.get_parent().TakeDamage(damage)
 		elif hitCollider.get_collision_layer_value(3):
-			if hitCollider.currentHealth > 0:
-				hitCollider.TakeDamage(damage)
+			if hitCollider.get_parent().currentHealth > 0:
+				hitCollider.get_parent().TakeDamage(damage)
 			else:
 				hitDead = true
 				hitRID = hitCollider.get_rid()
@@ -70,6 +70,7 @@ func ProjectileRaycast():
 			var hitDist = (hit.position - (global_position + (direction * radius))).length()
 			var hitAngle = (-direction).angle_to(hit.normal)
 			direction = (direction + (2 * cos(hitAngle) * hit.normal)).normalized()
+			look_at(direction + global_position)
 			global_position += hitDist * direction
 			remainingDist -= hitDist
 			return false

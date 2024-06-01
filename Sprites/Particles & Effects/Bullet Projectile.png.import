@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qhlyvw0biw1l"
-path="res://.godot/imported/Generic Static Enemy.png-4acebe4364d02eb06e12728bfa79ad97.ctex"
+uid="uid://cxrs476rfgmg8"
+path="res://.godot/imported/Bullet Projectile.png-ca32e006208b5bfb79424b6aba15d59a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Generic Objects/Generic Static Enemy.png"
-dest_files=["res://.godot/imported/Generic Static Enemy.png-4acebe4364d02eb06e12728bfa79ad97.ctex"]
+source_file="res://Sprites/Particles & Effects/Bullet Projectile.png"
+dest_files=["res://.godot/imported/Bullet Projectile.png-ca32e006208b5bfb79424b6aba15d59a.ctex"]
 
 [params]
 

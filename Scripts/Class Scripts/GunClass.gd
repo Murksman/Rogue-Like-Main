@@ -29,7 +29,7 @@ class_name Weapon
 
 var projectileObject : Object
 var projectileHitObject : Object
-var player : Node2D
+@onready var orientation = $"../../.."
 var rng = RandomNumberGenerator.new()
 
 var fireTime : float = 0.0
@@ -42,8 +42,6 @@ var reloadTime : float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	player = $"../..".parentPlayer
-	projectileContainer = player.projectileContainer
 	currentMagAmmo = magazineSize
 	rng.randomize()
 	projectileObject = load(str(projectileHitObjectResource.resource_path))
@@ -86,7 +84,7 @@ func Shoot():
 	fireTime += fireRate
 	for i in baseProjectiles:
 		var n : float = i 
-		var lookTheta = player.transform.x.angle_to(Vector2(1, 0))
+		var lookTheta = orientation.transform.x.angle_to(Vector2(1, 0))
 		var theta
 		if isSpreadRandom:
 			theta = PI * rng.randf_range(-spreadRange, spreadRange) - lookTheta
@@ -97,7 +95,7 @@ func Shoot():
 		var direction = Vector2(x, y)
 		var newBullet = projectileObject.instantiate()
 		projectileContainer.add_child(newBullet)
-		newBullet.global_position = global_position + player.transform.x * 22
+		newBullet.global_position = global_position + orientation.transform.x * 10
 		newBullet.look_at(newBullet.global_position + direction)
 		newBullet.addStats(projectileVelocity + rng.randf_range(projRandVelocityRange.x, projRandVelocityRange.y), direction, baseDamage, projectileMaxTime, numberOfBounces)
 

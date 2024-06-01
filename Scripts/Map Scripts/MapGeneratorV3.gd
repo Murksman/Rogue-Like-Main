@@ -29,7 +29,7 @@ class_name MapGenerator
 	get: 
 		return false
 	set(arg):
-		$"..".bake_navigation_polygon(true)
+		BakeNavMesh()
 
 
 @export_group("Tile Resources")
@@ -79,11 +79,12 @@ func CompileMap():
 				newTile.get_child(0).get_child(0).polygon = polygon
 				newTile.get_child(1).occluder.polygon = polygon
 				newTile.texture = target_image
-				newTile.name = "Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer: " + str(layer)
+				newTile.name = "Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer " + str(layer)
+				newTile.Health = tile_data.get_custom_data("Health")
 			else:
 				newTile = loaded_non_collidable.instantiate()
 				newTile.texture = target_image
-				newTile.name = "Non-Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer: " + str(layer)
+				newTile.name = "Non-Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer " + str(layer)
 			add_child(newTile)
 			newTile.owner = get_tree().edited_scene_root
 			newTile.position = Vector2(i * 32)
@@ -92,3 +93,11 @@ func CompileMap():
 func ImageMap(atlas_coords):
 	var img_pos = (atlas_coords.y * partitions_row) + atlas_coords.x
 	return image_array[img_pos]
+
+func DestroyTile(tile):
+	tile.queue_free()
+	$"..".add_free_node(tile)
+	$"..".query_free_nodes()
+
+func BakeNavMesh():
+	$"..".bake_navigation_polygon(true)

@@ -34,6 +34,7 @@ void fragment() {
 		vision_cone = rotatedUV + vec2(vision_horizontal_offset, 0.0);
 	}
 	
+	// float vision_fade = vision_fade_length / (rotatedUV.x + 0.5);
 	float vision_ratio = abs(vision_cone.x - 0.5) / abs(vision_cone.y - 0.5);
 	float distortion_effect = smoothstep(0.0, 1.0, ((vision_ratio - view_angle) / vision_fade_length) + vision_fade_length);
 	
@@ -44,9 +45,11 @@ void fragment() {
 	
 	if (rotatedUV.y > 0.5) {distortion_effect = 1.0;}
 	
+	// distortion_effect -= cutoffAmount;
 	if (distortion_effect > cutoffAmount) {distortion_effect = cutoffAmount;}
+	distortion_effect = clamp(distortion_effect,0.0,1.0); 
 	
-	float blur = mix(0.0, 2.0, distortion_effect);
+	float blur = mix(0.0, 4.0, distortion_effect);
 	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
 	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
 	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;
@@ -54,6 +57,6 @@ void fragment() {
 	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
 	
 	vec3 c = vec3(r,g,b);
-	c = mix(c, c / 8.0, distortion_effect);
+	c = mix(c, c / 3.0, distortion_effect);
 	COLOR = vec4(c.x,c.y,c.z,a);
 }

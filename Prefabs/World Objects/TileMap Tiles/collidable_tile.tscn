@@ -1,16 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbeifspcue10f"]
+[gd_scene load_steps=3 format=3 uid="uid://bbeifspcue10f"]
+
+[ext_resource type="Script" path="res://Prefabs/World Objects/TileMap Tiles/Collidable.gd" id="1_ai05e"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cic3f"]
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [node name="Collidable Tile" type="Sprite2D"]
 light_mask = 0
-z_index = 1300
+z_index = 10
 z_as_relative = false
-scale = Vector2(0.987897, 0.982676)
+region_filter_clip_enabled = true
+script = ExtResource("1_ai05e")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(-16, -16)
+collision_layer = 9
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(0, 0, 0, 32, 32, 32, 32, 0)
