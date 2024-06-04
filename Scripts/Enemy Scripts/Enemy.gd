@@ -26,12 +26,12 @@ func TakeDamage(damage):
 
 func _physics_process(delta):
 	spaceState = get_world_2d().direct_space_state
-	query = PhysicsRayQueryParameters2D.create(global_position, player.global_position, 33)
+	query = PhysicsRayQueryParameters2D.create(global_position, player.global_position, 1)
 	var hit = spaceState.intersect_ray(query)
-	if hit && hit.collider.get_collision_layer_value(6) || (player.global_position - global_position).length() <= autoAlertRadius:
+	if (hit && hit.collider.get_collision_layer_value(6)) || (player.global_position - global_position).length() <= autoAlertRadius:
 		aggression = aggroLevel
 	
-	if (aggression > 0.0):
+	if aggression > 0.0:
 		aggression -= delta
 		aggression = max(aggression, 0.0)
 		
@@ -46,8 +46,10 @@ func _physics_process(delta):
 		else:
 			hit_charge -= delta
 		
+		hit_charge = max(hit_charge, 0.0)
 		move_and_slide()
 	
+	print(hit_charge)
 	if hit_charge >= hitInterval:
 		hit_charge -= hitInterval
 		player.TakeDamage(damage)

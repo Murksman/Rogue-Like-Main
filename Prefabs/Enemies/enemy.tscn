@@ -21,7 +21,7 @@ aggroLevel = 10.0
 autoAlertRadius = 32.0
 damage = 20.0
 hitInterval = 1.0
-hitRange = 64.0
+hitRange = 32.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_y2nlk")
