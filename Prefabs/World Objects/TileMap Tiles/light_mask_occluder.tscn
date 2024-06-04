@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw38hjbdq1gnv"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_kjgs0"]
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[node name="Light_mask_occluder" type="LightOccluder2D"]
+modulate = Color(1, 1, 1, 0)
+occluder = SubResource("OccluderPolygon2D_kjgs0")

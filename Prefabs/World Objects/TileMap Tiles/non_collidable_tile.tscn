@@ -1,3 +1,4 @@
 [gd_scene format=3 uid="uid://d1l0d4uhkyrj2"]
 
 [node name="Non-Collidable Tile" type="Sprite2D"]
+z_as_relative = false

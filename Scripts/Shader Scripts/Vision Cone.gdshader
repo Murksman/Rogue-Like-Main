@@ -49,7 +49,7 @@ void fragment() {
 	if (distortion_effect > cutoffAmount) {distortion_effect = cutoffAmount;}
 	distortion_effect = clamp(distortion_effect,0.0,1.0); 
 	
-	float blur = mix(0.0, 4.0, distortion_effect);
+	float blur = mix(0.0, 2.0, distortion_effect);
 	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*distortion_effect*look_direction), blur).r;
 	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*distortion_effect*look_direction), blur).g;
 	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*distortion_effect*look_direction), blur).b;

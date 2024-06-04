@@ -4,7 +4,6 @@ class_name MapGenerator
 
 @export_group("Settings")
 @export var Source_Image : CompressedTexture2D
-@export var tileMap : TileMap
 @export var partition_size : int
 @export var Generate_Images : bool:
 	get:
@@ -34,12 +33,15 @@ class_name MapGenerator
 
 @export_group("Tile Resources")
 @export var image_array : Array[ImageTexture]
-
+@export var tileMap : TileMap
+@export var vis_mask_container : Node2D
 @export var collidable_tile : Resource
 @export var non_collidable_tile : Resource
+@export var vis_mask_occluder : Resource
 
 var loaded_collidable : Object
 var loaded_non_collidable : Object
+var loaded_mask_occluder : Object
 
 var partitions_col : int
 var partitions_row : int
@@ -63,28 +65,46 @@ func GenerateImages():
 func Clear():
 	for x in get_child_count():
 		get_child(get_child_count() - x - 1).queue_free()
+	for x in vis_mask_container.get_child_count():
+		vis_mask_container.get_child(vis_mask_container.get_child_count() - x - 1).queue_free()
 
 func CompileMap():
+	# load the prefabs
 	loaded_collidable = load(str(collidable_tile.resource_path))
+	loaded_mask_occluder = load(str(vis_mask_occluder.resource_path))
 	loaded_non_collidable = load(str(non_collidable_tile.resource_path))
+	
+	# Iterate through each layer in the tilemap
 	for layer in tileMap.get_layers_count():
 		var usedTiles = tileMap.get_used_cells(layer)
+		# create a new tile for each tile in the tilemap
 		for i in usedTiles:
+			# gather data for the tile
 			var tile_data = tileMap.get_cell_tile_data(layer,i)
 			var target_image = ImageMap(tileMap.get_cell_atlas_coords(layer,i))
 			var newTile
+			# create collision and occlusion if the wall is collidable
 			if tile_data.get_custom_data("Collidable"):
 				newTile = loaded_collidable.instantiate()
+				var newMaskOccluder : LightOccluder2D = loaded_mask_occluder.instantiate()
 				var polygon = tile_data.get_collision_polygon_points(0, 0)
 				newTile.get_child(0).get_child(0).polygon = polygon
 				newTile.get_child(1).occluder.polygon = polygon
+				newMaskOccluder.occluder.polygon = polygon
 				newTile.texture = target_image
 				newTile.name = "Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer " + str(layer)
+				newTile.breakable = tile_data.get_custom_data("Breakable")
 				newTile.Health = tile_data.get_custom_data("Health")
+				vis_mask_container.add_child(newMaskOccluder)
+				newMaskOccluder.owner = newMaskOccluder.get_tree().edited_scene_root
+				newMaskOccluder.global_position = Vector2(i * 32)
+				newTile.occluder_child = newMaskOccluder
+			# create simplified sprite for ground or other non-collidables
 			else:
 				newTile = loaded_non_collidable.instantiate()
 				newTile.texture = target_image
 				newTile.name = "Non-Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer " + str(layer)
+			# add the new tile into the scene
 			add_child(newTile)
 			newTile.owner = get_tree().edited_scene_root
 			newTile.position = Vector2(i * 32)

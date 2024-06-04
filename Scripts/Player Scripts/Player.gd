@@ -17,14 +17,16 @@ var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
 var camera : Camera2D
 
-var health : float = 50.0
+var alive : bool = true
+var health : float = 100.0
 
 func _ready():
 	camera = $Camera2D
 
 
 func _physics_process(delta):
-	Movement(delta)
+	if alive:
+		Movement(delta)
 
 
 func Movement(delta):
@@ -42,3 +44,8 @@ func Movement(delta):
 	else:
 		velocity += moveDirection * acceleration * delta * 100
 	move_and_slide()
+
+func TakeDamage(damage):
+	health -= damage
+	if health <= 0:
+		alive = false

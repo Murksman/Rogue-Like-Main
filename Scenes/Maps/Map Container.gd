@@ -18,4 +18,3 @@ func query_free_nodes():
 
 func add_free_node(obj):
 	free_nodes.append(obj)
-	print(obj)

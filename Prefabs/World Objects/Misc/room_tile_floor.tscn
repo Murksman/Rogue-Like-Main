@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c37w1rm3odp2g"]
-
-[ext_resource type="Texture2D" uid="uid://s4pm1gn25jhu" path="res://Sprites/World Objects/Sprite-0001.png" id="1_8pea0"]
-
-[node name="RoomTileFloor" type="Sprite2D"]
-z_index = 10
-position = Vector2(80, 14)
-scale = Vector2(10, 10)
-texture = ExtResource("1_8pea0")

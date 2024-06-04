@@ -10,12 +10,18 @@ radius = 8.0
 radius = 16.0
 
 [node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("agent")]
+light_mask = 0
 collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_kmqa2")
 accel = 2000.0
 drag = 10.0
 agent = NodePath("NavigationAgent2D")
 aggroLevel = 10.0
+autoAlertRadius = 32.0
+damage = 20.0
+hitInterval = 1.0
+hitRange = 64.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_y2nlk")

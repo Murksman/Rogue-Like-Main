@@ -5,11 +5,12 @@ extends Node2D
 @export var slotArray : Array[Node2D]
 
 var activeWeapons : Array[bool] = []
-var selected : int
+var selected_index : int
+var selected_weapon : Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	selected = defaultWeapon - 1
+	selected_index = defaultWeapon - 1
 	WeaponState()
 	SelectWeapon()
 
@@ -18,8 +19,8 @@ func _unhandled_input(event):
 	#changes the selected int depending on the input number key
 	if event is InputEventKey and event.is_pressed():
 		var eventInt = event.as_text().to_int()
-		if clamp(eventInt, 1, weaponSlots) == eventInt && eventInt != selected + 1:
-			selected = eventInt - 1
+		if clamp(eventInt, 1, weaponSlots) == eventInt && eventInt != selected_index + 1:
+			selected_index = eventInt - 1
 			SelectWeapon()
 	# increments the selected int from the mouse wheel
 	elif event.is_pressed() && event is InputEventMouseButton:
@@ -28,20 +29,21 @@ func _unhandled_input(event):
 			mouseWheel = 1
 		if event.is_action_pressed("Previous Weapon"):
 			mouseWheel = -1
-		selected = (selected + mouseWheel) % weaponSlots
-		if selected < 0:
-			selected += weaponSlots
+		selected_index = (selected_index + mouseWheel) % weaponSlots
+		if selected_index < 0:
+			selected_index += weaponSlots
 		if mouseWheel != 0:
 			SelectWeapon()
 
 func SelectWeapon():
-	selected = NearestWeapon(selected)
-	if selected != null:
+	selected_index = NearestWeapon(selected_index)
+	if selected_index != null:
 		for i in weaponSlots:
 			var selectObject = slotArray[i].get_child(0)
 			if selectObject != null:
-				if i == selected:
+				if i == selected_index:
 					selectObject.Select()
+					selected_weapon = slotArray[i].get_child(0)
 				else:
 					selectObject.Deselect()
 
