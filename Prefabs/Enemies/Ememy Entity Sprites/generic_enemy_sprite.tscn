@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxsam7bpr878t"]
+
+[ext_resource type="Texture2D" uid="uid://qhlyvw0biw1l" path="res://Sprites/Enemy/Generic Static Enemy.png" id="1_lqbof"]
+
+[node name="Generic Enemy" type="Sprite2D"]
+z_index = 5
+texture = ExtResource("1_lqbof")

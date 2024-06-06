@@ -1,14 +1,16 @@
 extends CharacterBody2D
 
+@export_group("Enemy Settings")
 @export var baseHealth : float = 100
 @export var accel : float
 @export var drag : float
-@export var agent : NavigationAgent2D
 @export var aggroLevel : float
 @export var autoAlertRadius : float
 @export var damage : float
 @export var hitInterval : float
 @export var hitRange : float
+@export_group("Enemy Resources")
+@export var agent : NavigationAgent2D
 
 @onready var player : CharacterBody2D = $"../..".player
 @onready var currentHealth : float = baseHealth
@@ -19,9 +21,12 @@ var hit_charge : float = 0.0
 var spaceState : PhysicsDirectSpaceState2D
 var query : PhysicsRayQueryParameters2D
 
+var entity_layer_sprite : Sprite2D
+
 func TakeDamage(damage):
 	currentHealth -= damage
 	if currentHealth <= 0:
+		entity_layer_sprite.queue_free()
 		self.queue_free()
 
 func _physics_process(delta):
@@ -49,8 +54,8 @@ func _physics_process(delta):
 		hit_charge = max(hit_charge, 0.0)
 		move_and_slide()
 	
-	print(hit_charge)
 	if hit_charge >= hitInterval:
 		hit_charge -= hitInterval
 		player.TakeDamage(damage)
-		print("test")
+	
+	entity_layer_sprite.global_position = global_position
