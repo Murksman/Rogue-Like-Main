@@ -10,8 +10,8 @@ extends CharacterBody2D
 @export_category("Resources")
 @export var projectileContainer : Node2D
 
-var spaceState : PhysicsDirectSpaceState2D
-var query : PhysicsRayQueryParameters2D
+#var spaceState : PhysicsDirectSpaceState2D
+#var query : PhysicsRayQueryParameters2D
 
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO

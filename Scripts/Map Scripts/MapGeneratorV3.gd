@@ -120,4 +120,4 @@ func DestroyTile(tile):
 	$"..".query_free_nodes()
 
 func BakeNavMesh():
-	$"..".bake_navigation_polygon(true)
+	$"..".bake_navigation_polygon(false)

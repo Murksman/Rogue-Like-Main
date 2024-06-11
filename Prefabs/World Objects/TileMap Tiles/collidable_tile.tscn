@@ -6,9 +6,8 @@
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [node name="Collidable Tile" type="Sprite2D"]
-modulate = Color(0.196078, 0.196078, 0.196078, 1)
 light_mask = 0
-z_index = 800
+z_index = 760
 z_as_relative = false
 region_filter_clip_enabled = true
 script = ExtResource("1_acy8c")
