@@ -27,10 +27,9 @@ func _process(delta):
 	
 	global_position = lerp(global_position, $"..".global_position, cam_smooth * delta)
 	var lightLength = ((mouse_offset * mousePosCamMultiplier) + (mouse_offset / zoom)).length()
-	mouse_light.offset.x = lightLength
 	mouse_light.scale.x = 1 + (lightLength / 100)
 	mouse_light.scale.y = 1 + (lightLength / 200)
-	mouse_light.position.x = -lightLength * lightLength / 100
+	mouse_light.offset.x = lightLength / mouse_light.scale.x
 	
 	vis_mask_cam.global_position = global_position
 	vis_mask_cam.offset = offset

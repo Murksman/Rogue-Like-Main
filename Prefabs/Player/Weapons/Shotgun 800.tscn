@@ -20,6 +20,7 @@ projectileObjectResource = ExtResource("2_vrpfg")
 projectileHitObjectResource = ExtResource("2_vrpfg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
 position = Vector2(30, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_7wh0r")

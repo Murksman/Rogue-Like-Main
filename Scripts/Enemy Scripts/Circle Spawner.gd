@@ -18,7 +18,7 @@ func SpawnCalc():
 		var radius = sqrt(rng.randf_range(0, 1)) * spawning_radius
 		var angle = rng.randf_range(0, 2 * PI)
 		var polar_position = Vector2(cos(angle), sin(angle)) * radius
-		print(polar_position / radius)
+		print(global_position + polar_position)
 		Spawn(global_position + polar_position)
 
 func _physics_process(delta):
