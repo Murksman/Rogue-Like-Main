@@ -5,7 +5,7 @@
 
 [node name="Bullet" type="Sprite2D"]
 visibility_layer = 1048575
-z_index = 10
+z_index = 110
 z_as_relative = false
 texture = ExtResource("1_mfefc")
 offset = Vector2(0, 0.5)

@@ -15,10 +15,9 @@ void fragment() {
 	float r = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_vision_displacement*effect), blur).r;
 	float g = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_vision_displacement*effect), blur).g;
 	float b = texture(screen_texture, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_vision_displacement*effect), blur).b;
-	float a = texture(screen_texture, SCREEN_UV, blur).a;
 	// vec3 c = (texture(vision_shape, SCREEN_UV, 0.0).rgb);
 	
 	vec3 c = vec3(r,g,b);
 	c = mix(c, c * 0.7, effect);
-	COLOR = vec4(c.x,c.y,c.z,a);
+	COLOR = vec4(c.x,c.y,c.z,effect);
 }

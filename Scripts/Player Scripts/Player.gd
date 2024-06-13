@@ -43,6 +43,7 @@ func Movement(delta):
 		velocity += moveDirection * acceleration * delta * 200
 	else:
 		velocity += moveDirection * acceleration * delta * 100
+	
 	move_and_slide()
 
 func TakeDamage(damage):
