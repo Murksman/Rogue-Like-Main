@@ -27,9 +27,11 @@ class_name Weapon
 @export var projectileHitObjectResource : Resource
 @export var projectileContainer : Node2D
 
+@onready var orientation = $"../../.."
+@onready var player = $"../../../../.."
+
 var projectileObject : Object
 var projectileHitObject : Object
-@onready var orientation = $"../../.."
 var rng = RandomNumberGenerator.new()
 
 var fireTime : float = 0.0
@@ -48,7 +50,7 @@ func _ready():
 	projectileHitObject = load(str(projectileHitObjectResource.resource_path))
 
 func _physics_process(delta):
-	if selected:
+	if selected && !player.ui_open:
 		if reloading:
 			reloadTime -= delta
 			reloadTime = clamp(reloadTime, 0, reloadSpeed) 
@@ -83,7 +85,7 @@ func Shoot():
 	preFiring = false
 	fireTime += fireRate
 	for i in baseProjectiles:
-		var n : float = i 
+		var n : float = i
 		var lookTheta = orientation.transform.x.angle_to(Vector2(1, 0))
 		var theta
 		if isSpreadRandom:
@@ -95,7 +97,7 @@ func Shoot():
 		var direction = Vector2(x, y)
 		var newBullet = projectileObject.instantiate()
 		projectileContainer.add_child(newBullet)
-		newBullet.global_position = global_position + orientation.transform.x * 10
+		newBullet.global_position = global_position + orientation.transform.x
 		newBullet.look_at(newBullet.global_position + direction)
 		newBullet.addStats(projectileVelocity + rng.randf_range(projRandVelocityRange.x, projRandVelocityRange.y), direction, baseDamage, projectileMaxTime, numberOfBounces)
 

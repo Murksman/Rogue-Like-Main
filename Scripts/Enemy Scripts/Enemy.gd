@@ -23,8 +23,8 @@ var query : PhysicsRayQueryParameters2D
 
 var entity_layer_sprite : Sprite2D
 
-func TakeDamage(damage):
-	currentHealth -= damage
+func TakeDamage(inDamage):
+	currentHealth -= inDamage
 	if currentHealth <= 0:
 		entity_layer_sprite.queue_free()
 		self.queue_free()

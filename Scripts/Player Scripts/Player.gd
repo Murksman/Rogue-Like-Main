@@ -13,11 +13,14 @@ extends CharacterBody2D
 #var spaceState : PhysicsDirectSpaceState2D
 #var query : PhysicsRayQueryParameters2D
 
+@onready var inventory_elements : Control = $"UI Layer/Inventory Elements"
+
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
 var camera : Camera2D
 
 var alive : bool = true
+var ui_open : bool = false
 var health : float = 100.0
 
 func _ready():
@@ -27,6 +30,11 @@ func _ready():
 func _physics_process(delta):
 	if alive:
 		Movement(delta)
+
+
+func _input(event):
+	if event.is_action_pressed("Use Action"):
+		InventoryOpen()
 
 
 func Movement(delta):
@@ -45,6 +53,11 @@ func Movement(delta):
 		velocity += moveDirection * acceleration * delta * 100
 	
 	move_and_slide()
+
+func InventoryOpen():
+	ui_open = !ui_open
+	inventory_elements.visible = ui_open
+
 
 func TakeDamage(damage):
 	health -= damage

@@ -11,7 +11,7 @@ extends Control
 func _ready():
 	UpdateUI()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	UpdateUI()
 
 func UpdateUI():

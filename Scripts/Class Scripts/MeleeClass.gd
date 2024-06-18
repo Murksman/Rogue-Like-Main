@@ -110,7 +110,7 @@ func Deselect():
 	selected = false
 	visible = false
 
-func Collide(delta):
+func Collide(_delta):
 	collisionExcludeFrames -= 1
 	collisionExcludeFrames = clampi(collisionExcludeFrames, 0, 10)
 	if collisionExcludeFrames > 0:
@@ -122,5 +122,5 @@ func Collide(delta):
 	for i in hit.size():
 		var hitObject = hit[i]
 		if hitObject.name == "Enemy":
-			var hitObjScript = hit.get_typed_script()
+			#var hitObjScript = hit.get_typed_script()
 			hitObject.TakeDamage(baseDamage + (angularMomentum * velocityDamageMulti * 100))

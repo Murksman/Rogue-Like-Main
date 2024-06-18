@@ -5,7 +5,7 @@ var free_nodes : Array[Object]
 func _ready():
 	bake_navigation_polygon(false)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	query_free_nodes()
 
 func query_free_nodes():
