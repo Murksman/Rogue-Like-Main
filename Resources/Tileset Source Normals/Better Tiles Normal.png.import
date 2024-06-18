@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ciokbetdr26va"
-path="res://.godot/imported/Testing bricks - Copy.jpg-0c401931a1d04601e3f0c04f6246e9b8.ctex"
+uid="uid://cj1n1lgrtds3p"
+path="res://.godot/imported/Better Tiles Normal.png-9376f579f5d3550374059b1fe56bac8f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Misc/Testing bricks - Copy.jpg"
-dest_files=["res://.godot/imported/Testing bricks - Copy.jpg-0c401931a1d04601e3f0c04f6246e9b8.ctex"]
+source_file="res://Resources/Tileset Source Normals/Better Tiles Normal.png"
+dest_files=["res://.godot/imported/Better Tiles Normal.png-9376f579f5d3550374059b1fe56bac8f.ctex"]
 
 [params]
 

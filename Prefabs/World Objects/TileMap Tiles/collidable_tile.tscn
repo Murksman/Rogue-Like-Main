@@ -1,24 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbeifspcue10f"]
+[gd_scene load_steps=4 format=3 uid="uid://bbeifspcue10f"]
 
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Collidable.gd" id="1_acy8c"]
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cic3f"]
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_mfx3n"]
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_05hwe"]
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [node name="Collidable Tile" type="Sprite2D"]
-light_mask = 0
+light_mask = 512
+z_index = 100
 z_as_relative = false
 region_filter_clip_enabled = true
 script = ExtResource("1_acy8c")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(-16, -16)
 collision_layer = 9
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(0, 0, 0, 32, 32, 32, 32, 0)
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-occluder = SubResource("OccluderPolygon2D_cic3f")
+[node name="Vision Occluder" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_mfx3n")
 sdf_collision = false
-occluder_light_mask = 513
+occluder_light_mask = 3
+
+[node name="Wall Light Occluder" type="LightOccluder2D" parent="."]
+scale = Vector2(1.01, 1.01)
+occluder = SubResource("OccluderPolygon2D_05hwe")
+sdf_collision = false
+occluder_light_mask = 512

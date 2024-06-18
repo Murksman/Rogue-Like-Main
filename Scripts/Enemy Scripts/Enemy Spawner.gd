@@ -10,9 +10,6 @@ class_name Spawner
 @onready var loaded_sprite : Object = preload("res://Prefabs/Enemies/Ememy Entity Sprites/generic_enemy_sprite.tscn")
 var spawnTime : float
 
-func _ready():
-	spawnTime = timePerSpawn
-
 
 func Spawn(spawn_pos):
 	spawnTime += timePerSpawn

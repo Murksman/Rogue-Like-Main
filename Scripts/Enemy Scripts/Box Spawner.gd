@@ -7,6 +7,8 @@ class_name EnemyBoxSpawner
 @onready var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _ready():
+	spawnTime = timePerSpawn
+	
 	rng.randomize()
 	
 	if spawnOnStart:
@@ -14,14 +16,13 @@ func _ready():
 
 
 func SpawnCalc():
-	for i in rng.randi_range(spawning_random_density.x, spawning_random_density.x):
-		var spawnX = rng.randi_range(0, spawning_dimensions.x)
-		var spawnY = rng.randi_range(0, spawning_dimensions.y)
-		Spawn(global_position + Vector2(spawnX, spawnY))
+	for i in rng.randi_range(spawning_random_density.x, spawning_random_density.y):
+		var spawnX = rng.randf_range(0, spawning_dimensions.x)
+		var spawnY = rng.randf_range(0, spawning_dimensions.y)
+		Spawn(global_position + (Vector2(spawnX, spawnY) * 32))
 
 func _physics_process(delta):
 	if spawning:
 		spawnTime -= delta
-	
-	if spawnTime <= 0.0:
-		SpawnCalc()
+		if spawnTime <= 0.0:
+			SpawnCalc()

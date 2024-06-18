@@ -3,6 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://qhlyvw0biw1l" path="res://Sprites/Enemy/Generic Static Enemy.png" id="1_lqbof"]
 
 [node name="Generic Enemy" type="Sprite2D"]
-z_index = 35
+z_index = 250
 z_as_relative = false
 texture = ExtResource("1_lqbof")
