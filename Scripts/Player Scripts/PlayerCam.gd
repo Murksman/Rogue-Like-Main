@@ -14,10 +14,13 @@ var time : float = 0.0
 @onready var Orientation : Node2D = $Orientation
 @onready var player : CharacterBody2D = $".."
 
-
+var global_mouse_pos : Vector2
 
 func _process(delta):
-	var mouse_offset = (get_viewport().get_mouse_position() - Vector2(960, 540)) + Vector2((inventorySpacing if player.ui_open else 0.0), 0.0) * 2
+	if (!player.ui_open):
+		global_mouse_pos = get_viewport().get_mouse_position()
+	#var mouse_offset = (global_mouse_pos - Vector2(960, 540)) + Vector2((inventorySpacing if player.ui_open else 0.0), 0.0) * 2
+	var mouse_offset = global_mouse_pos - Vector2(960, 540)
 	offset = (mouse_offset * mousePosCamMultiplier) + Vector2((inventorySpacing if player.ui_open else 0.0), 0.0)
 	
 	var direction = (offset - (Vector2((inventorySpacing if player.ui_open else 0.0), 0.0))).normalized()
