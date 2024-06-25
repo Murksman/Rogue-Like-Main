@@ -4,8 +4,6 @@ extends Control
 @export var slot_size : int
 @export var drag_drop_deadzone : float
 
-@onready var inventory = $Inventory
-
 var selected_id : int = -1
 var drag_drop_mode : int = 0
 var clicking : bool = false
@@ -13,49 +11,70 @@ var clicking : bool = false
 var click_position : Vector2
 var mouse_position : Vector2
 
+var temp_hold_item : Control
+var mouse_hold_item : Control
 
-func InventoryInput(event):
-	mouse_position = get_local_mouse_position()
+func InventoryLogic(event : InputEvent, inventory_ref : Inventory, input_slot : Control):
+	MouseChange()
 	
-	if (drag_drop_mode == 0 && clicking && (mouse_position - click_position).length() > drag_drop_deadzone):
-		drag_drop_mode = 2
+	if mouse_hold_item != null:
+		if Input.is_action_pressed("Primary"): 
+			mouse_hold_item.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			mouse_hold_item.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	if event.is_action("Primary"):
-		var inventory_vec_pos : Vector2i = (event.position - $Inventory.global_position) / slot_size
-		var inventory_list_pos : int = inventory_vec_pos.x + (inventory_vec_pos.y * inventory_size.x)
-		
 		clicking = event.is_pressed()
 		
 		if clicking:
 			if (drag_drop_mode == 1):
-				if InventoryItemPlace(inventory_list_pos, selected_id):
-					drag_drop_mode = -1
-			elif inventory.get_child(inventory_list_pos) != null && inventory.get_child(inventory_list_pos).get_child(1) != null:
+				drag_drop_mode = -1
+				PlaceItem(input_slot)
+			else:
 				click_position = get_local_mouse_position()
-				selected_id = inventory_list_pos
+				temp_hold_item = input_slot.get_child(1)
 		else:
 			if (drag_drop_mode == 2):
-				InventoryItemPlace(inventory_list_pos, selected_id)
 				drag_drop_mode = 0
-			elif (drag_drop_mode == 0):
+				PlaceItem(input_slot)
+			elif (drag_drop_mode == 0 && temp_hold_item != null):
 				drag_drop_mode = 1
+				mouse_hold_item = temp_hold_item
 			elif (drag_drop_mode == -1):
 				drag_drop_mode = 0
-		#var inventory_vec_pos : Vector2i = (event.position - $Inventory.global_position) / slot_size
-		#var inventory_list_pos : int = inventory_vec_pos.x + (inventory_vec_pos.y * inventory_size.x)
-		
-		#if inventory.get_child(inventory_list_pos) != null:
-		#	InventoryItemPlace(inventory_list_pos, selected_id, null)
+	
+	print(drag_drop_mode, " ", temp_hold_item, " ", mouse_hold_item)
+
+func ItemInput(event : InputEvent, inventory_ref : Inventory, input_item : InventoryItem):
+	InventoryLogic(event, inventory_ref, input_item.get_parent())
+
+func InventoryInput(event : InputEvent, inventory_ref : Inventory, event_item_slot):
+	InventoryLogic(event, inventory_ref, event_item_slot)
+
+func BackGroundInput(event : InputEvent):
+	MouseChange()
+	
+	if event.is_action_pressed("Primary") && drag_drop_mode == 1:
+		drag_drop_mode = -1
+		mouse_hold_item = null
 
 
-func InventoryItemPlace(index_to, index_from):
-	var slot_exists = inventory.get_child(index_to) != null
-	var target_slot_empty = slot_exists && inventory.get_child(index_to).get_child(1) == null
+func MouseChange():
+	mouse_position = get_global_mouse_position()
 	
-	if slot_exists && target_slot_empty:
-		var selected_item : Node = inventory.get_child(index_from).get_child(1)
-		if selected_item != null:
-			selected_item.reparent(inventory.get_child(index_to), false)
-			selected_item.global_position = inventory.get_child(index_to).global_position
+	if (temp_hold_item != null && drag_drop_mode == 0 && clicking && (mouse_position - click_position).length() > drag_drop_deadzone):
+		drag_drop_mode = 2
+		mouse_hold_item = temp_hold_item
+
+
+func PlaceItem(placement_slot : Node):
+	var placing_item = mouse_hold_item
 	
-	return slot_exists && target_slot_empty
+	if placement_slot.get_child(1) != null: 
+		mouse_hold_item = placement_slot.get_child(1)
+		drag_drop_mode = 1
+		print("test")
+	
+	placing_item.reparent(placement_slot) 
+	print("placed")
+	

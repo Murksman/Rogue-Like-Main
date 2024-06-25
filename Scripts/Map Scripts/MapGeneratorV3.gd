@@ -58,7 +58,7 @@ func GenerateImages():
 	var normal_img : Image = Source_Normal_Image.get_image()
 	var imgSize : Vector2i = img.get_size()
 	
-	if imgSize != img.get_size():
+	if imgSize != normal_img.get_size():
 		printerr("The dimensions for the Source Image and Source Normal Image do not match.")
 		return
 	

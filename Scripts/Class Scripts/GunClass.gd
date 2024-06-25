@@ -2,7 +2,7 @@
 extends Node2D
 class_name Weapon
 
-@export_category("Gun Bahavior")
+@export_group("Gun Bahavior")
 @export_enum("Full Auto", "Semi Auto", "Pump/Bolt Action") var fireMode : String = "Full Auto"
 @export var baseProjectiles : float = 1.0
 @export var isSpreadRandom : bool = false
@@ -22,7 +22,7 @@ class_name Weapon
 @export var startingAmmo : int
 @export var bulletsPerReload : int
 
-@export_category("Resources")
+@export_group("Weapon Resources")
 @export var projectileObjectResource : Resource
 @export var projectileHitObjectResource : Resource
 @export var projectileContainer : Node2D
@@ -36,21 +36,22 @@ var rng = RandomNumberGenerator.new()
 
 var fireTime : float = 0.0
 var selected = false
+var itemized = false
 var preFiring = false
 var currentMagAmmo : int
 var currentAmmoReserve : int
 var reloading = false
 var reloadTime : float = 0.0
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
+
+func _ready(): 
 	currentMagAmmo = magazineSize
 	rng.randomize()
 	projectileObject = load(str(projectileHitObjectResource.resource_path))
 	projectileHitObject = load(str(projectileHitObjectResource.resource_path))
 
 func _physics_process(delta):
-	if selected && !player.ui_open:
+	if !itemized && selected && !player.ui_open:
 		if reloading:
 			reloadTime -= delta
 			reloadTime = clamp(reloadTime, 0, reloadSpeed) 
@@ -125,5 +126,13 @@ func Deselect():
 	visible = false
 
 func Select():
+	$"../..".selected_weapon = self
 	selected = true
 	visible = true
+
+
+func ChangeItem(is_item):
+	itemized = is_item
+	
+	get_child(0).visible = !itemized
+	get_child(1).visible = itemized

@@ -17,13 +17,15 @@ func _ready():
 
 func _unhandled_input(event):
 	#changes the selected int depending on the input number key
-	if event is InputEventKey and event.is_pressed():
+	if !event.is_pressed():
+		return
+	if event is InputEventKey:
 		var eventInt = event.as_text().to_int()
 		if clamp(eventInt, 1, weaponSlots) == eventInt && eventInt != selected_index + 1:
 			selected_index = eventInt - 1
 			SelectWeapon()
 	# increments the selected int from the mouse wheel
-	elif event.is_pressed() && event is InputEventMouseButton:
+	elif event is InputEventMouseButton:
 		var mouseWheel : int
 		if event.is_action_pressed("Next Weapon"):
 			mouseWheel = 1
@@ -37,15 +39,20 @@ func _unhandled_input(event):
 
 func SelectWeapon():
 	selected_index = NearestWeapon(selected_index)
-	if selected_index != null:
-		for i in weaponSlots:
-			var selectObject = slotArray[i].get_child(0)
-			if selectObject != null:
-				if i == selected_index:
-					selectObject.Select()
-					selected_weapon = slotArray[i].get_child(0)
-				else:
-					selectObject.Deselect()
+	if selected_index == null:
+		return
+	
+	for i in weaponSlots:
+		var selectObject = slotArray[i].get_child(0)
+		print(selectObject.get_class())
+		if selectObject == null:
+			return
+		
+		if i == selected_index:
+			print(selectObject.get_class())
+			selectObject.Select()
+		else:
+			selectObject.Deselect()
 
 func NearestWeapon(index):
 	for i in weaponSlots:

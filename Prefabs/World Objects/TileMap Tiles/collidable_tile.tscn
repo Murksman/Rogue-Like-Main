@@ -27,7 +27,6 @@ sdf_collision = false
 occluder_light_mask = 3
 
 [node name="Wall Light Occluder" type="LightOccluder2D" parent="."]
-scale = Vector2(1.01, 1.01)
 occluder = SubResource("OccluderPolygon2D_05hwe")
 sdf_collision = false
 occluder_light_mask = 512
