@@ -4,7 +4,6 @@ extends Control
 @export var slot_size : int
 @export var drag_drop_deadzone : float
 
-var selected_id : int = -1
 var drag_drop_mode : int = 0
 var clicking : bool = false
 
@@ -26,6 +25,8 @@ func InventoryLogic(event : InputEvent, inventory_ref : Inventory, input_slot : 
 	if event.is_action("Primary"):
 		clicking = event.is_pressed()
 		
+		print(input_slot.name + "Test3")
+		
 		if clicking:
 			if (drag_drop_mode == 1):
 				drag_drop_mode = -1
@@ -43,7 +44,7 @@ func InventoryLogic(event : InputEvent, inventory_ref : Inventory, input_slot : 
 			elif (drag_drop_mode == -1):
 				drag_drop_mode = 0
 	
-	print(drag_drop_mode, " ", temp_hold_item, " ", mouse_hold_item)
+	#print(drag_drop_mode, " ", temp_hold_item, " ", mouse_hold_item)
 
 func ItemInput(event : InputEvent, inventory_ref : Inventory, input_item : InventoryItem):
 	InventoryLogic(event, inventory_ref, input_item.get_parent())
@@ -67,14 +68,15 @@ func MouseChange():
 		mouse_hold_item = temp_hold_item
 
 
-func PlaceItem(placement_slot : Node):
+func PlaceItem(placement_slot : Control):
 	var placing_item = mouse_hold_item
 	
+	print(placement_slot.name + "Test3")
 	if placement_slot.get_child(1) != null: 
 		mouse_hold_item = placement_slot.get_child(1)
 		drag_drop_mode = 1
 		print("test")
 	
-	placing_item.reparent(placement_slot) 
-	print("placed")
+	placing_item.reparent(placement_slot, false) 
+	print("placed ", placement_slot.name, placing_item.name, placing_item.global_position)
 	

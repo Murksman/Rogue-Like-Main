@@ -9,5 +9,7 @@ class_name Inventory
 func _gui_input(event):
 	var event_pos = floor(event.position / seperation)
 	var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
+	print(get_child(list_pos), list_pos, inv_size, event_pos, event.position)
 	inventory_master.InventoryInput(event, self, get_child(list_pos))
+	
 
