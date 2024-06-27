@@ -16,12 +16,6 @@ var mouse_hold_item : Control
 func InventoryLogic(event : InputEvent, inventory_ref : Inventory, input_slot : Control):
 	MouseChange()
 	
-	if mouse_hold_item != null:
-		if Input.is_action_pressed("Primary"): 
-			mouse_hold_item.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		else:
-			mouse_hold_item.mouse_filter = Control.MOUSE_FILTER_STOP
-	
 	if event.is_action("Primary"):
 		clicking = event.is_pressed()
 		
@@ -35,16 +29,11 @@ func InventoryLogic(event : InputEvent, inventory_ref : Inventory, input_slot : 
 				click_position = get_local_mouse_position()
 				temp_hold_item = input_slot.get_child(1)
 		else:
-			if (drag_drop_mode == 2):
-				drag_drop_mode = 0
-				PlaceItem(input_slot)
-			elif (drag_drop_mode == 0 && temp_hold_item != null):
+			if (drag_drop_mode == 0 && temp_hold_item != null && (event.position - click_position).length() < drag_drop_deadzone):
 				drag_drop_mode = 1
 				mouse_hold_item = temp_hold_item
 			elif (drag_drop_mode == -1):
 				drag_drop_mode = 0
-	
-	#print(drag_drop_mode, " ", temp_hold_item, " ", mouse_hold_item)
 
 func ItemInput(event : InputEvent, inventory_ref : Inventory, input_item : InventoryItem):
 	InventoryLogic(event, inventory_ref, input_item.get_parent())
@@ -63,9 +52,9 @@ func BackGroundInput(event : InputEvent):
 func MouseChange():
 	mouse_position = get_global_mouse_position()
 	
-	if (temp_hold_item != null && drag_drop_mode == 0 && clicking && (mouse_position - click_position).length() > drag_drop_deadzone):
-		drag_drop_mode = 2
-		mouse_hold_item = temp_hold_item
+	#if (temp_hold_item != null && drag_drop_mode == 0 && clicking && (mouse_position - click_position).length() > drag_drop_deadzone):
+	#	drag_drop_mode = 2
+	#	mouse_hold_item = temp_hold_item
 
 
 func PlaceItem(placement_slot : Control):
@@ -79,4 +68,3 @@ func PlaceItem(placement_slot : Control):
 	
 	placing_item.reparent(placement_slot, false) 
 	print("placed ", placement_slot.name, placing_item.name, placing_item.global_position)
-	

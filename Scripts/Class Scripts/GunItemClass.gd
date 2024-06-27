@@ -1,3 +1,4 @@
+"""
 @icon("res://Sprites/Generic Objects/Icons/GunClass Icon.png")
 extends Node2D
 class_name WeaponItem
@@ -24,3 +25,4 @@ class_name WeaponItem
 @export var projectileHitObjectResource : Resource
 @export var projectileContainer : Node2D
 @export_exp_easing("attenuation") var test : float
+"""
