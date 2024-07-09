@@ -22,9 +22,11 @@ func _drop_data(at_position, data):
 	if data is InventoryItem:
 		data.reparent(get_child(list_pos), false)
 		
-		if data is WeaponItem:
+		if data is WeaponItem && data.weapon_object.get_parent() != data:
+			var old_index = data.weapon_object.get_parent().slot
 			data.weapon_object.reparent(data, false)
-			weapon_holder.AddWeapon(true, list_pos)
+			weapon_holder.RemoveWeapon(old_index)
+			data.weapon_object.Deselect()
 
 func _can_drop_data(at_position, data):
 	return true

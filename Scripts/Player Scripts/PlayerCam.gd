@@ -22,7 +22,6 @@ var ui_screen_effects : float = 0.0
 
 func _physics_process(delta):
 	ui_screen_effects = lerpf(ui_screen_effects, (1.0 if player.ui_open else 0.0), ui_effect_smooth * delta)
-	print(ui_screen_effects, player.ui_open)
 
 func _process(delta):
 	global_mouse_pos = get_viewport().get_mouse_position()

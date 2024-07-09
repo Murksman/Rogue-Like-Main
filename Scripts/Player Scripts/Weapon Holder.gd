@@ -17,6 +17,7 @@ func _ready():
 
 
 func _unhandled_input(event):
+	#print(selected_index, " ", selected_weapon)
 	#changes the selected int depending on the input number key
 	if !event.is_pressed():
 		return
@@ -45,11 +46,14 @@ func SelectWeapon():
 	
 	for i in weaponSlots:
 		var selectObject = slotArray[i].get_child(0)
-		if selectObject == null: return
+		if selectObject == null: continue
+		
 		
 		if i == selected_index:
+			#print("select: ", i)
 			selectObject.Select(parentPlayer, orientation)
 		else:
+			#print("De-select: ", i)
 			selectObject.Deselect()
 
 func NearestWeapon(index):
@@ -60,10 +64,18 @@ func NearestWeapon(index):
 	return null
 
 func AddWeapon(select_new_weapon : bool = false, new_index : int = 0):
+	WeaponState()
 	if select_new_weapon:
 		selected_index = new_index
-		SelectWeapon()
+	
+	SelectWeapon()
+
+func RemoveWeapon(remove_index):
 	WeaponState()
+	if selected_index == remove_index:
+		selected_index = 0
+		selected_weapon = null
+		SelectWeapon()
 
 func WeaponState():
 	activeWeapons = []
