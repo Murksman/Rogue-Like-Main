@@ -27,8 +27,8 @@ class_name Weapon
 @export var projectileHitObjectResource : Resource
 @export var projectileContainer : Node2D
 
-@onready var orientation = $"../../.."
-@onready var player = $"../../../../.."
+var orientation = Node2D
+var player = CharacterBody2D
 
 var projectileObject : Object
 var projectileHitObject : Object
@@ -125,7 +125,9 @@ func Deselect():
 	selected = false
 	visible = false
 
-func Select():
+func Select(parent_player, parent_orientation):
+	orientation = parent_orientation
+	player = parent_player
 	$"../..".selected_weapon = self
 	selected = true
 	visible = true

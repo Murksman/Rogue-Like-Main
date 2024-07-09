@@ -1,6 +1,5 @@
 extends Node2D
 
-
 # these functions quit the game.
 func _input(event):
 	if event.is_action("Escape"):

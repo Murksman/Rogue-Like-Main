@@ -1,7 +1,8 @@
 extends Node2D
 @export var weaponSlots : int
 @export var defaultWeapon : int = 1
-@export var parentPlayer : Node2D
+@export var parentPlayer : CharacterBody2D
+@export var orientation : Node2D
 @export var slotArray : Array[Node2D]
 
 var activeWeapons : Array[bool] = []
@@ -38,19 +39,16 @@ func _unhandled_input(event):
 			SelectWeapon()
 
 func SelectWeapon():
-	selected_index = NearestWeapon(selected_index)
-	if selected_index == null:
-		return
+	var try_index = NearestWeapon(selected_index)
+	if try_index == null: return
+	else: selected_index = try_index
 	
 	for i in weaponSlots:
 		var selectObject = slotArray[i].get_child(0)
-		print(selectObject.get_class())
-		if selectObject == null:
-			return
+		if selectObject == null: return
 		
 		if i == selected_index:
-			print(selectObject.get_class())
-			selectObject.Select()
+			selectObject.Select(parentPlayer, orientation)
 		else:
 			selectObject.Deselect()
 
@@ -59,8 +57,12 @@ func NearestWeapon(index):
 		var n = (i + index) % (weaponSlots)
 		if activeWeapons[n]:
 			return n
+	return null
 
-func AddWeapon():
+func AddWeapon(select_new_weapon : bool = false, new_index : int = 0):
+	if select_new_weapon:
+		selected_index = new_index
+		SelectWeapon()
 	WeaponState()
 
 func WeaponState():
