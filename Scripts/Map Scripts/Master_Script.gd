@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 # these functions quit the game.
 func _input(event):

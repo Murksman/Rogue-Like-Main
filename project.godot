@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="Rogue-Like Project"
-run/main_scene="res://Scenes/Maps/Main.tscn"
+run/main_scene="res://Scenes/Maps/Menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://Sprites/icon.svg"
+config/icon="res://Sprites/UI and Menu/icon.svg"
 
 [display]
 
