@@ -38,7 +38,9 @@ func _input(event):
 
 
 func Movement(delta):
-	moveDirection = Input.get_vector("Left", "Right", "Up", "Down")
+	if !ui_open: moveDirection = Input.get_vector("Left", "Right", "Up", "Down")
+	else: moveDirection = Vector2.ZERO
+	
 	velocityNorm = velocity.normalized()
 	
 	velocity -= velocity.length_squared() * velocityNorm * delta * drag * 0.01

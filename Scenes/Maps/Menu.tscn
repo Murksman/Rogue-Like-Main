@@ -1,17 +1,84 @@
-[gd_scene load_steps=20 format=3 uid="uid://dnw6itssad8gs"]
+[gd_scene load_steps=49 format=3 uid="uid://dnw6itssad8gs"]
 
-[ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_l8rlo"]
+[ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
 [ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
+[ext_resource type="Script" path="res://Scripts/Class Scripts/Menu.gd" id="3_72npe"]
+[ext_resource type="Script" path="res://Scripts/Class Scripts/MenuChangeButton.gd" id="4_myeau"]
+[ext_resource type="Script" path="res://Scripts/UI Scripts/FileSaveContainer.gd" id="5_0qi48"]
+[ext_resource type="Script" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
+[ext_resource type="Script" path="res://Scripts/UI Scripts/LoadSceneButton.gd" id="7_trr0x"]
 
 [sub_resource type="Gradient" id="Gradient_bqn06"]
 offsets = PackedFloat32Array(0, 0.41791, 0.79602, 0.925373, 1)
-colors = PackedColorArray(0.0784314, 0.258824, 0.298039, 1, 0.0784314, 0.258824, 0.321569, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+colors = PackedColorArray(0.262745, 0.262745, 0.270588, 1, 0.262745, 0.262745, 0.270588, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_w6syi"]
 gradient = SubResource("Gradient_bqn06")
 fill = 2
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_qf14f"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.440931, 0.500323, 0.8261, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vc4kb"]
+gradient = SubResource("Gradient_qf14f")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_dpr7g"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.000789922, 0.239332, 0.814336, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_goreg"]
+gradient = SubResource("Gradient_dpr7g")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_58oi6"]
+font = ExtResource("2_jt3xa")
+font_size = 49
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_rl8sk"]
+offsets = PackedFloat32Array(0.719577, 1)
+colors = PackedColorArray(0.591752, 0.606047, 0.674595, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7ljse"]
+gradient = SubResource("Gradient_rl8sk")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_njevu"]
+offsets = PackedFloat32Array(0.719577, 1)
+colors = PackedColorArray(0.261901, 0.297717, 0.390668, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c60h3"]
+gradient = SubResource("Gradient_njevu")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hdox8"]
+font = ExtResource("2_jt3xa")
+font_size = 37
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_45jt6"]
+gradient = SubResource("Gradient_njevu")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_y3yhu"]
 offsets = PackedFloat32Array(0.878307, 1)
@@ -38,64 +105,136 @@ resource_name = "Quit Button"
 script/source = "extends TextureButton
 
 
-func _on_pressed():
+func _pressed():
 	get_tree().quit()
 "
 
-[sub_resource type="LabelSettings" id="LabelSettings_hdox8"]
+[sub_resource type="Gradient" id="Gradient_qttdi"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.479618, 0.486969, 0.493238, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o2deg"]
+gradient = SubResource("Gradient_qttdi")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_t054w"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.263416, 0.303953, 0.385202, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d2hmb"]
+gradient = SubResource("Gradient_t054w")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6xsj"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 10
+
+[sub_resource type="Gradient" id="Gradient_3dobo"]
+offsets = PackedFloat32Array(0.848276, 0.872414, 0.934483, 0.975862)
+colors = PackedColorArray(0.396889, 0.396889, 0.396889, 1, 0.442857, 0.442857, 0.442857, 1, 0.804247, 0.804247, 0.804247, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8y2v0"]
+gradient = SubResource("Gradient_3dobo")
+width = 256
+height = 256
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_e82wh"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.227572, 0.54139, 0.240806, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7jvsk"]
+gradient = SubResource("Gradient_e82wh")
+width = 300
+height = 60
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_mj6ve"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.144345, 0.293266, 0.242912, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o8c13"]
+gradient = SubResource("Gradient_mj6ve")
+width = 400
+height = 90
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_y831x"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.144345, 0.293266, 0.242912, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_itya5"]
+gradient = SubResource("Gradient_y831x")
+width = 400
+height = 90
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_eniqc"]
 font = ExtResource("2_jt3xa")
-font_size = 37
-shadow_color = Color(0, 0, 0, 1)
-shadow_offset = Vector2(2, 2)
-
-[sub_resource type="Gradient" id="Gradient_shct5"]
-offsets = PackedFloat32Array(0.862434, 1)
-colors = PackedColorArray(0.411928, 0.559636, 0.87792, 1, 0.168627, 0.109804, 0.12549, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_2tgvl"]
-gradient = SubResource("Gradient_shct5")
-width = 300
-height = 72
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="Gradient" id="Gradient_dpr7g"]
-offsets = PackedFloat32Array(0.862434, 1)
-colors = PackedColorArray(0.000789922, 0.239332, 0.814336, 1, 0.168627, 0.109804, 0.12549, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_goreg"]
-gradient = SubResource("Gradient_dpr7g")
-width = 300
-height = 72
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="LabelSettings" id="LabelSettings_58oi6"]
-font = ExtResource("2_jt3xa")
-font_size = 48
+font_size = 40
 shadow_color = Color(0, 0, 0, 1)
 
-[sub_resource type="Gradient" id="Gradient_rl8sk"]
-offsets = PackedFloat32Array(0.719577, 1)
-colors = PackedColorArray(0.591752, 0.606047, 0.674595, 1, 0.168627, 0.109804, 0.12549, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_7ljse"]
-gradient = SubResource("Gradient_rl8sk")
-width = 300
-height = 72
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="Gradient" id="Gradient_cgy5r"]
+[sub_resource type="Gradient" id="Gradient_oklyx"]
 offsets = PackedFloat32Array(0.862434, 1)
-colors = PackedColorArray(0.000789922, 0.239332, 0.814336, 1, 0.168627, 0.109804, 0.12549, 1)
+colors = PackedColorArray(0.479618, 0.486969, 0.493238, 1, 0.168627, 0.109804, 0.12549, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_fp33g"]
-gradient = SubResource("Gradient_cgy5r")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_f8vev"]
+gradient = SubResource("Gradient_oklyx")
 width = 300
 height = 72
 fill = 2
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_r8h0i"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.263416, 0.303953, 0.385202, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4gxjx"]
+gradient = SubResource("Gradient_r8h0i")
+width = 300
+height = 72
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_6pldm"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.227572, 0.54139, 0.240806, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_khygt"]
+gradient = SubResource("Gradient_6pldm")
+width = 400
+height = 90
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_g2hje"]
+offsets = PackedFloat32Array(0.862434, 1)
+colors = PackedColorArray(0.144345, 0.293266, 0.242912, 1, 0.168627, 0.109804, 0.12549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lv431"]
+gradient = SubResource("Gradient_g2hje")
+width = 400
+height = 90
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="GDScript" id="GDScript_f1ffr"]
+resource_name = "Apply Settings Change"
+script/source = "extends TextureButton
+
+func _pressed():
+	disabled = true
+"
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -104,9 +243,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_l8rlo")
+script = ExtResource("1_tce6k")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Main Menu" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_72npe")
+
+[node name="ColorRect" type="ColorRect" parent="Main Menu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,7 +263,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101961, 0.184314, 0.227451, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="Main Menu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -127,7 +275,7 @@ theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer"]
+[node name="NinePatchRect" type="NinePatchRect" parent="Main Menu/MarginContainer"]
 layout_mode = 2
 texture = SubResource("GradientTexture2D_w6syi")
 region_rect = Rect2(0, 0, 64, 64)
@@ -136,36 +284,7 @@ patch_margin_top = 19
 patch_margin_right = 19
 patch_margin_bottom = 19
 
-[node name="Quit Button" type="TextureButton" parent="MarginContainer/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -128.0
-offset_top = -100.0
-offset_right = 128.0
-offset_bottom = -36.0
-grow_horizontal = 2
-grow_vertical = 0
-texture_normal = SubResource("GradientTexture2D_v6woq")
-texture_pressed = SubResource("GradientTexture2D_7wakm")
-script = SubResource("GDScript_g8v05")
-
-[node name="Label" type="Label" parent="MarginContainer/NinePatchRect/Quit Button"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Quit Game"
-label_settings = SubResource("LabelSettings_hdox8")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureButton2" type="TextureButton" parent="MarginContainer/NinePatchRect"]
+[node name="Play Button" type="TextureButton" parent="Main Menu/MarginContainer/NinePatchRect"]
 layout_mode = 2
 offset_left = 710.0
 offset_top = 200.0
@@ -173,10 +292,12 @@ offset_right = 1010.0
 offset_bottom = 272.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = SubResource("GradientTexture2D_2tgvl")
+texture_normal = SubResource("GradientTexture2D_vc4kb")
 texture_pressed = SubResource("GradientTexture2D_goreg")
+script = ExtResource("4_myeau")
+target_menu_id = 1
 
-[node name="Label" type="Label" parent="MarginContainer/NinePatchRect/TextureButton2"]
+[node name="Label" type="Label" parent="Main Menu/MarginContainer/NinePatchRect/Play Button"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,7 +309,7 @@ label_settings = SubResource("LabelSettings_58oi6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BoxContainer" type="BoxContainer" parent="MarginContainer/NinePatchRect"]
+[node name="Option Buttons" type="BoxContainer" parent="Main Menu/MarginContainer/NinePatchRect"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -204,12 +325,14 @@ grow_vertical = 2
 theme_override_constants/separation = 10
 vertical = true
 
-[node name="TextureButton3" type="TextureButton" parent="MarginContainer/NinePatchRect/BoxContainer"]
+[node name="Settings" type="TextureButton" parent="Main Menu/MarginContainer/NinePatchRect/Option Buttons"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_7ljse")
-texture_pressed = SubResource("GradientTexture2D_fp33g")
+texture_pressed = SubResource("GradientTexture2D_c60h3")
+script = ExtResource("4_myeau")
+target_menu_id = 2
 
-[node name="Label" type="Label" parent="MarginContainer/NinePatchRect/BoxContainer/TextureButton3"]
+[node name="Label" type="Label" parent="Main Menu/MarginContainer/NinePatchRect/Option Buttons/Settings"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -221,12 +344,14 @@ label_settings = SubResource("LabelSettings_hdox8")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureButton4" type="TextureButton" parent="MarginContainer/NinePatchRect/BoxContainer"]
+[node name="Controls" type="TextureButton" parent="Main Menu/MarginContainer/NinePatchRect/Option Buttons"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_7ljse")
-texture_pressed = SubResource("GradientTexture2D_fp33g")
+texture_pressed = SubResource("GradientTexture2D_45jt6")
+script = ExtResource("4_myeau")
+target_menu_id = 3
 
-[node name="Label" type="Label" parent="MarginContainer/NinePatchRect/BoxContainer/TextureButton4"]
+[node name="Label" type="Label" parent="Main Menu/MarginContainer/NinePatchRect/Option Buttons/Controls"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -239,7 +364,516 @@ label_settings = SubResource("LabelSettings_hdox8")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="MarginContainer/NinePatchRect/Quit Button" to="MarginContainer/NinePatchRect/Quit Button" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/NinePatchRect/TextureButton2" to="MarginContainer/NinePatchRect/TextureButton2" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/NinePatchRect/BoxContainer/TextureButton3" to="MarginContainer/NinePatchRect/BoxContainer/TextureButton3" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/NinePatchRect/BoxContainer/TextureButton4" to="MarginContainer/NinePatchRect/BoxContainer/TextureButton4" method="_on_pressed"]
+[node name="Quit Button" type="TextureButton" parent="Main Menu/MarginContainer/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -130.0
+offset_right = 128.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = SubResource("GradientTexture2D_v6woq")
+texture_pressed = SubResource("GradientTexture2D_7wakm")
+script = SubResource("GDScript_g8v05")
+
+[node name="Label" type="Label" parent="Main Menu/MarginContainer/NinePatchRect/Quit Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quit Game"
+label_settings = SubResource("LabelSettings_hdox8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Save Select Menu" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_72npe")
+menu_id = 1
+
+[node name="ColorRect" type="ColorRect" parent="Save Select Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101961, 0.184314, 0.227451, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Save Select Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Save Select Menu/MarginContainer"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_w6syi")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 19
+patch_margin_top = 19
+patch_margin_right = 19
+patch_margin_bottom = 19
+
+[node name="Back Button" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 785.0
+offset_right = 342.0
+offset_bottom = 857.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture_normal = SubResource("GradientTexture2D_o2deg")
+texture_pressed = SubResource("GradientTexture2D_d2hmb")
+script = ExtResource("4_myeau")
+
+[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/Back Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back
+"
+label_settings = SubResource("LabelSettings_58oi6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="File Save Container" type="VBoxContainer" parent="Save Select Menu/MarginContainer/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+script = ExtResource("5_0qi48")
+save_paths = Array[String](["save1", "save2", "save3"])
+save_slots = Array[bool]([false, false, false])
+
+[node name="Save 1" type="Panel" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q6xsj")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_8y2v0")
+region_rect = Rect2(0, 0, 256, 256)
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="MarginContainer" type="MarginContainer" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="Control" type="Control" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="Load Save 1" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect/MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = -30.0
+offset_right = 340.0
+offset_bottom = 30.0
+grow_vertical = 2
+texture_normal = SubResource("GradientTexture2D_7jvsk")
+texture_pressed = SubResource("GradientTexture2D_o8c13")
+texture_disabled = SubResource("GradientTexture2D_itya5")
+script = ExtResource("6_d01m6")
+
+[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect/MarginContainer/Control/Load Save 1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load Game"
+label_settings = SubResource("LabelSettings_eniqc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Save 2" type="Panel" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q6xsj")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_8y2v0")
+region_rect = Rect2(0, 0, 256, 256)
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="MarginContainer" type="MarginContainer" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="Control" type="Control" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="Load Save 2" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = -30.0
+offset_right = 340.0
+offset_bottom = 30.0
+grow_vertical = 2
+texture_normal = SubResource("GradientTexture2D_7jvsk")
+texture_pressed = SubResource("GradientTexture2D_o8c13")
+texture_disabled = SubResource("GradientTexture2D_itya5")
+script = ExtResource("6_d01m6")
+file_index = 1
+
+[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control/Load Save 2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load Game"
+label_settings = SubResource("LabelSettings_eniqc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Save 3" type="Panel" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q6xsj")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_8y2v0")
+region_rect = Rect2(0, 0, 256, 256)
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="MarginContainer" type="MarginContainer" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="Control" type="Control" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="Load Save 3" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = -30.0
+offset_right = 340.0
+offset_bottom = 30.0
+grow_vertical = 2
+texture_normal = SubResource("GradientTexture2D_7jvsk")
+texture_pressed = SubResource("GradientTexture2D_o8c13")
+texture_disabled = SubResource("GradientTexture2D_itya5")
+script = ExtResource("6_d01m6")
+file_index = 2
+
+[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control/Load Save 3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load Game"
+label_settings = SubResource("LabelSettings_eniqc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Load Scene" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 1362.0
+offset_top = 341.0
+offset_right = 1662.0
+offset_bottom = 401.0
+grow_vertical = 2
+texture_normal = SubResource("GradientTexture2D_7jvsk")
+texture_pressed = SubResource("GradientTexture2D_o8c13")
+texture_disabled = SubResource("GradientTexture2D_itya5")
+script = ExtResource("7_trr0x")
+
+[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/Load Scene"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load Game"
+label_settings = SubResource("LabelSettings_eniqc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Settings Menu" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_72npe")
+menu_id = 2
+
+[node name="ColorRect" type="ColorRect" parent="Settings Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101961, 0.184314, 0.227451, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Settings Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Settings Menu/MarginContainer"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_w6syi")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 19
+patch_margin_top = 19
+patch_margin_right = 19
+patch_margin_bottom = 19
+
+[node name="Back Button" type="TextureButton" parent="Settings Menu/MarginContainer/NinePatchRect"]
+layout_mode = 2
+offset_left = 42.0
+offset_top = 785.0
+offset_right = 342.0
+offset_bottom = 857.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture_normal = SubResource("GradientTexture2D_f8vev")
+texture_pressed = SubResource("GradientTexture2D_4gxjx")
+script = ExtResource("4_myeau")
+
+[node name="Label" type="Label" parent="Settings Menu/MarginContainer/NinePatchRect/Back Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back
+"
+label_settings = SubResource("LabelSettings_58oi6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Apply Settings Change" type="TextureButton" parent="Settings Menu/MarginContainer/NinePatchRect"]
+layout_mode = 2
+offset_left = 275.0
+offset_top = 785.0
+offset_right = 675.0
+offset_bottom = 857.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture_normal = SubResource("GradientTexture2D_khygt")
+texture_pressed = SubResource("GradientTexture2D_lv431")
+texture_disabled = SubResource("GradientTexture2D_lv431")
+script = SubResource("GDScript_f1ffr")
+
+[node name="Label" type="Label" parent="Settings Menu/MarginContainer/NinePatchRect/Apply Settings Change"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Apply changes"
+label_settings = SubResource("LabelSettings_58oi6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Controls Menu" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_72npe")
+menu_id = 3
+
+[node name="ColorRect" type="ColorRect" parent="Controls Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101961, 0.184314, 0.227451, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Controls Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Controls Menu/MarginContainer"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_w6syi")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 19
+patch_margin_top = 19
+patch_margin_right = 19
+patch_margin_bottom = 19
+
+[node name="Back Button" type="TextureButton" parent="Controls Menu/MarginContainer/NinePatchRect"]
+layout_mode = 2
+offset_left = 42.0
+offset_top = 785.0
+offset_right = 342.0
+offset_bottom = 857.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture_normal = SubResource("GradientTexture2D_f8vev")
+texture_pressed = SubResource("GradientTexture2D_4gxjx")
+script = ExtResource("4_myeau")
+
+[node name="Label" type="Label" parent="Controls Menu/MarginContainer/NinePatchRect/Back Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back
+"
+label_settings = SubResource("LabelSettings_58oi6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Apply Settings Change" type="TextureButton" parent="Controls Menu/MarginContainer/NinePatchRect"]
+layout_mode = 2
+offset_left = 275.0
+offset_top = 785.0
+offset_right = 675.0
+offset_bottom = 857.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture_normal = SubResource("GradientTexture2D_khygt")
+texture_pressed = SubResource("GradientTexture2D_lv431")
+texture_disabled = SubResource("GradientTexture2D_lv431")
+script = SubResource("GDScript_f1ffr")
+
+[node name="Label" type="Label" parent="Controls Menu/MarginContainer/NinePatchRect/Apply Settings Change"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Apply changes"
+label_settings = SubResource("LabelSettings_58oi6")
+horizontal_alignment = 1
+vertical_alignment = 1
