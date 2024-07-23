@@ -12,7 +12,7 @@ var time : float = 0.0
 @onready var vis_mask_cam : Camera2D = $"../../Visibility Light Mask/Mask Cam"
 @onready var entity_rendering_cam : Camera2D = $"../../Entity Rendering Layer/Mask Cam"
 @onready var flash_light : Light2D = $Orientation/Flashlight
-@onready var wall_flash_light : Light2D = $"Orientation/Wall Flashlight"
+@onready var wall_flash_light : Light2D = $"Orientation/Flashlight (Wall)"
 @onready var Orientation : Node2D = $Orientation
 @onready var player : CharacterBody2D = $".."
 
@@ -42,13 +42,13 @@ func _process(delta):
 		Orientation.look_at(Orientation.global_position + direction)
 		
 		var lightLength = ((mouse_offset * mousePosCamMultiplier) + (mouse_offset / zoom)).length()
-		flash_light.scale.x = 1 + (lightLength / 100)
+		flash_light.scale.x = 0.2 + (lightLength / 100)
 		flash_light.energy = 5.0 / sqrt(flash_light.scale.x)
-		flash_light.scale.y = 1 + (lightLength / 200)
+		flash_light.scale.y = 0.2 + (lightLength / 200)
 		flash_light.offset.x = lightLength / flash_light.scale.x
 		wall_flash_light.scale = flash_light.scale
 		wall_flash_light.offset = flash_light.offset
-		wall_flash_light.energy = flash_light.energy * 2
+		wall_flash_light.energy = flash_light.energy
 	
 	vis_mask_cam.global_position = global_position
 	vis_mask_cam.offset = offset
