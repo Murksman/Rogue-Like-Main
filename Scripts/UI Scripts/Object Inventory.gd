@@ -11,22 +11,22 @@ extends GridContainer
 @export var inv_background : Control
 @export var inventory_master : Control
 @export var slot_resource : Resource
+@export var inv_size : Vector2i = Vector2i(1,1)
 
 @onready var seperation : Vector2 = Vector2(get_theme_constant("h_separation"), get_theme_constant("v_separation"))
 @onready var slot_loaded_res = load(str(slot_resource.resource_path))
 @onready var test_obj : Control = $"../Control"
 
-var inv_size : Vector2i = Vector2i(1,1)
 var inv_size_norm : int = 1
 var ref_inv_object : Object
 
-func _gui_input(event):
-	if Engine.is_editor_hint(): return
-	
-	if event.is_pressed() || event.is_released():
-		var event_pos = floor(event.position / seperation)
-		var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
-		inventory_master.InventoryInput(event, self, get_child(list_pos))
+#func _gui_input(event):
+	#if Engine.is_editor_hint(): return
+	#
+	#if event.is_pressed() || event.is_released():
+		#var event_pos = floor(event.position / seperation)
+		#var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
+		#inventory_master.InventoryInput(event, self, get_child(list_pos))
 
 func _get_drag_data(at_position):
 	if Engine.is_editor_hint(): return null
@@ -35,6 +35,7 @@ func _get_drag_data(at_position):
 func _drop_data(at_position, data):
 	var event_pos = floor(at_position / seperation)
 	var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
+	print(list_pos, inv_size)
 	if data is InventoryItem:
 		data.reparent(get_child(list_pos), false)
 		
@@ -47,6 +48,17 @@ func _drop_data(at_position, data):
 func _can_drop_data(at_position, data):
 	if Engine.is_editor_hint(): return false
 	return true
+
+
+func OpenInventory(target_inventory):
+	get_parent().visible = true
+	CalcInventory(target_inventory)
+
+func CloseInventory():
+	get_parent().visible = false
+	for slot in get_children():
+		if slot.get_child_count() > 1:
+			slot.get_child(1).Recall()
 
 func CalcInventory(new_object : Object = null):
 	if new_object != null:

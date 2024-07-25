@@ -6,6 +6,7 @@ class_name MapGenerator
 @export var Source_Image : CompressedTexture2D
 @export var Source_Normal_Image : CompressedTexture2D
 @export var partition_size : int
+
 @export var Generate_Images : bool:
 	get:
 		return false

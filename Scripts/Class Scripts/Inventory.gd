@@ -7,14 +7,15 @@ class_name Inventory
 @onready var inv_size : Vector2 = Vector2(columns, ceil(get_child_count() / columns))
 @onready var seperation : Vector2 = Vector2(get_theme_constant("h_separation"), get_theme_constant("v_separation"))
 
-func _gui_input(event):
-	if event.is_pressed() || event.is_released():
-		var event_pos = floor(event.position / seperation)
-		var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
-		inventory_master.InventoryInput(event, self, get_child(list_pos))
+#func _gui_input(event):
+	#if event.is_pressed() || event.is_released():
+		#var event_pos = floor(event.position / seperation)
+		#var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
+		#inventory_master.InventoryInput(event, self, get_child(list_pos))
 
 func _get_drag_data(at_position):
 	return self
+
 
 func _drop_data(at_position, data):
 	var event_pos = floor(at_position / seperation)
