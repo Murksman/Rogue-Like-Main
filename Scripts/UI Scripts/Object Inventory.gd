@@ -59,6 +59,7 @@ func CloseInventory():
 	for slot in get_children():
 		if slot.get_child_count() > 1:
 			slot.get_child(1).Recall()
+			print("test")
 
 func CalcInventory(new_object : Object = null):
 	if new_object != null:
@@ -89,5 +90,10 @@ func CalcInventory(new_object : Object = null):
 		inv_background.size = size
 		inv_background.get_child(0).texture.width = size.x
 		inv_background.get_child(0).texture.height = size.y
+	
+	var slot_number = 0
+	for new_item in new_object.inventory_items:
+		if new_item == null: continue
 		
+		new_item.reparent(get_child(slot_number), false)
 

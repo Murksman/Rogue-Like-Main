@@ -14,6 +14,9 @@ extends CharacterBody2D
 #var query : PhysicsRayQueryParameters2D
 
 @onready var inventory_elements : Control = $"UI Layer/Inventory Elements"
+@onready var world_obj_inventory : GridContainer = $"UI Layer/Inventory Elements/World Object Inventory/Object Inventory"
+@onready var obj_inventory_container : Control = $"UI Layer/Inventory Elements/World Object Inventory"
+@onready var usable_area : Area2D = $"Use Area"
 
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
@@ -34,7 +37,11 @@ func _physics_process(delta):
 
 func _input(event):
 	if event.is_action_pressed("Use Action"):
+		UseAction()
+	
+	if event.is_action_pressed("Inventory"):
 		InventoryOpen()
+
 
 
 func Movement(delta):
@@ -57,9 +64,34 @@ func Movement(delta):
 	move_and_slide()
 
 func InventoryOpen():
+	if ui_open:
+		obj_inventory_container.visible = false
+		world_obj_inventory.CloseInventory()
 	ui_open = !ui_open
 	inventory_elements.visible = ui_open
 
+func UseAction():
+	if ui_open: 
+		InventoryOpen()
+		return
+	
+	var action_items = usable_area.get_overlapping_areas()
+	if action_items.size() == 0: return
+	
+	InventoryOpen()
+	
+	var closest_chest : Chest
+	var closest_point : int
+	for item in action_items:
+		if not item is Chest: continue
+		if closest_chest == null: 
+			closest_chest = item
+			closest_point = (item.position - position).length()
+			continue
+		if (item.position - position).length() > closest_point:
+			closest_point = (item.position - position).length()
+	
+	world_obj_inventory.OpenInventory(closest_chest)
 
 func TakeDamage(damage):
 	health -= damage

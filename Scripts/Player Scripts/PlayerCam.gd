@@ -42,10 +42,12 @@ func _process(delta):
 		Orientation.look_at(Orientation.global_position + direction)
 		
 		var lightLength = ((mouse_offset * mousePosCamMultiplier) + (mouse_offset / zoom)).length()
-		flash_light.scale.x = 0.2 + (lightLength / 100)
-		flash_light.energy = 5.0 / sqrt(flash_light.scale.x)
-		flash_light.scale.y = 0.2 + (lightLength / 200)
+		flash_light.texture_scale = 0.15 + (lightLength / 1200.0)
+		#flash_light.texture_scale = 2.0# + (lightLength / 1000.0)
+		flash_light.energy = 5.0 / sqrt(5 + lightLength)
+		flash_light.scale.x = 1 + (lightLength / 400.0)
 		flash_light.offset.x = lightLength / flash_light.scale.x
+		wall_flash_light.texture_scale = flash_light.texture_scale
 		wall_flash_light.scale = flash_light.scale
 		wall_flash_light.offset = flash_light.offset
 		wall_flash_light.energy = flash_light.energy
