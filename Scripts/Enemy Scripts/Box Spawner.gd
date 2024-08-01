@@ -11,18 +11,19 @@ func _ready():
 	
 	rng.randomize()
 	
-	if spawnOnStart:
-		SpawnCalc()
+	#if spawnOnStart:
+		#SpawnCalc()
 
 
-func SpawnCalc():
-	for i in rng.randi_range(spawning_random_density.x, spawning_random_density.y):
+func SpawnCalc(intensity):
+	for i in rng.randi_range(spawning_random_density.x, spawning_random_density.y * intensity):
 		var spawnX = rng.randf_range(0, spawning_dimensions.x)
 		var spawnY = rng.randf_range(0, spawning_dimensions.y)
 		Spawn(global_position + (Vector2(spawnX, spawnY) * 32))
 
 func _physics_process(delta):
-	if spawning:
-		spawnTime -= delta
-		if spawnTime <= 0.0:
-			SpawnCalc()
+	pass
+	#if spawning:
+		#spawnTime -= delta
+		#if spawnTime <= 0.0:
+			#SpawnCalc()
