@@ -8,6 +8,7 @@ extends CharacterBody2D
 @export var zoomSmoothRate : float
 
 @export_category("Resources")
+@export var usable_area : Area2D
 @export var projectileContainer : Node2D
 
 #var spaceState : PhysicsDirectSpaceState2D
@@ -16,7 +17,6 @@ extends CharacterBody2D
 @onready var inventory_elements : Control = $"UI Layer/Inventory Elements"
 @onready var world_obj_inventory : GridContainer = $"UI Layer/Inventory Elements/World Object Inventory/Object Inventory"
 @onready var obj_inventory_container : Control = $"UI Layer/Inventory Elements/World Object Inventory"
-@onready var usable_area : Area2D = $"Use Area"
 
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
@@ -62,6 +62,8 @@ func Movement(delta):
 		velocity += moveDirection * acceleration * delta * 100
 	
 	move_and_slide()
+	
+	usable_area.global_position = global_position
 
 func InventoryOpen():
 	if ui_open:

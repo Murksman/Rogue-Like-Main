@@ -27,7 +27,6 @@ func _drop_data(at_position, data):
 		data.reparent(get_child(list_pos), false)
 		data.item_owner = get_child(list_pos)
 		data.inv_position = list_pos
-		print($"../../../../../Map container/Map Object Container/Chest 1".inventory_items)
 		
 		if data is WeaponItem && data.weapon_object.get_parent() != data:
 			var old_index = data.weapon_object.get_parent().slot
