@@ -3,6 +3,7 @@ extends TextureRect
 class_name InventoryItem
 
 var item_owner : Node
+var inv_position : int
 
 func _init(input_area : Vector2 = Vector2(40,40)):
 	position = Vector2(12,12)

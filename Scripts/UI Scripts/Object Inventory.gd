@@ -1,53 +1,12 @@
-@tool
-extends GridContainer
+extends Inventory
 
-@export var generate_inventory : bool:
-	get:
-		return false
-	set(arg):
-		CalcInventory(test_obj)
-
-@export var weapon_holder : Node2D
 @export var inv_background : Control
-@export var inventory_master : Control
 @export var slot_resource : Resource
-@export var inv_size : Vector2i = Vector2i(1,1)
 
-@onready var seperation : Vector2 = Vector2(get_theme_constant("h_separation"), get_theme_constant("v_separation"))
 @onready var slot_loaded_res = load(str(slot_resource.resource_path))
-@onready var test_obj : Control = $"../Control"
 
 var inv_size_norm : int = 1
 var ref_inv_object : Object
-
-#func _gui_input(event):
-	#if Engine.is_editor_hint(): return
-	#
-	#if event.is_pressed() || event.is_released():
-		#var event_pos = floor(event.position / seperation)
-		#var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
-		#inventory_master.InventoryInput(event, self, get_child(list_pos))
-
-func _get_drag_data(at_position):
-	if Engine.is_editor_hint(): return null
-	return self
-
-func _drop_data(at_position, data):
-	var event_pos = floor(at_position / seperation)
-	var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
-	print(list_pos, inv_size)
-	if data is InventoryItem:
-		data.reparent(get_child(list_pos), false)
-		
-		if data is WeaponItem && data.weapon_object.get_parent() != data:
-			var old_index = data.weapon_object.get_parent().slot
-			data.weapon_object.reparent(data, false)
-			weapon_holder.RemoveWeapon(old_index)
-			data.weapon_object.Deselect()
-
-func _can_drop_data(at_position, data):
-	if Engine.is_editor_hint(): return false
-	return true
 
 
 func OpenInventory(target_inventory):
@@ -60,6 +19,25 @@ func CloseInventory():
 		if slot.get_child_count() > 1:
 			slot.get_child(1).Recall()
 			print("test")
+
+func _drop_data(at_position, data):
+	var event_pos = floor(at_position / seperation)
+	var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
+	if data is InventoryItem:
+		if data.item_owner && data.item_owner.get_parent() is Chest:
+			data.item_owner.get_parent().inventory_items[data.inv_position] = null
+		
+		data.reparent(get_child(list_pos), false)
+		data.item_owner = ref_inv_object.item_container
+		data.inv_position = list_pos
+		ref_inv_object.inventory_items[list_pos] = data
+		
+		
+		if data is WeaponItem && data.weapon_object.get_parent() != data:
+			var old_index = data.weapon_object.get_parent().slot
+			data.weapon_object.reparent(data, false)
+			weapon_holder.RemoveWeapon(old_index)
+			data.weapon_object.Deselect()
 
 func CalcInventory(new_object : Object = null):
 	if new_object != null:
@@ -81,7 +59,6 @@ func CalcInventory(new_object : Object = null):
 		for i in inv_size_norm:
 			var new_slot = slot_loaded_res.instantiate()
 			add_child(new_slot)
-			new_slot.owner = get_tree().edited_scene_root
 			new_slot.name = "Slot" + str(i)
 		
 		size = 64 * inv_size
@@ -92,6 +69,7 @@ func CalcInventory(new_object : Object = null):
 		inv_background.get_child(0).texture.height = size.y
 	
 	var slot_number = 0
+	
 	for new_item in new_object.inventory_items:
 		if new_item == null: continue
 		
