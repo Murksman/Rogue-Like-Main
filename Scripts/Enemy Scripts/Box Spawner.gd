@@ -17,8 +17,8 @@ func _ready():
 
 func SpawnCalc(intensity):
 	for i in rng.randi_range(spawning_random_density.x, spawning_random_density.y * intensity):
-		var spawnX = rng.randf_range(0, spawning_dimensions.x)
-		var spawnY = rng.randf_range(0, spawning_dimensions.y)
+		var spawnX = rng.randf_range(-spawning_dimensions.x, spawning_dimensions.x)
+		var spawnY = rng.randf_range(-spawning_dimensions.y, spawning_dimensions.y)
 		Spawn(global_position + (Vector2(spawnX, spawnY) * 32))
 
 func _physics_process(delta):

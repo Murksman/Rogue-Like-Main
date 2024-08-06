@@ -42,9 +42,9 @@ func _process(delta):
 		Orientation.look_at(Orientation.global_position + direction)
 		
 		var lightLength = ((mouse_offset * mousePosCamMultiplier) + (mouse_offset / zoom)).length()
-		flash_light.texture_scale = 0.10 + (lightLength / 1200.0)
+		flash_light.texture_scale = 0.05 + (lightLength / 1200.0)
 		#flash_light.texture_scale = 2.0 + (lightLength / 1000.0)
-		flash_light.energy = 25.0 / sqrt(32 + lightLength)
+		flash_light.energy = 30.0 / sqrt(32 + lightLength)
 		var scale_smooth = lightLength / 96
 		flash_light.scale.y = 0.5 / ((scale_smooth * scale_smooth) + 1) + 0.5
 		flash_light.offset.x = lightLength
