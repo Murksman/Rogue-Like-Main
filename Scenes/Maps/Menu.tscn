@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://dnw6itssad8gs"]
+[gd_scene load_steps=59 format=3 uid="uid://dnw6itssad8gs"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
 [ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/LoadSceneButton.gd" id="7_trr0x"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/Input Mapping Select.gd" id="8_ctsu7"]
+[ext_resource type="Script" path="res://Scripts/Audio/TestingAudioPlayback.gd" id="9_gyfqg"]
 
 [sub_resource type="Gradient" id="Gradient_bqn06"]
 offsets = PackedFloat32Array(0, 0.41791, 0.79602, 0.925373, 1)
@@ -270,6 +271,10 @@ shadow_offset = Vector2(0, 0)
 [sub_resource type="Theme" id="Theme_o51ey"]
 default_base_scale = 1.22
 default_font = ExtResource("2_jt3xa")
+
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_a40p7"]
+mix_rate = 11025.0
+buffer_length = 0.2
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -861,9 +866,10 @@ patch_margin_top = 19
 patch_margin_right = 19
 patch_margin_bottom = 19
 
-[node name="Back Button2" type="TextureButton" parent="Controls Menu/MarginContainer/NinePatchRect"]
+[node name="Keybind Edit Button" type="TextureButton" parent="Controls Menu/MarginContainer/NinePatchRect"]
 z_index = 4096
 z_as_relative = false
+layout_mode = 0
 offset_left = 52.0
 offset_top = 43.0
 offset_right = 352.0
@@ -873,7 +879,7 @@ texture_normal = SubResource("GradientTexture2D_w7ecx")
 texture_pressed = SubResource("GradientTexture2D_ywkhm")
 script = ExtResource("8_ctsu7")
 
-[node name="Label" type="Label" parent="Controls Menu/MarginContainer/NinePatchRect/Back Button2"]
+[node name="Label" type="Label" parent="Controls Menu/MarginContainer/NinePatchRect/Keybind Edit Button"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -891,8 +897,7 @@ layout_mode = 2
 offset_left = 290.0
 offset_top = 38.0
 offset_right = 590.0
-offset_bottom = 158.0
-scale = Vector2(1, 0.56)
+offset_bottom = 108.0
 theme = SubResource("Theme_o51ey")
 text = " "
 placeholder_text = "- Press any button -"
@@ -949,3 +954,11 @@ text = "Apply changes"
 label_settings = SubResource("LabelSettings_58oi6")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamGenerator_a40p7")
+volume_db = -6.517
+mix_target = 1
+script = ExtResource("9_gyfqg")
+transposition = 2.0
+pulse_hz = 151.193
