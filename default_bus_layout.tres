@@ -24,7 +24,7 @@ band_db/3200_hz = 16.2
 band_db/10000_hz = -60.0
 
 [resource]
-bus/0/volume_db = 0.0672607
+bus/0/volume_db = -0.328256
 bus/0/effect/0/effect = SubResource("AudioEffectLowPassFilter_ir0ji")
 bus/0/effect/0/enabled = true
 bus/0/effect/1/effect = SubResource("AudioEffectCompressor_b6vyo")

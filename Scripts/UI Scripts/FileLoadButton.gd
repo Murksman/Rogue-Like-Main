@@ -3,4 +3,5 @@ extends TextureButton
 @export var file_index : int
 
 func _pressed():
-	$"../../../../..".SaveFile(file_index)
+	$"../../../../..".LoadFile(file_index).test_data
+	print("data: " + $"../../../../..".LoadFile(file_index).test_data)

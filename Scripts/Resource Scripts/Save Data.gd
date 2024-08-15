@@ -1,4 +1,4 @@
 extends Resource
 class_name SaveData
 
-var test_data : String = ""
+@export var test_data : String = ""

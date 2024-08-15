@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://dnw6itssad8gs"]
+[gd_scene load_steps=58 format=3 uid="uid://dnw6itssad8gs"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
 [ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
@@ -122,37 +122,6 @@ width = 300
 height = 72
 fill = 2
 fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="Gradient" id="Gradient_yrs8r"]
-offsets = PackedFloat32Array(0.884892, 1)
-colors = PackedColorArray(0.479618, 0.486969, 0.493238, 1, 0.168627, 0.109804, 0.12549, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_16qwr"]
-gradient = SubResource("Gradient_yrs8r")
-width = 300
-height = 72
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="Gradient" id="Gradient_i2ifx"]
-offsets = PackedFloat32Array(0.862434, 1)
-colors = PackedColorArray(0.263416, 0.303953, 0.385202, 1, 0.168627, 0.109804, 0.12549, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_np7cp"]
-gradient = SubResource("Gradient_i2ifx")
-width = 300
-height = 72
-fill = 2
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="GDScript" id="GDScript_pslo4"]
-resource_name = "Save Button"
-script/source = "extends TextureButton
-
-
-func _pressed():
-	$\"../File Save Container\".SaveFile()
-"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6xsj"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -521,31 +490,6 @@ label_settings = SubResource("LabelSettings_58oi6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Save Button" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect"]
-visible = false
-layout_mode = 0
-offset_left = 857.0
-offset_top = 779.0
-offset_right = 1157.0
-offset_bottom = 851.0
-scale = Vector2(0.7, 0.7)
-texture_normal = SubResource("GradientTexture2D_16qwr")
-texture_pressed = SubResource("GradientTexture2D_np7cp")
-script = SubResource("GDScript_pslo4")
-
-[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/Save Button"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Save
-"
-label_settings = SubResource("LabelSettings_58oi6")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="File Save Container" type="VBoxContainer" parent="Save Select Menu/MarginContainer/NinePatchRect"]
 layout_mode = 1
 anchors_preset = 15
@@ -561,7 +505,7 @@ theme_override_constants/separation = 8
 alignment = 1
 script = ExtResource("5_0qi48")
 save_paths = Array[String](["save1", "save2", "save3"])
-save_slots = Array[bool]([true, true, true])
+save_slots = Array[bool]([false, false, false])
 
 [node name="Save 1" type="Panel" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container"]
 layout_mode = 2
@@ -779,7 +723,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TextEdit" type="TextEdit" parent="Save Select Menu/MarginContainer/NinePatchRect"]
-visible = false
 layout_mode = 0
 offset_left = 629.0
 offset_top = 777.0
@@ -1014,10 +957,10 @@ vertical_alignment = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamGenerator_a40p7")
-volume_db = -40.418
-pitch_scale = 1.38
+volume_db = -80.0
+pitch_scale = 0.93
 mix_target = 2
 script = ExtResource("9_gyfqg")
-pulse_hz = 151.365
+transposition = 1.0
+pulse_hz = 193.455
 buffer_fill_interval = 0.01
-process_sound = true
