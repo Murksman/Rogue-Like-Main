@@ -1,12 +1,33 @@
-[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://c405ng4duf3r7"]
+[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://c405ng4duf3r7"]
 
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_ir0ji"]
 resource_name = "LowPassFilter"
-cutoff_hz = 400.0
-resonance = 0.23
+cutoff_hz = 2775.0
+resonance = 1.0
 db = 3
 
+[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_b6vyo"]
+resource_name = "Compressor"
+threshold = -26.2
+ratio = 1.8
+attack_us = 2000.0
+release_ms = 530.0
+sidechain = &"Master"
+
+[sub_resource type="AudioEffectEQ" id="AudioEffectEQ_ruj50"]
+resource_name = "EQ"
+band_db/32_hz = 24.0
+band_db/100_hz = -60.0
+band_db/320_hz = -60.0
+band_db/1000_hz = -60.0
+band_db/3200_hz = 16.2
+band_db/10000_hz = -60.0
+
 [resource]
-bus/0/volume_db = -0.723771
+bus/0/volume_db = 0.0672607
 bus/0/effect/0/effect = SubResource("AudioEffectLowPassFilter_ir0ji")
 bus/0/effect/0/enabled = true
+bus/0/effect/1/effect = SubResource("AudioEffectCompressor_b6vyo")
+bus/0/effect/1/enabled = true
+bus/0/effect/2/effect = SubResource("AudioEffectEQ_ruj50")
+bus/0/effect/2/enabled = true

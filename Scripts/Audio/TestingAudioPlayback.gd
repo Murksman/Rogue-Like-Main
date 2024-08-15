@@ -2,6 +2,7 @@ extends AudioStreamPlayer
 
 @export_range(0.0,2.0) var transposition : float
 @export_range(60.0,1000.0) var pulse_hz = 144.0 # The frequency of the sound wave.
+@export_range(0.01,1.0) var buffer_fill_interval : float
 
 var playback # Will hold the AudioStreamGeneratorPlayback.
 @onready var sample_hz = stream.mix_rate
@@ -12,13 +13,14 @@ var phase = 0.0
 
 func _ready():
 	play()
+	playing = true
 	playback = get_stream_playback()
 	fill_buffer()
 
 func _process(delta):
 	playback_timer += delta
-	if playback_timer > 0.2:
-		playback_timer -= 0.2
+	if playback_timer > buffer_fill_interval:
+		playback_timer -= buffer_fill_interval
 		fill_buffer()
 
 func fill_buffer():

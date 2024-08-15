@@ -1,10 +1,11 @@
-[gd_scene load_steps=59 format=3 uid="uid://dnw6itssad8gs"]
+[gd_scene load_steps=58 format=3 uid="uid://dnw6itssad8gs"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
 [ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
 [ext_resource type="Script" path="res://Scripts/Class Scripts/Menu.gd" id="3_72npe"]
 [ext_resource type="Script" path="res://Scripts/Class Scripts/MenuChangeButton.gd" id="4_myeau"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileSaveContainer.gd" id="5_0qi48"]
+[ext_resource type="Texture2D" uid="uid://khpsgfqsjnp5" path="res://Resources/Generic Button.tres" id="5_qneyr"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/LoadSceneButton.gd" id="7_trr0x"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/Input Mapping Select.gd" id="8_ctsu7"]
@@ -110,17 +111,6 @@ script/source = "extends TextureButton
 func _pressed():
 	get_tree().quit()
 "
-
-[sub_resource type="Gradient" id="Gradient_qttdi"]
-offsets = PackedFloat32Array(0.862434, 1)
-colors = PackedColorArray(0.479618, 0.486969, 0.493238, 1, 0.168627, 0.109804, 0.12549, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_o2deg"]
-gradient = SubResource("Gradient_qttdi")
-width = 300
-height = 72
-fill = 2
-fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_t054w"]
 offsets = PackedFloat32Array(0.862434, 1)
@@ -435,7 +425,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Save Select Menu" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -484,7 +473,7 @@ offset_bottom = 857.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.7, 0.7)
-texture_normal = SubResource("GradientTexture2D_o2deg")
+texture_normal = ExtResource("5_qneyr")
 texture_pressed = SubResource("GradientTexture2D_d2hmb")
 script = ExtResource("4_myeau")
 
@@ -733,6 +722,16 @@ label_settings = SubResource("LabelSettings_eniqc")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TextEdit" type="TextEdit" parent="Save Select Menu/MarginContainer/NinePatchRect"]
+layout_mode = 0
+offset_left = 629.0
+offset_top = 777.0
+offset_right = 829.0
+offset_bottom = 827.0
+placeholder_text = "Type Data Here
+"
+caret_blink_interval = 0.2
+
 [node name="Settings Menu" type="Control" parent="."]
 visible = false
 layout_mode = 1
@@ -827,6 +826,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Controls Menu" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -957,8 +957,10 @@ vertical_alignment = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamGenerator_a40p7")
-volume_db = -6.517
-mix_target = 1
+volume_db = -80.0
+pitch_scale = 0.93
+mix_target = 2
 script = ExtResource("9_gyfqg")
-transposition = 2.0
-pulse_hz = 151.193
+transposition = 1.0
+pulse_hz = 193.455
+buffer_fill_interval = 0.01
