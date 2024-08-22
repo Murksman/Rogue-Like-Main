@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://dnw6itssad8gs"]
+[gd_scene load_steps=62 format=3 uid="uid://dnw6itssad8gs"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
 [ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileSaveContainer.gd" id="5_0qi48"]
 [ext_resource type="Texture2D" uid="uid://khpsgfqsjnp5" path="res://Resources/Generic Button.tres" id="5_qneyr"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/LoadSceneButton.gd" id="7_trr0x"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/Input Mapping Select.gd" id="8_ctsu7"]
 [ext_resource type="Script" path="res://Scripts/Audio/TestingAudioPlayback.gd" id="9_gyfqg"]
 
@@ -522,7 +521,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Save Button" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect"]
-visible = false
 layout_mode = 0
 offset_left = 857.0
 offset_top = 779.0
@@ -622,6 +620,30 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Load Game"
 label_settings = SubResource("LabelSettings_eniqc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Save Button2" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect/MarginContainer/Control"]
+layout_mode = 0
+offset_left = 396.0
+offset_top = 68.0
+offset_right = 696.0
+offset_bottom = 140.0
+scale = Vector2(0.7, 0.7)
+texture_normal = SubResource("GradientTexture2D_16qwr")
+texture_pressed = SubResource("GradientTexture2D_np7cp")
+script = SubResource("GDScript_pslo4")
+
+[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect/MarginContainer/Control/Save Button2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Save
+"
+label_settings = SubResource("LabelSettings_58oi6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -740,33 +762,6 @@ script = ExtResource("6_d01m6")
 file_index = 2
 
 [node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control/Load Save 3"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Load Game"
-label_settings = SubResource("LabelSettings_eniqc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Load Scene" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 1362.0
-offset_top = 341.0
-offset_right = 1662.0
-offset_bottom = 401.0
-grow_vertical = 2
-texture_normal = SubResource("GradientTexture2D_7jvsk")
-texture_pressed = SubResource("GradientTexture2D_o8c13")
-texture_disabled = SubResource("GradientTexture2D_itya5")
-script = ExtResource("7_trr0x")
-
-[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/Load Scene"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

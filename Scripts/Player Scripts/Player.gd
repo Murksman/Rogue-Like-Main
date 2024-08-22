@@ -8,15 +8,16 @@ extends CharacterBody2D
 @export var zoomSmoothRate : float
 
 @export_category("Resources")
+@export var inventory_elements : Control
+@export var backpack_inventory : Inventory
+@export var world_obj_inventory : GridContainer
+@export var obj_inventory_container : Control
+@export var weapon_holder : Node2D
 @export var usable_area : Area2D
 @export var projectileContainer : Node2D
 
 #var spaceState : PhysicsDirectSpaceState2D
 #var query : PhysicsRayQueryParameters2D
-
-@onready var inventory_elements : Control = $"UI Layer/Inventory Elements"
-@onready var world_obj_inventory : GridContainer = $"UI Layer/Inventory Elements/World Object Inventory/Object Inventory"
-@onready var obj_inventory_container : Control = $"UI Layer/Inventory Elements/World Object Inventory"
 
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
@@ -36,6 +37,9 @@ func _physics_process(delta):
 
 
 func _input(event):
+	if event.is_action_pressed("Save"):
+		SceneLoadingContainer.SaveGame()
+	
 	if event.is_action_pressed("Use Action"):
 		UseAction()
 	

@@ -2,7 +2,6 @@ extends VBoxContainer
 
 @export var save_paths : Array[String]
 @export var save_slots : Array[bool]
-@export_range(1,3) var save_to : int = 1
 
 @export var save_data : SaveData = null
 
@@ -12,7 +11,9 @@ func LoadFile(file_index : int):
 	else:
 		return "File not found."
 
-func SaveFile(data : Resource = null):
+
+
+func SaveFile(data : Resource = null, save_index : int = 0):
 	#if !ResourceLoader.exists("user://" + save_paths[file_index] + ".tscn"):
 		#FileAccess.open("user://" + save_paths[file_index] + ".tscn", FileAccess.WRITE)
 	
@@ -20,5 +21,4 @@ func SaveFile(data : Resource = null):
 	save_data.test_data = $"../TextEdit".text
 	print(save_data.test_data)
 	
-	print(ResourceSaver.save(save_data , "user://" + save_paths[save_to-1] + ".tres"))
-	
+	print(ResourceSaver.save(save_data , "user://" + save_paths[save_index] + ".tres"))
