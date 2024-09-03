@@ -10,6 +10,8 @@ func _notification(note_event):
 		get_tree().quit()
 
 func ChangeMenu(menu_id):
+	if menu_id == 1:
+		$"Save Select Menu/MarginContainer/NinePatchRect/File Save Container".UpdateFileStatus()
 	for child in get_children():
 		if child is MenuScreen:
 			child.visible = child.menu_id == menu_id

@@ -512,7 +512,7 @@ label_settings = SubResource("LabelSettings_58oi6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="File Save Container" type="VBoxContainer" parent="Save Select Menu/MarginContainer/NinePatchRect" node_paths=PackedStringArray("slot_button_objexts")]
+[node name="File Save Container" type="VBoxContainer" parent="Save Select Menu/MarginContainer/NinePatchRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -528,7 +528,6 @@ alignment = 1
 script = ExtResource("5_0qi48")
 save_paths = Array[String](["user://Save1.tres", "user://Save2.tres", "user://Save3.tres"])
 save_slots = Array[bool]([true, true, true])
-slot_button_objexts = [NodePath("Save 1/NinePatchRect/MarginContainer/Control"), NodePath("Save 2/NinePatchRect/MarginContainer/Control"), NodePath("Save 3/NinePatchRect/MarginContainer/Control")]
 
 [node name="Save 1" type="Panel" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container"]
 layout_mode = 2
@@ -685,35 +684,6 @@ theme_override_constants/margin_bottom = 25
 [node name="Control" type="Control" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer"]
 layout_mode = 2
 
-[node name="Create new game" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 40.0
-offset_top = -30.0
-offset_right = 340.0
-offset_bottom = 30.0
-grow_vertical = 2
-texture_normal = SubResource("GradientTexture2D_7jvsk")
-texture_pressed = SubResource("GradientTexture2D_o8c13")
-texture_disabled = SubResource("GradientTexture2D_itya5")
-script = ExtResource("6_d01m6")
-file_index = 1
-
-[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control/Create new game"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "New Game
-"
-label_settings = SubResource("LabelSettings_eniqc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Load Save 2" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control"]
 layout_mode = 1
 anchors_preset = 4
@@ -738,37 +708,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Load Game"
-label_settings = SubResource("LabelSettings_eniqc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Delete Save" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -330.0
-offset_top = -24.0
-offset_right = -30.0
-offset_bottom = 24.0
-grow_horizontal = 0
-grow_vertical = 2
-texture_normal = SubResource("GradientTexture2D_ym31j")
-texture_pressed = SubResource("GradientTexture2D_j8mkf")
-texture_disabled = SubResource("GradientTexture2D_j8mkf")
-script = ExtResource("8_d4xua")
-file_index = 1
-
-[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 2/NinePatchRect/MarginContainer/Control/Delete Save"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Delete Save"
 label_settings = SubResource("LabelSettings_eniqc")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -808,35 +747,6 @@ theme_override_constants/margin_bottom = 25
 [node name="Control" type="Control" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer"]
 layout_mode = 2
 
-[node name="Create new game" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 40.0
-offset_top = -30.0
-offset_right = 340.0
-offset_bottom = 30.0
-grow_vertical = 2
-texture_normal = SubResource("GradientTexture2D_7jvsk")
-texture_pressed = SubResource("GradientTexture2D_o8c13")
-texture_disabled = SubResource("GradientTexture2D_itya5")
-script = ExtResource("6_d01m6")
-file_index = 2
-
-[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control/Create new game"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "New Game
-"
-label_settings = SubResource("LabelSettings_eniqc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Load Save 3" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control"]
 layout_mode = 1
 anchors_preset = 4
@@ -861,37 +771,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Load Game"
-label_settings = SubResource("LabelSettings_eniqc")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Delete Save" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -330.0
-offset_top = -24.0
-offset_right = -30.0
-offset_bottom = 24.0
-grow_horizontal = 0
-grow_vertical = 2
-texture_normal = SubResource("GradientTexture2D_ym31j")
-texture_pressed = SubResource("GradientTexture2D_j8mkf")
-texture_disabled = SubResource("GradientTexture2D_j8mkf")
-script = ExtResource("8_d4xua")
-file_index = 2
-
-[node name="Label" type="Label" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 3/NinePatchRect/MarginContainer/Control/Delete Save"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Delete Save"
 label_settings = SubResource("LabelSettings_eniqc")
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -6,7 +6,6 @@ var player_data : SaveData
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("test")
 	if ResourceLoader.exists(load_file_path):
 		print("File Save Found at: \"" + load_file_path + "\"")
 		player_data = ResourceLoader.load(load_file_path)
@@ -43,4 +42,11 @@ func FreshSave(file_path : String):
 	player_data = SaveData.new()
 	print(ResourceSaver.save(player_data, load_file_path))
 	return ResourceSaver.save(player_data, load_file_path)
-	
+
+func DeleteSave(file_path : String):
+	if ResourceLoader.exists(file_path):
+		var delete_err = DirAccess.remove_absolute(file_path)
+		if delete_err != OK: return "Error: cannot delete file. Lack of permissions or invalid file path."
+		return "File Removed."
+	else:
+		return "Error: cannot delete file, No file found."
