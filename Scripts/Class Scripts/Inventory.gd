@@ -34,5 +34,13 @@ func _drop_data(at_position, data):
 			weapon_holder.RemoveWeapon(old_index)
 			data.weapon_object.Deselect()
 
+
 func _can_drop_data(at_position, data):
 	return true
+
+
+func WipeInventory():
+	for slot in get_children():
+		for item in slot.get_children():
+			if not item is InventoryItem: continue
+			item.queue_free()

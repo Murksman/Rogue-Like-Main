@@ -74,4 +74,3 @@ func CalcInventory(new_object : Object = null):
 		if new_item == null: continue
 		
 		new_item.reparent(get_child(slot_number), false)
-

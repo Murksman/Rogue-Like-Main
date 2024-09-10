@@ -8,6 +8,7 @@ func _pressed():
 	var load_result = SceneLoadingContainer.LoadGame(save_container.save_paths[file_index])
 	if load_result is SaveData:
 		print("Successfully loaded data: " + load_result.test_data)
+		SceneLoadingContainer.load_file_path = save_container.save_paths[file_index]
 		get_tree().change_scene_to_file("res://Scenes/Maps/Main.tscn")
 	else:
 		print(load_result)

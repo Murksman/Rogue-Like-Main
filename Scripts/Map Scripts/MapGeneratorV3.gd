@@ -37,7 +37,7 @@ class_name MapGenerator
 @export var image_array : Array[ImageTexture]
 @export var normal_array : Array[ImageTexture]
 @export var tileMap : TileMap
-@export var vis_mask_container : Node2D
+@export var vis_occluder_container : Node2D
 #@export var collidable_tile : Resource
 #@export var non_collidable_tile : Resource
 #@export var vis_mask_occluder : Resource
@@ -78,8 +78,8 @@ func GenerateImages():
 func Clear():
 	for x in get_child_count():
 		get_child(get_child_count() - x - 1).queue_free()
-	for x in vis_mask_container.get_child_count():
-		vis_mask_container.get_child(vis_mask_container.get_child_count() - x - 1).queue_free()
+	for x in vis_occluder_container.get_child_count():
+		vis_occluder_container.get_child(vis_occluder_container.get_child_count() - x - 1).queue_free()
 
 func CompileMap():
 	# Iterate through each layer in the tilemap
@@ -108,7 +108,7 @@ func CompileMap():
 				newTile.name = "Collidable (" + str(i.x) + ", " + str(i.y) + ") Layer " + str(layer)
 				newTile.breakable = tile_data.get_custom_data("Breakable")
 				newTile.Health = tile_data.get_custom_data("Health")
-				vis_mask_container.add_child(newMaskOccluder)
+				vis_occluder_container.add_child(newMaskOccluder)
 				newMaskOccluder.owner = newMaskOccluder.get_tree().edited_scene_root
 				newMaskOccluder.global_position = Vector2(i * 32)
 				newTile.occluder_child = newMaskOccluder

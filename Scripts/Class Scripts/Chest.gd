@@ -1,4 +1,4 @@
-extends Area2D
+extends ActionableObject
 class_name Chest
 
 @export var inventory_size : Vector2i

@@ -13,6 +13,7 @@ extends CharacterBody2D
 @export var world_obj_inventory : GridContainer
 @export var obj_inventory_container : Control
 @export var weapon_holder : Node2D
+@export var usable_entity_area : Area2D
 @export var usable_area : Area2D
 @export var projectileContainer : Node2D
 
@@ -68,6 +69,7 @@ func Movement(delta):
 	move_and_slide()
 	
 	usable_area.global_position = global_position
+	usable_entity_area.global_position = global_position
 
 func InventoryOpen():
 	if ui_open:
@@ -82,22 +84,26 @@ func UseAction():
 		return
 	
 	var action_items = usable_area.get_overlapping_areas()
+	action_items.append_array(usable_entity_area.get_overlapping_areas())
+	
 	if action_items.size() == 0: return
 	
-	InventoryOpen()
-	
-	var closest_chest : Chest
+	var closest_object : ActionableObject
 	var closest_point : int
 	for item in action_items:
-		if not item is Chest: continue
-		if closest_chest == null: 
-			closest_chest = item
+		if not item is ActionableObject: continue
+		if closest_object == null:
+			closest_object = item
 			closest_point = (item.position - position).length()
 			continue
 		if (item.position - position).length() > closest_point:
 			closest_point = (item.position - position).length()
 	
-	world_obj_inventory.OpenInventory(closest_chest)
+	if closest_object is Chest: 
+		world_obj_inventory.OpenInventory(closest_object)
+		InventoryOpen()
+	elif closest_object is LevelExit: SceneLoadingContainer.ExitLevel()
+	else: return
 
 func TakeDamage(damage):
 	health -= damage
