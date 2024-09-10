@@ -84,3 +84,8 @@ func WeaponState():
 		activeWeapons[i] = false
 		if get_child(i).get_child_count() > 0:
 			activeWeapons[i] = true
+
+func WipeWeapons():
+	for slot in slotArray:
+		for t_weapon in slot.get_children():
+			t_weapon.queue_free()

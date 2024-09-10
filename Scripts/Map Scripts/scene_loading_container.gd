@@ -20,8 +20,16 @@ func SaveGame(file_path : String = load_file_path):
 	
 	print(load_file_path + "\n" + str(player))
 	var player_inventory = player.backpack_inventory
+	var player_ui_loadout = player.loadout_inventory
+	var player_weapon_holder = player.weapon_holder
+	
 	player_data.player_inventory_items.resize(player_inventory.inv_size.x * player_inventory.inv_size.y)
 	player_data.player_inventory_items.fill(null)
+	
+	player_data.player_ui_weapons.resize(player_ui_loadout.inv_size.x * player_ui_loadout.inv_size.y)
+	player_data.player_loadout_weapons.resize(player_data.player_ui_weapons.size())
+	player_data.player_ui_weapons.fill(null)
+	player_data.player_loadout_weapons.fill(null)
 	
 	for i in player_data.player_inventory_items.size():
 		var item = PackedScene.new()
@@ -29,6 +37,15 @@ func SaveGame(file_path : String = load_file_path):
 		if slot_children.size() > 1: 
 			item.pack(player_inventory.get_child(i).get_child(1))
 			player_data.player_inventory_items[i] = item
+	
+	for i in player_data.player_ui_weapons.size():
+		var inv_weapon = PackedScene.new()
+		var weapon = PackedScene.new()
+		if player_weapon_holder.get_child(i).get_children().size() > 1:
+			inv_weapon.pack(player_ui_loadout.get_child(i).get_child(1))
+			player_data.player_ui_weapons[i] = inv_weapon
+			weapon.pack(player_weapon_holder.slotArray[i].get_child(1))
+			player_data.player_loadout_weapons[i] = weapon
 	
 	return ResourceSaver.save(player_data, load_file_path)
 
@@ -46,7 +63,7 @@ func FreshSave(file_path : String):
 	load_file_path = file_path
 	
 	player_data = SaveData.new()
-	print(ResourceSaver.save(player_data, load_file_path))
+	#print(ResourceSaver.save(player_data, load_file_path))
 	return ResourceSaver.save(player_data, load_file_path)
 
 
@@ -68,10 +85,13 @@ func ExitLevel():
 		else: print("Error Exiting the level. [" + load_file_path + "] - " + str(save_status))
 	else:
 		print("Error Exiting the level. [" + load_file_path + "]")
+		print(save_status)
 
 
 func PlayerLoadData():
+	player.loadout_inventory.WipeInventory()
 	player.backpack_inventory.WipeInventory()
+	player.weapon_holder.WipeWeapons()
 	
 	var inv_items = player_data.player_inventory_items
 	for i in inv_items.size():

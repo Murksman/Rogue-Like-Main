@@ -10,6 +10,7 @@ extends CharacterBody2D
 @export_category("Resources")
 @export var inventory_elements : Control
 @export var backpack_inventory : Inventory
+@export var loadout_inventory : WeaponLoadout
 @export var world_obj_inventory : GridContainer
 @export var obj_inventory_container : Control
 @export var weapon_holder : Node2D
