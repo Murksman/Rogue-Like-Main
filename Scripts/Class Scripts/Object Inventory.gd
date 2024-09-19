@@ -1,4 +1,5 @@
 extends Inventory
+class_name ObjectInventory
 
 @export var inv_background : Control
 @export var slot_resource : Resource
@@ -6,7 +7,7 @@ extends Inventory
 @onready var slot_loaded_res = load(str(slot_resource.resource_path))
 
 var inv_size_norm : int = 1
-var ref_inv_object : Object
+var ref_inv_object : Chest
 
 
 func OpenInventory(target_inventory):
@@ -18,26 +19,15 @@ func CloseInventory():
 	for slot in get_children():
 		if slot.get_child_count() > 1:
 			slot.get_child(1).Recall()
-			print("test")
 
 func _drop_data(at_position, data):
+	DropElement(data, at_position)
+	ReparentWeapon(data)
+	
 	var event_pos = floor(at_position / seperation)
 	var list_pos : int = event_pos.x + (event_pos.y * inv_size.x)
 	if data is InventoryItem:
-		if data.item_owner && data.item_owner.get_parent() is Chest:
-			data.item_owner.get_parent().inventory_items[data.inv_position] = null
-		
-		data.reparent(get_child(list_pos), false)
-		data.item_owner = ref_inv_object.item_container
-		data.inv_position = list_pos
 		ref_inv_object.inventory_items[list_pos] = data
-		
-		
-		if data is WeaponItem && data.weapon_object.get_parent() != data:
-			var old_index = data.weapon_object.get_parent().slot
-			data.weapon_object.reparent(data, false)
-			weapon_holder.RemoveWeapon(old_index)
-			data.weapon_object.Deselect()
 
 func CalcInventory(new_object : Object = null):
 	if new_object != null:
@@ -74,3 +64,7 @@ func CalcInventory(new_object : Object = null):
 		if new_item == null: continue
 		
 		new_item.reparent(get_child(slot_number), false)
+		slot_number += 1
+		#print(get_child(slot_number).global_position)
+	
+	#print(ref_inv_object.inventory_items)

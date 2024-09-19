@@ -2,7 +2,8 @@
 extends Node
 
 func _ready():
-	SceneLoadingContainer.StartGame($Player)
+	if !Engine.is_editor_hint():
+		SceneLoadingContainer.StartGame($Player)
 
 func _input(event):
 	if event.is_action("Escape") && !Engine.is_editor_hint():
@@ -13,7 +14,8 @@ func _notification(note_event):
 		get_tree().quit()
 
 
-func _on_child_entered_tree(node):
-	if node is InventoryItem:
-		node.item_owner = node.get_parent().get_parent()
+#func _on_child_entered_tree(node):
+	#if node is InventoryItem:
+		#node.item_owner = node.get_parent().get_parent()
+		#print(node)
 

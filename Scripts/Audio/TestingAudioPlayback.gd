@@ -14,13 +14,15 @@ var playback_timer = 0.0
 var phase = 0.0
 
 func _ready():
+	return
+	playing = false
 	play()
-	playing = true
 	playback = get_stream_playback()
 	fill_buffer()
 
 func _process(delta):
-	if !process_sound: return
+	#if !process_sound: return
+	return
 	
 	playback_timer += delta
 	if playback_timer > buffer_fill_interval:

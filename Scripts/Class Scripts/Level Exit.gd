@@ -4,8 +4,7 @@ class_name LevelExit
 
 
 func _ready():
-	if !Engine.is_editor_hint(): return
-	if get_child_count() <= 0: return
+	if !Engine.is_editor_hint() || get_child_count() > 0: return
 	
 	var exit_image = TextureRect.new()
 	var areaObj = CollisionShape2D.new()

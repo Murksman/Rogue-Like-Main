@@ -6,7 +6,7 @@ class_name Spawner
 @export var spawning : bool = false
 @export var spawnOnStart : bool = true
 
-@onready var spawn_area : Area2D = $"Area2D"
+#@onready var spawn_area : Area2D = $"Area2D"
 @onready var enemyObject : Object = preload("res://Prefabs/Enemies/enemy.tscn")
 @onready var loaded_sprite : Object = preload("res://Prefabs/Enemies/Ememy Entity Sprites/generic_enemy_sprite.tscn")
 var spawnTime : float

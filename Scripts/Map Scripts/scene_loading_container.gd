@@ -23,20 +23,19 @@ func SaveGame(file_path : String = load_file_path):
 	var player_ui_loadout = player.loadout_inventory
 	var player_weapon_holder = player.weapon_holder
 	
-	player_data.player_inventory_items.resize(player_inventory.inv_size.x * player_inventory.inv_size.y)
-	player_data.player_inventory_items.fill(null)
+	#print(player.weapon_holder.get_children()[0].get_children()[0].get_children())
 	
+	player_data.player_inventory_items.resize(player_inventory.inv_size.x * player_inventory.inv_size.y)
 	player_data.player_ui_weapons.resize(player_ui_loadout.inv_size.x * player_ui_loadout.inv_size.y)
 	player_data.player_loadout_weapons.resize(player_data.player_ui_weapons.size())
-	player_data.player_ui_weapons.fill(null)
-	player_data.player_loadout_weapons.fill(null)
+	
 	
 	for i in player_data.player_inventory_items.size():
-		var item = PackedScene.new()
+		var packed_item = PackedScene.new()
 		var slot_children = player_inventory.get_child(i).get_children()
 		if slot_children.size() > 1: 
-			item.pack(player_inventory.get_child(i).get_child(1))
-			player_data.player_inventory_items[i] = item
+			packed_item.pack(player_inventory.get_child(i).get_child(1))
+			player_data.player_inventory_items[i] = packed_item
 	
 	for i in player_data.player_ui_weapons.size():
 		var inv_weapon = PackedScene.new()
@@ -44,7 +43,7 @@ func SaveGame(file_path : String = load_file_path):
 		if player_weapon_holder.get_child(i).get_children().size() > 1:
 			inv_weapon.pack(player_ui_loadout.get_child(i).get_child(1))
 			player_data.player_ui_weapons[i] = inv_weapon
-			weapon.pack(player_weapon_holder.slotArray[i].get_child(1))
+			weapon.pack(player_weapon_holder.slotArray[i].get_child(0))
 			player_data.player_loadout_weapons[i] = weapon
 	
 	return ResourceSaver.save(player_data, load_file_path)
@@ -98,6 +97,20 @@ func PlayerLoadData():
 		var item : PackedScene = inv_items[i]
 		if inv_items[i] != null && item.can_instantiate():
 			var compiled_item = item.instantiate()
-			print(compiled_item.get_class())
+			print(compiled_item.get_children(), " - Compiled Item Children")
+			if compiled_item is WeaponItem:
+				compiled_item.weapon_object = compiled_item.get_child(0)
 			player.backpack_inventory.get_child(i).add_child(compiled_item)
+	
+	var weapon_objs = player_data.player_loadout_weapons
+	var weapon_items = player_data.player_ui_weapons
+	for i in weapon_objs.size():
+		var weapon : PackedScene = weapon_objs[i]
+		var weapon_item : PackedScene = weapon_items[i]
+		if weapon != null && weapon.can_instantiate() && weapon_item != null && weapon_item.can_instantiate():
+			var compiled_weapon = weapon.instantiate()
+			player.weapon_holder.slotArray[i].add_child(compiled_weapon)
+			var compiled_weapon_item = weapon_item.instantiate()
+			player.loadout_inventory.get_child(i).add_child(compiled_weapon_item)
+			compiled_weapon_item.weapon_object = compiled_weapon
 
