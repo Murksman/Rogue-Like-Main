@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://bb6hfelc0trab"]
+
+[ext_resource type="Texture2D" uid="uid://2icoedat8vmb" path="res://Sprites/World Objects/Ball Test.png" id="1_0epl6"]
+[ext_resource type="Script" path="res://Scripts/Object Scripts/Projectile.gd" id="2_enb81"]
+
+[sub_resource type="Shader" id="Shader_2wd3n"]
+code = "shader_type canvas_item;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	vec4 c = texture(TEXTURE, UV);
+	c.rgb = vec3(dot(vec3(1.0), c.rgb) * 0.33333);
+	c.rgb = mix(vec3(0.5), c.rgb, 1.1);
+	COLOR = c;
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s7xfk"]
+shader = SubResource("Shader_2wd3n")
+
+[sub_resource type="Gradient" id="Gradient_np5cp"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.624138)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0qndo"]
+gradient = SubResource("Gradient_np5cp")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Projectile" type="Sprite2D"]
+material = SubResource("ShaderMaterial_s7xfk")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_0epl6")
+script = ExtResource("2_enb81")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+blend_mode = 1
+range_item_cull_mask = 1023
+texture = SubResource("GradientTexture2D_0qndo")
+texture_scale = 5.0
+height = 10.0

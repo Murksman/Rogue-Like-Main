@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://uod05mpwayll"]
+
+[ext_resource type="Texture2D" uid="uid://djjcnxr7061h7" path="res://Sprites/Player Objects/ShotGun 800.png" id="1_k6yqp"]
+[ext_resource type="Script" path="res://Scripts/Class Scripts/WeaponItem.gd" id="2_sn7rd"]
+[ext_resource type="Script" path="res://Scripts/Class Scripts/WeaponClass.gd" id="3_i45ar"]
+[ext_resource type="PackedScene" uid="uid://ogc7uqallucc" path="res://Prefabs/Effect Objects/Player Projectiles/Bullet Projectile.tscn" id="4_k4qjj"]
+
+[node name="Shotgun 800 Item" type="TextureRect" node_paths=PackedStringArray("weapon_object")]
+z_index = 4096
+z_as_relative = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_k6yqp")
+script = ExtResource("2_sn7rd")
+weapon_object = NodePath("Shotgun 800")
+inv_position = 1
+
+[node name="Shotgun 800" type="Node2D" parent="."]
+z_index = 5
+script = ExtResource("3_i45ar")
+fireMode = "Semi Auto"
+baseProjectiles = 10.0
+isSpreadRandom = true
+spreadRange = 0.04
+fireRate = 0.33
+baseDamage = 40.0
+projectileVelocity = 22.0
+projRandVelocityRange = Vector2(-4, 4)
+projectileMaxTime = 2.0
+continuousReload = true
+reloadSpeed = 0.3
+magazineSize = 8
+totalAmmoCapacity = 120
+startingAmmo = 120
+bulletsPerReload = 2
+projectileObjectResource = ExtResource("4_k4qjj")
+projectileHitObjectResource = ExtResource("4_k4qjj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Shotgun 800"]
+visible = false
+z_index = -1
+position = Vector2(12, 0)
+texture = ExtResource("1_k6yqp")

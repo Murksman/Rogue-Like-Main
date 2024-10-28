@@ -566,6 +566,7 @@ theme_override_constants/margin_bottom = 25
 layout_mode = 2
 
 [node name="Create new game" type="TextureButton" parent="Save Select Menu/MarginContainer/NinePatchRect/File Save Container/Save 1/NinePatchRect/MarginContainer/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5

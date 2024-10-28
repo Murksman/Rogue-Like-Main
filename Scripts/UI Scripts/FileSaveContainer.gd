@@ -21,9 +21,9 @@ func _ready():
 	#
 	#save_data = SaveData.new()
 	#save_data.test_data = $"../TextEdit".text
-	#print(save_data.test_data)
+	#printerr(save_data.test_data)
 	#
-	#print(ResourceSaver.save(save_data , "user://" + save_paths[save_index] + ".tres"))
+	#printerr(ResourceSaver.save(save_data , "user://" + save_paths[save_index] + ".tres"))
 
 func UpdateFileStatus():
 	for i in save_slots.size():

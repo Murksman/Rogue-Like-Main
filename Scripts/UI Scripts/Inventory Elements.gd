@@ -19,8 +19,6 @@ func InventoryLogic(event : InputEvent, inventory_ref : Inventory, input_slot : 
 	if event.is_action("Primary"):
 		clicking = event.is_pressed()
 		
-		print(input_slot.name + "Test3")
-		
 		if clicking:
 			if (drag_drop_mode == 1):
 				drag_drop_mode = -1
@@ -60,11 +58,8 @@ func MouseChange():
 func PlaceItem(placement_slot : Control):
 	var placing_item = mouse_hold_item
 	
-	print(placement_slot.name + "Test3")
 	if placement_slot.get_child(1) != null: 
 		mouse_hold_item = placement_slot.get_child(1)
 		drag_drop_mode = 1
-		print("test")
 	
 	placing_item.reparent(placement_slot, false) 
-	print("placed ", placement_slot.name, placing_item.name, placing_item.global_position)

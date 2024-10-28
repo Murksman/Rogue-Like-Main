@@ -29,6 +29,7 @@ func _drop_data(at_position, data):
 	if data is InventoryItem:
 		ref_inv_object.inventory_items[list_pos] = data
 
+
 func CalcInventory(new_object : Object = null):
 	if new_object != null:
 		ref_inv_object = new_object
@@ -58,13 +59,9 @@ func CalcInventory(new_object : Object = null):
 		inv_background.get_child(0).texture.width = size.x
 		inv_background.get_child(0).texture.height = size.y
 	
-	var slot_number = 0
+	#var slot_number = 0
 	
 	for new_item in new_object.inventory_items:
 		if new_item == null: continue
 		
-		new_item.reparent(get_child(slot_number), false)
-		slot_number += 1
-		#print(get_child(slot_number).global_position)
-	
-	#print(ref_inv_object.inventory_items)
+		new_item.reparent(get_child(new_item.inv_position), false)

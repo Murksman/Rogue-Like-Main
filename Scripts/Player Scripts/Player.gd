@@ -18,9 +18,6 @@ extends CharacterBody2D
 @export var usable_area : Area2D
 @export var projectileContainer : Node2D
 
-#var spaceState : PhysicsDirectSpaceState2D
-#var query : PhysicsRayQueryParameters2D
-
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
 var camera : Camera2D

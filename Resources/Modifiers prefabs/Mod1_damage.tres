@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="Mod1_damage" load_steps=2 format=3 uid="uid://c0edlsqdm2yp7"]
+
+[ext_resource type="Script" path="res://Scripts/Resource Scripts/Modifier Scripts/Mod 1 - damage.gd" id="1_wvahr"]
+
+[resource]
+script = ExtResource("1_wvahr")

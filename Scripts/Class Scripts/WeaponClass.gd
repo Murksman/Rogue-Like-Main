@@ -27,6 +27,9 @@ class_name Weapon
 @export var projectileHitObjectResource : Resource
 @export var projectileContainer : Node2D
 
+@export_group("Modifiers")
+@export var mod : Modifier
+
 var orientation = Node2D
 var player = CharacterBody2D
 
@@ -38,23 +41,56 @@ var fireTime : float = 0.0
 var selected = false
 var itemized = false
 var preFiring = false
-var currentMagAmmo : int
-var currentAmmoReserve : int
+var currentMagAmmo : int = 0
+var currentAmmoReserve : int = 0
 var reloading = false
 var reloadTime : float = 0.0
 
+@onready var t_fire_mode : String =	fireMode
+@onready var t_projectiles : float = baseProjectiles
+@onready var t_is_spread_random : bool = isSpreadRandom
+@onready var t_spread_range : float = spreadRange
+@onready var t_fire_rate : float = fireRate
+@onready var t_damage : float = baseDamage
+@onready var t_projectile_velocity : float = projectileVelocity
+@onready var t_proj_rand_velocity_range : Vector2 = projRandVelocityRange
+@onready var t_projectile_max_time : float = projectileMaxTime
+@onready var t_number_of_bounces : int = numberOfBounces
+@onready var t_continuous_reload: bool = continuousReload
+@onready var t_reload_speed : float = reloadSpeed
+@onready var t_magazine_size : int = magazineSize
+@onready var t_total_ammo_capacity : int = totalAmmoCapacity
+@onready var t_starting_ammo : int = startingAmmo
+@onready var t_bullets_per_reload : int = bulletsPerReload
+
+@onready var t_projectileObjectResource : Resource = projectileObjectResource
+@onready var t_projectileHitObjectResource : Resource = projectileHitObjectResource
+
+
+func CalculateStats(use_mod : bool = true):
+	var stats_status : int = 0
+	
+	if mod == null || !use_mod: return
+	
+	stats_status = mod.SetStats(self)
+	
+	if stats_status == 0: return
 
 func _ready(): 
-	currentMagAmmo = magazineSize
+	CalculateStats(true)
+	
+	currentMagAmmo = t_magazine_size
+	
 	rng.randomize()
-	projectileObject = load(str(projectileHitObjectResource.resource_path))
-	projectileHitObject = load(str(projectileHitObjectResource.resource_path))
+	
+	projectileObject = load(str(t_projectileObjectResource.resource_path))
+	projectileHitObject = load(str(t_projectileHitObjectResource.resource_path))
 
 func _physics_process(delta):
 	if !itemized && selected && !player.ui_open:
 		if reloading:
 			reloadTime -= delta
-			reloadTime = clamp(reloadTime, 0, reloadSpeed) 
+			reloadTime = clamp(reloadTime, 0, t_reload_speed) 
 			if reloadTime == 0: 
 				ReloadEnd() 
 		InputActions(delta)
@@ -63,36 +99,37 @@ func _physics_process(delta):
 func InputActions(delta):
 	var triggerHeld = Input.is_action_pressed("Primary")
 	var triggerPressed = Input.is_action_just_pressed("Primary")
+	
 	fireTime -= delta
-	if currentMagAmmo < magazineSize && Input.is_action_just_pressed("Reload") && !reloading:
+	
+	if currentMagAmmo < t_magazine_size && Input.is_action_just_pressed("Reload") && !reloading:
 		ReloadStart()
 	if reloading && triggerPressed && currentMagAmmo != 0:
 		ReloadCancel()
 	if triggerHeld && !preFiring && currentMagAmmo > 0 && !reloading:
-		if fireMode == "Full Auto" && fireTime <= 0:
+		if t_fire_mode == "Full Auto" && fireTime <= 0:
 			Shoot()
-		if triggerPressed && fireMode == "Semi Auto":
+		if t_fire_mode == "Semi Auto" && triggerPressed:
 			if fireTime <= 0:
 				Shoot()
-			elif fireTime <= 0.2 * fireRate:
+			elif fireTime <= 0.2 * t_fire_rate:
 				preFiring = true
 	else:
-		fireTime = clamp(fireTime, 0, fireRate)
+		fireTime = clamp(fireTime, 0, t_fire_rate)
 		if preFiring && fireTime == 0 && currentMagAmmo > 0 && !reloading:
 			Shoot()
 
 func Shoot():
 	currentMagAmmo -= 1
 	preFiring = false
-	fireTime += fireRate
-	for i in baseProjectiles:
-		var n : float = i
+	fireTime += t_fire_rate
+	for i in t_projectiles:
 		var lookTheta = orientation.transform.x.angle_to(Vector2(1, 0))
 		var theta
-		if isSpreadRandom:
-			theta = PI * rng.randf_range(-spreadRange, spreadRange) - lookTheta
+		if t_is_spread_random:
+			theta = PI * rng.randf_range(-t_spread_range, t_spread_range) - lookTheta
 		else:
-			theta = PI * (n + 0.5 - baseProjectiles / 2.0) * spreadRange - lookTheta
+			theta = PI * (i + 0.5 - t_projectiles / 2.0) * t_spread_range - lookTheta
 		var x = cos(theta)
 		var y = sin(theta)
 		var direction = Vector2(x, y)
@@ -100,20 +137,20 @@ func Shoot():
 		projectileContainer.add_child(newBullet)
 		newBullet.global_position = global_position + orientation.transform.x
 		newBullet.look_at(newBullet.global_position + direction)
-		newBullet.addStats(projectileVelocity + rng.randf_range(projRandVelocityRange.x, projRandVelocityRange.y), direction, baseDamage, projectileMaxTime, numberOfBounces)
+		newBullet.addStats(t_projectile_velocity + rng.randf_range(t_proj_rand_velocity_range.x, t_proj_rand_velocity_range.y), direction, t_damage, t_projectile_max_time, t_number_of_bounces)
 
 func ReloadStart():
 	reloading = true
 	preFiring = false
-	reloadTime = reloadSpeed
+	reloadTime = t_reload_speed
 
 func ReloadEnd():
 	reloading = false
-	var ammoSpace = magazineSize - currentMagAmmo 
-	var reloadAmount = clamp(ammoSpace, 0, bulletsPerReload) 
+	var ammoSpace = t_magazine_size - currentMagAmmo 
+	var reloadAmount = clamp(ammoSpace, 0, t_bullets_per_reload) 
 	currentAmmoReserve -= reloadAmount 
 	currentMagAmmo += reloadAmount
-	if currentMagAmmo < magazineSize && continuousReload:
+	if currentMagAmmo < t_magazine_size && t_continuous_reload:
 		ReloadStart()
 
 func ReloadCancel():
@@ -132,7 +169,7 @@ func Select(parent_player, parent_orientation):
 	selected = true
 	visible = true
 
-
+ 
 func ChangeItem(is_item):
 	itemized = is_item
 	

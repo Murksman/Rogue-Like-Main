@@ -29,15 +29,13 @@ func DropElement(data, at_position):
 		if data.item_owner && data.item_owner.get_parent() is Chest:
 			data.item_owner.get_parent().inventory_items[data.inv_position] = null
 		
-		var data_parent = data.get_parent().get_parent()
+		if self is ObjectInventory:
+			data.item_owner = self.ref_inv_object.item_container
+		else:
+			data.item_owner = get_child(list_pos)
 		
 		data.reparent(get_child(list_pos), false)
-		data.item_owner = get_child(list_pos)
 		data.inv_position = list_pos
-		
-		if data_parent is ObjectInventory: 
-			data_parent.ref_inv_object.RecalculateContent()
-			#print(data_parent.ref_inv_object.inventory_items)
 
 
 func ReparentWeapon(data):

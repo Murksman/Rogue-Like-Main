@@ -3,7 +3,7 @@ extends TextureRect
 class_name InventoryItem
 
 var item_owner : Node
-var inv_position : int
+@export var inv_position : int
 
 func _init(input_area : Vector2 = Vector2(40,40)):
 	position = Vector2(12,12)
@@ -27,13 +27,4 @@ func _can_drop_data(at_position, data):
 	return true
 
 func Recall():
-	print("Recalled! ", self.name)
 	reparent(item_owner, false)
-
-#func _drop_data(at_position, data):
-	#if is_drag_successful() && data != self && data is InventoryItem: 
-		#print(data)
-		#var grid_pos = floor(at_position / $"../..".seperation)
-		#var list_pos : int = grid_pos.x + (grid_pos.y * $"../..".inv_size.x)
-		#print(get_child(list_pos), list_pos, $"../..".inv_size, grid_pos, at_position)
-		#$"../..".inventory_master.DropDrag(data, $"../..", get_parent())

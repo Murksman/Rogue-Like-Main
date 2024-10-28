@@ -7,7 +7,7 @@ extends TextureButton
 func _pressed():
 	var delete_err = SceneLoadingContainer.DeleteSave(save_container.save_paths[file_index])
 	if delete_err != "File Removed.":
-		print(delete_err)
+		printerr(delete_err, " Delete Error")
 	else:
-		print("Deleted File")
+		printerr("Deleted File")
 		save_container.UpdateFileStatus()

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootTable" load_steps=5 format=3 uid="uid://8cuopywwlfq6"]
+
+[ext_resource type="Script" path="res://Scripts/Resource Scripts/Loot Table.gd" id="1_okl8p"]
+[ext_resource type="PackedScene" uid="uid://bby1unf3c7sek" path="res://Prefabs/Inventory Items/Ammo Box.tscn" id="1_t5a1k"]
+[ext_resource type="PackedScene" uid="uid://da2a4pl5ls2an" path="res://Prefabs/Inventory Items/Generic Item.tscn" id="2_qec4a"]
+[ext_resource type="PackedScene" uid="uid://uod05mpwayll" path="res://Prefabs/Inventory Items/Shotgun Item.tscn" id="3_p2671"]
+
+[resource]
+script = ExtResource("1_okl8p")
+resource_table = Array[Resource]([null, ExtResource("2_qec4a"), ExtResource("1_t5a1k"), ExtResource("3_p2671")])
+resource_weights = Array[int]([1000, 100, 100, 50])
+sort_weights = false
+total_weight = 1250

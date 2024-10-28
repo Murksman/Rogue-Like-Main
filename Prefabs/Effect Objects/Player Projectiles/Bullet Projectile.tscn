@@ -1,14 +1,14 @@
 [gd_scene load_steps=5 format=3 uid="uid://ogc7uqallucc"]
 
 [ext_resource type="Texture2D" uid="uid://cxrs476rfgmg8" path="res://Sprites/Particles & Effects/Bullet Projectile.png" id="1_mfefc"]
-[ext_resource type="Script" path="res://Scripts/Object Scripts/Bullet.gd" id="2_ew5pv"]
+[ext_resource type="Script" path="res://Scripts/Object Scripts/Projectile.gd" id="2_hk8wc"]
 
-[sub_resource type="Gradient" id="Gradient_su6u4"]
+[sub_resource type="Gradient" id="Gradient_eiwaq"]
 interpolation_mode = 2
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_aarnw"]
-gradient = SubResource("Gradient_su6u4")
+gradient = SubResource("Gradient_eiwaq")
 width = 256
 height = 256
 fill = 1
@@ -21,7 +21,7 @@ z_index = 110
 z_as_relative = false
 texture = ExtResource("1_mfefc")
 offset = Vector2(0, 0.5)
-script = ExtResource("2_ew5pv")
+script = ExtResource("2_hk8wc")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.996078, 0.788235, 0, 1)

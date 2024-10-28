@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://da2a4pl5ls2an"]
+
+[ext_resource type="Texture2D" uid="uid://cmpdu2kvxq4es" path="res://Sprites/Generic Objects/Icons/Melee Icon.png" id="1_amlh3"]
+[ext_resource type="Script" path="res://Scripts/Class Scripts/Inventory Item.gd" id="2_vym0n"]
+
+[node name="InventoryItem" type="TextureRect"]
+z_index = 4096
+z_as_relative = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_amlh3")
+script = ExtResource("2_vym0n")

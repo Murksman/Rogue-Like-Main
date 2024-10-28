@@ -3,7 +3,6 @@ extends Inventory
 class_name WeaponLoadout
 
 func _can_drop_data(at_position, data):
-	print("testing drop - ", data.get_script().get_path(), " ", data.weapon_object)
 	return data is WeaponItem && data.weapon_object != null
 
 
