@@ -25,10 +25,11 @@ class_name Weapon
 @export_group("Weapon Resources")
 @export var projectileObjectResource : Resource
 @export var projectileHitObjectResource : Resource
-@export var projectileContainer : Node2D
 
 @export_group("Modifiers")
 @export var mod : Modifier
+
+@onready var projectileContainer : Node2D = get_tree().current_scene.projectile_container
 
 var orientation = Node2D
 var player = CharacterBody2D

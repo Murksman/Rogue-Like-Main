@@ -1,5 +1,7 @@
 extends Node
 
+@onready var projectile_container : Node2D = $"Projectile Container"
+
 func _ready():
 	SceneLoadingContainer.StartGame($Player)
 
@@ -10,5 +12,3 @@ func _input(event):
 func _notification(note_event):
 	if note_event == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
-
-
