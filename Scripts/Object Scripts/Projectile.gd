@@ -109,5 +109,3 @@ func ProjectileRaycast() -> bool:
 		stopped = true
 		
 		return true
-
-

@@ -14,5 +14,3 @@ func _drop_data(at_position, data):
 	if data is WeaponItem:
 		data.weapon_object.reparent(weapon_holder.get_child(list_pos), false)
 		weapon_holder.AddWeapon(true, list_pos)
-
-

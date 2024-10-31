@@ -22,4 +22,3 @@ func SetStats(weapon : Weapon) -> int:
 
 func PrimaryFire() -> int:
 	return 1
-

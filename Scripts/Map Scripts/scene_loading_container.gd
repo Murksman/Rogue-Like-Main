@@ -144,6 +144,3 @@ func NodeTreeFetch(node : Node, node_processing_list : Array[Node] = []):
 		node_processing_list.append(child)
 		NodeTreeFetch(child, node_processing_list)
 	return node_processing_list
-
-
-
