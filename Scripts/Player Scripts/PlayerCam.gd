@@ -24,6 +24,7 @@ func _physics_process(delta):
 	ui_screen_effects = lerpf(ui_screen_effects, (1.0 if player.ui_open else 0.0), ui_effect_smooth * delta)
 
 func _process(delta):
+	global_position = floor(lerp(global_position, player.global_position, cam_smooth * delta))
 	global_mouse_pos = get_viewport().get_mouse_position()
 	#var mouse_offset = (global_mouse_pos - Vector2(960, 540)) + Vector2((inventorySpacing if player.ui_open else 0.0), 0.0) * 2
 	var mouse_offset = global_mouse_pos - Vector2(960, 540)
@@ -33,7 +34,7 @@ func _process(delta):
 	
 	
 	cone_shader.material.set_shader_parameter("look_direction", direction)
-	cone_shader.material.set_shader_parameter("player_offset", Vector2(offset.x / 960, offset.y / 540))
+	cone_shader.material.set_shader_parameter("player_offset", (player.global_position + offset) * zoom / Vector2(ProjectSettings.get_setting("display/window/size/viewport_width"), ProjectSettings.get_setting("display/window/size/viewport_height")))
 	vis_mask_cone_shader.material.set_shader_parameter("look_direction", direction)
 	vis_mask_cone_shader.material.set_shader_parameter("player_offset", Vector2(offset.x / 960, offset.y / 540))
 	screen_effects_shader.material.set_shader_parameter("ui_effects", ui_screen_effects)
@@ -55,7 +56,6 @@ func _process(delta):
 	$Debug_Visibility_Layer.position = offset
 	
 	
-	global_position = floor(lerp(global_position, player.global_position, cam_smooth * delta))
 	vis_mask_cam.global_position = global_position
 	vis_mask_cam.offset = offset
 	$Masked_Entity_Layer.global_position = global_position + offset
