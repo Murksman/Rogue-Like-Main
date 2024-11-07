@@ -1,4 +1,5 @@
 shader_type canvas_item;
+render_mode unshaded;
 
 uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
 uniform sampler2D mask_texture;
@@ -22,7 +23,7 @@ void fragment() {
 	float blur = mix(0.0, vision_cone_blurring, effect);
 	
 	vec3 lensing = textureLod(lensing_noise_map, SCREEN_UV + player_offset, 1.0).rgb;
-	vec2 lensing_displacement = (vec2(lensing.x, lensing.y) - vec2(0.2)) * vision_noise_amplitude;
+	vec2 lensing_displacement = (vec2(lensing.x, lensing.y) - vec2(0.5)) * vision_noise_amplitude * effect;
 	
 	vec2 r_displacement = SCREEN_PIXEL_SIZE*((r_vision_displacement*effect) + lensing_displacement);
 	vec2 g_displacement = SCREEN_PIXEL_SIZE*((g_vision_displacement*effect) + lensing_displacement);

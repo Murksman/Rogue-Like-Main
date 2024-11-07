@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Rogue-Like Project"
-run/main_scene="res://Scenes/Maps/Menu.tscn"
+run/main_scene="res://Scenes/Maps/Level Editor Main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://Sprites/UI and Menu/icon.svg"
 
@@ -24,7 +24,6 @@ SceneLoadingContainer="*res://Scripts/Map Scripts/scene_loading_container.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=4
-window/size/initial_position_type=2
 window/vsync/vsync_mode=2
 
 [input]
@@ -112,7 +111,8 @@ limits/message_queue/max_size_mb=8000
 
 [physics]
 
-common/physics_jitter_fix=0.1
+common/physics_jitter_fix=0.0
+common/physics_interpolation=true
 
 [rendering]
 

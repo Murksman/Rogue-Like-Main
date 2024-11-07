@@ -6,15 +6,15 @@ var time : float = 0.0
 @export var ui_effect_smooth : float
 @export var inventorySpacing : float
 
-@onready var cone_shader : ColorRect = $"Shader Layer/Shader Container/Vision Cone Effects/Vision Cone Color Control"
-@onready var vis_mask_cone_shader : ColorRect = $"../../Visibility Light Mask/Light Mask Shader"
-@onready var screen_effects_shader : ColorRect = $"Shader Layer/Shader Container/Screen Effect Controls/Screen Controls"
-@onready var vis_mask_cam : Camera2D = $"../../Visibility Light Mask/Mask Cam"
-@onready var entity_rendering_cam : Camera2D = $"../../Entity Rendering Layer/Mask Cam"
-@onready var flash_light : Light2D = $Orientation/Flashlight
-@onready var wall_flash_light : Light2D = $"Orientation/Flashlight (Wall)"
-@onready var Orientation : Node2D = $Orientation
-@onready var player : CharacterBody2D = $".."
+@export var cone_shader : ColorRect
+@export var vis_mask_cone_shader : ColorRect
+@export var screen_effects_shader : ColorRect
+@export var vis_mask_cam : Camera2D
+@export var entity_rendering_cam : Camera2D
+@export var flash_light : Light2D
+@export var wall_flash_light : Light2D 
+@export var Orientation : Node2D
+@export var player : CharacterBody2D
 
 var global_mouse_pos : Vector2
 
