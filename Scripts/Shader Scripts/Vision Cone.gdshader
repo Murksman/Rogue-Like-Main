@@ -14,9 +14,9 @@ uniform vec2 g_vision_displacement = vec2(0.0, 2.0);
 uniform vec2 b_vision_displacement = vec2(-3.0, 0.0);
 
 uniform float vision_noise_amplitude : hint_range(0.0, 100.0, 0.5);
-uniform float vision_cone_blurring : hint_range(0.0, 10.0, 0.1);
+uniform float vision_cone_blurring : hint_range(0.0, 4.0, 0.05);
 
-uniform float lensing_step : hint_range(0.01,1.0,0.001);
+uniform float pixelation_step : hint_range(1.0,10.0,1.0);
 
 void fragment() {
 	float effect = texture(mask_texture, SCREEN_UV).r;
@@ -31,9 +31,15 @@ void fragment() {
 	vec2 g_displacement = SCREEN_PIXEL_SIZE*((g_vision_displacement*effect) + lensing_displacement);
 	vec2 b_displacement = SCREEN_PIXEL_SIZE*((b_vision_displacement*effect) + lensing_displacement);
 	
+	// vec2 uv = floor(((SCREEN_UV / SCREEN_PIXEL_SIZE) + vec2(0.5)) / pixelation_step) * SCREEN_PIXEL_SIZE * pixelation_step;
+	 
 	float r = textureLod(screen_texture, SCREEN_UV + r_displacement, blur).r;
 	float g = textureLod(screen_texture, SCREEN_UV + g_displacement, blur).g;
 	float b = textureLod(screen_texture, SCREEN_UV + b_displacement, blur).b;
+	
+	//float r = textureLod(screen_texture, uv, 0.5).r;
+	//float g = textureLod(screen_texture, uv, 0.5).g;
+	//float b = textureLod(screen_texture, uv, 0.5).b;
 	
 	vec3 c = vec3(r,g,b);
 	
@@ -42,7 +48,7 @@ void fragment() {
 	c = mix(c, vec3(c.r, c.g, c.b), clamp(1.0 - (r+g+b) / 1.0, 0.0, 1.0));
 	//c = mix(c, c * 1.0, effect);
 	
-	c.rgb = mix(vec3(dot(vec3(1.0), c.rgb) * 0.33333), c.rgb / 1.3, 0.6);
+	c.rgb = mix(vec3(dot(vec3(1.0), c.rgb) * 0.33333), c.rgb / 1.3, 0.4);
 	
 	COLOR = vec4(c.x,c.y,c.z,effect);
 	//COLOR = texture(lensing_noise_map, SCREEN_UV);

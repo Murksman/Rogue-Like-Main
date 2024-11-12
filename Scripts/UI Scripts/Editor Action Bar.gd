@@ -1,7 +1,5 @@
-extends VSplitContainer
+extends HSplitContainer
 
-func _ready() -> void:
-	var grabber : GradientTexture2D = get("theme_override_icons/grabber")
-	grabber.width = size.x
-	print(grabber)
-	set("theme_override_icons/grabber", grabber)
+func _on_dragged(offset: int) -> void:
+	var space : int = offset - 24
+	#$"Tile Tray/Tile Tray Container/Tray Scroller/Tray Grid".columns = floor(space / 86)

@@ -1,0 +1,174 @@
+[gd_scene load_steps=10 format=3 uid="uid://cg1jm4w5iv7tt"]
+
+[ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_rsd2b"]
+[ext_resource type="Texture2D" uid="uid://ch2f6xi1dyobq" path="res://Sprites/Misc/Better Flashlight Image.png" id="2_m38o4"]
+[ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="3_e3wfj"]
+[ext_resource type="Texture2D" uid="uid://bvjp8ndpumkc7" path="res://Sprites/World Objects/2d_lights_and_shadows_neutral_point_light.webp" id="4_hcyjk"]
+[ext_resource type="Script" path="res://Scripts/UI Scripts/Tray Grid.gd" id="5_l5xey"]
+[ext_resource type="Script" path="res://Scripts/UI Scripts/Tile.gd" id="6_gbmg7"]
+[ext_resource type="Texture2D" uid="uid://brmmc8xkwyack" path="res://Resources/Tileset Source Normals/Better Tiles Normal.png" id="7_uh8iw"]
+
+[sub_resource type="Gradient" id="Gradient_2vxdc"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.915584)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2fb8o"]
+gradient = SubResource("Gradient_2vxdc")
+width = 84
+height = 110
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[node name="TestingScene" type="Node2D"]
+script = ExtResource("1_rsd2b")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0, 0, 0, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(5, 5)
+
+[node name="Wall Flashlight" type="PointLight2D" parent="."]
+light_mask = 513
+visibility_layer = 513
+z_as_relative = false
+position = Vector2(73, 93)
+energy = 16.0
+range_z_min = 4096
+range_z_max = -4096
+range_item_cull_mask = 1023
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_item_cull_mask = 512
+texture = ExtResource("2_m38o4")
+texture_scale = 50.0
+height = 100.0
+
+[node name="Wall Flashlight2" type="PointLight2D" parent="."]
+top_level = true
+light_mask = 1023
+visibility_layer = 1023
+z_index = 4096
+z_as_relative = false
+position = Vector2(73, 93)
+scale = Vector2(1, 100)
+energy = 31.7
+range_z_min = 4096
+range_z_max = -4096
+range_layer_min = -512
+range_layer_max = 512
+range_item_cull_mask = 1048575
+shadow_enabled = true
+shadow_item_cull_mask = 512
+texture = ExtResource("3_e3wfj")
+texture_scale = 50.0
+height = 100.0
+
+[node name="Peripheral lighting (Wall)" type="PointLight2D" parent="."]
+z_as_relative = false
+position = Vector2(73, 93)
+color = Color(1, 0.835294, 0.294118, 1)
+energy = 0.6
+range_item_cull_mask = 512
+shadow_enabled = true
+shadow_item_cull_mask = 512
+texture = ExtResource("4_hcyjk")
+height = 100.0
+
+[node name="Peripheral lighting" type="PointLight2D" parent="."]
+z_index = 4096
+z_as_relative = false
+position = Vector2(82, 87)
+color = Color(1, 0.835294, 0.294118, 1)
+shadow_enabled = true
+texture = ExtResource("4_hcyjk")
+texture_scale = 1.87
+height = 65.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_l5xey")
+
+[node name="Tile" type="Control" parent="CanvasLayer/Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_stretch_ratio = 0.0
+script = ExtResource("6_gbmg7")
+
+[node name="Tile Display" type="Control" parent="CanvasLayer/Control/Tile"]
+anchors_preset = 0
+offset_right = 86.0
+offset_bottom = 86.0
+mouse_filter = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Tile/Tile Display"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_uh8iw")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="Tile Select Outline" type="TextureRect" parent="CanvasLayer/Control/Tile"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_right = 85.0
+offset_bottom = 110.0
+texture = SubResource("GradientTexture2D_2fb8o")
+
+[node name="Tile2" type="Control" parent="CanvasLayer/Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 86.0
+offset_right = 86.0
+size_flags_stretch_ratio = 0.0
+script = ExtResource("6_gbmg7")
+
+[node name="Tile Display" type="Control" parent="CanvasLayer/Control/Tile2"]
+anchors_preset = 0
+offset_right = 86.0
+offset_bottom = 86.0
+mouse_filter = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/Tile2/Tile Display"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_uh8iw")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="Tile Select Outline" type="TextureRect" parent="CanvasLayer/Control/Tile2"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_right = 85.0
+offset_bottom = 110.0
+texture = SubResource("GradientTexture2D_2fb8o")
