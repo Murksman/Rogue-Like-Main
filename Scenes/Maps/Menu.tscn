@@ -1,11 +1,11 @@
 [gd_scene load_steps=62 format=3 uid="uid://dnw6itssad8gs"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
-[ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
+[ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/Fonts and Text/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
 [ext_resource type="Script" path="res://Scripts/Class Scripts/Menu.gd" id="3_72npe"]
 [ext_resource type="Script" path="res://Scripts/Class Scripts/MenuChangeButton.gd" id="4_myeau"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileSaveContainer.gd" id="5_0qi48"]
-[ext_resource type="Texture2D" uid="uid://khpsgfqsjnp5" path="res://Resources/Generic Button.tres" id="5_qneyr"]
+[ext_resource type="Texture2D" uid="uid://khpsgfqsjnp5" path="res://Resources/UI/Generic Button.tres" id="5_qneyr"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/Input Mapping Select.gd" id="8_ctsu7"]
 [ext_resource type="Script" path="res://Scripts/UI Scripts/Delete Save.gd" id="8_d4xua"]
