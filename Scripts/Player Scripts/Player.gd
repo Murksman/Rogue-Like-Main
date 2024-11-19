@@ -24,6 +24,7 @@ var camera : Camera2D
 
 var alive : bool = true
 var ui_open : bool = false
+var editor_open : bool = false
 var health : float = 100.0
 
 func _ready():
@@ -31,11 +32,13 @@ func _ready():
 
 
 func _physics_process(delta):
-	if alive:
+	if alive && !editor_open:
 		Movement(delta)
 
 
 func _input(event):
+	if editor_open: return
+	
 	if event.is_action_pressed("Save"):
 		SceneLoadingContainer.SaveGame()
 	

@@ -24,6 +24,10 @@ func _physics_process(delta):
 	ui_screen_effects = lerpf(ui_screen_effects, (1.0 if player.ui_open else 0.0), ui_effect_smooth * delta)
 
 func _process(delta):
+	if player.editor_open: 
+		offset = Vector2.ZERO
+		return
+	
 	global_mouse_pos = get_viewport().get_mouse_position()
 	global_position = lerp(global_position, player.global_position, cam_smooth * delta)
 	
