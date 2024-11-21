@@ -1,4 +1,5 @@
 extends Node
+
 var load_file_path : String = ""
 var player_data : SaveData
 var player : Node2D

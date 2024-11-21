@@ -1,6 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bckitscg7ylby"]
-
-[ext_resource type="Script" path="res://Scripts/Map Scripts/Tile.gd" id="1_lo7xe"]
+[gd_scene load_steps=5 format=3 uid="uid://bbc1etvp35100"]
 
 [sub_resource type="Gradient" id="Gradient_ugmdd"]
 
@@ -9,12 +7,16 @@ gradient = SubResource("Gradient_ugmdd")
 width = 32
 height = 32
 
+[sub_resource type="GDScript" id="GDScript_2hs3q"]
+script/source = "extends Sprite2D
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7im31"]
 size = Vector2(32, 32)
 
 [node name="Tile Image" type="Sprite2D"]
 texture = SubResource("GradientTexture2D_r5xng")
-script = ExtResource("1_lo7xe")
+script = SubResource("GDScript_2hs3q")
 
 [node name="Collision Box" type="Area2D" parent="."]
 collision_layer = 0
