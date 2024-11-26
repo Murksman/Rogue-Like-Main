@@ -29,8 +29,6 @@ class_name Weapon
 @export_group("Modifiers")
 @export var mod : Modifier
 
-@onready var projectileContainer : Node2D = get_tree().current_scene.projectile_container
-
 var orientation = Node2D
 var player = CharacterBody2D
 
@@ -135,9 +133,9 @@ func Shoot():
 		var y = sin(theta)
 		var direction = Vector2(x, y)
 		var newBullet = projectileObject.instantiate()
-		projectileContainer.add_child(newBullet)
 		newBullet.global_position = global_position + orientation.transform.x
 		newBullet.look_at(newBullet.global_position + direction)
+		LevelInfo.projectile_container.add_child(newBullet)
 		newBullet.addStats(t_projectile_velocity + rng.randf_range(t_proj_rand_velocity_range.x, t_proj_rand_velocity_range.y), direction, t_damage, t_projectile_max_time, t_number_of_bounces)
 
 func ReloadStart():

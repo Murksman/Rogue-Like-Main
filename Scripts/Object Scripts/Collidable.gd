@@ -8,7 +8,7 @@ func TakeDamage(damage):
 	if breakable:
 		if Health - damage <= 0:
 			occluder_child.queue_free()
-			$"..".DestroyTile(self)
+			$"../..".DestroyTile(self)
 			return Health
 		
 		Health -= damage

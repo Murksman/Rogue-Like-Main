@@ -4,6 +4,7 @@ extends Node
 
 func _ready():
 	SceneLoadingContainer.StartGame($Player)
+	LevelInfo.projectile_container = projectile_container
 
 func _input(event):
 	if event.is_action("Escape"):

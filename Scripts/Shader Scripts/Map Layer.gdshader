@@ -9,7 +9,7 @@ void fragment() {
 	vec4 c = texture(screen_texture, SCREEN_UV);
 	
 	if (!is_visible) {
-		c.a *= 0.3;
+		c.a *= 0.2;
 	}
 	
 	COLOR = c;
