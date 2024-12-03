@@ -5,6 +5,6 @@ class_name Tile
 
 var tile_info : TileInfo
 
-#func _gui_input(event: InputEvent) -> void:
-	#if event.is_action_pressed("Primary"):
-		#$"..".SelectTile(self)
+func _gui_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Primary"):
+		$"..".SelectTile(self)

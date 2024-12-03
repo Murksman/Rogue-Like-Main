@@ -20,7 +20,6 @@ func _input(event: InputEvent) -> void:
 func LevelPanePressed(event : InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		if Input.is_action_pressed("Editor Secondary"):
-			print(player.position)
 			player.position += (dragging_mouse_point - get_viewport().get_mouse_position()) / 2
 			dragging_mouse_point = get_viewport().get_mouse_position()
 	
