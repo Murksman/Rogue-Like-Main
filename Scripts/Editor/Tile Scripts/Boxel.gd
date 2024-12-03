@@ -1,5 +1,5 @@
 extends Resource
-class_name LibraryObject
+class_name Boxel
 
 var type : int = 0
 var img : Image

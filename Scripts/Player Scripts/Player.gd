@@ -17,18 +17,16 @@ extends CharacterBody2D
 @export var usable_entity_area : Area2D
 @export var usable_area : Area2D
 @export var projectileContainer : Node2D
+@export var collision_body : CollisionShape2D
 
 var moveDirection : Vector2 = Vector2.ZERO
 var velocityNorm : Vector2 = Vector2.ZERO
-var camera : Camera2D
+@onready var camera : Camera2D = $Camera2D
 
 var alive : bool = true
 var ui_open : bool = false
 var editor_open : bool = false
 var health : float = 100.0
-
-func _ready():
-	camera = $Camera2D
 
 
 func _physics_process(delta):
