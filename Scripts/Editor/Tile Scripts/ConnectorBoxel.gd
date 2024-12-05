@@ -1,10 +1,8 @@
 extends Boxel
 class_name ConnectorBoxel
 
-var tile_data : Array[TileData]
+var tile_array : Array[TileInfo]
 
-func _init() -> void:
-	type = 2
-
-func GetTileInfo() -> TileInfo:
-	return null
+func GetConnectedTile(tile_index : int):
+	var boxel_index = LevelInfo.connector_boxel_matrix[tile_index]
+	return tile_array[boxel_index]

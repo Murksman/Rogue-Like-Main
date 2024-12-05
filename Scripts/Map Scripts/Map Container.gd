@@ -2,24 +2,15 @@ extends NavigationRegion2D
 
 var free_nodes : Array[Node]
 
-@export var generate_map_array : bool:
-	set(arg):
-		layer_init(floor_group)
-		generate_map_array = false
-
 @export var target_tile_position : Vector2i
 
-@export var set_tile_visibility : bool:
-	set(arg):
-		var tile = GetTile(target_tile_position, floor_group)
-		if tile: tile.visible = !tile.visible
-		else: printerr("No Tile Found at: ", target_tile_position)
-		set_tile_visibility = false
-
-@export var floor_group : CanvasGroup
-@export var wall_group : CanvasGroup
-@export var entity_group : CanvasGroup
+@export var layer_groups : Array[CanvasGroup]
 @export var chunk_size : int
+
+@export_category("Tile Resources")
+@export var tile_prefab : PackedScene
+
+@onready var generic_tile_object := load("res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn")
 
 var map_size : Vector2i
 var bounds_offset : Vector2i = Vector2i.ZERO 
@@ -27,9 +18,9 @@ var chunk_origin : Vector2i = Vector2i.ZERO  # Defines the top left chunk's posi
 var chunk_dimensions : Vector2i = Vector2i.ZERO
 
 func _ready():
-	layer_init(floor_group)
-	layer_init(wall_group)
-	layer_init(entity_group)
+	layer_init(layer_groups[0])
+	layer_init(layer_groups[1])
+	layer_init(layer_groups[2])
 
 func layer_init(layer_group : CanvasGroup):
 	ResizeMapBounds()
@@ -90,6 +81,7 @@ func ResizeMapBounds():
 	chunk_origin = floor(Vector2(bounds_offset) / chunk_size)
 	chunk_dimensions = ceil(Vector2(map_size) / chunk_size)
 
+
 func bind_array_tile(tile : Node, layer_group : CanvasGroup):
 	var tile_position : Vector2i = round(tile.position / 32)
 	var tile_array_index = tile_position % chunk_size
@@ -108,8 +100,33 @@ func query_free_nodes():
 			bake_navigation_polygon(false)
 			free_nodes.remove_at(list_size - n - 1)
 
+func PixelToTilePosition(pixel_pos : Vector2) -> Vector2i:
+	return floor((pixel_pos + Vector2(16.0,16.0)) / 32)
+
 func add_free_node(obj):
 	free_nodes.append(obj)
+
+func AddTile(tile_info : TileInfo, tile_pixel_pos : Vector2, layer : CanvasGroup) -> Node:
+	var tile_pos = PixelToTilePosition(tile_pixel_pos)
+	
+	if tile_pos.x > map_size.x - bounds_offset.x || tile_pos.y > map_size.y - bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
+		return null
+	
+	var tile_array_index = tile_pos % chunk_size
+	var tile_chunk_index = ((tile_pos - tile_array_index) / chunk_size) - Vector2i(1,1) - chunk_origin
+	var prev_tile : Node = layer.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+	
+	if prev_tile: prev_tile.queue_free()
+	
+	var new_tile = generic_tile_object.instantiate()
+	layer_groups[tile_info.layer].add_child(new_tile)
+	new_tile.global_position = tile_pos * 32
+	print(new_tile.global_position)
+	
+	layer.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
+	
+	return new_tile
+
 
 func DestroyTile(tile):
 	tile.queue_free()

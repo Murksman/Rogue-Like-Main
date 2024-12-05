@@ -1,10 +1,7 @@
 extends Boxel
 class_name UnitBoxel
 
-
-func _init() -> void:
-	type = 1
-	
+@export var tile_info : TileInfo
 
 func GetTileInfo() -> TileInfo:
-	return null
+	return tile_info
