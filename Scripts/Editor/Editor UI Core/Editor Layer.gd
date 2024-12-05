@@ -12,13 +12,18 @@ var anchor_mouse_point : Vector2
 var selected_boxel : UIBoxel
 
 var drag_action_tile : Node
+var editing 
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"):
-		visible = !visible
-		player.editor_open = visible
-		player.visible = !visible
-		player.collision_body.disabled = player.collision_body.disabled
+		editing = !editing
+		visible = editing
+		player.editor_open = editing
+		player.visible = !editing
+		player.collision_body.disabled = editing
+		
+		if layer_button_group.get_pressed_button(): layer_button_group.get_pressed_button().button_pressed = false
+		level_tilemap_root.ResetLayerVisibility()
 
 func LevelPanePressed(event : InputEvent) -> void:
 	if event is InputEventMouseMotion:

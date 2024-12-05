@@ -17,12 +17,12 @@ var bounds_offset : Vector2i = Vector2i.ZERO
 var chunk_origin : Vector2i = Vector2i.ZERO  # Defines the top left chunk's position as a relative origin point for the chunk array. Measured in chunks
 var chunk_dimensions : Vector2i = Vector2i.ZERO
 
-func _ready():
+func _ready() -> void:
 	layer_init(layer_groups[0])
 	layer_init(layer_groups[1])
 	layer_init(layer_groups[2])
 
-func layer_init(layer_group : CanvasGroup):
+func layer_init(layer_group : CanvasGroup) -> void:
 	ResizeMapBounds()
 	
 	var chunk_temp : Array[Array] = []
@@ -62,7 +62,7 @@ func GetTileByPixel(pixel_position : Vector2, layer_group : CanvasGroup) -> Node
 	var tile_position : Vector2i = floor((pixel_position + Vector2(16.0,16.0)) / 32)
 	return GetTile(tile_position, layer_group)
 
-func ResizeMapBounds():
+func ResizeMapBounds() -> void:
 	map_size = Vector2i.ZERO
 	bounds_offset = Vector2i.ZERO
 	
@@ -82,17 +82,17 @@ func ResizeMapBounds():
 	chunk_dimensions = ceil(Vector2(map_size) / chunk_size)
 
 
-func bind_array_tile(tile : Node, layer_group : CanvasGroup):
+func bind_array_tile(tile : Node, layer_group : CanvasGroup) -> void:
 	var tile_position : Vector2i = round(tile.position / 32)
 	var tile_array_index = tile_position % chunk_size
 	var tile_chunk_index = ((tile_position - tile_array_index) / chunk_size) - Vector2i(1,1) - chunk_origin
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = tile
 
-func _physics_process(_delta):
+func _physics_process(_delta) -> void:
 	pass
 	#query_free_nodes()
 
-func query_free_nodes():
+func query_free_nodes() -> void:
 	var list_size = free_nodes.size()
 	for n in list_size:
 		var wr = weakref(free_nodes[list_size - n - 1])
@@ -103,7 +103,7 @@ func query_free_nodes():
 func PixelToTilePosition(pixel_pos : Vector2) -> Vector2i:
 	return floor((pixel_pos + Vector2(16.0,16.0)) / 32)
 
-func add_free_node(obj):
+func add_free_node(obj) -> void:
 	free_nodes.append(obj)
 
 func AddTile(tile_info : TileInfo, tile_pixel_pos : Vector2, layer : CanvasGroup) -> Node:
@@ -119,16 +119,22 @@ func AddTile(tile_info : TileInfo, tile_pixel_pos : Vector2, layer : CanvasGroup
 	if prev_tile: prev_tile.queue_free()
 	
 	var new_tile = generic_tile_object.instantiate()
+	new_tile.owner = self
+	new_tile.texture = tile_info.image
 	layer_groups[tile_info.layer].add_child(new_tile)
-	new_tile.global_position = tile_pos * 32
-	print(new_tile.global_position)
+	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
+	print(new_tile.texture)
 	
 	layer.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
 	
 	return new_tile
 
 
-func DestroyTile(tile):
+func ResetLayerVisibility() -> void:
+	for layer in get_children():
+		layer.material.set_shader_parameter("is_visible", true)
+
+func DestroyTile(tile) -> void:
 	tile.queue_free()
 	add_free_node(tile)
 	query_free_nodes()

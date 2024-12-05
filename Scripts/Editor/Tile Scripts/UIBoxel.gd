@@ -11,7 +11,5 @@ func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Primary"):
 		$"..".SelectTile(self)
 
-
-
 func _on_mouse_exited() -> void:
 	$"..".MouseExit(self)
