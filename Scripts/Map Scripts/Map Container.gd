@@ -7,7 +7,7 @@ var free_nodes : Array[Node]
 @export var layer_groups : Array[CanvasGroup]
 @export var chunk_size : int
 
-@export_category("Tile Resources")
+@export_group("Tile Resources")
 @export var tile_prefab : PackedScene
 
 @onready var generic_tile_object := load("res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn")
@@ -96,7 +96,7 @@ func query_free_nodes() -> void:
 	var list_size = free_nodes.size()
 	for n in list_size:
 		var wr = weakref(free_nodes[list_size - n - 1])
-		if (!wr.get_ref()):
+		if !wr.get_ref():
 			bake_navigation_polygon(false)
 			free_nodes.remove_at(list_size - n - 1)
 

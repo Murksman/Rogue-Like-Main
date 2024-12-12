@@ -14,15 +14,9 @@ var selected_boxel : UIBoxel
 
 var drag_action_tile : Node
 var editing : bool = false
-var queue_window_time : int = 0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"): EditToggle()
-
-func _process(delta: float) -> void:
-	if queue_window_time > 0:
-		queue_window_time -= 1
-		if queue_window_time == 0: import_window.WindowReady()
 
 func EditToggle():
 	editing = !editing
@@ -43,7 +37,7 @@ func EditorExit():
 func EditorReady():
 	import_window.popup()
 	import_window.visible = true
-	queue_window_time = 2
+	import_window.WindowReady()
 
 func LevelPanePressed(event : InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -60,7 +54,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	if event.is_pressed(): mouse_position = level_tilemap_root.get_local_mouse_position()
 	
-	if event.is_action("Editor Secondary") &&event.is_pressed():
+	if event.is_action("Editor Secondary") && event.is_pressed():
 		anchor_mouse_point = get_viewport().get_mouse_position()
 	
 	#if event.is_action("Editor Primary") && event.is_pressed():
