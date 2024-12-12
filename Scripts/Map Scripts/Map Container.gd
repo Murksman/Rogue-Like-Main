@@ -123,7 +123,6 @@ func AddTile(tile_info : TileInfo, tile_pixel_pos : Vector2, layer : CanvasGroup
 	new_tile.texture = tile_info.image
 	layer_groups[tile_info.layer].add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
-	print(new_tile.texture)
 	
 	layer.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
 	

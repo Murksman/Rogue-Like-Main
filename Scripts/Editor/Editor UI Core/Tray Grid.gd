@@ -24,7 +24,7 @@ func MouseExit(target : Control):
 	hover_boxel.name_label.visible = false
 	hover_boxel = null
 
-func HoverTile(hover_target : Control):
+func HoverTile(hover_target : UIBoxel):
 	if hover_boxel == hover_target: return
 	if hover_boxel: hover_boxel.name_label.visible = false
 	else: hover_boxel = hover_target

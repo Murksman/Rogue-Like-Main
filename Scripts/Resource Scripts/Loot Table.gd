@@ -81,7 +81,6 @@ func RollItems(rarity, quantity) -> Array[Resource]:
 				items.append(resource_table[n])
 				break
 	
-	print(items)
 	return items
 
 

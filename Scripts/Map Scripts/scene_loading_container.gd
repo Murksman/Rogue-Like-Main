@@ -4,13 +4,16 @@ var load_file_path : String = ""
 var player_data : SaveData
 var player : Node2D
 
+func _ready() -> void:
+	if DirAccess.make_dir_absolute("user://Editor Boxels") == null:
+		print("successfully created boxel folder")
+
 func StartGame(player_ref : Node2D):
 	player = player_ref
 	
 	if ResourceLoader.exists(load_file_path):
 		player_data = LoadGame(load_file_path)
 		PlayerLoadData()
-
 
 func SaveGame(file_path : String = load_file_path, fresh_save : bool = false):
 	if !ResourceLoader.exists(load_file_path) || fresh_save:

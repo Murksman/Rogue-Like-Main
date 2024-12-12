@@ -2,7 +2,7 @@ extends Control
 class_name UIBoxel
 
 @onready var tile_highlighter : Control = $"Tile Select Outline"
-@onready var name_label : Control = $"Tile Display/Name Label"
+@onready var name_label : Control = $"Boxel Display/Name Label"
 
 @export var boxel : Boxel
 

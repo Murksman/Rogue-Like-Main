@@ -1,0 +1,15 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://ckwrj5vo0wefw"]
+
+[ext_resource type="Texture2D" uid="uid://4icilf5wpqm7" path="res://Sprites/UI and Menu/UI Elements/UI Button Template.png" id="1_eyw7n"]
+
+[resource]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = ExtResource("1_eyw7n")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+modulate_color = Color(0.784314, 0.301961, 0.278431, 1)

@@ -3,6 +3,7 @@ extends CanvasLayer
 @export var level_tilemap_root : Node2D
 @export var layer_button_group : ButtonGroup
 @export var core_tile_importer : TileImporter
+@export var import_window : Window
 
 @onready var player : CharacterBody2D = $"../Player"
 
@@ -12,18 +13,37 @@ var anchor_mouse_point : Vector2
 var selected_boxel : UIBoxel
 
 var drag_action_tile : Node
-var editing 
+var editing : bool = false
+var queue_window_time : int = 0
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("Edit Mode"):
-		editing = !editing
-		visible = editing
-		player.editor_open = editing
-		player.visible = !editing
-		player.collision_body.disabled = editing
-		
-		if layer_button_group.get_pressed_button(): layer_button_group.get_pressed_button().button_pressed = false
-		level_tilemap_root.ResetLayerVisibility()
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Edit Mode"): EditToggle()
+
+func _process(delta: float) -> void:
+	if queue_window_time > 0:
+		queue_window_time -= 1
+		if queue_window_time == 0: import_window.WindowReady()
+
+func EditToggle():
+	editing = !editing
+	if editing: EditorReady()
+	else: EditorExit()
+	
+	visible = editing
+	player.editor_open = editing
+	player.visible = !editing
+	player.collision_body.disabled = editing
+	
+	if layer_button_group.get_pressed_button(): layer_button_group.get_pressed_button().button_pressed = false
+
+func EditorExit():
+	import_window.notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	level_tilemap_root.ResetLayerVisibility()
+
+func EditorReady():
+	import_window.popup()
+	import_window.visible = true
+	queue_window_time = 2
 
 func LevelPanePressed(event : InputEvent) -> void:
 	if event is InputEventMouseMotion:
