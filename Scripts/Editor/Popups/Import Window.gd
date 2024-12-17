@@ -17,7 +17,8 @@ func _process(delta: float) -> void:
 		if queue_import_time == 0: RequestOpenFile()
 
 func WindowReady() -> void:
-	queue_import_time = 2
+	if !preview_image.texture: queue_import_time = 2
+	
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -48,6 +49,11 @@ func FileImportCatch(files : Array[String]) -> void:
 	
 	UpdateImportSettings()
 
-
 func _on_button_pressed() -> void:
 	RequestOpenFile()
+
+func FinishImport():
+	
+
+func _on_finish_import_button_pressed() -> void:
+	FinishImport()
