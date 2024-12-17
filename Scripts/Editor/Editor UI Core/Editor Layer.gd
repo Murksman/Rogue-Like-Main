@@ -4,6 +4,7 @@ extends CanvasLayer
 @export var layer_button_group : ButtonGroup
 @export var core_tile_importer : TileImporter
 @export var import_window : Window
+@export var library_grid : GridContainer
 
 @onready var player : CharacterBody2D = $"../Player"
 
@@ -11,6 +12,7 @@ var mouse_position : Vector2 = Vector2.ZERO
 var anchor_mouse_point : Vector2
 
 var selected_boxel : UIBoxel
+var selected_layer : int = 0
 
 var drag_action_tile : Node
 var editing : bool = false
@@ -47,10 +49,13 @@ func LevelPanePressed(event : InputEvent) -> void:
 			
 		elif Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && selected_boxel:
 			var global_mouse_pos = level_tilemap_root.get_local_mouse_position()
-			var temp_sampled_tile = level_tilemap_root.GetTileByPixel(global_mouse_pos, layer_button_group.get_pressed_button().select_layer)
+			selected_layer = layer_button_group.get_pressed_button().layer_int
+			var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
+			
+			var temp_sampled_tile = level_tilemap_root.GetTileByPixel(global_mouse_pos, layer_canvas)
 			
 			if drag_action_tile != temp_sampled_tile: 
-				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel.GetTileInfo(), global_mouse_pos, layer_button_group.get_pressed_button().select_layer)
+				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel.GetTileInfo(), global_mouse_pos, layer_canvas)
 	
 	if event.is_pressed(): mouse_position = level_tilemap_root.get_local_mouse_position()
 	

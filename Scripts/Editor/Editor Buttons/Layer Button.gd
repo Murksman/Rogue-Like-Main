@@ -1,6 +1,7 @@
 extends Button
 
 @export var select_layer : CanvasGroup
+@export var layer_int : int
 
 func _pressed() -> void:
 	if !button_group.get_pressed_button(): 

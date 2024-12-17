@@ -2,8 +2,9 @@ extends Window
 
 @export var open_file_handler : FileDialog
 @export var filepath_text : LineEdit
+@export var boxelname_text : LineEdit
 @export var preview_image : TextureRect
-
+@export var editor_master : CanvasLayer
 
 var open_file_paths : Array[String] = []
 var imported_src_image : Image
@@ -53,7 +54,15 @@ func _on_button_pressed() -> void:
 	RequestOpenFile()
 
 func FinishImport():
-	
-
+	var new_boxel = UnitBoxel.new()
+	var new_tile_info = TileInfo.new()
+	new_tile_info.image = imported_image_tex
+	new_tile_info.layers = [editor_master.selected_layer]
+	new_tile_info.tile_name = boxelname_text.text
+	new_boxel.tile_info = new_tile_info
+	new_boxel.boxel_img = imported_image_tex
+	new_boxel.boxel_name = boxelname_text.text
+	editor_master.library_grid.AddNewBoxel(new_boxel)
+ 
 func _on_finish_import_button_pressed() -> void:
 	FinishImport()

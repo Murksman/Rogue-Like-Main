@@ -1,9 +1,10 @@
 extends Control
 class_name UIBoxel
 
-@onready var tile_highlighter : Control = $"Tile Select Outline"
-@onready var name_label : Control = $"Boxel Display/Name Label"
-
+@export var tile_highlighter : Control
+@export var name_label : TextureRect
+@export var name_text : Label
+@export var boxel_image : TextureRect
 @export var boxel : Boxel
 
 func _gui_input(event: InputEvent) -> void:
@@ -13,3 +14,8 @@ func _gui_input(event: InputEvent) -> void:
 
 func _on_mouse_exited() -> void:
 	$"..".MouseExit(self)
+
+func AddBoxel(boxel_res : Boxel) -> void:
+	boxel = boxel_res
+	boxel_image.texture = boxel.boxel_img
+	name_text.text = boxel.boxel_name

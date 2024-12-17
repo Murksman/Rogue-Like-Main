@@ -1,0 +1,174 @@
+[gd_scene load_steps=17 format=3 uid="uid://ccxacsgbtd7rm"]
+
+[ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/UIBoxel.gd" id="1_rbgbx"]
+[ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="2_7nfan"]
+[ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/UnitBoxel.gd" id="3_vfwum"]
+[ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/TileInfo.gd" id="4_t5y7d"]
+[ext_resource type="Texture2D" uid="uid://btf2tat8mjq7u" path="res://Resources/Tileset Source Images/Better Tiles.png" id="5_xdtow"]
+
+[sub_resource type="Resource" id="Resource_rgtan"]
+script = ExtResource("4_t5y7d")
+image = ExtResource("2_7nfan")
+layers = Array[int]([])
+tile_name = "Generic Tile"
+
+[sub_resource type="Resource" id="Resource_2k1dk"]
+script = ExtResource("3_vfwum")
+tile_info = SubResource("Resource_rgtan")
+boxel_img = ExtResource("2_7nfan")
+boxel_name = "Generic Boxel"
+
+[sub_resource type="Gradient" id="Gradient_o06ff"]
+offsets = PackedFloat32Array(0.928571, 1)
+colors = PackedColorArray(0, 0, 0, 0.521569, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_crv4h"]
+gradient = SubResource("Gradient_o06ff")
+fill_from = Vector2(1, 0)
+
+[sub_resource type="Gradient" id="Gradient_kwlwl"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.954545)
+colors = PackedColorArray(0.144063, 0.144063, 0.144063, 1, 0.670588, 0.670588, 0.670588, 0.913725)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qjtwp"]
+gradient = SubResource("Gradient_kwlwl")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_h5hmj"]
+colors = PackedColorArray(0.12549, 0.145098, 0.168627, 0, 0.12549, 0.145098, 0.168627, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x5qsj"]
+gradient = SubResource("Gradient_h5hmj")
+width = 86
+height = 32
+fill_to = Vector2(0.0026455, 0.590112)
+
+[sub_resource type="LabelSettings" id="LabelSettings_poids"]
+font_size = 10
+font_color = Color(0.821789, 0.821789, 0.821789, 1)
+
+[sub_resource type="Gradient" id="Gradient_c7xex"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.928571)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_m6s21"]
+gradient = SubResource("Gradient_c7xex")
+width = 32
+height = 32
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[node name="UIBoxel" type="Control" node_paths=PackedStringArray("tile_highlighter", "name_label", "name_text", "boxel_image")]
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 3
+anchors_preset = 0
+size_flags_stretch_ratio = 0.0
+script = ExtResource("1_rbgbx")
+tile_highlighter = NodePath("Tile Select Outline")
+name_label = NodePath("Boxel Display/Name Label")
+name_text = NodePath("Boxel Display/Name Label/Name Text")
+boxel_image = NodePath("Boxel Display/Boxel Image")
+boxel = SubResource("Resource_2k1dk")
+
+[node name="Shadow" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 7.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_crv4h")
+
+[node name="Tile Idle Outline" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_qjtwp")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+
+[node name="Boxel Display" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_top = 2.0
+offset_right = 32.0
+offset_bottom = 66.0
+grow_horizontal = 2
+mouse_filter = 1
+
+[node name="Boxel Image" type="TextureRect" parent="Boxel Display"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_xdtow")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="Name Label" type="TextureRect" parent="Boxel Display"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -22.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("GradientTexture2D_x5qsj")
+expand_mode = 1
+
+[node name="Name Text" type="Label" parent="Boxel Display/Name Label"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_poids")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tile Select Outline" type="NinePatchRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_m6s21")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

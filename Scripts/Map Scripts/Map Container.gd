@@ -2,8 +2,6 @@ extends NavigationRegion2D
 
 var free_nodes : Array[Node]
 
-@export var target_tile_position : Vector2i
-
 @export var layer_groups : Array[CanvasGroup]
 @export var chunk_size : int
 
