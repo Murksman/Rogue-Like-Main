@@ -18,5 +18,4 @@ func _pressed() -> void:
 		ChangeLayerVisibility(button.select_layer, button_group.get_pressed_button() == button)
 
 func ChangeLayerVisibility(layer : CanvasGroup, is_visible : bool):
-	print(layer, is_visible)
 	layer.material.set_shader_parameter("is_visible", is_visible)

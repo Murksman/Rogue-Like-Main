@@ -20,16 +20,14 @@ func SelectBoxel(selected_tile : UIBoxel):
 	editor_overlay.selected_boxel = selected
 
 func MouseExit(target : Control):
-	if target != hover_boxel: return
-	
-	hover_boxel.name_label.visible = false
-	hover_boxel = null
+	if target == hover_boxel:
+		hover_boxel.name_label.visible = false
+		hover_boxel = null
 
 func HoverBoxel(hover_target : UIBoxel):
-	if hover_boxel == hover_target: return
-	if hover_boxel: hover_boxel.name_label.visible = false
-	else: hover_boxel = hover_target
-	
+	if hover_boxel && hover_target != hover_boxel: 
+		hover_boxel.name_label.visible = false
+	hover_boxel = hover_target
 	hover_target.name_label.visible = true
 
 func AddNewBoxel(boxel_res : Boxel):

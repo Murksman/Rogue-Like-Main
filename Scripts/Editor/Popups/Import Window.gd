@@ -19,18 +19,18 @@ func _process(delta: float) -> void:
 
 func WindowReady() -> void:
 	if !preview_image.texture: queue_import_time = 2
-	
+
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		self.visible = false
+		visible = false
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Escape"): notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"):
-		$"../../..".EditToggle()
+		$"../../..".EditToggle(false)
 
 func RequestOpenFile() -> void:
 	open_file_handler.file_open_return = self
@@ -67,3 +67,4 @@ func FinishImport():
  
 func _on_finish_import_button_pressed() -> void:
 	FinishImport()
+	visible = false

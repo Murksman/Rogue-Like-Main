@@ -18,10 +18,10 @@ var drag_action_tile : Node
 var editing : bool = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("Edit Mode"): EditToggle()
+	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 
-func EditToggle():
-	editing = !editing
+func EditToggle(force_toggle : bool):
+	editing = force_toggle
 	if editing: EditorReady()
 	else: EditorExit()
 	
@@ -61,16 +61,13 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	if event.is_action("Editor Secondary") && event.is_pressed():
 		anchor_mouse_point = get_viewport().get_mouse_position()
-	
-	#if event.is_action("Editor Primary") && event.is_pressed():
-		#var current_layer_button = layer_button_group.get_pressed_button()
-		#
-		#if !current_layer_button: return
-		#
-		#mouse_position = level_tilemap_root.get_local_mouse_position()
-		#var selected_tile : Node2D = level_tilemap_root.GetTileByPixel(mouse_position, current_layer_button.select_layer)
-		#
-		#if !selected_tile: return
-		#
-		#selected_tile.visible = !selected_tile.visible
-		#return
+
+
+func _on_editor_import_button_pressed() -> void:
+	import_window.popup()
+	import_window.visible = true
+	import_window.WindowReady()
+
+
+func _on_editor_exit_button_pressed() -> void:
+	EditToggle(false)
