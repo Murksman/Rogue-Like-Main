@@ -57,7 +57,8 @@ func FinishImport():
 	var new_boxel = UnitBoxel.new()
 	var new_tile_info = TileInfo.new()
 	new_tile_info.image = imported_image_tex
-	new_tile_info.layers = [editor_master.selected_layer]
+	var layers : Array[int] = [editor_master.selected_layer]
+	new_tile_info.layers = layers
 	new_tile_info.tile_name = boxelname_text.text
 	new_boxel.tile_info = new_tile_info
 	new_boxel.boxel_img = imported_image_tex

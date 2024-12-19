@@ -8,9 +8,9 @@ class_name UIBoxel
 @export var boxel : Boxel
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion: $"..".HoverTile(self)
+	if event is InputEventMouseMotion: $"..".HoverBoxel(self)
 	if event.is_action_pressed("Primary"):
-		$"..".SelectTile(self)
+		$"..".SelectBoxel(self)
 
 func _on_mouse_exited() -> void:
 	$"..".MouseExit(self)

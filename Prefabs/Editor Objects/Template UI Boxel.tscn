@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_rgtan"]
 script = ExtResource("4_xmj06")
 image = ExtResource("2_swpdk")
-layer = 0
+layers = Array[int]([])
 tile_name = "Generic Tile"
 
 [sub_resource type="Resource" id="Resource_2k1dk"]
