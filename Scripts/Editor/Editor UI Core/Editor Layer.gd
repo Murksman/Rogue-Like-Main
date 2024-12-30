@@ -12,10 +12,12 @@ var mouse_position : Vector2 = Vector2.ZERO
 var anchor_mouse_point : Vector2
 
 var selected_boxel : UIBoxel
-var selected_layer : int = 0
 
 var drag_action_tile : Node
 var editing : bool = false
+
+func _ready() -> void:
+	LoadBoxels()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
@@ -36,9 +38,7 @@ func EditorExit():
 	import_window.notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	level_tilemap_root.ResetLayerVisibility()
 
-func EditorReady():
-	import_window.popup()
-	import_window.visible = true
+func EditorReady(): 
 	import_window.WindowReady()
 
 func LevelPanePressed(event : InputEvent) -> void:
@@ -49,7 +49,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 			
 		elif Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && selected_boxel:
 			var global_mouse_pos = level_tilemap_root.get_local_mouse_position()
-			selected_layer = layer_button_group.get_pressed_button().layer_int
+			var selected_layer = layer_button_group.get_pressed_button().layer_int
 			var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 			
 			var temp_sampled_tile = level_tilemap_root.GetTileByPixel(global_mouse_pos, layer_canvas)
@@ -62,6 +62,16 @@ func LevelPanePressed(event : InputEvent) -> void:
 	if event.is_action("Editor Secondary") && event.is_pressed():
 		anchor_mouse_point = get_viewport().get_mouse_position()
 
+func LoadBoxels() -> void:
+	var boxel_paths = DirAccess.get_files_at("user://Editor Boxels")
+	print(boxel_paths)
+	for path in boxel_paths:
+		var load_result = ResourceLoader.load("user://Editor Boxels/" + path, "Boxel")
+		if load_result is Boxel: library_grid.AddNewBoxel(load_result)
+		else: 
+			print("Boxel Loading Error Code: ", load_result)
+	
+	library_grid.ReorderBoxels()
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.popup()

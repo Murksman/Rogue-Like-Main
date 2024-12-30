@@ -8,7 +8,6 @@
 [sub_resource type="Resource" id="Resource_rgtan"]
 script = ExtResource("4_xmj06")
 image = ExtResource("2_swpdk")
-layers = Array[int]([])
 tile_name = "Generic Tile"
 
 [sub_resource type="Resource" id="Resource_2k1dk"]
@@ -16,6 +15,7 @@ script = ExtResource("3_tlvem")
 tile_info = SubResource("Resource_rgtan")
 boxel_img = ExtResource("2_swpdk")
 boxel_name = "Generic Boxel"
+layers = Array[int]([])
 
 [sub_resource type="Gradient" id="Gradient_o06ff"]
 offsets = PackedFloat32Array(0.928571, 1)

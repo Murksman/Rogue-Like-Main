@@ -6,17 +6,8 @@ var timer : float = 0
 
 func _process(delta: float) -> void:
 	if timer > 0.0: 
-		if timer - delta <= 0: UpdateBoxelSearch()
+		if timer - delta <= 0: library_grid.ReorderBoxels(text)
 		timer -= delta
-
-func UpdateBoxelSearch(search_text : String = text):
-	if text == "":
-		for child in library_grid.get_children():
-			child.visible = true
-	else:
-		for child in library_grid.get_children():
-			var boxel_name = child.boxel.boxel_name
-			child.visible = boxel_name.contains(search_text)
 
 
 func _on_text_changed(new_text: String) -> void:

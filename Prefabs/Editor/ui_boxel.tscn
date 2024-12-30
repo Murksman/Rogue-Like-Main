@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://ccxacsgbtd7rm"]
+[gd_scene load_steps=19 format=3 uid="uid://ccxacsgbtd7rm"]
 
 [ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/UIBoxel.gd" id="1_rbgbx"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="2_7nfan"]
@@ -9,7 +9,6 @@
 [sub_resource type="Resource" id="Resource_rgtan"]
 script = ExtResource("4_t5y7d")
 image = ExtResource("2_7nfan")
-layers = Array[int]([])
 tile_name = "Generic Tile"
 
 [sub_resource type="Resource" id="Resource_2k1dk"]
@@ -17,6 +16,7 @@ script = ExtResource("3_vfwum")
 tile_info = SubResource("Resource_rgtan")
 boxel_img = ExtResource("2_7nfan")
 boxel_name = "Generic Boxel"
+layers = Array[int]([])
 
 [sub_resource type="Gradient" id="Gradient_o06ff"]
 offsets = PackedFloat32Array(0.928571, 1)
@@ -35,6 +35,16 @@ colors = PackedColorArray(0.144063, 0.144063, 0.144063, 1, 0.670588, 0.670588, 0
 gradient = SubResource("Gradient_kwlwl")
 fill = 2
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_0kc7d"]
+offsets = PackedFloat32Array(0.00636943, 0.964968)
+colors = PackedColorArray(0.172549, 0.2, 0.235294, 0.0196078, 0.124729, 0.116549, 0.115465, 0.827451)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_atmng"]
+gradient = SubResource("Gradient_0kc7d")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.260684)
 
 [sub_resource type="Gradient" id="Gradient_h5hmj"]
 colors = PackedColorArray(0.12549, 0.145098, 0.168627, 0, 0.12549, 0.145098, 0.168627, 1)
@@ -61,7 +71,7 @@ height = 32
 fill = 2
 fill_from = Vector2(0.5, 0.5)
 
-[node name="UIBoxel" type="Control" node_paths=PackedStringArray("tile_highlighter", "name_label", "name_text", "boxel_image")]
+[node name="UIBoxel" type="Control" node_paths=PackedStringArray("tile_highlighter", "name_label", "name_text", "boxel_image", "grayout")]
 custom_minimum_size = Vector2(68, 68)
 layout_mode = 3
 anchors_preset = 0
@@ -71,6 +81,7 @@ tile_highlighter = NodePath("Tile Select Outline")
 name_label = NodePath("Boxel Display/Name Label")
 name_text = NodePath("Boxel Display/Name Label/Name Text")
 boxel_image = NodePath("Boxel Display/Boxel Image")
+grayout = NodePath("Boxel Display/Grayout")
 boxel = SubResource("Resource_2k1dk")
 
 [node name="Shadow" type="TextureRect" parent="."]
@@ -128,6 +139,22 @@ grow_vertical = 2
 texture = ExtResource("5_xdtow")
 expand_mode = 2
 stretch_mode = 6
+
+[node name="Grayout" type="TextureRect" parent="Boxel Display"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = -34.0
+offset_right = 34.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_atmng")
 
 [node name="Name Label" type="TextureRect" parent="Boxel Display"]
 visible = false

@@ -35,7 +35,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func RequestOpenFile() -> void:
 	open_file_handler.file_open_return = self
 	open_file_handler.popup()
-	
 
 func UpdateImportSettings():
 	imported_image_tex = ImageTexture.create_from_image(imported_src_image)
@@ -57,14 +56,22 @@ func FinishImport():
 	var new_boxel = UnitBoxel.new()
 	var new_tile_info = TileInfo.new()
 	new_tile_info.image = imported_image_tex
-	var layers : Array[int] = [editor_master.selected_layer]
-	new_tile_info.layers = layers
+	var layers : Array[int] = [editor_master.layer_button_group.get_pressed_button().layer_int]
+	print(editor_master.layer_button_group.get_pressed_button().layer_int, layers.has(0))
 	new_tile_info.tile_name = boxelname_text.text
 	new_boxel.tile_info = new_tile_info
+	new_boxel.layers = layers
 	new_boxel.boxel_img = imported_image_tex
 	new_boxel.boxel_name = boxelname_text.text
 	editor_master.library_grid.AddNewBoxel(new_boxel)
- 
+	
+	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "tres")
+	
+	var err = ResourceSaver.save(new_boxel, load_path)
+	
+	print(err)
+
 func _on_finish_import_button_pressed() -> void:
-	FinishImport()
-	visible = false
+	if editor_master.layer_button_group.get_pressed_button():
+		FinishImport()
+		visible = false

@@ -1,19 +1,29 @@
 extends Node
 
 var load_file_path : String = ""
+var boxel_load_path : String = "user://Editor Boxels"
+
 var player_data : SaveData
 var player : Node2D
 
 func _ready() -> void:
-	if DirAccess.make_dir_absolute("user://Editor Boxels") == null:
-		print("successfully created boxel folder")
+	if DirAccess.make_dir_absolute(boxel_load_path) == null:
+		print("Ready - successfully created boxel folder")
 
 func StartGame(player_ref : Node2D):
 	player = player_ref
 	
-	if ResourceLoader.exists(load_file_path):
-		player_data = LoadGame(load_file_path)
-		PlayerLoadData()
+	if !ResourceLoader.exists(load_file_path):
+		return
+	
+	var temp_load_data = LoadGame(load_file_path)
+	if temp_load_data is String: 
+		printerr("Loading ERROR - " + temp_load_data + "\n\n")
+		return
+	
+	player_data = temp_load_data
+	
+	PlayerLoadData()
 
 func SaveGame(file_path : String = load_file_path, fresh_save : bool = false):
 	if !ResourceLoader.exists(load_file_path) || fresh_save:
@@ -110,7 +120,7 @@ func LoadGame(file_path : String):
 	return player_data
 
 
-func FreshSave(file_path : String):
+func FreshSave(file_path : String) -> int:
 	load_file_path = file_path
 	
 	player_data = SaveData.new()
@@ -118,7 +128,7 @@ func FreshSave(file_path : String):
 	return ResourceSaver.save(player_data, load_file_path)
 
 
-func DeleteSave(file_path : String):
+func DeleteSave(file_path : String) -> String:
 	if ResourceLoader.exists(file_path):
 		var delete_err = DirAccess.remove_absolute(file_path)
 		if delete_err != OK: return "Error: cannot delete file. Lack of permissions or invalid file path."
@@ -127,7 +137,7 @@ func DeleteSave(file_path : String):
 		return "Error: cannot delete file, No file found."
 
 
-func ExitLevel():
+func ExitLevel() -> void:
 	var save_status = SaveGame()
 	if save_status is int:
 		if save_status == 0:
@@ -138,13 +148,21 @@ func ExitLevel():
 		printerr("Error Exiting the level. [" + load_file_path + "] - error code: " + str(save_status))
 
 
-func AssignNodeOwners(parent_node):
+func AssignNodeOwners(parent_node) -> void:
 	for node in NodeTreeFetch(parent_node):
 		node.owner = parent_node
 
-
-func NodeTreeFetch(node : Node, node_processing_list : Array[Node] = []):
+func NodeTreeFetch(node : Node, node_processing_list : Array[Node] = []) -> Array[Node]:
 	for child in node.get_children():
 		node_processing_list.append(child)
 		NodeTreeFetch(child, node_processing_list)
 	return node_processing_list
+
+func SearchGenerateDirPath(source_path : String, extension : String) -> String:
+	if !FileAccess.file_exists(source_path + "." + extension): return (source_path + "." + extension)
+	var dupe_path_iterator = 1
+	var curr_path = source_path + " " + str(dupe_path_iterator) + "." + extension
+	while FileAccess.file_exists(curr_path):
+		dupe_path_iterator += 1
+		curr_path = source_path + " " + str(dupe_path_iterator) + "." + extension
+	return curr_path

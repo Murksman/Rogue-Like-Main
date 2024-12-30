@@ -4,7 +4,7 @@ class_name Inventory
 @export var weapon_holder : Node2D
 @export var inventory_master : Control
 
-@onready var inv_size : Vector2 = Vector2(columns, get_child_count() / columns)
+@onready var inv_size : Vector2i = Vector2i(columns, get_child_count() / columns)
 @onready var seperation : Vector2 = Vector2(get_theme_constant("h_separation"), get_theme_constant("v_separation"))
 
 #func _gui_input(event):

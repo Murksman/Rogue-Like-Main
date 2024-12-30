@@ -117,7 +117,6 @@ func AddTile(tile_info : TileInfo, tile_pixel_pos : Vector2, layer : CanvasGroup
 	if prev_tile: prev_tile.queue_free()
 	
 	var new_tile = generic_tile_object.instantiate()
-	new_tile.owner = self
 	new_tile.texture = tile_info.image
 	layer_groups[tile_info.layers[0]].add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)

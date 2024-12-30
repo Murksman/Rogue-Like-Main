@@ -39,7 +39,8 @@ func CalcInventory(new_object : Object = null):
 	inv_size = ref_inv_object.inventory_size
 	
 	if inv_size_norm != inv_size.x * inv_size.y:
-		inv_size_norm = inv_size.x * inv_size.y
+		
+		inv_size_norm = int(inv_size.x * inv_size.y)
 		
 		for child in get_children():
 			remove_child(child)

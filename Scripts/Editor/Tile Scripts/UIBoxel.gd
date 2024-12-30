@@ -5,6 +5,7 @@ class_name UIBoxel
 @export var name_label : TextureRect
 @export var name_text : Label
 @export var boxel_image : TextureRect
+@export var grayout : TextureRect
 @export var boxel : Boxel
 
 func _gui_input(event: InputEvent) -> void:
