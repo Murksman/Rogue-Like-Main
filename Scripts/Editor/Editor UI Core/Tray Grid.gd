@@ -43,17 +43,27 @@ func AddNewBoxel(boxel_res : Boxel):
 func ReorderBoxels(search_text : String = search_box.text, layer_button : Button = editor_overlay.layer_button_group.get_pressed_button()):
 	var ui_boxels = get_children()
 	
-	if search_text == "":
+	var no_search : bool = search_text == ""
+	
+	if no_search && layer_button:
+		for child in ui_boxels:
+			child.visible = child.boxel.ContainsLayer(layer_button.layer_int)
+	elif no_search:
 		for child in ui_boxels:
 			child.visible = true
+	elif layer_button:
+		for child in ui_boxels:
+			child.visible = child.boxel.boxel_name.contains(search_text) && child.boxel.ContainsLayer(layer_button.layer_int)
 	else:
 		for child in ui_boxels:
 			child.visible = child.boxel.boxel_name.contains(search_text)
 	
-	if layer_button:
-		for child in ui_boxels:
-			child.grayout.visible = !child.boxel.ContainsLayer(layer_button.layer_int)
-	else:
-		for child in ui_boxels:
-			child.grayout.visible = false
 	
+	
+	#if layer_button:
+		#for child in ui_boxels:
+			#child.grayout.visible = !child.boxel.ContainsLayer(layer_button.layer_int)
+	#else:
+		#for child in ui_boxels:
+			#child.grayout.visible = false
+	#

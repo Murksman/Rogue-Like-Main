@@ -64,7 +64,6 @@ func LevelPanePressed(event : InputEvent) -> void:
 
 func LoadBoxels() -> void:
 	var boxel_paths = DirAccess.get_files_at("user://Editor Boxels")
-	print(boxel_paths)
 	for path in boxel_paths:
 		var load_result = ResourceLoader.load("user://Editor Boxels/" + path, "Boxel")
 		if load_result is Boxel: library_grid.AddNewBoxel(load_result)

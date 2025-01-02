@@ -5,17 +5,20 @@ extends Window
 @export var boxelname_text : LineEdit
 @export var preview_image : TextureRect
 @export var editor_master : CanvasLayer
+@export var normal_image_control : Control
 
 var open_file_paths : Array[String] = []
 var imported_src_image : Image
+var imported_src_normal : Image
 var imported_image_tex : ImageTexture
+var imported_normal_tex : ImageTexture
 
 var queue_import_time : int = 0
 
 func _process(delta: float) -> void:
 	if queue_import_time > 0:
 		queue_import_time -= 1
-		if queue_import_time == 0: RequestOpenFile()
+		if queue_import_time == 0: open_file_handler.RequestOpenFile(self)
 
 func WindowReady() -> void:
 	if !preview_image.texture: queue_import_time = 2
@@ -32,32 +35,30 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"):
 		$"../../..".EditToggle(false)
 
-func RequestOpenFile() -> void:
-	open_file_handler.file_open_return = self
-	open_file_handler.popup()
-
-func UpdateImportSettings():
+func UpdateImageSettings():
 	imported_image_tex = ImageTexture.create_from_image(imported_src_image)
 	
 	filepath_text.text = open_file_paths[0]
 	preview_image.texture = imported_image_tex
 
-func FileImportCatch(files : Array[String]) -> void:
-	open_file_paths = files
-	
-	imported_src_image = Image.load_from_file(open_file_paths[0])
-	
-	UpdateImportSettings()
+func UpdateNormalSettings():
+	imported_normal_tex = ImageTexture.create_from_image(imported_src_image)
 
-func _on_button_pressed() -> void:
-	RequestOpenFile()
+func ImageImportCatch(files : Array[String]) -> void:
+	imported_src_image = Image.load_from_file(files[0])
+	
+	UpdateImageSettings()
+
+func NormalImportCatch(files : Array[String]) -> void:
+	imported_src_normal = Image.load_from_file(files[0])
+	
+	UpdateNormalSettings()
 
 func FinishImport():
 	var new_boxel = UnitBoxel.new()
 	var new_tile_info = TileInfo.new()
 	new_tile_info.image = imported_image_tex
 	var layers : Array[int] = [editor_master.layer_button_group.get_pressed_button().layer_int]
-	print(editor_master.layer_button_group.get_pressed_button().layer_int, layers.has(0))
 	new_tile_info.tile_name = boxelname_text.text
 	new_boxel.tile_info = new_tile_info
 	new_boxel.layers = layers
@@ -71,7 +72,19 @@ func FinishImport():
 	
 	print(err)
 
+
+
 func _on_finish_import_button_pressed() -> void:
 	if editor_master.layer_button_group.get_pressed_button():
 		FinishImport()
 		visible = false
+
+func _on_files_dropped(files: PackedStringArray) -> void:
+	if normal_image_control.get_global_rect().has_point(get_mouse_position()):
+		NormalImportCatch(files)
+	else:
+		ImageImportCatch(files)
+
+
+func _on_file_path_button_pressed() -> void:
+	open_file_handler.RequestOpen(self)
