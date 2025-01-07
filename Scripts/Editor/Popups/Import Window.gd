@@ -1,11 +1,19 @@
 extends Window
 
 @export var open_file_handler : FileDialog
+@export var editor_master : CanvasLayer
+
+@export_group("Boxel Image Controls")
 @export var filepath_text : LineEdit
 @export var boxelname_text : LineEdit
 @export var preview_image : TextureRect
-@export var editor_master : CanvasLayer
-@export var normal_image_control : Control
+@export_group("Boxel Info Controls")
+@export var boxel_type_selection : Array[CheckBox]
+@export var boxel_layer_selection : Array[CheckBox]
+@export_group("Boxel Normal Controls")
+@export var normals_tab_control : Control
+@export var normal_image : TextureRect
+@export var normalpath_text : LineEdit
 
 var open_file_paths : Array[String] = []
 var imported_src_image : Image
@@ -54,7 +62,17 @@ func NormalImportCatch(files : Array[String]) -> void:
 	
 	UpdateNormalSettings()
 
+func ValidateImport():
+	if !imported_src_image: return "Invalid or missing image."
+	if !editor_master.layer_button_group.get_pressed_button(): return "Select 1 or more layers for the boxel type."
+	return 0
+
 func FinishImport():
+	var validation_status = ValidateImport()
+	if validation_status is String:
+		printerr(validation_status)
+		return
+	
 	var new_boxel = UnitBoxel.new()
 	var new_tile_info = TileInfo.new()
 	new_tile_info.image = imported_image_tex
@@ -70,21 +88,17 @@ func FinishImport():
 	
 	var err = ResourceSaver.save(new_boxel, load_path)
 	
+	visible = false
 	print(err)
 
-
-
 func _on_finish_import_button_pressed() -> void:
-	if editor_master.layer_button_group.get_pressed_button():
-		FinishImport()
-		visible = false
+	FinishImport()
 
 func _on_files_dropped(files: PackedStringArray) -> void:
-	if normal_image_control.get_global_rect().has_point(get_mouse_position()):
+	if normals_tab_control.get_global_rect().has_point(get_mouse_position()):
 		NormalImportCatch(files)
 	else:
 		ImageImportCatch(files)
-
 
 func _on_file_path_button_pressed() -> void:
 	open_file_handler.RequestOpen(self)
