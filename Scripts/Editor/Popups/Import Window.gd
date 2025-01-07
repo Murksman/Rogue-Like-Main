@@ -51,6 +51,9 @@ func UpdateImageSettings():
 
 func UpdateNormalSettings():
 	imported_normal_tex = ImageTexture.create_from_image(imported_src_image)
+	
+	normalpath_text.text = open_file_paths[0]
+	preview_image.texture = imported_normal_tex
 
 func ImageImportCatch(files : Array[String]) -> void:
 	imported_src_image = Image.load_from_file(files[0])
@@ -59,6 +62,10 @@ func ImageImportCatch(files : Array[String]) -> void:
 
 func NormalImportCatch(files : Array[String]) -> void:
 	imported_src_normal = Image.load_from_file(files[0])
+	if imported_src_image && imported_src_normal.get_size() != imported_src_image.get_size():
+		printerr("Imported Boxel Image and Normal image must have the same size.")
+		imported_src_normal = null
+		return
 	
 	UpdateNormalSettings()
 
