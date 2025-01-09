@@ -54,8 +54,8 @@ func LevelPanePressed(event : InputEvent) -> void:
 			
 			var temp_sampled_tile = level_tilemap_root.GetTileByPixel(global_mouse_pos, layer_canvas)
 			
-			if drag_action_tile != temp_sampled_tile: 
-				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel.GetTileInfo(), global_mouse_pos, layer_canvas)
+			if drag_action_tile != temp_sampled_tile:
+				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel, global_mouse_pos, layer_canvas)
 	
 	if event.is_pressed(): mouse_position = level_tilemap_root.get_local_mouse_position()
 	

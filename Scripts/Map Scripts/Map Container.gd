@@ -104,24 +104,44 @@ func PixelToTilePosition(pixel_pos : Vector2) -> Vector2i:
 func add_free_node(obj) -> void:
 	free_nodes.append(obj)
 
-func AddTile(tile_info : TileInfo, tile_pixel_pos : Vector2, layer : CanvasGroup) -> Node:
+func AddTileByPixel(boxel : Boxel, tile_pixel_pos : Vector2, layer_group : CanvasGroup) -> Node:
 	var tile_pos = PixelToTilePosition(tile_pixel_pos)
+	
+	var tile_info
+	if boxel is UnitBoxel || boxel is ScatterBoxel:
+		tile_info = boxel.GetTileInfo()
+	elif boxel is ConnectorBoxel:
+		var adjacency_index = 0
+		var test_left = GetTile(tile_pos - Vector2i(1,0), layer_group)
+		var test_right = GetTile(tile_pos - Vector2i(-1,0), layer_group)
+		var test_up = GetTile(tile_pos - Vector2i(0,-1), layer_group)
+		var test_down = GetTile(tile_pos - Vector2i(0,1), layer_group)
+		if test_left: adjacency_index |= 1
+		if test_right: adjacency_index |= 2
+		if test_up: adjacency_index |= 4
+		if test_down: adjacency_index |= 8
+		
+		tile_info = boxel.GetConnectedTile(adjacency_index)
+		print(adjacency_index, " adjacency index - ", tile_info)
+	else: return
+	
+	
 	
 	if tile_pos.x > map_size.x - bounds_offset.x || tile_pos.y > map_size.y - bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
 		return null
 	
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = ((tile_pos - tile_array_index) / chunk_size) - Vector2i(1,1) - chunk_origin
-	var prev_tile : Node = layer.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+	var prev_tile : Node = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
 	if prev_tile: prev_tile.queue_free()
 	
 	var new_tile = generic_tile_object.instantiate()
 	new_tile.texture = tile_info.image
-	layer_groups[tile_info.layers[0]].add_child(new_tile)
+	layer_group[tile_info.layers[0]].add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
 	
-	layer.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
+	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
 	
 	return new_tile
 
