@@ -2,7 +2,6 @@ extends CanvasLayer
 
 @export var level_tilemap_root : Node2D
 @export var layer_button_group : ButtonGroup
-@export var core_tile_importer : TileImporter
 @export var import_window : Window
 @export var library_grid : GridContainer
 
@@ -12,11 +11,14 @@ var mouse_position : Vector2 = Vector2.ZERO
 var anchor_mouse_point : Vector2
 
 var selected_boxel : UIBoxel
+var hover_boxel : UIBoxel
 
 var drag_action_tile : Node
 var editing : bool = false
 
 func _ready() -> void:
+	LevelInfo.editor_ref = self
+	
 	LoadBoxels()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -40,6 +42,7 @@ func EditorExit():
 
 func EditorReady(): 
 	import_window.WindowReady()
+	$"Editor UI".grab_focus()
 
 func LevelPanePressed(event : InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -71,6 +74,28 @@ func LoadBoxels() -> void:
 			print("Boxel Loading Error Code: ", load_result)
 	
 	library_grid.ReorderBoxels()
+
+func SelectBoxel(target_boxel : UIBoxel) -> void:
+	if target_boxel == selected_boxel:
+		target_boxel.tile_highlighter.visible = false
+		selected_boxel = null
+		return
+	
+	if selected_boxel: selected_boxel.tile_highlighter.visible = false
+	
+	target_boxel.tile_highlighter.visible = true
+	selected_boxel = target_boxel
+
+func MouseExit(target : Control):
+	if target == hover_boxel:
+		hover_boxel.name_label.visible = false
+		hover_boxel = null
+
+func HoverBoxel(hover_target : UIBoxel):
+	if hover_boxel && hover_target != hover_boxel: 
+		hover_boxel.name_label.visible = false
+	hover_boxel = hover_target
+	hover_target.name_label.visible = true
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.popup()

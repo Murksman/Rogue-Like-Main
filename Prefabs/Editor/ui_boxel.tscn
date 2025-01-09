@@ -9,7 +9,6 @@
 [sub_resource type="Resource" id="Resource_rgtan"]
 script = ExtResource("4_t5y7d")
 image = ExtResource("2_7nfan")
-tile_name = "Generic Tile"
 
 [sub_resource type="Resource" id="Resource_2k1dk"]
 script = ExtResource("3_vfwum")

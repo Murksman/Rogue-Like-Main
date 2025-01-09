@@ -2,6 +2,8 @@ extends Window
 
 @export var open_file_handler : FileDialog
 @export var editor_master : CanvasLayer
+@export var error_popup : AcceptDialog
+@export var error_popup_text : Label
 
 @export_group("Boxel Image Controls")
 @export var filepath_text : LineEdit
@@ -11,7 +13,6 @@ extends Window
 @export var boxel_type_selection : Array[CheckBox]
 @export var boxel_layer_selection : Array[CheckBox]
 @export var boxel_type_group : ButtonGroup
-#@export var boxel_layer_group : ButtonGroup
 @export_group("Boxel Normal Controls")
 @export var normals_tab_control : Control
 @export var normal_image : TextureRect
@@ -26,6 +27,7 @@ var imported_normal_tex : ImageTexture
 var queue_import_time : int = 0
 
 var selected_type : int = 0
+var selected_layers : Array[int] = []
 
 func _process(delta: float) -> void:
 	if queue_import_time > 0:
@@ -40,30 +42,36 @@ func _notification(what: int) -> void:
 		visible = false
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("Escape"): notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	if event.is_action("Escape"): 
+		notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"):
 		$"../../..".EditToggle(false)
+	
 
-func ImageImportCatch(files : Array[String]) -> void:
-	imported_src_image = Image.load_from_file(files[0])
-	if imported_src_normal && imported_src_image.get_size() != imported_src_normal.get_size():
-		printerr("Imported Boxel Image and Normal image must have the same size.")
-		imported_src_image = null
-		return
+func FileImportCatch(files : Array[String], is_normal : bool) -> void:
+	open_file_paths = files
 	
-	UpdateImageSettings()
-
-func NormalImportCatch(files : Array[String]) -> void:
-	imported_src_normal = Image.load_from_file(files[0])
+	print("File Catch")
 	
-	if imported_src_image && imported_src_normal.get_size() != imported_src_image.get_size():
-		printerr("Imported Boxel Image and Normal image must have the same size.")
-		imported_src_normal = null
-		return
-	
-	UpdateNormalSettings()
+	if is_normal:
+		imported_src_normal = Image.load_from_file(files[0])
+		
+		if imported_src_image && imported_src_normal.get_size() != imported_src_image.get_size():
+			ErrorPop("Imported Boxel Image and Normal image must have the same size.")
+			imported_src_normal = null
+			return
+		
+		UpdateNormalSettings()
+	else:
+		imported_src_image = Image.load_from_file(files[0])
+		#if imported_src_normal && imported_src_image.get_size() != imported_src_normal.get_size():
+			#ErrorPop("Imported Boxel Image and Normal image must have the same size.")
+			#imported_src_image = null
+			#return
+		
+		UpdateImageSettings()
 
 func UpdateImageSettings():
 	imported_image_tex = ImageTexture.create_from_image(imported_src_image)
@@ -72,27 +80,30 @@ func UpdateImageSettings():
 	preview_image.texture = imported_image_tex
 
 func UpdateNormalSettings():
-	imported_normal_tex = ImageTexture.create_from_image(imported_src_image)
+	imported_normal_tex = ImageTexture.create_from_image(imported_src_normal)
 	
 	normalpath_text.text = open_file_paths[0]
-	preview_image.texture = imported_normal_tex
+	normal_image.texture = imported_normal_tex
 
 func ValidateImport():
 	if boxel_type_group.get_pressed_button(): selected_type = boxel_type_group.get_pressed_button().get_meta("type_index")
+	
+	selected_layers = []
+	for layer_button in boxel_layer_selection: if layer_button.button_pressed: selected_layers.append(layer_button.get_meta("layer_index")) 
 	
 	if selected_type == 0 && (imported_src_image.get_size() != Vector2i(32,32) || imported_src_normal.get_size() != Vector2i(32,32)):
 		return "Images and Normals must be a 32x32 image when imported single boxels."
 	if (selected_type == 1 || selected_type == 2) && (imported_src_image.get_size() != Vector2i(128,128) || imported_src_normal.get_size() != Vector2i(128,128)):
 		return "Images and Normals must be a 32x32 image when imported single boxels."
 	if !imported_src_image: return "Invalid or missing image."
-	if !editor_master.layer_button_group.get_pressed_button(): return "Select 1 or more layers for the boxel type."
+	if selected_layers.size() == 0: return "Select 1 or more layers for the boxel type."
 	
 	return 0
 
 func FinishImport():
 	var validation_status = ValidateImport()
 	if validation_status is String:
-		printerr(validation_status)
+		ErrorPop(validation_status)
 		return
 	
 	var selected_type = boxel_type_group.get_pressed_button().get_meta("type_index")
@@ -115,9 +126,6 @@ func FinishImport():
 		
 		new_boxel = ConnectorBoxel.new()
 		new_boxel.tile_array = new_tile_info_array
-	
-	var selected_layers : Array[int] = []
-	for layer_button in boxel_layer_selection: if layer_button.button_pressed: selected_layers.append(layer_button.get_meta("layer_index")) 
 	
 	new_boxel.layers = selected_layers
 	new_boxel.boxel_name = StringName(boxelname_text.text)
@@ -157,14 +165,21 @@ func GenerateNormalImages() -> Array[ImageTexture]:
 	
 	return normal_array
 
+func ErrorPop(error_code : String):
+	print("test Error Pop")
+	error_popup_text.text = "Error: " + error_code
+	error_popup.size = Vector2(320,130)
+	error_popup.popup()
+	error_popup.visible = true
+
 func _on_finish_import_button_pressed() -> void:
 	FinishImport()
 
 func _on_files_dropped(files: PackedStringArray) -> void:
-	if normals_tab_control.get_global_rect().has_point(get_mouse_position()):
-		NormalImportCatch(files)
-	else:
-		ImageImportCatch(files)
+	FileImportCatch(files, normals_tab_control.get_global_rect().has_point(get_mouse_position()))
 
 func _on_file_path_button_pressed() -> void:
-	open_file_handler.RequestOpen(self)
+	open_file_handler.RequestOpen(self, false)
+
+func _on_normal_path_button_pressed() -> void:
+	open_file_handler.RequestOpen(self, true)
