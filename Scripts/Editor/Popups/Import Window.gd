@@ -26,7 +26,7 @@ var imported_normal_tex : ImageTexture
 
 var queue_import_time : int = 0
 
-var selected_type : int = 0
+#var selected_type : int = 0
 var selected_layers : Array[int] = []
 
 func _process(delta: float) -> void:
@@ -64,10 +64,6 @@ func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 		UpdateNormalSettings()
 	else:
 		imported_src_image = Image.load_from_file(files[0])
-		#if imported_src_normal && imported_src_image.get_size() != imported_src_normal.get_size():
-			#ErrorPop("Imported Boxel Image and Normal image must have the same size.")
-			#imported_src_image = null
-			#return
 		
 		UpdateImageSettings()
 
@@ -84,17 +80,19 @@ func UpdateNormalSettings():
 	normal_image.texture = imported_normal_tex
 
 func ValidateImport():
+	var selected_type : int = -1
 	if boxel_type_group.get_pressed_button(): selected_type = boxel_type_group.get_pressed_button().get_meta("type_index")
 	
 	selected_layers = []
 	for layer_button in boxel_layer_selection: if layer_button.button_pressed: selected_layers.append(layer_button.get_meta("layer_index")) 
 	
-	if selected_type == 0 && (imported_src_image.get_size() != Vector2i(32,32) || imported_src_normal.get_size() != Vector2i(32,32)):
-		return "Images and Normals must be a 32x32 image when imported single boxels."
-	if (selected_type == 1 || selected_type == 2) && (imported_src_image.get_size() != Vector2i(128,128) || imported_src_normal.get_size() != Vector2i(128,128)):
-		return "Images and Normals must be a 32x32 image when imported single boxels."
+	if selected_type == -1: return "Select a boxel type."
 	if !imported_src_image: return "Invalid or missing image."
 	if selected_layers.size() == 0: return "Select 1 or more layers for the boxel type."
+	if selected_type == 0 && (imported_src_image.get_size() != Vector2i(32,32) || imported_src_normal.get_size() != Vector2i(32,32)):
+		return "Images and Normals must be a 32x32 image when importing single boxels."
+	if (selected_type == 1 || selected_type == 2) && (imported_src_image.get_size() != Vector2i(128,128) || imported_src_normal.get_size() != Vector2i(128,128)):
+		return "Images and Normals must be a 128x128 image when importing connected or scatter boxels."
 	
 	return 0
 

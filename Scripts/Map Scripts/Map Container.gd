@@ -138,7 +138,7 @@ func AddTileByPixel(boxel : Boxel, tile_pixel_pos : Vector2, layer_group : Canva
 	
 	var new_tile = generic_tile_object.instantiate()
 	new_tile.texture = tile_info.image
-	layer_group[tile_info.layers[0]].add_child(new_tile)
+	layer_group.add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
 	
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
