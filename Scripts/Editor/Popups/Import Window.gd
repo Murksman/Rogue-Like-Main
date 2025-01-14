@@ -32,7 +32,7 @@ var selected_layers : Array[int] = []
 func _process(delta: float) -> void:
 	if queue_import_time > 0:
 		queue_import_time -= 1
-		if queue_import_time == 0: open_file_handler.RequestOpenFile(self)
+		if queue_import_time == 0: open_file_handler.RequestOpen(self, false)
 
 func WindowReady() -> void:
 	if !preview_image.texture: queue_import_time = 2
@@ -52,8 +52,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 	open_file_paths = files
-	
-	print("File Catch")
 	
 	if is_normal:
 		imported_src_normal = Image.load_from_file(files[0])
@@ -125,6 +123,7 @@ func FinishImport():
 			new_tile_info_array.append(new_tile_info) 
 		
 		new_boxel = ConnectorBoxel.new()
+		new_boxel.boxel_img = new_tile_info_array[0].image
 		new_boxel.tile_array = new_tile_info_array
 	
 	new_boxel.layers = selected_layers
@@ -166,7 +165,6 @@ func GenerateNormalImages() -> Array[ImageTexture]:
 	return normal_array
 
 func ErrorPop(error_code : String):
-	print("test Error Pop")
 	error_popup_text.text = "Error: " + error_code
 	error_popup.size = Vector2(320,130)
 	error_popup.popup()

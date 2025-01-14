@@ -17,10 +17,15 @@ func _on_mouse_exited() -> void:
 	LevelInfo.editor_ref.MouseExit(self)
 
 func _get_drag_data(at_position: Vector2) -> Variant:
-	var preview : TextureRect = boxel_image.duplicate()
+	var preview_parent = Control.new()
+	var preview = TextureRect.new()
+	preview.texture = boxel_image.texture
+	preview.position = Vector2(-16,-16)
+	preview_parent.add_child(preview)
+	preview.owner = preview_parent
 	preview.modulate.a = 0.5
 	
-	set_drag_preview(preview)
+	set_drag_preview(preview_parent)
 	return self
 
 func AddBoxel(boxel_res : Boxel) -> void:
@@ -34,7 +39,12 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var prev_parent = data.get_parent()
 	var prev_order = data.get_index()
-	data.reparent(get_parent())
-	if get_parent() is not GridContainer:
-		reparent(prev_parent)
-		prev_parent.move_child(self, prev_order)
+	var curr_parent = get_parent()
+	
+	data.reparent(curr_parent, false)
+	if curr_parent is GridContainer: curr_parent.move_child(data, get_index())
+	else: data.position = (curr_parent.size - data.size) / 2
+	
+	reparent(prev_parent, false)
+	if prev_parent is GridContainer: prev_parent.move_child(self, prev_order)
+	else: position = (prev_parent.size - self.size) / 2

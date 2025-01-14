@@ -41,7 +41,6 @@ func EditorExit():
 	level_tilemap_root.ResetLayerVisibility()
 
 func EditorReady(): 
-	import_window.WindowReady()
 	$"Editor UI".grab_focus()
 
 func LevelPanePressed(event : InputEvent) -> void:
