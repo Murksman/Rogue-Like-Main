@@ -2,6 +2,7 @@ extends Node
 
 var load_file_path : String = ""
 var boxel_load_path : String = "user://Editor Boxels"
+var levels_load_path : String = "user://Editor Levels"
 
 var player_data : SaveData
 var player : Node2D
@@ -9,6 +10,8 @@ var player : Node2D
 func _ready() -> void:
 	if DirAccess.make_dir_absolute(boxel_load_path) == null:
 		print("Ready - successfully created boxel folder")
+	if DirAccess.make_dir_absolute(levels_load_path) == null:
+		print("Ready - successfully created levels folder")
 
 func StartGame(player_ref : Node2D):
 	player = player_ref

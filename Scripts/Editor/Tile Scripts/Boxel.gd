@@ -1,7 +1,7 @@
 extends Resource
 class_name Boxel
 
-@export var boxel_img : Texture2D
+@export var boxel_img : CanvasTexture
 @export var boxel_name : StringName
 @export var layers : Array[int] = []
 

@@ -24,6 +24,8 @@ var imported_src_normal : Image
 var imported_image_tex : ImageTexture
 var imported_normal_tex : ImageTexture
 
+var full_image : CanvasTexture
+
 var queue_import_time : int = 0
 
 #var selected_type : int = 0
@@ -111,17 +113,28 @@ func FinishImport():
 		new_boxel = UnitBoxel.new()
 		new_tile_info.image = imported_image_tex
 		new_boxel.tile_info = new_tile_info
-		new_boxel.boxel_img = imported_image_tex
+		new_boxel.boxel_img = CanvasTexture.new()
+		new_boxel.boxel_img.diffuse_texture = imported_image_tex
+		new_boxel.boxel_img.normal_texture = imported_normal_tex
 	elif selected_type == 1 || selected_type == 2:
 		var new_tile_info_array : Array[TileInfo] = []
 		var boxel_image_list = GenerateImages()
-		for image in boxel_image_list: 
+		var boxel_normal_list = GenerateNormalImages()
+		new_tile_info_array.resize(boxel_image_list.size())
+		
+		for i in boxel_image_list.size(): 
 			var new_tile_info = TileInfo.new()
-			new_tile_info.image = image
+			new_tile_info.image = CanvasTexture.new()
+			new_tile_info.image.diffuse_texture = boxel_image_list[i]
+			new_tile_info.image.normal_texture = boxel_normal_list[i]
 			new_tile_info_array.append(new_tile_info) 
 		
-		new_boxel = ConnectorBoxel.new()
-		new_boxel.boxel_img = new_tile_info_array[0].image
+		if selected_type == 1: new_boxel = ConnectorBoxel.new()
+		else: new_boxel = ScatterBoxel.new()
+		
+		new_boxel.boxel_img = CanvasTexture.new()
+		new_boxel.boxel_img.diffuse_texture = new_tile_info_array[0].image.diffuse_texture
+		new_boxel.boxel_img.normal_texture = new_tile_info_array[0].image.normal_texture
 		new_boxel.tile_array = new_tile_info_array
 	
 	new_boxel.layers = selected_layers

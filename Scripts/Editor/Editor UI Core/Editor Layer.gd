@@ -45,7 +45,7 @@ func EditorReady():
 	pass
 
 func LevelPanePressed(event : InputEvent) -> void:
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion || event.is_action("Editor Primary"):
 		if Input.is_action_pressed("Editor Secondary"):
 			player.position += (anchor_mouse_point - get_viewport().get_mouse_position()) / 2
 			anchor_mouse_point = get_viewport().get_mouse_position()
@@ -60,8 +60,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 			var check_chunks_err = level_tilemap_root.CheckSetMapSize(tile_position)
 			
 			if drag_action_position != tile_position:
-				print(tile_position,drag_action_position)
-				
+				print(selected_boxel.boxel is ScatterBoxel)
 				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 				drag_action_position = tile_position
 	

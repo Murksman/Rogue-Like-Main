@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=132 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -32,7 +32,6 @@
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Boxel Tray Frame.gd" id="35_xhdnv"]
 [ext_resource type="PackedScene" uid="uid://bby1unf3c7sek" path="res://Prefabs/Inventory Items/Ammo Box.tscn" id="36_4baki"]
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/LibrarySearchBox.gd" id="36_d88y6"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Map Editor Pane.gd" id="36_itdsx"]
 [ext_resource type="Script" path="res://Scripts/Resource Scripts/Loot Table.gd" id="37_8hfmu"]
 [ext_resource type="PackedScene" uid="uid://ccxacsgbtd7rm" path="res://Prefabs/Editor/ui_boxel.tscn" id="38_67lmj"]
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Editor Layer.gd" id="41_hic17"]
@@ -51,6 +50,7 @@
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/import grid lines.gdshader" id="48_r4tcy"]
 [ext_resource type="ButtonGroup" uid="uid://sow5uuw8lgmf" path="res://Resources/UI/Layer Button Group.tres" id="48_rkwao"]
 [ext_resource type="Script" path="res://Scripts/Editor/Popups/Open File Handler.gd" id="49_fqm1k"]
+[ext_resource type="PackedScene" uid="uid://d1l0d4uhkyrj2" path="res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn" id="49_pojje"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -510,6 +510,15 @@ shader_parameter/is_visible = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jvv8s"]
 shader = ExtResource("47_s3dxo")
 shader_parameter/is_visible = true
+
+[sub_resource type="Gradient" id="Gradient_pc65e"]
+offsets = PackedFloat32Array(0.745223)
+colors = PackedColorArray(1, 0.137255, 0.14902, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8qhor"]
+gradient = SubResource("Gradient_pc65e")
+width = 16
+height = 16
 
 [node name="World" type="Node2D"]
 texture_filter = 1
@@ -2800,7 +2809,6 @@ height = 40.0
 
 [node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "library_grid")]
 layer = 20
-visible = false
 script = ExtResource("41_hic17")
 level_tilemap_root = NodePath("../Level Tilemap Root")
 layer_button_group = ExtResource("48_rkwao")
@@ -3136,10 +3144,8 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = SubResource("GradientTexture2D_m7t0x")
 
-[node name="Editor Level Pane" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container" node_paths=PackedStringArray("editor_overlay")]
+[node name="Editor Level Pane" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container"]
 layout_mode = 2
-script = ExtResource("36_itdsx")
-editor_overlay = NodePath("../../..")
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)
@@ -3767,8 +3773,9 @@ navigation_polygon = SubResource("NavigationPolygon_5py3h")
 enabled = false
 script = ExtResource("24_e5ldj")
 layer_groups = [NodePath("Floor Layer"), NodePath("Decal Layer"), NodePath("Wall Layer"), NodePath("Entity Layer"), NodePath("testing Layer")]
-chunk_size = 16
+chunk_size = 4
 chunk_background = NodePath("../Background")
+tile_prefab = ExtResource("49_pojje")
 
 [node name="Floor Layer" type="CanvasGroup" parent="Level Tilemap Root"]
 z_as_relative = false
@@ -3799,6 +3806,9 @@ clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_8qhor")
+
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]
 [connection signal="child_order_changed" from="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" to="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" method="_on_child_order_changed"]
@@ -3806,7 +3816,7 @@ script = ExtResource("43_uy6ih")
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Import Button" to="Editor Overlay Layer" method="_on_editor_import_button_pressed"]
 [connection signal="dragged" from="Editor Overlay Layer/Editor UI/Library Container" to="Editor Overlay Layer/Editor UI/Library Container" method="_on_dragged"]
 [connection signal="text_changed" from="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" to="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" method="_on_text_changed"]
-[connection signal="mouse_entered" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" method="_on_mouse_entered"]
+[connection signal="gui_input" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" to="Editor Overlay Layer" method="LevelPanePressed"]
 [connection signal="files_dropped" from="Editor Overlay Layer/UI Popups/Import Window" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_files_dropped"]
 [connection signal="gui_input" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/ExitButton" to="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/ExitButton" method="_on_gui_input"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_file_path_button_pressed"]
