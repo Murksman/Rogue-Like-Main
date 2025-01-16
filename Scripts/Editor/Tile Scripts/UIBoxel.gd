@@ -16,7 +16,7 @@ func _gui_input(event: InputEvent) -> void:
 func _on_mouse_exited() -> void:
 	LevelInfo.editor_ref.MouseExit(self)
 
-func _get_drag_data(at_position: Vector2) -> Variant:
+func _get_drag_data(_at_position: Vector2) -> Variant:
 	var preview_parent = Control.new()
 	var preview = TextureRect.new()
 	preview.texture = boxel_image.texture

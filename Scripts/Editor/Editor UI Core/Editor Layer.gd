@@ -14,6 +14,7 @@ var selected_boxel : UIBoxel
 var hover_boxel : UIBoxel
 
 var drag_action_tile : Node
+var drag_action_position : Vector2i
 var editing : bool = false
 
 func _ready() -> void:
@@ -54,11 +55,15 @@ func LevelPanePressed(event : InputEvent) -> void:
 			var selected_layer = layer_button_group.get_pressed_button().layer_int
 			var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 			
-			var temp_sampled_tile = level_tilemap_root.GetTileByPixel(global_mouse_pos, layer_canvas)
+			var tile_position = level_tilemap_root.PixelToTilePosition(global_mouse_pos)
 			
-			if !drag_action_tile || drag_action_tile != temp_sampled_tile:
-				print("Test")
-				drag_action_tile = level_tilemap_root.AddTileByPixel(selected_boxel.boxel, global_mouse_pos, layer_canvas)
+			var check_chunks_err = level_tilemap_root.CheckSetMapSize(tile_position)
+			
+			if drag_action_position != tile_position:
+				print(tile_position,drag_action_position)
+				
+				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
+				drag_action_position = tile_position
 	
 	if event.is_pressed(): mouse_position = level_tilemap_root.get_local_mouse_position()
 	
