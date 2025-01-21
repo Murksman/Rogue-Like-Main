@@ -9,9 +9,9 @@ var player : Node2D
 
 func _ready() -> void:
 	if DirAccess.make_dir_absolute(boxel_load_path) == null:
-		print("Ready - successfully created boxel folder")
+		print("Scene Load - successfully created boxel folder")
 	if DirAccess.make_dir_absolute(levels_load_path) == null:
-		print("Ready - successfully created levels folder")
+		print("Scene Load - successfully created levels folder")
 
 func StartGame(player_ref : Node2D):
 	player = player_ref

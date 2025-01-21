@@ -1,4 +1,4 @@
-[gd_scene load_steps=132 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=140 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -34,6 +34,7 @@
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/LibrarySearchBox.gd" id="36_d88y6"]
 [ext_resource type="Script" path="res://Scripts/Resource Scripts/Loot Table.gd" id="37_8hfmu"]
 [ext_resource type="PackedScene" uid="uid://ccxacsgbtd7rm" path="res://Prefabs/Editor/ui_boxel.tscn" id="38_67lmj"]
+[ext_resource type="Shader" path="res://Scripts/Shader Scripts/circular image.gdshader" id="41_8yxcg"]
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Editor Layer.gd" id="41_hic17"]
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Editor Action Bar.gd" id="41_ruhv6"]
 [ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Tray Grid.gd" id="42_pipfe"]
@@ -383,6 +384,36 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.491453)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tbkho"]
+load_path = "res://.godot/imported/UI Button Template.png-b05fa7349dad59e824bef5489da0f127.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nobhe"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = SubResource("CompressedTexture2D_tbkho")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+modulate_color = Color(0.560784, 1, 0.545098, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s6q3a"]
+load_path = "res://.godot/imported/UI Button Template.png-b05fa7349dad59e824bef5489da0f127.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ssyku"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = SubResource("CompressedTexture2D_s6q3a")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+modulate_color = Color(0.361584, 0.566461, 0.337329, 1)
+
 [sub_resource type="Gradient" id="Gradient_r7b0r"]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0, 0.837662, 0.961039, 1)
@@ -427,6 +458,16 @@ gradient = SubResource("Gradient_o75a1")
 height = 32
 fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0.0275229)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r33ls"]
+shader = ExtResource("41_8yxcg")
+shader_parameter/outline_color = Color(0.355314, 0.355314, 0.355314, 1)
+shader_parameter/outline_width = 0.01
+
+[sub_resource type="Gradient" id="Gradient_gdbcy"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gen7i"]
+gradient = SubResource("Gradient_gdbcy")
 
 [sub_resource type="LabelSettings" id="LabelSettings_ej2pu"]
 font_size = 14
@@ -2888,6 +2929,26 @@ theme = ExtResource("44_am6u2")
 theme_override_font_sizes/font_size = 14
 text = "Import Boxel"
 
+[node name="Save Level Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
+modulate = Color(0.536232, 0.761034, 0.838759, 1)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 160.0
+offset_top = -14.0
+offset_right = 290.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme = ExtResource("44_am6u2")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxTexture_nobhe")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_nobhe")
+theme_override_styles/hover = SubResource("StyleBoxTexture_nobhe")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ssyku")
+theme_override_styles/normal = SubResource("StyleBoxTexture_nobhe")
+text = "Save Level"
+
 [node name="Layer Bar Container" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
 z_index = 10
 z_as_relative = false
@@ -2914,7 +2975,7 @@ button_group = ExtResource("48_rkwao")
 text = "Floor
 "
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Floor Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Floor Layer")
 test = ""
 
 [node name="Decal Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
@@ -2927,7 +2988,7 @@ action_mode = 0
 button_group = ExtResource("48_rkwao")
 text = "Decals"
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Decal Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Decal Layer")
 layer_int = 1
 
 [node name="Wall Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
@@ -2940,7 +3001,7 @@ action_mode = 0
 button_group = ExtResource("48_rkwao")
 text = "Walls"
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Wall Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Wall Layer")
 layer_int = 2
 
 [node name="Entity Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
@@ -2954,7 +3015,7 @@ button_group = ExtResource("48_rkwao")
 text = "Entities
 "
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Entity Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Entity Layer")
 layer_int = 3
 
 [node name="Lighting Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
@@ -2967,7 +3028,7 @@ action_mode = 0
 button_group = ExtResource("48_rkwao")
 text = "Lighting"
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/testing Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/testing Layer")
 layer_int = 4
 
 [node name="Tile Tray" type="Control" parent="Editor Overlay Layer/Editor UI"]
@@ -2990,9 +3051,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -436.0
+offset_left = -409.0
 offset_top = -40.0
-offset_right = 436.0
+offset_right = 409.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -3000,6 +3061,105 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="Boxel Frame" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame2" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame3" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame4" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame5" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame6" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame7" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame8" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame9" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture2D_8uele")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("35_xhdnv")
+
+[node name="Boxel Frame10" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -3146,6 +3306,36 @@ texture = SubResource("GradientTexture2D_m7t0x")
 
 [node name="Editor Level Pane" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container"]
 layout_mode = 2
+
+[node name="Boxel Toolbar" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -175.0
+offset_top = -100.0
+offset_right = 175.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Tool Icons" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="Shape Tool" type="TextureRect" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Tool Icons"]
+material = SubResource("ShaderMaterial_r33ls")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_gen7i")
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)
@@ -3767,36 +3957,39 @@ filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.svg", "*.web
 use_native_dialog = true
 script = ExtResource("49_fqm1k")
 
-[node name="Level Tilemap Root" type="NavigationRegion2D" parent="." node_paths=PackedStringArray("layer_groups", "chunk_background")]
+[node name="Level Tilemap Root" type="NavigationRegion2D" parent="." node_paths=PackedStringArray("layer_groups", "chunk_background", "level_save_root")]
 position = Vector2(16, 16)
 navigation_polygon = SubResource("NavigationPolygon_5py3h")
 enabled = false
 script = ExtResource("24_e5ldj")
-layer_groups = [NodePath("Floor Layer"), NodePath("Decal Layer"), NodePath("Wall Layer"), NodePath("Entity Layer"), NodePath("testing Layer")]
-chunk_size = 4
+layer_groups = [NodePath("Level Save Root/Floor Layer"), NodePath("Level Save Root/Decal Layer"), NodePath("Level Save Root/Wall Layer"), NodePath("Level Save Root/Entity Layer"), NodePath("Level Save Root/testing Layer")]
+chunk_size = 16
 chunk_background = NodePath("../Background")
+level_save_root = NodePath("Level Save Root")
 tile_prefab = ExtResource("49_pojje")
 
-[node name="Floor Layer" type="CanvasGroup" parent="Level Tilemap Root"]
+[node name="Level Save Root" type="Node2D" parent="Level Tilemap Root"]
+
+[node name="Floor Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_as_relative = false
 material = SubResource("ShaderMaterial_tf405")
 script = ExtResource("43_uy6ih")
 
-[node name="Decal Layer" type="CanvasGroup" parent="Level Tilemap Root"]
+[node name="Decal Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 material = SubResource("ShaderMaterial_pxv5g")
 script = ExtResource("43_uy6ih")
 
-[node name="Wall Layer" type="CanvasGroup" parent="Level Tilemap Root"]
+[node name="Wall Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 100
 z_as_relative = false
 material = SubResource("ShaderMaterial_esbmk")
 script = ExtResource("43_uy6ih")
 
-[node name="Entity Layer" type="CanvasGroup" parent="Level Tilemap Root"]
+[node name="Entity Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 material = SubResource("ShaderMaterial_ccf2s")
 script = ExtResource("43_uy6ih")
 
-[node name="testing Layer" type="CanvasGroup" parent="Level Tilemap Root"]
+[node name="testing Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 visible = false
 z_as_relative = false
 material = SubResource("ShaderMaterial_jvv8s")
@@ -3806,7 +3999,8 @@ clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Center Map Pylon" type="Sprite2D" parent="."]
+visible = false
 texture = SubResource("GradientTexture2D_8qhor")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
@@ -3814,6 +4008,7 @@ texture = SubResource("GradientTexture2D_8qhor")
 [connection signal="child_order_changed" from="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" to="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" method="_on_child_order_changed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Exit Button" to="Editor Overlay Layer" method="_on_editor_exit_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Import Button" to="Editor Overlay Layer" method="_on_editor_import_button_pressed"]
+[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Save Level Button" to="Editor Overlay Layer" method="_on_save_level"]
 [connection signal="dragged" from="Editor Overlay Layer/Editor UI/Library Container" to="Editor Overlay Layer/Editor UI/Library Container" method="_on_dragged"]
 [connection signal="text_changed" from="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" to="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" method="_on_text_changed"]
 [connection signal="gui_input" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" to="Editor Overlay Layer" method="LevelPanePressed"]

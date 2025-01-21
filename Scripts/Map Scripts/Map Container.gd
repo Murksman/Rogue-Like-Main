@@ -5,6 +5,7 @@ var free_nodes : Array[Node]
 @export var layer_groups : Array[CanvasGroup]
 @export var chunk_size : int
 @export var chunk_background : Sprite2D
+@export var level_save_root : Node2D
 
 @export_group("Tile Resources")
 @export var tile_prefab : PackedScene
@@ -121,7 +122,7 @@ func ResizeMapBounds() -> void:
 	bounds_offset = Vector2i.ZERO
 	
 	var temp_map_pixel_size : Vector4 = Vector4(bounds_offset.x, bounds_offset.y, map_size.x, map_size.y) * 32
-	for layer in get_children():
+	for layer in layer_groups:
 		for tile in layer.get_children():
 			if tile.position.x > temp_map_pixel_size.z: temp_map_pixel_size.z = tile.position.x
 			if tile.position.y > temp_map_pixel_size.w: temp_map_pixel_size.w = tile.position.y
@@ -215,7 +216,7 @@ func UpdateChunkBackground() -> void:
 	chunk_background.position = (chunk_origin * chunk_size * 32) + (temp_size / 2)
 
 func ResetLayerVisibility() -> void:
-	for layer in get_children():
+	for layer in layer_groups:
 		layer.material.set_shader_parameter("is_visible", true)
 
 func DestroyTile(tile) -> void:

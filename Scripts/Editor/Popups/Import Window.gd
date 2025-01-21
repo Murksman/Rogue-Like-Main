@@ -127,7 +127,7 @@ func FinishImport():
 			new_tile_info.image = CanvasTexture.new()
 			new_tile_info.image.diffuse_texture = boxel_image_list[i]
 			new_tile_info.image.normal_texture = boxel_normal_list[i]
-			new_tile_info_array.append(new_tile_info) 
+			new_tile_info_array[i] = new_tile_info
 		
 		if selected_type == 1: new_boxel = ConnectorBoxel.new()
 		else: new_boxel = ScatterBoxel.new()

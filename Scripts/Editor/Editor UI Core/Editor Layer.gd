@@ -57,10 +57,10 @@ func LevelPanePressed(event : InputEvent) -> void:
 			
 			var tile_position = level_tilemap_root.PixelToTilePosition(global_mouse_pos)
 			
-			var check_chunks_err = level_tilemap_root.CheckSetMapSize(tile_position)
+			var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
+			if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
 			
 			if drag_action_position != tile_position:
-				print(selected_boxel.boxel is ScatterBoxel)
 				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 				drag_action_position = tile_position
 	
@@ -101,11 +101,21 @@ func HoverBoxel(hover_target : UIBoxel):
 	hover_boxel = hover_target
 	hover_target.name_label.visible = true
 
+func SaveLevel():
+	SceneLoadingContainer.AssignNodeOwners(level_tilemap_root.level_save_root)
+	
+	var new_level_save = PackedScene.new()
+	new_level_save.pack(level_tilemap_root.level_save_root)
+	
+	var save_err = ResourceSaver.save(new_level_save, "user://Editor Levels/Testing Level Save.scn")
+
 func _on_editor_import_button_pressed() -> void:
 	import_window.popup()
 	import_window.visible = true
 	import_window.WindowReady()
 
-
 func _on_editor_exit_button_pressed() -> void:
 	EditToggle(false)
+
+func _on_save_level() -> void:
+	SaveLevel()
