@@ -3,7 +3,10 @@ extends CanvasLayer
 @export var level_tilemap_root : Node2D
 @export var layer_button_group : ButtonGroup
 @export var import_window : Window
+@export var level_load_window : Window 
+@export var level_save_window : Window 
 @export var library_grid : GridContainer
+@export var toolbar : Control
 
 @onready var player : CharacterBody2D = $"../Player"
 
@@ -24,6 +27,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
+	if event.is_action_pressed("Save Request"): SaveLevel()
 
 func EditToggle(force_toggle : bool):
 	editing = force_toggle
@@ -50,17 +54,20 @@ func LevelPanePressed(event : InputEvent) -> void:
 			player.position += (anchor_mouse_point - get_viewport().get_mouse_position()) / 2
 			anchor_mouse_point = get_viewport().get_mouse_position()
 			
-		elif Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && selected_boxel:
+		elif (Input.is_action_pressed("Editor Primary") || Input.is_action_just_pressed("Editor Primary")) && layer_button_group.get_pressed_button() && selected_boxel:
 			var global_mouse_pos = level_tilemap_root.get_local_mouse_position()
 			var selected_layer = layer_button_group.get_pressed_button().layer_int
 			var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
+			var tool_index = null
 			
 			var tile_position = level_tilemap_root.PixelToTilePosition(global_mouse_pos)
+			
 			
 			var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
 			if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
 			
-			if drag_action_position != tile_position:
+			if drag_action_position != tile_position || !drag_action_tile:
+				print("test")
 				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 				drag_action_position = tile_position
 	
@@ -68,6 +75,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	if event.is_action("Editor Secondary") && event.is_pressed():
 		anchor_mouse_point = get_viewport().get_mouse_position()
+
+
+
 
 func LoadBoxels() -> void:
 	var boxel_paths = DirAccess.get_files_at("user://Editor Boxels")
@@ -101,13 +111,22 @@ func HoverBoxel(hover_target : UIBoxel):
 	hover_boxel = hover_target
 	hover_target.name_label.visible = true
 
-func SaveLevel():
+func RequestSaveLevel():
+	level_save_window.popup()
+	level_save_window.visible = true
+
+func SaveLevel(filepath : String):
 	SceneLoadingContainer.AssignNodeOwners(level_tilemap_root.level_save_root)
 	
 	var new_level_save = PackedScene.new()
 	new_level_save.pack(level_tilemap_root.level_save_root)
 	
-	var save_err = ResourceSaver.save(new_level_save, "user://Editor Levels/Testing Level Save.scn")
+	var save_err = ResourceSaver.save(new_level_save, filepath)
+
+func RequestLoadLevel() -> void:
+	level_load_window.popup()
+	level_load_window.visible = true
+	level_load_window.WindowReady()
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.popup()
@@ -118,4 +137,22 @@ func _on_editor_exit_button_pressed() -> void:
 	EditToggle(false)
 
 func _on_save_level() -> void:
-	SaveLevel()
+	RequestSaveLevel()
+
+func _on_load_level_button_pressed() -> void:
+	RequestLoadLevel()
+
+func LoadLevel(file_path : String) -> void:
+	var new_level = ResourceLoader.load(file_path, "PackedScene").instantiate()
+	
+	if new_level:
+		level_tilemap_root.level_save_root.queue_free()
+		
+		level_tilemap_root.add_child(new_level)
+		level_tilemap_root.level_save_root = new_level
+		for i in 5:
+			level_tilemap_root.layer_groups[i] = new_level.get_child(i)
+			$"Editor UI/Top Editor Bar/Layer Bar Container".get_child(i).select_layer = new_level.get_child(i)
+		
+		print(level_tilemap_root.get_children())
+	else: printerr("LoadLevel Error")

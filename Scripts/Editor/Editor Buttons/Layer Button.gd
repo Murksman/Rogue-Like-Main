@@ -2,7 +2,6 @@ extends Button
 
 @export var select_layer : CanvasGroup
 @export var layer_int : int
-@export_dir var test
 
 func _pressed() -> void:
 	var pressed : Button = button_group.get_pressed_button()

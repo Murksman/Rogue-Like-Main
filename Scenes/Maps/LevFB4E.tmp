@@ -1,4 +1,4 @@
-[gd_scene load_steps=168 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=162 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -56,9 +56,6 @@
 [ext_resource type="Script" path="res://Scripts/Editor/Popups/Open File Handler.gd" id="49_fqm1k"]
 [ext_resource type="PackedScene" uid="uid://d1l0d4uhkyrj2" path="res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn" id="49_pojje"]
 [ext_resource type="Script" path="res://Scripts/Editor/Popups/Level Load Selector.gd" id="51_bpwc7"]
-[ext_resource type="Texture2D" uid="uid://4icilf5wpqm7" path="res://Sprites/UI and Menu/UI Elements/UI Button Template.png" id="53_e6j4b"]
-[ext_resource type="Script" path="res://Scripts/Editor/Popups/Level Save Window.gd" id="53_wb2ik"]
-[ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -540,6 +537,10 @@ shader_parameter/outline_width = 3.0
 shader_parameter/corner_radius = 10.8
 shader_parameter/selected_blend = 0.0
 
+[sub_resource type="LabelSettings" id="LabelSettings_ej2pu"]
+font_size = 14
+font_color = Color(1, 0.529867, 0.497942, 1)
+
 [sub_resource type="GDScript" id="GDScript_pfrj5"]
 resource_name = "ExitButton"
 script/source = "extends ColorRect
@@ -594,30 +595,6 @@ texture_margin_bottom = 5.0
 
 [sub_resource type="SystemFont" id="SystemFont_3o153"]
 
-[sub_resource type="Gradient" id="Gradient_2w2ks"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.441176, 1)
-colors = PackedColorArray(0.235496, 0.274378, 0.322844, 1, 0.567332, 0.608185, 0.639858, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_iv2px"]
-gradient = SubResource("Gradient_2w2ks")
-width = 16
-height = 16
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7hnnx"]
-texture = SubResource("GradientTexture2D_iv2px")
-texture_margin_left = 7.0
-texture_margin_top = 7.0
-texture_margin_right = 7.0
-texture_margin_bottom = 7.0
-expand_margin_left = 4.0
-expand_margin_top = 36.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
-
 [sub_resource type="Gradient" id="Gradient_4nou6"]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0.42623, 0.95082)
@@ -642,6 +619,36 @@ expand_margin_bottom = 2.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5rioj"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nknpi"]
+bg_color = Color(0.122089, 0.165854, 0.21998, 1)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.537255)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="SystemFont" id="SystemFont_s14hb"]
+
+[sub_resource type="FontVariation" id="FontVariation_g01kq"]
+base_font = SubResource("SystemFont_s14hb")
+
+[sub_resource type="LabelSettings" id="LabelSettings_5gxck"]
+font = SubResource("FontVariation_g01kq")
+font_size = 14
+font_color = Color(0.698039, 0.698039, 0.698039, 0.717647)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oq4k7"]
+bg_color = Color(0.167215, 0.197578, 0.235417, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [sub_resource type="Gradient" id="Gradient_fsnl2"]
 interpolation_mode = 2
 offsets = PackedFloat32Array(0, 0.987013)
@@ -653,48 +660,6 @@ width = 32
 height = 32
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4wljv"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hipv6"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-texture = ExtResource("53_e6j4b")
-texture_margin_left = 4.0
-texture_margin_top = 4.0
-texture_margin_right = 4.0
-texture_margin_bottom = 4.0
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-modulate_color = Color(0.709776, 0.758327, 0.793432, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g38rd"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-texture = ExtResource("53_e6j4b")
-texture_margin_left = 4.0
-texture_margin_top = 4.0
-texture_margin_right = 4.0
-texture_margin_bottom = 4.0
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-modulate_color = Color(0.406378, 0.407079, 0.422042, 1)
-
-[sub_resource type="SystemFont" id="SystemFont_yupbn"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_8h061"]
-font = SubResource("SystemFont_yupbn")
-font_color = Color(0.680274, 0.731831, 0.786958, 1)
-outline_size = 2
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_ej2pu"]
-font_size = 14
-font_color = Color(1, 0.529867, 0.497942, 1)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5py3h"]
 parsed_geometry_type = 1
@@ -744,7 +709,6 @@ texture = SubResource("GradientTexture2D_4xic8")
 current = true
 
 [node name="Global Lighting" type="CanvasModulate" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
@@ -3017,14 +2981,12 @@ texture = SubResource("GradientTexture2D_apqe3")
 texture_scale = 1.27
 height = 40.0
 
-[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar")]
+[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "library_grid", "toolbar")]
 layer = 20
 script = ExtResource("41_hic17")
 level_tilemap_root = NodePath("../Level Tilemap Root")
 layer_button_group = ExtResource("48_rkwao")
 import_window = NodePath("UI Popups/Import Window")
-level_load_window = NodePath("UI Popups/Level Load Selector")
-level_save_window = NodePath("UI Popups/Level Save Window")
 library_grid = NodePath("Editor UI/Library Container/Library Tray/Library Tray Container/Library Scroller/Library Grid")
 toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Unit Boxel Tools")
 
@@ -3166,6 +3128,7 @@ text = "Floor
 "
 script = ExtResource("44_kbe7g")
 select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Floor Layer")
+test = ""
 
 [node name="Decal Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
 custom_minimum_size = Vector2(160, 0)
@@ -3656,7 +3619,6 @@ handle_input_locally = false
 title = "Import New Boxels"
 initial_position = 1
 size = Vector2i(1258, 773)
-visible = false
 exclusive = true
 unresizable = true
 borderless = true
@@ -3664,10 +3626,10 @@ transparent = true
 keep_title_visible = true
 content_scale_mode = 1
 script = ExtResource("46_0bbil")
-open_file_handler = NodePath("../../OS dialogs/Open Image Handler")
+open_file_handler = NodePath("../../OS dialogs/Open Image handler")
 editor_master = NodePath("../..")
-error_popup = NodePath("../Import Error Popup")
-error_popup_text = NodePath("../Import Error Popup/MarginContainer/Error Text")
+error_popup = NodePath("Import Error Popup")
+error_popup_text = NodePath("Import Error Popup/MarginContainer/Error Text")
 filepath_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Text")
 boxelname_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name/Boxel Text Edit")
 preview_image = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Image Preview/Imported Image BG/Imported Image")
@@ -3678,6 +3640,70 @@ normals_tab_control = NodePath("Window Margins/UI Container/Import Preview Margi
 normal_image = NodePath("Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG/Imported Image")
 normalpath_text = NodePath("Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line/FilePath Text")
 
+[node name="Import Error Popup" type="AcceptDialog" parent="Editor Overlay Layer/UI Popups/Import Window"]
+title = "Import Error"
+initial_position = 4
+size = Vector2i(320, 130)
+unresizable = true
+popup_window = true
+force_native = true
+theme = ExtResource("46_0d38j")
+theme_override_constants/buttons_separation = 0
+dialog_autowrap = true
+
+[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Import Error Popup"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Import Window Border" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Import Window/Import Error Popup"]
+visible = false
+modulate = Color(0.625597, 0.625597, 0.625597, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("48_em1ao")
+patch_margin_left = 15
+patch_margin_top = 15
+patch_margin_right = 15
+patch_margin_bottom = 15
+
+[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Import Error Popup"]
+custom_minimum_size = Vector2(300, 90)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 4
+
+[node name="Testing Margins" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Import Error Popup/MarginContainer"]
+visible = false
+layout_mode = 2
+color = Color(0.196096, 0.240223, 0.308645, 1)
+
+[node name="Error Text" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Import Error Popup/MarginContainer"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 85
+text = "Error"
+label_settings = SubResource("LabelSettings_ej2pu")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="Window Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Import Window"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -3687,7 +3713,7 @@ grow_vertical = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_bottom = 8
 
 [node name="Window BG" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins"]
 layout_mode = 2
@@ -4176,40 +4202,22 @@ patch_margin_top = 15
 patch_margin_right = 15
 patch_margin_bottom = 15
 
-[node name="Level Load Selector" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("lvl_list", "lvlpath_text", "open_level_handler", "editor_overlay")]
+[node name="Level Load Selector" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("lvl_list", "lvlpath_text")]
 auto_translate_mode = 1
 transparent_bg = true
 title = "Select a level to load"
 initial_position = 4
-size = Vector2i(740, 650)
+size = Vector2i(740, 540)
+transient = true
 exclusive = true
-borderless = true
 transparent = true
 popup_window = true
-extend_to_title = true
 theme = ExtResource("46_0d38j")
 script = ExtResource("51_bpwc7")
-lvl_list = NodePath("List File Items/File List Margins/Level Selection Scroller/Level List")
+lvl_list = NodePath("MarginContainer/Margins/Level Selection Scroller/Level List")
 lvlpath_text = NodePath("MarginContainer2/Level Path")
-open_level_handler = NodePath("../../OS dialogs/Open Level Handler")
-editor_overlay = NodePath("../..")
 
-[node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Window Styling" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Load Selector/Window Theming"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_7hnnx")
-
-[node name="List File Items" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector"]
+[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector"]
 custom_minimum_size = Vector2(300, 90)
 anchors_preset = 15
 anchor_right = 1.0
@@ -4217,15 +4225,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 55
+theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 60
 
-[node name="Background" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Load Selector/List File Items"]
+[node name="Background" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_64kq2")
 
-[node name="File List Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/List File Items"]
+[node name="Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer"]
 custom_minimum_size = Vector2(300, 90)
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -4233,17 +4241,58 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Level Selection Scroller" type="ScrollContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/List File Items/File List Margins"]
+[node name="Level Selection Scroller" type="ScrollContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Level List" type="VBoxContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/List File Items/File List Margins/Level Selection Scroller"]
+[node name="Level List" type="VBoxContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller"]
 material = SubResource("ShaderMaterial_5rioj")
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Level Load Selector/List File Items"]
+[node name="Level file" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller/Level List"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nknpi")
+
+[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller/Level List/Level file"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Control" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller/Level List/Level file/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller/Level List/Level file/MarginContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme = ExtResource("44_am6u2")
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+text = "User://Editor Boxels/Testing"
+label_settings = SubResource("LabelSettings_5gxck")
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Filepath Styling" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller/Level List/Level file/MarginContainer/Control"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oq4k7")
+
+[node name="Panel2" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer/Margins/Level Selection Scroller/Level List"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nknpi")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer"]
 layout_mode = 2
 texture = SubResource("GradientTexture2D_qpmiv")
 patch_margin_left = 15
@@ -4266,19 +4315,10 @@ theme_override_constants/separation = 20
 alignment = 1
 
 [node name="Import External" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2"]
+modulate = Color(0.480905, 0.514916, 0.580529, 1)
 custom_minimum_size = Vector2(40.205, 0)
 layout_mode = 2
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxEmpty_4wljv")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hipv6")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_g38rd")
-theme_override_styles/normal = SubResource("StyleBoxTexture_hipv6")
-action_mode = 0
+theme = ExtResource("44_am6u2")
 text = "Import from External"
 
 [node name="Level Path" type="Label" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2"]
@@ -4286,12 +4326,7 @@ custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("44_am6u2")
-text = "C"
-label_settings = SubResource("LabelSettings_8h061")
-vertical_alignment = 1
 text_overrun_behavior = 3
-text_direction = 2
-structured_text_bidi_override = 2
 
 [node name="Load Level" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2"]
 modulate = Color(0.461939, 0.63299, 0.791514, 1)
@@ -4300,185 +4335,6 @@ layout_mode = 2
 theme = ExtResource("44_am6u2")
 text = "Load Level"
 
-[node name="Exit Button" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector"]
-modulate = Color(0.93, 0.28179, 0.1674, 1)
-custom_minimum_size = Vector2(32, 20)
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -48.0
-offset_top = 10.0
-offset_right = -16.0
-offset_bottom = 30.0
-grow_horizontal = 0
-theme = ExtResource("44_am6u2")
-
-[node name="Level Save Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("editor_overlay", "lvlpath_text")]
-transparent_bg = true
-initial_position = 1
-size = Vector2i(400, 150)
-visible = false
-exclusive = true
-borderless = true
-transparent = true
-popup_window = true
-extend_to_title = true
-script = ExtResource("53_wb2ik")
-editor_overlay = NodePath("../..")
-lvlpath_text = NodePath("MarginContainer2/Level Path")
-
-[node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Save Window"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Window Styling" type="Panel" parent="Editor Overlay Layer/UI Popups/Level Save Window/Window Theming"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_7hnnx")
-
-[node name="MarginContainer2" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Level Save Window"]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 18.0
-offset_top = -42.0
-offset_right = -16.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="Select File Path" type="Button" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2"]
-custom_minimum_size = Vector2(40.205, 0)
-layout_mode = 2
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_normal_color = Color(0.458111, 0.53084, 0.567238, 1)
-theme_override_colors/icon_focus_color = Color(0.458824, 0.529412, 0.568627, 1)
-theme_override_colors/icon_pressed_color = Color(0.179475, 0.20868, 0.241684, 1)
-theme_override_colors/icon_hover_color = Color(0.458824, 0.529412, 0.568627, 1)
-theme_override_colors/icon_disabled_color = Color(0.180392, 0.207843, 0.243137, 1)
-theme_override_constants/h_separation = 0
-theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxEmpty_4wljv")
-theme_override_styles/hover = SubResource("StyleBoxTexture_hipv6")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_g38rd")
-theme_override_styles/normal = SubResource("StyleBoxTexture_hipv6")
-action_mode = 0
-icon = ExtResource("54_f01av")
-icon_alignment = 1
-
-[node name="Control" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Select File Path"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Level Path" type="Label" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2"]
-custom_minimum_size = Vector2(0, 26)
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("44_am6u2")
-label_settings = SubResource("LabelSettings_8h061")
-vertical_alignment = 1
-text_overrun_behavior = 3
-text_direction = 2
-structured_text_bidi_override = 2
-
-[node name="Save Level" type="Button" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2"]
-modulate = Color(0.41952, 0.69, 0.3519, 1)
-custom_minimum_size = Vector2(40.205, 0)
-layout_mode = 2
-theme = ExtResource("44_am6u2")
-theme_override_constants/align_to_largest_stylebox = 0
-text = "Save Level"
-
-[node name="Window Prompt Text" type="Label" parent="Editor Overlay Layer/UI Popups/Level Save Window"]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -82.0
-offset_bottom = -59.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "Select a Name and Filepath
-"
-horizontal_alignment = 1
-
-[node name="Exit Button" type="Button" parent="Editor Overlay Layer/UI Popups/Level Save Window"]
-modulate = Color(0.93, 0.28179, 0.1674, 1)
-custom_minimum_size = Vector2(32, 20)
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -44.0
-offset_top = 6.0
-offset_right = -12.0
-offset_bottom = 26.0
-grow_horizontal = 0
-theme = ExtResource("44_am6u2")
-
-[node name="Import Error Popup" type="AcceptDialog" parent="Editor Overlay Layer/UI Popups"]
-title = "Import Error"
-initial_position = 4
-size = Vector2i(320, 134)
-unresizable = true
-popup_window = true
-force_native = true
-theme = ExtResource("46_0d38j")
-theme_override_constants/buttons_separation = 0
-dialog_autowrap = true
-
-[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Import Error Popup"]
-custom_minimum_size = Vector2(300, 90)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -35.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 4
-
-[node name="Testing Margins" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Error Popup/MarginContainer"]
-visible = false
-layout_mode = 2
-color = Color(0.196096, 0.240223, 0.308645, 1)
-
-[node name="Error Text" type="Label" parent="Editor Overlay Layer/UI Popups/Import Error Popup/MarginContainer"]
-custom_minimum_size = Vector2(200, 60)
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 85
-text = "Error"
-label_settings = SubResource("LabelSettings_ej2pu")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
 [node name="OS dialogs" type="Control" parent="Editor Overlay Layer"]
 layout_mode = 3
 anchors_preset = 0
@@ -4486,7 +4342,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="Open Image Handler" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
+[node name="Open Image handler" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
 title = "Open File(s)"
 size = Vector2i(350, 180)
 always_on_top = true
@@ -4498,19 +4354,6 @@ access = 2
 filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.svg", "*.webp", "*.hdr", "*.ktx", "*.tga")
 use_native_dialog = true
 script = ExtResource("49_fqm1k")
-
-[node name="Open Level Handler" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
-title = "Open a File"
-force_native = true
-ok_button_text = "Open"
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.scn", "*.tscn")
-use_native_dialog = true
-
-[node name="FileDialog" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
-title = "Save a Level"
-access = 2
 
 [node name="Level Tilemap Root" type="NavigationRegion2D" parent="." node_paths=PackedStringArray("layer_groups", "chunk_background", "level_save_root")]
 position = Vector2(16, 16)
@@ -4579,12 +4422,5 @@ texture = SubResource("GradientTexture2D_8qhor")
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_file_path_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_normal_path_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Finalization Options/Finish Import Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_finish_import_button_pressed"]
-[connection signal="close_requested" from="Editor Overlay Layer/UI Popups/Level Load Selector" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_close_requested"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Import External" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_import_external"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Load Level" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_load_level"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/Exit Button" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_exit"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Save Level" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_save"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/Exit Button" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_exit"]
-[connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_file_selected"]
-[connection signal="files_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_files_selected"]
-[connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Level Handler" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_receive_level_path"]
+[connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Image handler" to="Editor Overlay Layer/OS dialogs/Open Image handler" method="_on_file_selected"]
+[connection signal="files_selected" from="Editor Overlay Layer/OS dialogs/Open Image handler" to="Editor Overlay Layer/OS dialogs/Open Image handler" method="_on_files_selected"]

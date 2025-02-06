@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=10 format=3 uid="uid://cmowskftvwg3h"]
+[gd_resource type="Theme" load_steps=14 format=3 uid="uid://cmowskftvwg3h"]
 
 [sub_resource type="Gradient" id="Gradient_0uxp7"]
 interpolation_mode = 1
@@ -48,56 +48,51 @@ content_margin_left = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pa3a2"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 5
-border_color = Color(0.458405, 0.458405, 0.458405, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-corner_detail = 4
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 1)
+[sub_resource type="Gradient" id="Gradient_skxqm"]
+offsets = PackedFloat32Array(0.876543, 1)
+colors = PackedColorArray(0.865263, 0.201543, 0.209743, 1, 0.736259, 0.0636993, 0.0460817, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_piosa"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 5
-border_color = Color(0.458405, 0.458405, 0.458405, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-corner_detail = 4
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 1)
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aomse"]
+gradient = SubResource("Gradient_skxqm")
+width = 40
+height = 20
+fill = 2
+fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mo26d"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 5
-border_color = Color(0.458405, 0.458405, 0.458405, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-corner_detail = 4
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 1)
+[sub_resource type="Gradient" id="Gradient_mhi8h"]
+offsets = PackedFloat32Array(0.87931, 1)
+colors = PackedColorArray(0.395882, 0.0577101, 0.0665675, 1, 0.736259, 0.0636993, 0.0460817, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1hovc"]
+gradient = SubResource("Gradient_mhi8h")
+width = 40
+height = 20
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_2w2ks"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.441176, 1)
+colors = PackedColorArray(0.235496, 0.274378, 0.322844, 1, 0.567332, 0.608185, 0.639858, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_iv2px"]
+gradient = SubResource("Gradient_2w2ks")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ik3am"]
+texture = SubResource("GradientTexture2D_iv2px")
+texture_margin_left = 7.0
+texture_margin_top = 7.0
+texture_margin_right = 7.0
+texture_margin_bottom = 7.0
+expand_margin_left = 4.0
+expand_margin_top = 36.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 
 [resource]
 AcceptDialog/constants/buttons_min_height = 20
@@ -110,6 +105,8 @@ Button/colors/font_focus_color = Color(1, 1, 1, 1)
 Button/colors/font_hover_color = Color(0, 0, 0, 1)
 Button/colors/font_pressed_color = Color(0, 0, 0, 1)
 Button/constants/align_to_largest_stylebox = 1
-Button/styles/hover = SubResource("StyleBoxFlat_pa3a2")
-Button/styles/normal = SubResource("StyleBoxFlat_piosa")
-Button/styles/pressed = SubResource("StyleBoxFlat_mo26d")
+Window/constants/close_h_offset = 50
+Window/constants/resize_margin = 6
+Window/icons/close = SubResource("GradientTexture2D_aomse")
+Window/icons/close_pressed = SubResource("GradientTexture2D_1hovc")
+Window/styles/embedded_border = SubResource("StyleBoxTexture_ik3am")

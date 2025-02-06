@@ -1,0 +1,102 @@
+[gd_scene load_steps=10 format=3 uid="uid://dgno7wu1esney"]
+
+[ext_resource type="Script" path="res://Scripts/Editor/Editor Buttons/Level File Path.gd" id="1_ob213"]
+[ext_resource type="Theme" uid="uid://cl5mg55mmovrh" path="res://Resources/Theme and Styles/Default Editor Theme.tres" id="1_wr1uw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nknpi"]
+bg_color = Color(0.122089, 0.165854, 0.21998, 1)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.537255)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_4u1qi"]
+color = Color(0.52549, 0.52549, 0.52549, 0.741176)
+thickness = 18
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x0o4m"]
+
+[sub_resource type="SystemFont" id="SystemFont_s14hb"]
+subpixel_positioning = 0
+
+[sub_resource type="FontVariation" id="FontVariation_g01kq"]
+base_font = SubResource("SystemFont_s14hb")
+
+[sub_resource type="LabelSettings" id="LabelSettings_5gxck"]
+font = SubResource("FontVariation_g01kq")
+font_size = 14
+font_color = Color(0.698039, 0.698039, 0.698039, 0.717647)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_o7q4c"]
+color = Color(0.762404, 0.762404, 0.762403, 1)
+grow_begin = 0.0
+grow_end = 0.0
+
+[node name="Level file" type="Panel"]
+custom_minimum_size = Vector2(70, 24)
+offset_right = 200.0
+offset_bottom = 24.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_nknpi")
+script = ExtResource("1_ob213")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="Spacer" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Seperator" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer/Seperator"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 3.0
+offset_right = 2.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_4u1qi")
+
+[node name="Filepath Text" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme = ExtResource("1_wr1uw")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_x0o4m")
+text = "User://Editor Boxels/Testing"
+label_settings = SubResource("LabelSettings_5gxck")
+vertical_alignment = 1
+text_overrun_behavior = 3
+text_direction = 2
+
+[node name="Panel" type="HSeparator" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -5.0
+offset_right = -3.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_o7q4c")
