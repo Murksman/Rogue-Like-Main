@@ -4182,6 +4182,7 @@ transparent_bg = true
 title = "Select a level to load"
 initial_position = 4
 size = Vector2i(740, 650)
+visible = false
 exclusive = true
 borderless = true
 transparent = true
@@ -4286,7 +4287,6 @@ custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("44_am6u2")
-text = "C"
 label_settings = SubResource("LabelSettings_8h061")
 vertical_alignment = 1
 text_overrun_behavior = 3
@@ -4313,7 +4313,7 @@ offset_bottom = 30.0
 grow_horizontal = 0
 theme = ExtResource("44_am6u2")
 
-[node name="Level Save Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("editor_overlay", "lvlpath_text")]
+[node name="Level Save Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("editor_overlay", "lvlpath_text", "save_handler")]
 transparent_bg = true
 initial_position = 1
 size = Vector2i(400, 150)
@@ -4326,6 +4326,7 @@ extend_to_title = true
 script = ExtResource("53_wb2ik")
 editor_overlay = NodePath("../..")
 lvlpath_text = NodePath("MarginContainer2/Level Path")
+save_handler = NodePath("../../OS dialogs/Save Level Handler")
 
 [node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Level Save Window"]
 anchors_preset = 15
@@ -4378,21 +4379,6 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_hipv6")
 action_mode = 0
 icon = ExtResource("54_f01av")
 icon_alignment = 1
-
-[node name="Control" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Select File Path"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Level Path" type="Label" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2"]
 custom_minimum_size = Vector2(0, 26)
@@ -4508,12 +4494,15 @@ access = 2
 filters = PackedStringArray("*.scn", "*.tscn")
 use_native_dialog = true
 
-[node name="FileDialog" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
+[node name="Save Level Handler" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
 title = "Save a Level"
+force_native = true
+ok_button_text = "Save"
 access = 2
+filters = PackedStringArray("*.scn", "*.tscn")
+use_native_dialog = true
 
 [node name="Level Tilemap Root" type="NavigationRegion2D" parent="." node_paths=PackedStringArray("layer_groups", "chunk_background", "level_save_root")]
-position = Vector2(16, 16)
 navigation_polygon = SubResource("NavigationPolygon_5py3h")
 enabled = false
 script = ExtResource("24_e5ldj")
@@ -4524,9 +4513,9 @@ level_save_root = NodePath("Level Save Root")
 tile_prefab = ExtResource("49_pojje")
 
 [node name="Level Save Root" type="Node2D" parent="Level Tilemap Root"]
+position = Vector2(16, 16)
 
 [node name="Floor Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
-z_as_relative = false
 material = SubResource("ShaderMaterial_tf405")
 script = ExtResource("43_uy6ih")
 
@@ -4583,8 +4572,12 @@ texture = SubResource("GradientTexture2D_8qhor")
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Import External" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_import_external"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Load Level" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_load_level"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/Exit Button" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_exit"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Select File Path" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_select_file_path"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Save Level" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_save"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/Exit Button" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_exit"]
 [connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_file_selected"]
 [connection signal="files_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_files_selected"]
 [connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Level Handler" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_receive_level_path"]
+[connection signal="dir_selected" from="Editor Overlay Layer/OS dialogs/Save Level Handler" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_dir_selected"]
+[connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Save Level Handler" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_file_selected"]
+[connection signal="files_selected" from="Editor Overlay Layer/OS dialogs/Save Level Handler" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_files_selected"]

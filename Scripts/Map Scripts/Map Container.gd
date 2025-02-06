@@ -23,11 +23,10 @@ func _ready() -> void:
 	layer_init(layer_groups[0])
 	layer_init(layer_groups[1])
 	layer_init(layer_groups[2])
+	ResizeMapBounds()
 	UpdateChunkBackground()
 
 func layer_init(layer_group : CanvasGroup) -> void:
-	ResizeMapBounds()
-	
 	chunk_temp = []
 	chunk_temp.resize(chunk_size)
 	
@@ -69,7 +68,7 @@ func CheckSetMapSize(tile_pos : Vector2i) -> int:
 		
 		chunk_dimensions.x += 1
 		chunk_origin.x -= 1
-		
+	
 	
 	if chunk_coords.y < 0:
 		if chunk_coords.y + 1 < chunk_origin.y: return 2
@@ -121,20 +120,25 @@ func ResizeMapBounds() -> void:
 	map_size = Vector2i.ZERO
 	bounds_offset = Vector2i.ZERO
 	
-	var temp_map_pixel_size : Vector4 = Vector4(bounds_offset.x, bounds_offset.y, map_size.x, map_size.y) * 32
+	var temp_map_pixel_size : Vector2 = Vector2.ZERO
+	var temp_map_pixel_offset : Vector2 = Vector2.ZERO
 	for layer in layer_groups:
 		for tile in layer.get_children():
-			if tile.position.x > temp_map_pixel_size.z: temp_map_pixel_size.z = tile.position.x
-			if tile.position.y > temp_map_pixel_size.w: temp_map_pixel_size.w = tile.position.y
-			if tile.position.x < temp_map_pixel_size.x: temp_map_pixel_size.x = tile.position.x
-			if tile.position.y < temp_map_pixel_size.y: temp_map_pixel_size.y = tile.position.y
+			if tile.position.x > temp_map_pixel_size.x: temp_map_pixel_size.x = tile.position.x
+			if tile.position.y > temp_map_pixel_size.y: temp_map_pixel_size.y = tile.position.y
+			if tile.position.x < temp_map_pixel_offset.x: temp_map_pixel_offset.x = tile.position.x
+			if tile.position.y < temp_map_pixel_offset.y: temp_map_pixel_offset.y = tile.position.y
 	
-	bounds_offset = round(Vector2(temp_map_pixel_size.x, temp_map_pixel_size.y)) / 32
-	map_size = round(Vector2(temp_map_pixel_size.z, temp_map_pixel_size.w)) / 32
-	map_size -= bounds_offset
+	var tile_offset = PixelToTilePosition(temp_map_pixel_offset)
+	var tile_size = PixelToTilePosition(temp_map_pixel_size)
 	
-	chunk_origin = floor(Vector2(bounds_offset) / chunk_size)
-	chunk_dimensions = ceil(Vector2(map_size) / chunk_size)
+	chunk_origin = Vector2i(floor(Vector2(tile_offset) / chunk_size))
+	chunk_dimensions = Vector2i(floor(Vector2(tile_size) / chunk_size)) - chunk_origin + Vector2i(1,1)
+	
+	map_size = chunk_dimensions * chunk_size
+	bounds_offset = chunk_origin * chunk_size
+	
+	UpdateChunkBackground()
 
 
 func bind_array_tile(tile : Node, layer_group : CanvasGroup) -> void:

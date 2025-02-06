@@ -40,6 +40,7 @@ func SelectListLevel(path : String, path_button : Control) -> void:
 		child.selector_bar.visible = child == select_path_button
 
 func _on_load_level() -> void:
+	print("Test")
 	editor_overlay.LoadLevel(selected_path)
 	hide()
 
