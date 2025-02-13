@@ -457,13 +457,13 @@ fill = 2
 fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_hafb3"]
-colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.356863)
+interpolation_mode = 2
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.494118)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_r3ka4"]
 gradient = SubResource("Gradient_hafb3")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_6w0wb"]
 interpolation_mode = 1
@@ -3547,6 +3547,7 @@ script = ExtResource("43_erl8j")
 tool_index = 5
 
 [node name="Connector Boxel Tools2" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
+visible = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -3651,13 +3652,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Import Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("open_file_handler", "editor_master", "error_popup", "error_popup_text", "filepath_text", "boxelname_text", "preview_image", "boxel_type_selection", "boxel_layer_selection", "normals_tab_control", "normal_image", "normalpath_text")]
+[node name="Import Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("open_file_handler", "editor_master", "error_popup", "error_popup_text", "filepath_text", "preview_image", "boxelname_text", "boxel_type_selection", "boxel_layer_selection", "normals_tab_control", "normal_image", "normalpath_text")]
 transparent_bg = true
 handle_input_locally = false
 title = "Import New Boxels"
 initial_position = 1
 size = Vector2i(1258, 773)
-visible = false
 exclusive = true
 unresizable = true
 borderless = true
@@ -3670,8 +3670,8 @@ editor_master = NodePath("../..")
 error_popup = NodePath("../Import Error Popup")
 error_popup_text = NodePath("../Import Error Popup/MarginContainer/Error Text")
 filepath_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Text")
-boxelname_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name/Boxel Text Edit")
 preview_image = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Image Preview/Imported Image BG/Imported Image")
+boxelname_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name/Boxel Text Edit")
 boxel_type_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Single Boxels"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Connected Boxel"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Scatter Boxel")]
 boxel_layer_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Floor"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Decals"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Walls")]
 boxel_type_group = ExtResource("46_u00xq")
@@ -4482,7 +4482,7 @@ ok_button_text = "Open"
 dialog_hide_on_ok = true
 file_mode = 1
 access = 2
-filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.svg", "*.webp", "*.hdr", "*.ktx", "*.tga", "*.tres", "*.res")
+filters = PackedStringArray("*.png, *.jpg, *.jpeg, *.bmp, *.svg, *.webp, *.hdr, *.ktx, *.tga, *.tres, *.res")
 use_native_dialog = true
 script = ExtResource("49_fqm1k")
 

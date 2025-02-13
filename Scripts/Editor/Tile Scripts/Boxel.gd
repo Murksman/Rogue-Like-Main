@@ -5,6 +5,7 @@ class_name Boxel
 @export var boxel_name : StringName
 @export var layers : Array[int] = []
 
+
 func GetTileInfo() -> TileInfo:
 	return null
 

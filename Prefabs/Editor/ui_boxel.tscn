@@ -13,7 +13,7 @@ image = ExtResource("2_7nfan")
 script = ExtResource("3_vfwum")
 tile_info = SubResource("Resource_rgtan")
 boxel_img = ExtResource("2_7nfan")
-boxel_name = "Generic Boxel"
+boxel_name = &""
 layers = Array[int]([])
 
 [sub_resource type="Gradient" id="Gradient_o06ff"]

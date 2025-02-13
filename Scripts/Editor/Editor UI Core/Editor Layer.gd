@@ -23,6 +23,7 @@ var editing : bool = false
 var current_level_filepath : String
 
 func _ready() -> void:
+	visible = !editing
 	LevelInfo.editor_ref = self
 	
 	LoadBoxels()
@@ -131,6 +132,12 @@ func RequestLoadLevel() -> void:
 	level_load_window.popup()
 	level_load_window.visible = true
 	level_load_window.WindowReady()
+
+func EditBoxel(boxel : Boxel) -> void:
+	import_window.SetImporterMode(true, boxel)
+	import_window.popup()
+	import_window.visible = true
+	import_window.WindowReady()
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.popup()

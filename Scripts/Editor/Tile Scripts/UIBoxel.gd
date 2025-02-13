@@ -11,7 +11,11 @@ class_name UIBoxel
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion: LevelInfo.editor_ref.HoverBoxel(self)
 	if event.is_action_pressed("Primary"):
-		LevelInfo.editor_ref.SelectBoxel(self) 
+		if event is InputEventMouseButton && event.double_click:
+			LevelInfo.editor_ref.EditBoxel(boxel)
+			print("test - ", event)
+		else:
+			LevelInfo.editor_ref.SelectBoxel(self) 
 
 func _on_mouse_exited() -> void:
 	LevelInfo.editor_ref.MouseExit(self)

@@ -7,9 +7,9 @@ extends Window
 
 @export_group("Boxel Image Controls")
 @export var filepath_text : LineEdit
-@export var boxelname_text : LineEdit
 @export var preview_image : TextureRect
 @export_group("Boxel Info Controls")
+@export var boxelname_text : LineEdit
 @export var boxel_type_selection : Array[CheckBox]
 @export var boxel_layer_selection : Array[CheckBox]
 @export var boxel_type_group : ButtonGroup
@@ -49,8 +49,37 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"):
-		$"../../..".EditToggle(false)
+		hide()
+		editor_master.EditToggle(false)
+
+func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
+	for layer in boxel_layer_selection:
+		layer.set_pressed_no_signal(false)
+	for type in boxel_type_selection:
+		type.set_pressed_no_signal(false)
 	
+	if editing:
+		filepath_text.text = "No Path Selected."
+		normalpath_text.text = "No Path Selected."
+		preview_image.texture = edit_boxel.boxel_img.diffuse_texture
+		imported_image_tex = edit_boxel.boxel_img.diffuse_texture
+		normal_image.texture = edit_boxel.boxel_img.normal_texture
+		imported_normal_tex = edit_boxel.boxel_img.normal_texture
+		boxelname_text.text = edit_boxel.boxel_name
+		for i in edit_boxel.layers:
+			boxel_layer_selection[i].set_pressed_no_signal(true)
+		
+		if edit_boxel is UnitBoxel: boxel_type_selection[0].set_pressed_no_signal(false)
+		elif edit_boxel is ConnectorBoxel: boxel_type_selection[1].set_pressed_no_signal(false)
+		elif edit_boxel is ScatterBoxel: boxel_type_selection[2].set_pressed_no_signal(false)
+	else:
+		filepath_text.text = "No Path Selected."
+		normalpath_text.text = "No Path Selected."
+		preview_image.texture = null
+		imported_image_tex = null
+		normal_image.texture = null
+		imported_normal_tex = null
+		boxelname_text.text = ""
 
 func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 	open_file_paths = files
@@ -112,7 +141,7 @@ func ValidateImport():
 	if selected_layers.size() == 0: return "Select 1 or more layers for the boxel type."
 	if selected_type == 0 && (imported_image_tex.get_size() != Vector2(32,32) || imported_normal_tex.get_size() != Vector2(32,32)):
 		return "Images and Normals must be a 32x32 image when importing single boxels."
-	if (selected_type == 1 || selected_type == 2) && (imported_src_image.get_size() != Vector2i(128,128) || imported_src_normal.get_size() != Vector2i(128,128)):
+	if (selected_type == 1 || selected_type == 2) && (imported_image_tex.get_size() != Vector2(128,128) || imported_normal_tex.get_size() != Vector2(128,128)):
 		return "Images and Normals must be a 128x128 image when importing connected or scatter boxels."
 	
 	return 0
