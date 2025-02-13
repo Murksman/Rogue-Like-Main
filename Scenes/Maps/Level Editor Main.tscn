@@ -1,4 +1,4 @@
-[gd_scene load_steps=168 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -59,6 +59,7 @@
 [ext_resource type="Texture2D" uid="uid://4icilf5wpqm7" path="res://Sprites/UI and Menu/UI Elements/UI Button Template.png" id="53_e6j4b"]
 [ext_resource type="Script" path="res://Scripts/Editor/Popups/Level Save Window.gd" id="53_wb2ik"]
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
+[ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -4481,7 +4482,7 @@ ok_button_text = "Open"
 dialog_hide_on_ok = true
 file_mode = 1
 access = 2
-filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.svg", "*.webp", "*.hdr", "*.ktx", "*.tga")
+filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.svg", "*.webp", "*.hdr", "*.ktx", "*.tga", "*.tres", "*.res")
 use_native_dialog = true
 script = ExtResource("49_fqm1k")
 
@@ -4510,7 +4511,8 @@ layer_groups = [NodePath("Level Save Root/Floor Layer"), NodePath("Level Save Ro
 chunk_size = 16
 chunk_background = NodePath("../Background")
 level_save_root = NodePath("Level Save Root")
-tile_prefab = ExtResource("49_pojje")
+tile_object = ExtResource("49_pojje")
+wall_object = ExtResource("58_8eboa")
 
 [node name="Level Save Root" type="Node2D" parent="Level Tilemap Root"]
 position = Vector2(16, 16)

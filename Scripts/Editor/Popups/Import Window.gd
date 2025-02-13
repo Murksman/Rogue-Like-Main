@@ -54,29 +54,48 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 	open_file_paths = files
+	var pre_load = false
 	
 	if is_normal:
-		imported_src_normal = Image.load_from_file(files[0])
+		var filepath = files[0]
+		if filepath.get_extension() == "tres" || filepath.get_extension() == "res":
+			var image_resource = ResourceLoader.load(filepath, "Image")
+			print(image_resource)
+			if image_resource is ImageTexture || image_resource is Image:
+				imported_normal_tex = image_resource
+				pre_load = true
+			else: printerr("FileImportCatch Error: Invalid File Type!")
+		else:
+			imported_src_normal = Image.load_from_file(filepath)
 		
 		if imported_src_image && imported_src_normal.get_size() != imported_src_image.get_size():
 			ErrorPop("Imported Boxel Image and Normal image must have the same size.")
 			imported_src_normal = null
 			return
 		
-		UpdateNormalSettings()
+		UpdateNormalSettings(pre_load)
 	else:
-		imported_src_image = Image.load_from_file(files[0])
+		var filepath = files[0]
+		if filepath.get_extension() == "tres" || filepath.get_extension() == "res":
+			var image_resource = ResourceLoader.load(filepath, "Image")
+			print(image_resource)
+			if image_resource is ImageTexture:
+				imported_image_tex = image_resource
+				pre_load = true
+			else: printerr("FileImportCatch Error: Invalid File Type!")
+		else:
+			imported_src_image = Image.load_from_file(filepath)
 		
-		UpdateImageSettings()
+		UpdateImageSettings(pre_load)
 
-func UpdateImageSettings():
-	imported_image_tex = ImageTexture.create_from_image(imported_src_image)
+func UpdateImageSettings(pre_load : bool = false):
+	if !pre_load: imported_image_tex = ImageTexture.create_from_image(imported_src_image)
 	
 	filepath_text.text = open_file_paths[0]
 	preview_image.texture = imported_image_tex
 
-func UpdateNormalSettings():
-	imported_normal_tex = ImageTexture.create_from_image(imported_src_normal)
+func UpdateNormalSettings(pre_load : bool = false):
+	if !pre_load: imported_normal_tex = ImageTexture.create_from_image(imported_src_normal)
 	
 	normalpath_text.text = open_file_paths[0]
 	normal_image.texture = imported_normal_tex
@@ -89,9 +108,9 @@ func ValidateImport():
 	for layer_button in boxel_layer_selection: if layer_button.button_pressed: selected_layers.append(layer_button.get_meta("layer_index")) 
 	
 	if selected_type == -1: return "Select a boxel type."
-	if !imported_src_image: return "Invalid or missing image."
+	if !imported_image_tex: return "Invalid or missing image."
 	if selected_layers.size() == 0: return "Select 1 or more layers for the boxel type."
-	if selected_type == 0 && (imported_src_image.get_size() != Vector2i(32,32) || imported_src_normal.get_size() != Vector2i(32,32)):
+	if selected_type == 0 && (imported_image_tex.get_size() != Vector2(32,32) || imported_normal_tex.get_size() != Vector2(32,32)):
 		return "Images and Normals must be a 32x32 image when importing single boxels."
 	if (selected_type == 1 || selected_type == 2) && (imported_src_image.get_size() != Vector2i(128,128) || imported_src_normal.get_size() != Vector2i(128,128)):
 		return "Images and Normals must be a 128x128 image when importing connected or scatter boxels."
@@ -111,11 +130,11 @@ func FinishImport():
 	if selected_type == 0:
 		var new_tile_info = TileInfo.new()
 		new_boxel = UnitBoxel.new()
-		new_tile_info.image = imported_image_tex
+		new_tile_info.image = CanvasTexture.new()
+		new_tile_info.image.diffuse_texture = imported_image_tex
+		new_tile_info.image.normal_texture = imported_normal_tex
 		new_boxel.tile_info = new_tile_info
-		new_boxel.boxel_img = CanvasTexture.new()
-		new_boxel.boxel_img.diffuse_texture = imported_image_tex
-		new_boxel.boxel_img.normal_texture = imported_normal_tex
+		new_boxel.boxel_img = new_tile_info.image
 	elif selected_type == 1 || selected_type == 2:
 		var new_tile_info_array : Array[TileInfo] = []
 		var boxel_image_list = GenerateImages()

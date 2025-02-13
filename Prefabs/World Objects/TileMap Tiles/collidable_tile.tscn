@@ -16,6 +16,7 @@ region_filter_clip_enabled = true
 script = ExtResource("1_acy8c")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(-16, -16)
 collision_layer = 9
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]

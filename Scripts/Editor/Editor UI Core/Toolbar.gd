@@ -21,9 +21,10 @@ func ToolPressed() -> void:
 	
 
 func _process(delta: float) -> void:
+	if !editor_main.editing: return
+	
 	if editor_main.selected_boxel: 
 		if !boxel_type || editor_main.selected_boxel.boxel.get_script() != boxel_type.get_script():
-			print("test")
 			boxel_type = editor_main.selected_boxel.boxel
 			
 			for child in get_children():

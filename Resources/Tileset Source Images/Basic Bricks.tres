@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://dagh1j1fpqw4m"]
+
+[ext_resource type="Texture2D" uid="uid://c5uwtr4cb2wxy" path="res://Resources/Tileset Source Images/Basic Brick Texture.tres" id="1_piptg"]
+[ext_resource type="Texture2D" uid="uid://bt2snf3ad3f0w" path="res://Resources/Tileset Source Images/Basic Brick Normal.tres" id="2_gfq7b"]
+
+[resource]
+diffuse_texture = ExtResource("1_piptg")
+normal_texture = ExtResource("2_gfq7b")

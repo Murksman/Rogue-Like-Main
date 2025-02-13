@@ -8,9 +8,8 @@ var free_nodes : Array[Node]
 @export var level_save_root : Node2D
 
 @export_group("Tile Resources")
-@export var tile_prefab : PackedScene
-
-@onready var generic_tile_object := preload("res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn")
+@export var tile_object : PackedScene
+@export var wall_object : PackedScene
 
 var map_size : Vector2i
 var bounds_offset : Vector2i = Vector2i.ZERO 
@@ -20,10 +19,10 @@ var chunk_dimensions : Vector2i = Vector2i.ZERO
 var chunk_temp : Array[Array] = []
 
 func _ready() -> void:
+	ResizeMapBounds()
 	layer_init(layer_groups[0])
 	layer_init(layer_groups[1])
 	layer_init(layer_groups[2])
-	ResizeMapBounds()
 	UpdateChunkBackground()
 
 func layer_init(layer_group : CanvasGroup) -> void:
@@ -156,7 +155,7 @@ func query_free_nodes() -> void:
 			free_nodes.remove_at(list_size - n - 1)
 
 func PixelToTilePosition(pixel_pos : Vector2) -> Vector2i:
-	return floor((pixel_pos + Vector2(16.0,16.0)) / 32)
+	return floor(pixel_pos / 32)
 
 func add_free_node(obj) -> void:
 	free_nodes.append(obj)
@@ -182,7 +181,10 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, t
 	
 	if prev_tile: prev_tile.queue_free()
 	
-	var new_tile = generic_tile_object.instantiate()
+	var new_tile : Node
+	if boxel is ConnectorBoxel: new_tile = wall_object.instantiate()
+	else: new_tile = tile_object.instantiate()
+	
 	new_tile.texture = tile_info.image
 	layer_group.add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
