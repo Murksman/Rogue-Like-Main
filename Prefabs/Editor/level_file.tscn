@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dgno7wu1esney"]
+[gd_scene load_steps=11 format=3 uid="uid://dgno7wu1esney"]
 
 [ext_resource type="Script" path="res://Scripts/Editor/Editor Buttons/Level File Path.gd" id="1_ob213"]
 [ext_resource type="Theme" uid="uid://cl5mg55mmovrh" path="res://Resources/Theme and Styles/Default Editor Theme.tres" id="1_wr1uw"]
@@ -15,10 +15,6 @@ shadow_offset = Vector2(0, 1)
 anti_aliasing = false
 anti_aliasing_size = 7.861
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_4u1qi"]
-color = Color(0.52549, 0.52549, 0.52549, 0.741176)
-thickness = 18
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x0o4m"]
 
 [sub_resource type="SystemFont" id="SystemFont_s14hb"]
@@ -30,9 +26,29 @@ base_font = SubResource("SystemFont_s14hb")
 [sub_resource type="LabelSettings" id="LabelSettings_5gxck"]
 font = SubResource("FontVariation_g01kq")
 font_size = 14
-font_color = Color(0.698039, 0.698039, 0.698039, 0.717647)
+font_color = Color(0.92, 0.92, 0.92, 0.713726)
 outline_size = 1
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3e08x"]
+bg_color = Color(0.85, 0.2975, 0.306708, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0, 0, 0, 0.545098)
+shadow_size = 1
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmpnl"]
+bg_color = Color(0.602358, 0.175411, 0.185357, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0, 0, 0, 0.545098)
+shadow_size = 1
+shadow_offset = Vector2(0, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_o7q4c"]
 color = Color(0.760784, 0.760784, 0.760784, 1)
@@ -42,7 +58,7 @@ thickness = 3
 
 [node name="Level file" type="Panel" node_paths=PackedStringArray("selector_bar", "filepath_text")]
 clip_children = 2
-custom_minimum_size = Vector2(70, 24)
+custom_minimum_size = Vector2(128, 30.335)
 offset_right = 200.0
 offset_bottom = 24.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_nknpi")
@@ -55,31 +71,13 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 3.0
+offset_right = -3.0
+offset_bottom = -0.334999
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 6
-
-[node name="Spacer" type="Control" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="Seperator" type="Control" parent="HBoxContainer"]
-visible = false
-layout_mode = 2
-
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer/Seperator"]
-custom_minimum_size = Vector2(4, 0)
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = 3.0
-offset_right = 2.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/separator = SubResource("StyleBoxLine_4u1qi")
+scale = Vector2(1.00162, 1)
+theme_override_constants/separation = 4
 
 [node name="Filepath Text" type="Label" parent="HBoxContainer"]
 layout_mode = 2
@@ -87,11 +85,27 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 theme = ExtResource("1_wr1uw")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_x0o4m")
-text = "User://Editor Boxels/Testing"
+text = "wefwefwefwefewfwefewfwefwefweff"
 label_settings = SubResource("LabelSettings_5gxck")
 vertical_alignment = 1
 text_overrun_behavior = 3
 text_direction = 2
+
+[node name="Delete Button" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.601223, 0.601223, 0.601223, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/icon_max_width = 0
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_3e08x")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kmpnl")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3e08x")
+text = "Delete"
 
 [node name="Selector Bar" type="HSeparator" parent="."]
 visible = false
@@ -105,3 +119,5 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_o7q4c")
+
+[connection signal="pressed" from="HBoxContainer/Delete Button" to="." method="_on_delete_button_pressed"]

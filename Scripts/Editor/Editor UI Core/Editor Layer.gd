@@ -35,6 +35,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			SaveLevel(current_level_filepath)
 		else:
 			RequestSaveLevel()
+	
+	if event.is_action_pressed("Delete") && selected_boxel:
+		selected_boxel.Delete()
+		selected_boxel = null
 
 func EditToggle(force_toggle : bool):
 	editing = force_toggle
@@ -86,8 +90,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 func LoadBoxels() -> void:
 	var boxel_paths = DirAccess.get_files_at("user://Editor Boxels")
 	for path in boxel_paths:
-		var load_result = ResourceLoader.load("user://Editor Boxels/" + path, "Boxel")
-		if load_result is Boxel: library_grid.AddNewBoxel(load_result)
+		var load_path = "user://Editor Boxels/" + path
+		var load_result = ResourceLoader.load(load_path, "Boxel")
+		if load_result is Boxel: library_grid.AddNewBoxel(load_result, load_path)
 		else: 
 			print("Boxel Loading Error Code: ", load_result)
 	
@@ -106,14 +111,14 @@ func SelectBoxel(target_boxel : UIBoxel) -> void:
 
 func MouseExit(target : Control):
 	if target == hover_boxel:
-		hover_boxel.name_label.visible = false
+		hover_boxel.name_text.visible = false
 		hover_boxel = null
 
 func HoverBoxel(hover_target : UIBoxel):
 	if hover_boxel && hover_target != hover_boxel: 
-		hover_boxel.name_label.visible = false
+		hover_boxel.name_text.visible = false
 	hover_boxel = hover_target
-	hover_target.name_label.visible = true
+	hover_target.name_text.visible = true
 
 func RequestSaveLevel():
 	level_save_window.popup()
@@ -140,6 +145,7 @@ func EditBoxel(boxel : Boxel) -> void:
 	import_window.WindowReady()
 
 func _on_editor_import_button_pressed() -> void:
+	import_window.SetImporterMode(false)
 	import_window.popup()
 	import_window.visible = true
 	import_window.WindowReady()
@@ -161,6 +167,7 @@ func LoadLevel(file_path : String) -> void:
 		
 		level_tilemap_root.add_child(new_level)
 		level_tilemap_root.level_save_root = new_level
+		new_level.position = Vector2(16,16)
 		for i in 5:
 			level_tilemap_root.layer_groups[i] = new_level.get_child(i)
 			$"Editor UI/Top Editor Bar/Layer Bar Container".get_child(i).select_layer = new_level.get_child(i)

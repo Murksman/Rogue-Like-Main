@@ -5,3 +5,6 @@ class_name UnitBoxel
 
 func GetTileInfo() -> TileInfo:
 	return tile_info
+
+func StitchFullTexture() -> CanvasTexture:
+	return tile_info.image

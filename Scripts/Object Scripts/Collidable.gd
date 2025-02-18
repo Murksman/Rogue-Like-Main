@@ -7,7 +7,7 @@ extends Sprite2D
 func TakeDamage(damage):
 	if breakable:
 		if Health - damage <= 0:
-			occluder_child.queue_free()
+			if occluder_child: occluder_child.queue_free()
 			$"../..".DestroyTile(self)
 			return Health
 		

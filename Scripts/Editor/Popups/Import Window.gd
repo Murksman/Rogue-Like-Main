@@ -5,6 +5,9 @@ extends Window
 @export var error_popup : AcceptDialog
 @export var error_popup_text : Label
 
+@export_group("Boxel Import | Edit Controls")
+@export var importing_label : Label
+@export var editing_label : Label
 @export_group("Boxel Image Controls")
 @export var filepath_text : LineEdit
 @export var preview_image : TextureRect
@@ -59,20 +62,34 @@ func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
 		type.set_pressed_no_signal(false)
 	
 	if editing:
+		importing_label.visible = false
+		editing_label.visible = true
+		
 		filepath_text.text = "No Path Selected."
 		normalpath_text.text = "No Path Selected."
-		preview_image.texture = edit_boxel.boxel_img.diffuse_texture
-		imported_image_tex = edit_boxel.boxel_img.diffuse_texture
-		normal_image.texture = edit_boxel.boxel_img.normal_texture
-		imported_normal_tex = edit_boxel.boxel_img.normal_texture
+		print("testing SetImporterMode")
+		var full_texture : CanvasTexture = edit_boxel.StitchFullTexture()
+		print("Full Texture - ", full_texture.diffuse_texture.get_class())
+		preview_image.texture = full_texture.diffuse_texture
+		imported_image_tex = full_texture.diffuse_texture
+		normal_image.texture = full_texture.normal_texture
+		imported_normal_tex = full_texture.normal_texture
 		boxelname_text.text = edit_boxel.boxel_name
+		print("Full Texture - ", preview_image.texture)
+		
 		for i in edit_boxel.layers:
 			boxel_layer_selection[i].set_pressed_no_signal(true)
 		
-		if edit_boxel is UnitBoxel: boxel_type_selection[0].set_pressed_no_signal(false)
-		elif edit_boxel is ConnectorBoxel: boxel_type_selection[1].set_pressed_no_signal(false)
-		elif edit_boxel is ScatterBoxel: boxel_type_selection[2].set_pressed_no_signal(false)
+		if edit_boxel is UnitBoxel: 
+			boxel_type_selection[0].set_pressed_no_signal(false)
+		elif edit_boxel is ConnectorBoxel: 
+			boxel_type_selection[1].set_pressed_no_signal(false)
+		elif edit_boxel is ScatterBoxel: 
+			boxel_type_selection[2].set_pressed_no_signal(false)
 	else:
+		importing_label.visible = true
+		editing_label.visible = false
+		
 		filepath_text.text = "No Path Selected."
 		normalpath_text.text = "No Path Selected."
 		preview_image.texture = null
@@ -187,7 +204,7 @@ func FinishImport():
 	
 	new_boxel.layers = selected_layers
 	new_boxel.boxel_name = StringName(boxelname_text.text)
-	editor_master.library_grid.AddNewBoxel(new_boxel)
+	editor_master.library_grid.AddNewBoxel(new_boxel, filepath_text.text)
 	
 	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "tres")
 	

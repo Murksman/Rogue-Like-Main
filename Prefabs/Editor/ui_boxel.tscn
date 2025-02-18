@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ccxacsgbtd7rm"]
+[gd_scene load_steps=16 format=3 uid="uid://ccxacsgbtd7rm"]
 
 [ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/UIBoxel.gd" id="1_rbgbx"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="2_7nfan"]
@@ -34,28 +34,125 @@ gradient = SubResource("Gradient_kwlwl")
 fill = 2
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="Gradient" id="Gradient_0kc7d"]
-offsets = PackedFloat32Array(0.00636943, 0.964968)
-colors = PackedColorArray(0.172549, 0.2, 0.235294, 0.0196078, 0.124729, 0.116549, 0.115465, 0.827451)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_atmng"]
-gradient = SubResource("Gradient_0kc7d")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.260684)
-
-[sub_resource type="Gradient" id="Gradient_h5hmj"]
-colors = PackedColorArray(0.12549, 0.145098, 0.168627, 0, 0.12549, 0.145098, 0.168627, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_x5qsj"]
-gradient = SubResource("Gradient_h5hmj")
-width = 86
-height = 32
-fill_to = Vector2(0.0026455, 0.590112)
+[sub_resource type="FontFile" id="FontFile_kv52n"]
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/10/0/ascent = 0.0
+cache/0/10/0/descent = 0.0
+cache/0/10/0/underline_position = 0.0
+cache/0/10/0/underline_thickness = 0.0
+cache/0/10/0/scale = 1.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/35/0/ascent = 0.0
+cache/0/35/0/descent = 0.0
+cache/0/35/0/underline_position = 0.0
+cache/0/35/0/underline_thickness = 0.0
+cache/0/35/0/scale = 1.0
+cache/0/40/0/ascent = 0.0
+cache/0/40/0/descent = 0.0
+cache/0/40/0/underline_position = 0.0
+cache/0/40/0/underline_thickness = 0.0
+cache/0/40/0/scale = 1.0
+cache/0/45/0/ascent = 0.0
+cache/0/45/0/descent = 0.0
+cache/0/45/0/underline_position = 0.0
+cache/0/45/0/underline_thickness = 0.0
+cache/0/45/0/scale = 1.0
+cache/0/50/0/ascent = 0.0
+cache/0/50/0/descent = 0.0
+cache/0/50/0/underline_position = 0.0
+cache/0/50/0/underline_thickness = 0.0
+cache/0/50/0/scale = 1.0
+cache/0/55/0/ascent = 0.0
+cache/0/55/0/descent = 0.0
+cache/0/55/0/underline_position = 0.0
+cache/0/55/0/underline_thickness = 0.0
+cache/0/55/0/scale = 1.0
+cache/0/60/0/ascent = 0.0
+cache/0/60/0/descent = 0.0
+cache/0/60/0/underline_position = 0.0
+cache/0/60/0/underline_thickness = 0.0
+cache/0/60/0/scale = 1.0
+cache/0/65/0/ascent = 0.0
+cache/0/65/0/descent = 0.0
+cache/0/65/0/underline_position = 0.0
+cache/0/65/0/underline_thickness = 0.0
+cache/0/65/0/scale = 1.0
+cache/0/70/0/ascent = 0.0
+cache/0/70/0/descent = 0.0
+cache/0/70/0/underline_position = 0.0
+cache/0/70/0/underline_thickness = 0.0
+cache/0/70/0/scale = 1.0
+cache/0/75/0/ascent = 0.0
+cache/0/75/0/descent = 0.0
+cache/0/75/0/underline_position = 0.0
+cache/0/75/0/underline_thickness = 0.0
+cache/0/75/0/scale = 1.0
+cache/0/80/0/ascent = 0.0
+cache/0/80/0/descent = 0.0
+cache/0/80/0/underline_position = 0.0
+cache/0/80/0/underline_thickness = 0.0
+cache/0/80/0/scale = 1.0
+cache/0/30/0/ascent = 0.0
+cache/0/30/0/descent = 0.0
+cache/0/30/0/underline_position = 0.0
+cache/0/30/0/underline_thickness = 0.0
+cache/0/30/0/scale = 1.0
+cache/0/25/0/ascent = 0.0
+cache/0/25/0/descent = 0.0
+cache/0/25/0/underline_position = 0.0
+cache/0/25/0/underline_thickness = 0.0
+cache/0/25/0/scale = 1.0
+cache/0/20/0/ascent = 0.0
+cache/0/20/0/descent = 0.0
+cache/0/20/0/underline_position = 0.0
+cache/0/20/0/underline_thickness = 0.0
+cache/0/20/0/scale = 1.0
+cache/0/15/0/ascent = 0.0
+cache/0/15/0/descent = 0.0
+cache/0/15/0/underline_position = 0.0
+cache/0/15/0/underline_thickness = 0.0
+cache/0/15/0/scale = 1.0
+cache/0/5/0/ascent = 0.0
+cache/0/5/0/descent = 0.0
+cache/0/5/0/underline_position = 0.0
+cache/0/5/0/underline_thickness = 0.0
+cache/0/5/0/scale = 1.0
+cache/0/12/0/ascent = 0.0
+cache/0/12/0/descent = 0.0
+cache/0/12/0/underline_position = 0.0
+cache/0/12/0/underline_thickness = 0.0
+cache/0/12/0/scale = 1.0
+cache/0/11/0/ascent = 0.0
+cache/0/11/0/descent = 0.0
+cache/0/11/0/underline_position = 0.0
+cache/0/11/0/underline_thickness = 0.0
+cache/0/11/0/scale = 1.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_poids"]
-font_size = 10
+font = SubResource("FontFile_kv52n")
+font_size = 11
 font_color = Color(0.821789, 0.821789, 0.821789, 1)
+outline_size = 1
+outline_color = Color(0.47, 0.47, 0.47, 1)
+shadow_color = Color(0, 0, 0, 0.556863)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o5si"]
+bg_color = Color(0.1501, 0.172045, 0.19, 0.960784)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.256004, 0.275257, 0.308512, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [sub_resource type="Gradient" id="Gradient_c7xex"]
 interpolation_mode = 1
@@ -69,17 +166,15 @@ height = 32
 fill = 2
 fill_from = Vector2(0.5, 0.5)
 
-[node name="UIBoxel" type="Control" node_paths=PackedStringArray("tile_highlighter", "name_label", "name_text", "boxel_image", "grayout")]
+[node name="UIBoxel" type="Control" node_paths=PackedStringArray("tile_highlighter", "name_text", "boxel_image")]
 custom_minimum_size = Vector2(68, 68)
 layout_mode = 3
 anchors_preset = 0
 size_flags_stretch_ratio = 0.0
 script = ExtResource("1_rbgbx")
 tile_highlighter = NodePath("Tile Select Outline")
-name_label = NodePath("Boxel Display/Name Label")
-name_text = NodePath("Boxel Display/Name Label/Name Text")
+name_text = NodePath("Boxel Display/Name Text")
 boxel_image = NodePath("Boxel Display/Boxel Image")
-grayout = NodePath("Boxel Display/Grayout")
 boxel = SubResource("Resource_2k1dk")
 
 [node name="Shadow" type="TextureRect" parent="."]
@@ -137,48 +232,41 @@ grow_vertical = 2
 expand_mode = 2
 stretch_mode = 6
 
-[node name="Grayout" type="TextureRect" parent="Boxel Display"]
+[node name="Name Text" type="Label" parent="Boxel Display"]
 visible = false
+z_index = 100
+custom_minimum_size = Vector2(60, 14)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -34.0
-offset_top = -34.0
-offset_right = 34.0
-offset_bottom = 34.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("GradientTexture2D_atmng")
-
-[node name="Name Label" type="TextureRect" parent="Boxel Display"]
-visible = false
-layout_mode = 1
-anchors_preset = 12
+anchors_preset = -1
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -22.0
+offset_top = -14.0
+offset_right = 1.0
 offset_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 0
-texture = SubResource("GradientTexture2D_x5qsj")
-expand_mode = 1
-
-[node name="Name Text" type="Label" parent="Boxel Display/Name Label"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -16.0
-grow_horizontal = 2
-grow_vertical = 0
+text = "New Boxel Connector"
 label_settings = SubResource("LabelSettings_poids")
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 64
+max_lines_visible = 3
+visible_characters_behavior = 1
+
+[node name="Panel" type="Panel" parent="Boxel Display/Name Text"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_right = 4.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5o5si")
 
 [node name="Tile Select Outline" type="NinePatchRect" parent="."]
 visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=168 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -50,7 +50,6 @@
 [ext_resource type="ButtonGroup" uid="uid://cfov1k3tfhvkx" path="res://Resources/UI/Boxel Type Group.tres" id="46_u00xq"]
 [ext_resource type="Theme" uid="uid://cf74qdf0p6acc" path="res://Resources/Theme and Styles/Layer Button Theme.tres" id="47_ch65g"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/Map Layer.gdshader" id="47_s3dxo"]
-[ext_resource type="Texture2D" uid="uid://o5nsnl5ooc4j" path="res://Sprites/UI and Menu/UI Elements/UI Circle Border.png" id="48_em1ao"]
 [ext_resource type="Shader" path="res://Scripts/Shader Scripts/import grid lines.gdshader" id="48_r4tcy"]
 [ext_resource type="ButtonGroup" uid="uid://sow5uuw8lgmf" path="res://Resources/UI/Layer Button Group.tres" id="48_rkwao"]
 [ext_resource type="Script" path="res://Scripts/Editor/Popups/Open File Handler.gd" id="49_fqm1k"]
@@ -541,9 +540,54 @@ shader_parameter/outline_width = 3.0
 shader_parameter/corner_radius = 10.8
 shader_parameter/selected_blend = 0.0
 
+[sub_resource type="Gradient" id="Gradient_2w2ks"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.441176, 1)
+colors = PackedColorArray(0.235496, 0.274378, 0.322844, 1, 0.567332, 0.608185, 0.639858, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_iv2px"]
+gradient = SubResource("Gradient_2w2ks")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7hnnx"]
+texture = SubResource("GradientTexture2D_iv2px")
+texture_margin_left = 7.0
+texture_margin_top = 7.0
+texture_margin_right = 7.0
+texture_margin_bottom = 7.0
+expand_margin_left = 4.0
+expand_margin_top = 36.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_kqhul"]
+font_size = 18
+outline_size = 1
+outline_color = Color(0.273873, 0.273873, 0.273873, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.756863)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gllf4"]
+bg_color = Color(0.949715, 0.294223, 0.191539, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.57, 0.262865, 0.2223, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 2
+
 [sub_resource type="GDScript" id="GDScript_pfrj5"]
 resource_name = "ExitButton"
-script/source = "extends ColorRect
+script/source = "extends Panel
 
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed(\"Editor Primary\"):
@@ -555,6 +599,7 @@ shader = ExtResource("48_r4tcy")
 shader_parameter/px_ratio = 64
 shader_parameter/line_offset = 1.0
 shader_parameter/line_thickness = 2
+shader_parameter/transparency = 0.5
 
 [sub_resource type="Gradient" id="Gradient_ckenv"]
 interpolation_mode = 1
@@ -594,30 +639,6 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
 [sub_resource type="SystemFont" id="SystemFont_3o153"]
-
-[sub_resource type="Gradient" id="Gradient_2w2ks"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.441176, 1)
-colors = PackedColorArray(0.235496, 0.274378, 0.322844, 1, 0.567332, 0.608185, 0.639858, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_iv2px"]
-gradient = SubResource("Gradient_2w2ks")
-width = 16
-height = 16
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7hnnx"]
-texture = SubResource("GradientTexture2D_iv2px")
-texture_margin_left = 7.0
-texture_margin_top = 7.0
-texture_margin_right = 7.0
-texture_margin_bottom = 7.0
-expand_margin_left = 4.0
-expand_margin_top = 36.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
 
 [sub_resource type="Gradient" id="Gradient_4nou6"]
 interpolation_mode = 1
@@ -721,15 +742,6 @@ shader_parameter/is_visible = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jvv8s"]
 shader = ExtResource("47_s3dxo")
 shader_parameter/is_visible = true
-
-[sub_resource type="Gradient" id="Gradient_pc65e"]
-offsets = PackedFloat32Array(0.745223)
-colors = PackedColorArray(1, 0.137255, 0.14902, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_8qhor"]
-gradient = SubResource("Gradient_pc65e")
-width = 16
-height = 16
 
 [node name="World" type="Node2D"]
 texture_filter = 1
@@ -3652,12 +3664,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Import Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("open_file_handler", "editor_master", "error_popup", "error_popup_text", "filepath_text", "preview_image", "boxelname_text", "boxel_type_selection", "boxel_layer_selection", "normals_tab_control", "normal_image", "normalpath_text")]
+[node name="Import Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("open_file_handler", "editor_master", "error_popup", "error_popup_text", "importing_label", "editing_label", "filepath_text", "preview_image", "boxelname_text", "boxel_type_selection", "boxel_layer_selection", "normals_tab_control", "normal_image", "normalpath_text")]
 transparent_bg = true
 handle_input_locally = false
 title = "Import New Boxels"
 initial_position = 1
 size = Vector2i(1258, 773)
+visible = false
 exclusive = true
 unresizable = true
 borderless = true
@@ -3669,15 +3682,32 @@ open_file_handler = NodePath("../../OS dialogs/Open Image Handler")
 editor_master = NodePath("../..")
 error_popup = NodePath("../Import Error Popup")
 error_popup_text = NodePath("../Import Error Popup/MarginContainer/Error Text")
+importing_label = NodePath("Window Margins/UI Container/Window Topbar/Importing Boxel Label")
+editing_label = NodePath("Window Margins/UI Container/Window Topbar/Editing Boxel Label")
 filepath_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Text")
 preview_image = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Image Preview/Imported Image BG/Imported Image")
 boxelname_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name/Boxel Text Edit")
 boxel_type_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Single Boxels"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Connected Boxel"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Scatter Boxel")]
 boxel_layer_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Floor"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Decals"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Walls")]
 boxel_type_group = ExtResource("46_u00xq")
-normals_tab_control = NodePath("Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures")
-normal_image = NodePath("Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG/Imported Image")
-normalpath_text = NodePath("Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line/FilePath Text")
+normals_tab_control = NodePath("Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures")
+normal_image = NodePath("Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG/Imported Image")
+normalpath_text = NodePath("Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line/FilePath Text")
+
+[node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Import Window"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Window Styling" type="Panel" parent="Editor Overlay Layer/UI Popups/Import Window/Window Theming"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_7hnnx")
 
 [node name="Window Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Import Window"]
 anchors_preset = 15
@@ -3690,10 +3720,6 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Window BG" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins"]
-layout_mode = 2
-color = Color(0.30839, 0.329277, 0.342991, 1)
-
 [node name="UI Container" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins"]
 layout_mode = 2
 
@@ -3703,17 +3729,48 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 40.0
 grow_horizontal = 2
-color = Color(0.473158, 0.485571, 0.478524, 1)
+color = Color(0.354504, 0.391591, 0.45587, 1)
 
-[node name="ExitButton" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container"]
+[node name="Importing Boxel Label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Window Topbar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -11.5
+offset_right = 64.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "IMPORTING NEW BOXEL
+"
+label_settings = SubResource("LabelSettings_kqhul")
+
+[node name="Editing Boxel Label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Window Topbar"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -11.5
+offset_right = 64.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "EDITING BOXEL
+"
+label_settings = SubResource("LabelSettings_kqhul")
+
+[node name="ExitButton" type="Panel" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 20.0
+offset_left = -56.0
+offset_top = 5.0
+offset_right = -6.0
+offset_bottom = 27.0
 grow_horizontal = 0
-color = Color(1, 0, 0, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_gllf4")
 script = SubResource("GDScript_pfrj5")
 
 [node name="Import Preview Margins" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container"]
@@ -3773,93 +3830,56 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="FilePath Line" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
-custom_minimum_size = Vector2(0, 24)
+[node name="FilePath Line" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
+custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
-
-[node name="FilePath Text" type="LineEdit" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -15.0
-offset_bottom = 17.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_font_sizes/font_size = 12
-editable = false
+theme_override_constants/separation = 6
 
 [node name="FilePath label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -11.5
-offset_right = 80.0
-offset_bottom = 11.5
-grow_vertical = 2
+custom_minimum_size = Vector2(74.725, 0)
+layout_mode = 2
 text = "File Path:"
 clip_text = true
 
+[node name="FilePath Text" type="LineEdit" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+editable = false
+
 [node name="FilePath Button" type="Button" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line"]
 modulate = Color(0.738462, 0.767023, 0.793184, 1)
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 6.0
-offset_top = -12.0
-offset_right = 32.0
-offset_bottom = 14.0
-grow_horizontal = 0
-grow_vertical = 2
+custom_minimum_size = Vector2(40, 28)
+layout_mode = 2
+size_flags_vertical = 4
 theme = ExtResource("44_am6u2")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
-theme_override_constants/outline_size = 1
+theme_override_colors/icon_normal_color = Color(0.433857, 0.505737, 0.55351, 1)
+theme_override_colors/icon_hover_color = Color(0.520795, 0.593552, 0.642208, 1)
 theme_override_constants/h_separation = 0
-theme_override_constants/icon_max_width = 17
+theme_override_constants/icon_max_width = 32
+theme_override_constants/align_to_largest_stylebox = 0
 theme_override_fonts/font = SubResource("SystemFont_fluvt")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 4
 action_mode = 0
-text = "
-"
+icon = ExtResource("54_f01av")
+icon_alignment = 1
 
-[node name="Boxel Name" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
-custom_minimum_size = Vector2(0, 20)
+[node name="Boxel Name" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="Boxel Text Edit" type="LineEdit" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -174.0
-offset_top = -15.0
-offset_right = 26.0
-offset_bottom = 17.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_font_sizes/font_size = 12
-
 [node name="Boxel Text label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -11.5
-offset_right = 96.0
-offset_bottom = 11.5
-grow_vertical = 2
-text = "Boxel Name"
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Boxel Name:"
 clip_text = true
+
+[node name="Boxel Text Edit" type="LineEdit" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 
 [node name="Boxel Type Label" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
 custom_minimum_size = Vector2(0, 24)
@@ -3961,7 +3981,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 0.54902, 0.588235)
 
-[node name="TabContainer" type="TabContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins"]
+[node name="Advanced Settings Tabs" type="TabContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -3976,11 +3996,11 @@ current_tab = 0
 clip_tabs = false
 script = ExtResource("46_k8w68")
 
-[node name="Normal Textures" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer"]
+[node name="Normal Textures" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures"]
+[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -3990,18 +4010,18 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.556863, 1, 0.290196)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures"]
 layout_mode = 1
 offset_left = 30.0
 offset_right = 310.0
 offset_bottom = 330.0
 theme_override_constants/separation = 16
 
-[node name="Normal Preview" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer"]
+[node name="Normal Preview" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer"]
 custom_minimum_size = Vector2(264, 290)
 layout_mode = 2
 
-[node name="Imported Normal BG" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/Normal Preview"]
+[node name="Imported Normal BG" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/Normal Preview"]
 custom_minimum_size = Vector2(264, 264)
 layout_mode = 2
 offset_left = -10.0
@@ -4010,7 +4030,7 @@ offset_right = 254.0
 offset_bottom = 280.0
 color = Color(0.211975, 0.226078, 0.265919, 1)
 
-[node name="Imported Image" type="TextureRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG"]
+[node name="Imported Image" type="TextureRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG"]
 texture_filter = 1
 texture_repeat = 1
 material = SubResource("ShaderMaterial_8bicn")
@@ -4022,7 +4042,7 @@ offset_right = 260.0
 offset_bottom = 260.0
 stretch_mode = 5
 
-[node name="Image Outline" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG"]
+[node name="Image Outline" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG"]
 modulate = Color(0.787759, 0.787759, 0.787759, 0.815686)
 layout_mode = 1
 anchors_preset = 15
@@ -4037,69 +4057,48 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="FilePath Line" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer"]
+[node name="FilePath Line" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer"]
 custom_minimum_size = Vector2(280, 24)
 layout_mode = 2
 
-[node name="FilePath Text" type="LineEdit" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -15.0
-offset_bottom = 17.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_font_sizes/font_size = 12
-editable = false
-
-[node name="FilePath label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -11.5
-offset_right = 80.0
-offset_bottom = 11.5
-grow_vertical = 2
+[node name="FilePath label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line"]
+custom_minimum_size = Vector2(76, 0)
+layout_mode = 2
 text = "File Path:"
 clip_text = true
 
-[node name="FilePath Button" type="Button" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line"]
+[node name="FilePath Text" type="LineEdit" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+editable = false
+
+[node name="FilePath Button" type="Button" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line"]
 modulate = Color(0.738462, 0.767023, 0.793184, 1)
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 6.0
-offset_top = -12.0
-offset_right = 32.0
-offset_bottom = 14.0
-grow_horizontal = 0
-grow_vertical = 2
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
 theme = ExtResource("44_am6u2")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
-theme_override_constants/outline_size = 1
+theme_override_colors/icon_normal_color = Color(0.435294, 0.505882, 0.552941, 1)
+theme_override_colors/icon_pressed_color = Color(0.566587, 0.637991, 0.68584, 1)
 theme_override_constants/h_separation = 0
-theme_override_constants/icon_max_width = 17
+theme_override_constants/icon_max_width = 32
+theme_override_constants/align_to_largest_stylebox = 0
 theme_override_fonts/font = SubResource("SystemFont_fluvt")
 theme_override_font_sizes/font_size = 16
 action_mode = 0
 text = "
 "
+icon = ExtResource("54_f01av")
+icon_alignment = 1
 
-[node name="Scattering" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer"]
+[node name="Scattering" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Scattering"]
+[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Scattering"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -4108,12 +4107,12 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.509804, 1, 1, 0.290196)
 
-[node name="Collision & Vision" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer"]
+[node name="Collision & Vision" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Collision & Vision"]
+[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Collision & Vision"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -4122,7 +4121,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 0.552941, 0.290196)
 
-[node name="Import Finalization Options" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container"]
+[node name="Import Finalization Options" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container"]
 custom_minimum_size = Vector2(180, 36)
 layout_mode = 1
 anchors_preset = 3
@@ -4136,26 +4135,13 @@ offset_right = -20.0
 offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
-
-[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Finalization Options"]
-visible = false
-modulate = Color(0.703808, 0.703808, 0.703808, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.637843, 0.637843, 0.637843, 1)
+alignment = 2
 
 [node name="Finish Import Button" type="Button" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Finalization Options"]
 modulate = Color(0.489994, 0.834633, 0.386162, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+clip_contents = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 theme = ExtResource("44_am6u2")
 theme_override_colors/font_color = Color(0.184624, 0.230572, 0.261562, 1)
 theme_override_colors/font_outline_color = Color(0.132143, 0.154782, 0.173734, 1)
@@ -4164,26 +4150,12 @@ theme_override_fonts/font = SubResource("SystemFont_3o153")
 theme_override_font_sizes/font_size = 18
 text = "Import"
 
-[node name="Import Window Border" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Import Window"]
-modulate = Color(0.625597, 0.625597, 0.625597, 1)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("48_em1ao")
-patch_margin_left = 15
-patch_margin_top = 15
-patch_margin_right = 15
-patch_margin_bottom = 15
-
 [node name="Level Load Selector" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("lvl_list", "lvlpath_text", "open_level_handler", "editor_overlay")]
 auto_translate_mode = 1
 transparent_bg = true
 title = "Select a level to load"
 initial_position = 4
 size = Vector2i(740, 650)
-visible = false
 exclusive = true
 borderless = true
 transparent = true
@@ -4355,7 +4327,7 @@ offset_right = -16.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="Select File Path" type="Button" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2"]
@@ -4394,9 +4366,10 @@ structured_text_bidi_override = 2
 
 [node name="Save Level" type="Button" parent="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2"]
 modulate = Color(0.41952, 0.69, 0.3519, 1)
-custom_minimum_size = Vector2(40.205, 0)
+custom_minimum_size = Vector2(84, 0)
 layout_mode = 2
 theme = ExtResource("44_am6u2")
+theme_override_colors/font_color = Color(0.150203, 0.319745, 4.81308e-08, 1)
 theme_override_constants/align_to_largest_stylebox = 0
 text = "Save Level"
 
@@ -4545,10 +4518,6 @@ clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
 
-[node name="Center Map Pylon" type="Sprite2D" parent="."]
-visible = false
-texture = SubResource("GradientTexture2D_8qhor")
-
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]
 [connection signal="child_order_changed" from="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" to="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" method="_on_child_order_changed"]
@@ -4566,9 +4535,8 @@ texture = SubResource("GradientTexture2D_8qhor")
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2/Shape Tool4" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Scatter Boxel Tools3/Shape Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
 [connection signal="files_dropped" from="Editor Overlay Layer/UI Popups/Import Window" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_files_dropped"]
-[connection signal="gui_input" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/ExitButton" to="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/ExitButton" method="_on_gui_input"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_file_path_button_pressed"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/TabContainer/Normal Textures/VBoxContainer/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_normal_path_button_pressed"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_normal_path_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Finalization Options/Finish Import Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_finish_import_button_pressed"]
 [connection signal="close_requested" from="Editor Overlay Layer/UI Popups/Level Load Selector" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_close_requested"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Import External" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_import_external"]

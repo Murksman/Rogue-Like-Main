@@ -2,18 +2,17 @@ extends Control
 class_name UIBoxel
 
 @export var tile_highlighter : Control
-@export var name_label : TextureRect
 @export var name_text : Label
 @export var boxel_image : TextureRect
 @export var grayout : TextureRect
 @export var boxel : Boxel
+@export var boxel_res_path : String
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion: LevelInfo.editor_ref.HoverBoxel(self)
 	if event.is_action_pressed("Primary"):
 		if event is InputEventMouseButton && event.double_click:
 			LevelInfo.editor_ref.EditBoxel(boxel)
-			print("test - ", event)
 		else:
 			LevelInfo.editor_ref.SelectBoxel(self) 
 
@@ -32,7 +31,13 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	set_drag_preview(preview_parent)
 	return self
 
-func AddBoxel(boxel_res : Boxel) -> void:
+func Delete() -> void:
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(boxel_res_path))
+	queue_free()
+
+func AddBoxel(boxel_res : Boxel, file_path : String) -> void:
+	boxel_res_path = file_path
+	
 	boxel = boxel_res
 	boxel_image.texture = boxel.boxel_img
 	name_text.text = boxel.boxel_name

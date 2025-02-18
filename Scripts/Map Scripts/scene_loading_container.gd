@@ -2,7 +2,7 @@ extends Node
 
 var load_file_path : String = ""
 var boxel_load_path : String = "user://Editor Boxels"
-var levels_load_path : String = "user://Editor Levels"
+var levels_load_path : String = "res://Scenes/Editor Maps"
 
 var player_data : SaveData
 var player : Node2D

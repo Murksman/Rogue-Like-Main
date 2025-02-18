@@ -4,11 +4,11 @@ extends Container
 @export var ui_boxel_prefab : PackedScene
 @export var search_box : LineEdit
 
-func AddNewBoxel(boxel_res : Boxel):
+func AddNewBoxel(boxel_res : Boxel, boxel_res_path):
 	var new_boxel : UIBoxel = ui_boxel_prefab.instantiate()
 	add_child(new_boxel)
 	
-	new_boxel.AddBoxel(boxel_res)
+	new_boxel.AddBoxel(boxel_res, boxel_res_path)
 	
 	queue_sort()
 
