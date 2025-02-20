@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PackedPolygonData" load_steps=2 format=3 uid="uid://dydhgu4gfctro"]
+
+[ext_resource type="Script" path="res://Scripts/Resource Scripts/packaged_polygon_data.gd" id="1_3nayf"]
+
+[resource]
+script = ExtResource("1_3nayf")
+polygon_data = Array[PackedVector2Array]([PackedVector2Array(-13, -13, 13, -13, 13, 13, -13, 13), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(16, 13, -13, 13, -13, -13, 16, -13), PackedVector2Array(), PackedVector2Array(-16, -13, 16, -13, 16, 13, -16, 13), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(13, 16, -13, 16, -13, 13, -16, 13, -16, -13, 13, -13), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(), PackedVector2Array(-16, 13, -16, -13, -13, -13, -13, -16, 13, -16, 13, 13)])

@@ -3080,24 +3080,6 @@ theme_override_constants/margin_bottom = 12
 [node name="Top Bar Settings Area" type="Control" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins"]
 layout_mode = 2
 
-[node name="Editor Exit Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
-modulate = Color(1, 0.22, 0.22, 1)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -76.0
-offset_bottom = 32.0
-grow_horizontal = 0
-theme = ExtResource("44_am6u2")
-theme_override_constants/outline_size = 2
-theme_override_constants/h_separation = 0
-theme_override_font_sizes/font_size = 17
-action_mode = 0
-text = "X
-"
-icon_alignment = 1
-
 [node name="Editor Import Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
 modulate = Color(0.536232, 0.761034, 0.838759, 1)
 layout_mode = 1
@@ -3118,9 +3100,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 160.0
+offset_left = 152.0
 offset_top = -14.0
-offset_right = 290.0
+offset_right = 282.0
 offset_bottom = 14.0
 grow_vertical = 2
 theme = ExtResource("44_am6u2")
@@ -3137,9 +3119,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 310.0
+offset_left = 294.0
 offset_top = -14.0
-offset_right = 440.0
+offset_right = 424.0
 offset_bottom = 14.0
 grow_vertical = 2
 theme = ExtResource("44_am6u2")
@@ -3150,6 +3132,25 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_dekd6")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_c7u6f")
 theme_override_styles/normal = SubResource("StyleBoxTexture_dekd6")
 text = "Load Level"
+
+[node name="Editor Exit Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
+modulate = Color(1, 0.22, 0.22, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 6.0
+offset_bottom = 34.0
+grow_horizontal = 0
+theme = ExtResource("44_am6u2")
+theme_override_constants/outline_size = 2
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_font_sizes/font_size = 17
+action_mode = 0
+text = "X
+"
+icon_alignment = 1
 
 [node name="Layer Bar Container" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
 z_index = 10
@@ -4239,7 +4240,7 @@ theme_override_constants/separation = 20
 alignment = 1
 
 [node name="Import External" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2"]
-custom_minimum_size = Vector2(40.205, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
@@ -4252,7 +4253,7 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_hipv6")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_g38rd")
 theme_override_styles/normal = SubResource("StyleBoxTexture_hipv6")
 action_mode = 0
-text = "Import from External"
+text = "Import"
 
 [node name="Level Path" type="Label" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2"]
 custom_minimum_size = Vector2(0, 26)
@@ -4267,14 +4268,14 @@ structured_text_bidi_override = 2
 
 [node name="Load Level" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2"]
 modulate = Color(0.461939, 0.63299, 0.791514, 1)
-custom_minimum_size = Vector2(40.205, 0)
+custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme = ExtResource("44_am6u2")
 text = "Load Level"
 
 [node name="Exit Button" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector"]
 modulate = Color(0.93, 0.28179, 0.1674, 1)
-custom_minimum_size = Vector2(32, 20)
+custom_minimum_size = Vector2(40, 22)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -4284,6 +4285,8 @@ offset_right = -16.0
 offset_bottom = 30.0
 grow_horizontal = 0
 theme = ExtResource("44_am6u2")
+theme_override_constants/align_to_largest_stylebox = 0
+text = "X"
 
 [node name="Level Save Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("editor_overlay", "lvlpath_text", "save_handler")]
 transparent_bg = true
@@ -4520,10 +4523,10 @@ script = ExtResource("43_uy6ih")
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]
 [connection signal="child_order_changed" from="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" to="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" method="_on_child_order_changed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Exit Button" to="Editor Overlay Layer" method="_on_editor_exit_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Import Button" to="Editor Overlay Layer" method="_on_editor_import_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Save Level Button" to="Editor Overlay Layer" method="_on_save_level"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Load Level Button" to="Editor Overlay Layer" method="_on_load_level_button_pressed"]
+[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Exit Button" to="Editor Overlay Layer" method="_on_editor_exit_button_pressed"]
 [connection signal="dragged" from="Editor Overlay Layer/Editor UI/Library Container" to="Editor Overlay Layer/Editor UI/Library Container" method="_on_dragged"]
 [connection signal="text_changed" from="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" to="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" method="_on_text_changed"]
 [connection signal="gui_input" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" to="Editor Overlay Layer" method="LevelPanePressed"]
