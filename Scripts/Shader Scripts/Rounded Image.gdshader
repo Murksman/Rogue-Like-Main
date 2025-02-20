@@ -10,9 +10,9 @@ void fragment() {
 	//vec2 corner_uv = vec2(corner_radius) * 0.016;
 	vec2 corner_uv = corner_radius * TEXTURE_PIXEL_SIZE;
 	vec2 px = abs(UV - vec2(0.5)) - vec2(0.5) + corner_uv;
-	
+
 	bool outline = false;
-	
+
 	if (px.x < 0.0) {
 		if (px.y + outline_width * TEXTURE_PIXEL_SIZE.y > corner_uv.y) {
 			outline = true;
@@ -35,7 +35,7 @@ void fragment() {
 			}
 		}
 	}
-	
+
 	if (outline) {
 		vec4 blended_color = mix(outline_color, outline_selected_color, selected_blend);
 		COLOR.rgb = mix(COLOR.rgb, blended_color.rgb, blended_color.a);

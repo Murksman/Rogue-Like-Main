@@ -42,6 +42,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func EditToggle(force_toggle : bool):
 	editing = force_toggle
+	
+	$"../Global Lighting".visible = !editing
 	if editing: EditorReady()
 	else: EditorExit()
 	
@@ -126,12 +128,33 @@ func RequestSaveLevel():
 	level_save_window.WindowReady(current_level_filepath)
 
 func SaveLevel(filepath : String):
-	SceneLoadingContainer.AssignNodeOwners(level_tilemap_root.level_save_root)
+	current_level_filepath = filepath
+	
+	level_tilemap_root.AssignTileOwner()
 	
 	var new_level_save = PackedScene.new()
 	new_level_save.pack(level_tilemap_root.level_save_root)
 	
 	var save_err = ResourceSaver.save(new_level_save, filepath)
+
+func LoadLevel(file_path : String) -> void:
+	current_level_filepath = file_path
+	
+	var new_level = ResourceLoader.load(file_path, "PackedScene").instantiate()
+	
+	if new_level:
+		level_tilemap_root.level_save_root.queue_free()
+		
+		level_tilemap_root.add_child(new_level)
+		level_tilemap_root.level_save_root = new_level
+		new_level.position = Vector2(16,16)
+		for i in 5:
+			level_tilemap_root.layer_groups[i] = new_level.get_child(i)
+			$"Editor UI/Top Editor Bar/Layer Bar Container".get_child(i).select_layer = new_level.get_child(i)
+		
+		level_tilemap_root.ResizeMapBounds()
+		print(level_tilemap_root.layer_groups[2].get_child_count())
+	else: printerr("LoadLevel Error")
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()
@@ -158,20 +181,3 @@ func _on_save_level() -> void:
 
 func _on_load_level_button_pressed() -> void:
 	RequestLoadLevel()
-
-func LoadLevel(file_path : String) -> void:
-	var new_level = ResourceLoader.load(file_path, "PackedScene").instantiate()
-	
-	if new_level:
-		level_tilemap_root.level_save_root.queue_free()
-		
-		level_tilemap_root.add_child(new_level)
-		level_tilemap_root.level_save_root = new_level
-		new_level.position = Vector2(16,16)
-		for i in 5:
-			level_tilemap_root.layer_groups[i] = new_level.get_child(i)
-			$"Editor UI/Top Editor Bar/Layer Bar Container".get_child(i).select_layer = new_level.get_child(i)
-		
-		level_tilemap_root.ResizeMapBounds()
-		print(level_tilemap_root.layer_groups[2].get_child_count())
-	else: printerr("LoadLevel Error")

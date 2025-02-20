@@ -229,3 +229,10 @@ func DestroyTile(tile) -> void:
 	tile.queue_free()
 	add_free_node(tile)
 	query_free_nodes()
+
+
+func AssignTileOwner() -> void:
+	for layer in layer_groups:
+		layer.owner = level_save_root
+		for child in layer.get_children():
+			child.owner = level_save_root

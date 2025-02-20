@@ -150,8 +150,7 @@ func ExitLevel() -> void:
 	else:
 		printerr("Error Exiting the level. [" + load_file_path + "] - error code: " + str(save_status))
 
-
-func AssignNodeOwners(parent_node) -> void:
+func AssignNodeOwners(parent_node : Node) -> void:
 	for node in NodeTreeFetch(parent_node):
 		node.owner = parent_node
 
