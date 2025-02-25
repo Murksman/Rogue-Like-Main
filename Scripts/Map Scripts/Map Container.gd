@@ -8,6 +8,7 @@ var free_nodes : Array[Node]
 @export var level_save_root : Node2D
 
 @export_group("Tile Resources")
+@export var default_wall_occluders : PackedPolygonArray
 @export var tile_object : PackedScene
 @export var wall_object : PackedScene
 
@@ -171,8 +172,10 @@ func CalcAdjacency(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup
 	return adjacency_index
 
 func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, tile_info : TileInfo = null):
+	var adjacent_index : int
 	if !tile_info: 
-		var adjacent_index = CalcAdjacency(boxel, tile_pos, layer_group)
+		adjacent_index = CalcAdjacency(boxel, tile_pos, layer_group)
+		print(adjacent_index)
 		tile_info = boxel.GetConnectedTile(adjacent_index)
 	
 	var tile_array_index = tile_pos % chunk_size
@@ -182,8 +185,14 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, t
 	if prev_tile: prev_tile.queue_free()
 	
 	var new_tile : Node
-	if boxel is ConnectorBoxel: new_tile = wall_object.instantiate()
-	else: new_tile = tile_object.instantiate()
+	if boxel is ConnectorBoxel: 
+		new_tile = wall_object.instantiate()
+		set_editable_instance(new_tile, true)
+		new_tile.get_child(2).occluder = default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacent_index]]
+		print(default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacent_index]].polygon)
+	else: 
+		new_tile = tile_object.instantiate()
+		set_editable_instance(new_tile, true)
 	
 	new_tile.texture = tile_info.image
 	layer_group.add_child(new_tile)

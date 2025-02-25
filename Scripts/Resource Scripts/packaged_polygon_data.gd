@@ -1,4 +1,4 @@
 extends Resource
-class_name PackedPolygonData
+class_name PackedPolygonArray
 
-@export var polygon_data : Array[PackedVector2Array]
+@export var polygon_data : Array[OccluderPolygon2D]

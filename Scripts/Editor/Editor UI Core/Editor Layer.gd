@@ -140,9 +140,11 @@ func SaveLevel(filepath : String):
 func LoadLevel(file_path : String) -> void:
 	current_level_filepath = file_path
 	
-	var new_level = ResourceLoader.load(file_path, "PackedScene").instantiate()
+	var level_load = ResourceLoader.load(file_path, "PackedScene")
 	
-	if new_level:
+	
+	if level_load is PackedScene:
+		var new_level = level_load.instantiate()
 		level_tilemap_root.level_save_root.queue_free()
 		
 		level_tilemap_root.add_child(new_level)
@@ -154,7 +156,7 @@ func LoadLevel(file_path : String) -> void:
 		
 		level_tilemap_root.ResizeMapBounds()
 		print(level_tilemap_root.layer_groups[2].get_child_count())
-	else: printerr("LoadLevel Error")
+	else: printerr("LoadLevel Error - ", level_load)
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()
