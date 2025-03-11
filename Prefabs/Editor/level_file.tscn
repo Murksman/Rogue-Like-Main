@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://dgno7wu1esney"]
 
-[ext_resource type="Script" path="res://Scripts/Editor/Editor Buttons/Level File Path.gd" id="1_ob213"]
+[ext_resource type="Script" uid="uid://c3raddfptccpl" path="res://Scripts/Editor/Editor Buttons/Level File Path.gd" id="1_ob213"]
 [ext_resource type="Theme" uid="uid://cl5mg55mmovrh" path="res://Resources/Theme and Styles/Default Editor Theme.tres" id="1_wr1uw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nknpi"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bb6hfelc0trab"]
 
 [ext_resource type="Texture2D" uid="uid://2icoedat8vmb" path="res://Sprites/World Objects/Ball Test.png" id="1_0epl6"]
-[ext_resource type="Script" path="res://Scripts/Object Scripts/Projectile.gd" id="2_enb81"]
+[ext_resource type="Script" uid="uid://b3h72jvhnfx4i" path="res://Scripts/Object Scripts/Projectile.gd" id="2_enb81"]
 
 [sub_resource type="Shader" id="Shader_2wd3n"]
 code = "shader_type canvas_item;

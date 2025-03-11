@@ -4,3 +4,4 @@
 modulate = Color(1, 1, 1, 0.443137)
 z_index = -100
 z_as_relative = false
+metadata/boxel_id = 0

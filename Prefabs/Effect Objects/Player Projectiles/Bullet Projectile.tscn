@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://ogc7uqallucc"]
 
 [ext_resource type="Texture2D" uid="uid://cxrs476rfgmg8" path="res://Sprites/Particles & Effects/Bullet Projectile.png" id="1_mfefc"]
-[ext_resource type="Script" path="res://Scripts/Object Scripts/Projectile.gd" id="2_hk8wc"]
+[ext_resource type="Script" uid="uid://b3h72jvhnfx4i" path="res://Scripts/Object Scripts/Projectile.gd" id="2_hk8wc"]
 
 [sub_resource type="Gradient" id="Gradient_eiwaq"]
 interpolation_mode = 2

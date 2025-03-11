@@ -21,6 +21,7 @@ var drag_action_position : Vector2i
 var editing : bool = false
 
 var current_level_filepath : String
+var current_level_name : String
 
 func _ready() -> void:
 	visible = !editing
@@ -90,9 +91,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 		anchor_mouse_point = get_viewport().get_mouse_position()
 
 func LoadBoxels() -> void:
-	var boxel_paths = DirAccess.get_files_at("user://Editor Boxels")
+	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.boxel_load_path)
 	for path in boxel_paths:
-		var load_path = "user://Editor Boxels/" + path
+		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
 		var load_result = ResourceLoader.load(load_path, "Boxel")
 		if load_result is Boxel: library_grid.AddNewBoxel(load_result, load_path)
 		else: 
@@ -129,13 +130,17 @@ func RequestSaveLevel():
 
 func SaveLevel(filepath : String):
 	current_level_filepath = filepath
+	current_level_name = filepath.get_file().split(".")[0]
 	
-	level_tilemap_root.AssignTileOwner()
-	
-	var new_level_save = PackedScene.new()
-	new_level_save.pack(level_tilemap_root.level_save_root)
-	
-	var save_err = ResourceSaver.save(new_level_save, filepath)
+	if filepath.get_extension() == "dat":
+		WriteLevelFile(filepath)
+	else:
+		level_tilemap_root.AssignTileOwner()
+		
+		var new_level_save = PackedScene.new()
+		new_level_save.pack(level_tilemap_root.level_save_root)
+		
+		var save_err = ResourceSaver.save(new_level_save, filepath)
 
 func LoadLevel(file_path : String) -> void:
 	current_level_filepath = file_path
@@ -155,8 +160,42 @@ func LoadLevel(file_path : String) -> void:
 			$"Editor UI/Top Editor Bar/Layer Bar Container".get_child(i).select_layer = new_level.get_child(i)
 		
 		level_tilemap_root.ResizeMapBounds()
-		print(level_tilemap_root.layer_groups[2].get_child_count())
+		level_tilemap_root.ResetMap()
+		print(level_tilemap_root.layer_groups[2].get_child_count(), " - LoadLevel()")
 	else: printerr("LoadLevel Error - ", level_load)
+
+func WriteLevelFile(filepath, filename : String = current_level_name):
+	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
+	file.resize(0)
+	
+	var filename_buff := filename.to_utf8_buffer()
+	file.store_8(filename_buff.size())
+	file.store_buffer(filename_buff)
+	file.store_string("\n")
+	
+	## Metadata TBD
+	file.store_string("\n")
+	
+	file.store_32(level_tilemap_root.map_size.x)
+	file.store_32(level_tilemap_root.map_size.y)
+	file.store_string("\n")
+	
+	file.store_32(level_tilemap_root.boxel_id_list.size())
+	
+	var boxel_id_buffer : PackedByteArray = level_tilemap_root.boxel_id_list.to_byte_array()
+	file.store_64(boxel_id_buffer.size())
+	file.store_buffer(boxel_id_buffer)
+	file.store_string("\n")
+	
+	var map_array_length : int = level_tilemap_root.chunk_dimensions.x * level_tilemap_root.chunk_dimensions.y * level_tilemap_root.chunk_size
+	
+	for layer in level_tilemap_root.group_layers:
+		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(layer, map_array_length)
+		
+		file.store_64(map_array_length)
+		file.store_string("\n")
+	file.store_string("\n")
+	
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()

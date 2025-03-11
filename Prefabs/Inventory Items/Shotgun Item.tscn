@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://uod05mpwayll"]
 
 [ext_resource type="Texture2D" uid="uid://djjcnxr7061h7" path="res://Sprites/Player Objects/ShotGun 800.png" id="1_k6yqp"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/WeaponItem.gd" id="2_sn7rd"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/WeaponClass.gd" id="3_i45ar"]
+[ext_resource type="Script" uid="uid://ckkehcvrc8bby" path="res://Scripts/Class Scripts/WeaponItem.gd" id="2_sn7rd"]
+[ext_resource type="Script" uid="uid://xk6h6443o3wl" path="res://Scripts/Class Scripts/WeaponClass.gd" id="3_i45ar"]
 [ext_resource type="PackedScene" uid="uid://ogc7uqallucc" path="res://Prefabs/Effect Objects/Player Projectiles/Bullet Projectile.tscn" id="4_k4qjj"]
 
 [node name="Shotgun 800 Item" type="TextureRect" node_paths=PackedStringArray("weapon_object")]

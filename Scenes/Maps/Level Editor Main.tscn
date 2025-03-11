@@ -1,64 +1,65 @@
-[gd_scene load_steps=168 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
 
-[ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
-[ext_resource type="Script" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
-[ext_resource type="Script" path="res://Scripts/Enemy Scripts/Box Spawner.gd" id="3_67nb2"]
-[ext_resource type="Script" path="res://Scripts/Enemy Scripts/Circle Spawner.gd" id="4_0qi6d"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/HUD Controls/HUD Elements.gd" id="5_4w1tw"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/Inventory Controls/Inventory Elements.gd" id="6_mw0o8"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/UI background input master.gd" id="7_gsku4"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Object Inventory.gd" id="8_oa867"]
+[ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
+[ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
+[ext_resource type="Script" uid="uid://cq6mc2wmp7f31" path="res://Scripts/Enemy Scripts/Box Spawner.gd" id="3_67nb2"]
+[ext_resource type="Script" uid="uid://bh0kig8ii6b0s" path="res://Scripts/Enemy Scripts/Circle Spawner.gd" id="4_0qi6d"]
+[ext_resource type="Script" uid="uid://78najy7rqvog" path="res://Scripts/UI Scripts/HUD Controls/HUD Elements.gd" id="5_4w1tw"]
+[ext_resource type="Script" uid="uid://udo7btpxmvlh" path="res://Scripts/UI Scripts/Inventory Controls/Inventory Elements.gd" id="6_mw0o8"]
+[ext_resource type="Script" uid="uid://cl107yji6yfib" path="res://Scripts/UI Scripts/UI background input master.gd" id="7_gsku4"]
+[ext_resource type="Script" uid="uid://bd8xssgeqmtv" path="res://Scripts/Class Scripts/Object Inventory.gd" id="8_oa867"]
 [ext_resource type="PackedScene" uid="uid://bcnjtbtpifxxc" path="res://Prefabs/UI Objects/inventory_slot.tscn" id="9_8b83u"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Weapon Loadout.gd" id="10_xonw4"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Inventory.gd" id="11_xlbb8"]
+[ext_resource type="Script" uid="uid://d3brfji3leiri" path="res://Scripts/Class Scripts/Weapon Loadout.gd" id="10_xonw4"]
+[ext_resource type="Script" uid="uid://bgdspvtt81tr8" path="res://Scripts/Class Scripts/Inventory.gd" id="11_xlbb8"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="12_0ifuc"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Inventory Item.gd" id="13_5quyf"]
-[ext_resource type="Script" path="res://Scripts/Player Scripts/Player.gd" id="14_ugq71"]
-[ext_resource type="Script" path="res://Scripts/Player Scripts/PlayerCam.gd" id="15_5suuv"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Entity_Visibility.gdshader" id="16_aa6he"]
+[ext_resource type="Script" uid="uid://bo3nabcim6ng2" path="res://Scripts/Class Scripts/Inventory Item.gd" id="13_5quyf"]
+[ext_resource type="Script" uid="uid://b1rcdcjswbmw8" path="res://Scripts/Player Scripts/Player.gd" id="14_ugq71"]
+[ext_resource type="Script" uid="uid://b0lfj58nrmylc" path="res://Scripts/Player Scripts/PlayerCam.gd" id="15_5suuv"]
+[ext_resource type="Shader" uid="uid://oq03bkv6wc7b" path="res://Scripts/Shader Scripts/Entity_Visibility.gdshader" id="16_aa6he"]
 [ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="17_6cjm7"]
-[ext_resource type="Script" path="res://Scripts/Player Scripts/Weapon Holder.gd" id="18_5wtcq"]
-[ext_resource type="Script" path="res://Scripts/Player Scripts/Misc/WeaponSlot.gd" id="19_leonk"]
+[ext_resource type="Script" uid="uid://dgv7cc7kthxx2" path="res://Scripts/Player Scripts/Weapon Holder.gd" id="18_5wtcq"]
+[ext_resource type="Script" uid="uid://bpwk1ghs86k6m" path="res://Scripts/Player Scripts/Misc/WeaponSlot.gd" id="19_leonk"]
 [ext_resource type="Texture2D" uid="uid://bvjp8ndpumkc7" path="res://Sprites/World Objects/2d_lights_and_shadows_neutral_point_light.webp" id="20_8qlr8"]
-[ext_resource type="Script" path="res://Scripts/Player Scripts/Misc/Shader Controller.gd" id="21_xw4pp"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Vision Cone.gdshader" id="22_om1lu"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="23_d60xw"]
-[ext_resource type="Script" path="res://Scripts/Map Scripts/Map Container.gd" id="24_e5ldj"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Chest.gd" id="32_2682j"]
+[ext_resource type="Script" uid="uid://c4hj0vjuldsoh" path="res://Scripts/Player Scripts/Misc/Shader Controller.gd" id="21_xw4pp"]
+[ext_resource type="Shader" uid="uid://buvlom23gqi1h" path="res://Scripts/Shader Scripts/Vision Cone.gdshader" id="22_om1lu"]
+[ext_resource type="Shader" uid="uid://b2trawbhxsph0" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="23_d60xw"]
+[ext_resource type="Script" uid="uid://cs3tw6uh30cga" path="res://Scripts/Map Scripts/Map Container.gd" id="24_e5ldj"]
+[ext_resource type="Script" uid="uid://bsntp1u26ewnl" path="res://Scripts/Class Scripts/Chest.gd" id="32_2682j"]
 [ext_resource type="Resource" uid="uid://8cuopywwlfq6" path="res://Resources/Loot Tables/Chest Loot Generic Table.tres" id="33_ymr75"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Vis_mask_cone.gdshader" id="35_2wstq"]
+[ext_resource type="Shader" uid="uid://bpju2pddlc286" path="res://Scripts/Shader Scripts/Vis_mask_cone.gdshader" id="35_2wstq"]
 [ext_resource type="FontFile" uid="uid://bnlamhhfpyyse" path="res://Sprites/UI and Menu/Fonts and Text/OpenSans-Light.ttf" id="35_3xe68"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Boxel Tray Frame.gd" id="35_xhdnv"]
+[ext_resource type="Script" uid="uid://rpdw86t5puk1" path="res://Scripts/Editor/Editor UI Core/Boxel Tray Frame.gd" id="35_xhdnv"]
 [ext_resource type="PackedScene" uid="uid://bby1unf3c7sek" path="res://Prefabs/Inventory Items/Ammo Box.tscn" id="36_4baki"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/LibrarySearchBox.gd" id="36_d88y6"]
-[ext_resource type="Script" path="res://Scripts/Resource Scripts/Loot Table.gd" id="37_8hfmu"]
+[ext_resource type="Script" uid="uid://5mo6ixip0n8d" path="res://Scripts/Editor/Editor UI Core/LibrarySearchBox.gd" id="36_d88y6"]
+[ext_resource type="Script" uid="uid://c2m7kdvwq4a76" path="res://Scripts/Resource Scripts/Loot Table.gd" id="37_8hfmu"]
 [ext_resource type="PackedScene" uid="uid://ccxacsgbtd7rm" path="res://Prefabs/Editor/ui_boxel.tscn" id="38_67lmj"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Toolbar.gd" id="41_0ktbi"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Rounded Image.gdshader" id="41_ewpkx"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Editor Layer.gd" id="41_hic17"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Editor Action Bar.gd" id="41_ruhv6"]
+[ext_resource type="Script" uid="uid://dp8bw784fs3x6" path="res://Scripts/Editor/Editor UI Core/Toolbar.gd" id="41_0ktbi"]
+[ext_resource type="Shader" uid="uid://bj81ga7km5meq" path="res://Scripts/Shader Scripts/Rounded Image.gdshader" id="41_ewpkx"]
+[ext_resource type="Script" uid="uid://n0jwf4ulqxsu" path="res://Scripts/Editor/Editor UI Core/Editor Layer.gd" id="41_hic17"]
+[ext_resource type="Script" uid="uid://uspm2r7xvjbg" path="res://Scripts/Editor/Editor UI Core/Editor Action Bar.gd" id="41_ruhv6"]
 [ext_resource type="ButtonGroup" uid="uid://dby4g188uui0u" path="res://Resources/UI/Tool Button Group.tres" id="42_hp0j5"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Tray Grid.gd" id="42_pipfe"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor Buttons/Boxel Tool Button.gd" id="43_erl8j"]
-[ext_resource type="Script" path="res://Scripts/Map Scripts/Layer Group.gd" id="43_uy6ih"]
+[ext_resource type="Script" uid="uid://o5ua13n2tkhh" path="res://Scripts/Editor/Editor UI Core/Tray Grid.gd" id="42_pipfe"]
+[ext_resource type="Script" uid="uid://2hocptaxtp0n" path="res://Scripts/Editor/Editor Buttons/Boxel Tool Button.gd" id="43_erl8j"]
+[ext_resource type="Script" uid="uid://b203b2ssgo74r" path="res://Scripts/Map Scripts/Layer Group.gd" id="43_uy6ih"]
 [ext_resource type="Theme" uid="uid://cl5mg55mmovrh" path="res://Resources/Theme and Styles/Default Editor Theme.tres" id="44_am6u2"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor Buttons/Layer Button.gd" id="44_kbe7g"]
-[ext_resource type="Script" path="res://Scripts/Editor/Popups/Import Window.gd" id="46_0bbil"]
+[ext_resource type="Script" uid="uid://dv5kwqtcyg1y0" path="res://Scripts/Editor/Editor Buttons/Layer Button.gd" id="44_kbe7g"]
+[ext_resource type="Script" uid="uid://ciljl8m0umdvk" path="res://Scripts/Editor/Popups/Import Window.gd" id="46_0bbil"]
 [ext_resource type="Theme" uid="uid://cmowskftvwg3h" path="res://Resources/Theme and Styles/Editor Popup Theme.tres" id="46_0d38j"]
-[ext_resource type="Script" path="res://Scripts/Editor/Editor UI Core/Boxel Details Tab Container.gd" id="46_k8w68"]
+[ext_resource type="Script" uid="uid://bx7lh77ukjh6f" path="res://Scripts/Editor/Editor UI Core/Boxel Details Tab Container.gd" id="46_k8w68"]
 [ext_resource type="ButtonGroup" uid="uid://cfov1k3tfhvkx" path="res://Resources/UI/Boxel Type Group.tres" id="46_u00xq"]
 [ext_resource type="Theme" uid="uid://cf74qdf0p6acc" path="res://Resources/Theme and Styles/Layer Button Theme.tres" id="47_ch65g"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/Map Layer.gdshader" id="47_s3dxo"]
-[ext_resource type="Shader" path="res://Scripts/Shader Scripts/import grid lines.gdshader" id="48_r4tcy"]
+[ext_resource type="Shader" uid="uid://b4ot41lplht6f" path="res://Scripts/Shader Scripts/Map Layer.gdshader" id="47_s3dxo"]
+[ext_resource type="Shader" uid="uid://cxfm8uknttc1t" path="res://Scripts/Shader Scripts/import grid lines.gdshader" id="48_r4tcy"]
 [ext_resource type="ButtonGroup" uid="uid://sow5uuw8lgmf" path="res://Resources/UI/Layer Button Group.tres" id="48_rkwao"]
-[ext_resource type="Script" path="res://Scripts/Editor/Popups/Open File Handler.gd" id="49_fqm1k"]
+[ext_resource type="Script" uid="uid://d003aidk5dqd1" path="res://Scripts/Editor/Popups/Open File Handler.gd" id="49_fqm1k"]
 [ext_resource type="PackedScene" uid="uid://d1l0d4uhkyrj2" path="res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn" id="49_pojje"]
-[ext_resource type="Script" path="res://Scripts/Editor/Popups/Level Load Selector.gd" id="51_bpwc7"]
+[ext_resource type="Script" uid="uid://brkuj2w2mlr7n" path="res://Scripts/Editor/Popups/Level Load Selector.gd" id="51_bpwc7"]
 [ext_resource type="Texture2D" uid="uid://4icilf5wpqm7" path="res://Sprites/UI and Menu/UI Elements/UI Button Template.png" id="53_e6j4b"]
-[ext_resource type="Script" path="res://Scripts/Editor/Popups/Level Save Window.gd" id="53_wb2ik"]
+[ext_resource type="Script" uid="uid://8olmgl6a0el1" path="res://Scripts/Editor/Popups/Level Save Window.gd" id="53_wb2ik"]
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
 [ext_resource type="Resource" uid="uid://dkvpkci6r641t" path="res://Resources/Misc Data/default_wall_occluders.tres" id="55_uqdnf"]
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
+[ext_resource type="Texture2D" uid="uid://btf2tat8mjq7u" path="res://Resources/Tileset Source Images/Better Tiles.png" id="60_l7xb5"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -131,16 +132,16 @@ viewport_path = NodePath("Visibility Light Mask")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i8b67"]
 resource_local_to_scene = true
 shader = ExtResource("22_om1lu")
-shader_parameter/player_offset = null
+shader_parameter/mask_texture = SubResource("ViewportTexture_sei38")
+shader_parameter/lensing_noise_map = SubResource("NoiseTexture2D_wkqfg")
+shader_parameter/fog_noise_map = SubResource("NoiseTexture2D_8rqcq")
+shader_parameter/player_offset = Vector2(0, 0)
 shader_parameter/r_vision_displacement = Vector2(0, 0)
 shader_parameter/g_vision_displacement = Vector2(0, 0)
 shader_parameter/b_vision_displacement = Vector2(0, 0)
 shader_parameter/vision_noise_amplitude = 27.0
 shader_parameter/vision_cone_blurring = 0.3
 shader_parameter/pixelation_step = 1.0
-shader_parameter/mask_texture = SubResource("ViewportTexture_sei38")
-shader_parameter/lensing_noise_map = SubResource("NoiseTexture2D_wkqfg")
-shader_parameter/fog_noise_map = SubResource("NoiseTexture2D_8rqcq")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fvgln"]
 blend_mode = 1
@@ -750,13 +751,13 @@ script = ExtResource("1_po503")
 [node name="Background" type="Sprite2D" parent="."]
 z_index = -250
 z_as_relative = false
-position = Vector2(960, 540)
 texture = SubResource("GradientTexture2D_4xic8")
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true
 
 [node name="Global Lighting" type="CanvasModulate" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
@@ -2751,10 +2752,10 @@ custom_minimum_size = Vector2(40, 28)
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("44_am6u2")
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
-theme_override_colors/icon_normal_color = Color(0.433857, 0.505737, 0.55351, 1)
 theme_override_colors/icon_hover_color = Color(0.520795, 0.593552, 0.642208, 1)
+theme_override_colors/icon_normal_color = Color(0.433857, 0.505737, 0.55351, 1)
+theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/h_separation = 0
 theme_override_constants/icon_max_width = 32
 theme_override_constants/align_to_largest_stylebox = 0
@@ -2976,10 +2977,10 @@ modulate = Color(0.738462, 0.767023, 0.793184, 1)
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme = ExtResource("44_am6u2")
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
-theme_override_colors/icon_normal_color = Color(0.435294, 0.505882, 0.552941, 1)
 theme_override_colors/icon_pressed_color = Color(0.566587, 0.637991, 0.68584, 1)
+theme_override_colors/icon_normal_color = Color(0.435294, 0.505882, 0.552941, 1)
+theme_override_colors/font_outline_color = Color(0.412152, 0.412152, 0.412152, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/h_separation = 0
 theme_override_constants/icon_max_width = 32
 theme_override_constants/align_to_largest_stylebox = 0
@@ -3041,8 +3042,8 @@ clip_contents = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme = ExtResource("44_am6u2")
-theme_override_colors/font_color = Color(0.184624, 0.230572, 0.261562, 1)
 theme_override_colors/font_outline_color = Color(0.132143, 0.154782, 0.173734, 1)
+theme_override_colors/font_color = Color(0.184624, 0.230572, 0.261562, 1)
 theme_override_constants/outline_size = 1
 theme_override_fonts/font = SubResource("SystemFont_3o153")
 theme_override_font_sizes/font_size = 18
@@ -3143,9 +3144,9 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/focus = SubResource("StyleBoxEmpty_4wljv")
 theme_override_styles/hover = SubResource("StyleBoxTexture_hipv6")
@@ -3236,14 +3237,14 @@ custom_minimum_size = Vector2(40.205, 0)
 layout_mode = 2
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/icon_normal_color = Color(0.458111, 0.53084, 0.567238, 1)
-theme_override_colors/icon_focus_color = Color(0.458824, 0.529412, 0.568627, 1)
-theme_override_colors/icon_pressed_color = Color(0.179475, 0.20868, 0.241684, 1)
-theme_override_colors/icon_hover_color = Color(0.458824, 0.529412, 0.568627, 1)
 theme_override_colors/icon_disabled_color = Color(0.180392, 0.207843, 0.243137, 1)
+theme_override_colors/icon_hover_color = Color(0.458824, 0.529412, 0.568627, 1)
+theme_override_colors/icon_pressed_color = Color(0.179475, 0.20868, 0.241684, 1)
+theme_override_colors/icon_focus_color = Color(0.458824, 0.529412, 0.568627, 1)
+theme_override_colors/icon_normal_color = Color(0.458111, 0.53084, 0.567238, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 16
 theme_override_styles/focus = SubResource("StyleBoxEmpty_4wljv")
@@ -3372,9 +3373,8 @@ use_native_dialog = true
 [node name="Save Level Handler" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
 title = "Save a Level"
 force_native = true
-ok_button_text = "Save"
 access = 2
-filters = PackedStringArray("*.scn", "*.tscn")
+filters = PackedStringArray(".dat", "*.scn, *.tscn")
 use_native_dialog = true
 
 [node name="Level Tilemap Root" type="NavigationRegion2D" parent="." node_paths=PackedStringArray("layer_groups", "chunk_background", "level_save_root")]
@@ -3420,7 +3420,13 @@ clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-48, 16)
+texture = ExtResource("60_l7xb5")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Sprite2D"]
+position = Vector2(48, -16)
 occluder = SubResource("OccluderPolygon2D_voy83")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]

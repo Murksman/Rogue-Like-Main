@@ -1,6 +1,6 @@
 extends Node
 
-var wall_default_polygons : Array[OccluderPolygon2D]
+#var wall_default_polygons : Array[OccluderPolygon2D]
 
 var projectile_container : Node2D
 var editor_ref : CanvasLayer

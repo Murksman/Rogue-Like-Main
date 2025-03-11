@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=3 uid="uid://ccxacsgbtd7rm"]
 
-[ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/UIBoxel.gd" id="1_rbgbx"]
+[ext_resource type="Script" uid="uid://hww1gxyjwdax" path="res://Scripts/Editor/Tile Scripts/UIBoxel.gd" id="1_rbgbx"]
 [ext_resource type="Texture2D" uid="uid://d24jejwxwkmwj" path="res://Sprites/Generic Objects/White_Texture.png" id="2_7nfan"]
-[ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/UnitBoxel.gd" id="3_vfwum"]
-[ext_resource type="Script" path="res://Scripts/Editor/Tile Scripts/TileInfo.gd" id="4_t5y7d"]
+[ext_resource type="Script" uid="uid://c67uhhlv20vli" path="res://Scripts/Editor/Tile Scripts/UnitBoxel.gd" id="3_vfwum"]
+[ext_resource type="Script" uid="uid://dnh8oqcsme480" path="res://Scripts/Editor/Tile Scripts/TileInfo.gd" id="4_t5y7d"]
 
 [sub_resource type="Resource" id="Resource_rgtan"]
 script = ExtResource("4_t5y7d")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bby1unf3c7sek"]
 
 [ext_resource type="Texture2D" uid="uid://byv6pum0m5dud" path="res://Sprites/Items & Icons/Ammo Box.png" id="1_5b12p"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Inventory Item.gd" id="1_l7iy3"]
+[ext_resource type="Script" uid="uid://bo3nabcim6ng2" path="res://Scripts/Class Scripts/Inventory Item.gd" id="1_l7iy3"]
 
 [node name="InventoryItem" type="TextureRect"]
 offset_right = 32.0

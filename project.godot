@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Rogue-Like Project"
 run/main_scene="res://Scenes/Maps/Level Editor Main.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://Sprites/UI and Menu/Generic/icon.svg"
 
 [autoload]
@@ -24,7 +24,6 @@ LevelInfo="*res://Scripts/Map Scripts/level_info.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=3
 window/size/initial_position_type=2
 
 [editor]

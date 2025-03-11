@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://1akksb317ea8"]
 
-[ext_resource type="Script" path="res://Scripts/Class Scripts/MeleeClass.gd" id="1_kea20"]
+[ext_resource type="Script" uid="uid://dga1l3s6tksdn" path="res://Scripts/Class Scripts/MeleeClass.gd" id="1_kea20"]
 [ext_resource type="Texture2D" uid="uid://bqajo6451qqyj" path="res://Sprites/Player Objects/Warhammer.png" id="2_hcgon"]
 
 [sub_resource type="Curve" id="Curve_6xs7e"]

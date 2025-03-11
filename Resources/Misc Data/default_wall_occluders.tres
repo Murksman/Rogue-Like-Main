@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PackedPolygonArray" load_steps=18 format=3 uid="uid://dkvpkci6r641t"]
 
-[ext_resource type="Script" path="res://Scripts/Resource Scripts/packaged_polygon_data.gd" id="1_3nayf"]
+[ext_resource type="Script" uid="uid://dqb4f5asatx2r" path="res://Scripts/Resource Scripts/packaged_polygon_data.gd" id="1_3nayf"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_8fnjx"]
 polygon = PackedVector2Array(-13, 13, 13, 13, 13, -13, -13, -13)
@@ -23,7 +23,7 @@ polygon = PackedVector2Array(-16, -13, -13, -13, -13, -16, 13, -16, 13, -13, 16,
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_0g0a3"]
 polygon = PackedVector2Array(-16, -13, 16, -13, 16, 13, -16, 13)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_jpcm1"]
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_23jr1"]
 polygon = PackedVector2Array(-16, -13, 13, -13, 13, 13, -16, 13)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vxqja"]
@@ -52,4 +52,4 @@ polygon = PackedVector2Array(-16, 13, -16, -13, -13, -13, -13, -16, 13, -16, 13,
 
 [resource]
 script = ExtResource("1_3nayf")
-polygon_data = Array[OccluderPolygon2D]([SubResource("OccluderPolygon2D_8fnjx"), SubResource("OccluderPolygon2D_cw1tc"), SubResource("OccluderPolygon2D_7lub5"), SubResource("OccluderPolygon2D_tm2ld"), SubResource("OccluderPolygon2D_kiq5w"), SubResource("OccluderPolygon2D_0hd6o"), SubResource("OccluderPolygon2D_0g0a3"), SubResource("OccluderPolygon2D_jpcm1"), SubResource("OccluderPolygon2D_vxqja"), SubResource("OccluderPolygon2D_tu4va"), SubResource("OccluderPolygon2D_ykw7r"), SubResource("OccluderPolygon2D_jab7g"), SubResource("OccluderPolygon2D_u242p"), SubResource("OccluderPolygon2D_uh7us"), SubResource("OccluderPolygon2D_4e2sx"), SubResource("OccluderPolygon2D_xnm3v")])
+polygon_data = Array[OccluderPolygon2D]([SubResource("OccluderPolygon2D_8fnjx"), SubResource("OccluderPolygon2D_cw1tc"), SubResource("OccluderPolygon2D_7lub5"), SubResource("OccluderPolygon2D_tm2ld"), SubResource("OccluderPolygon2D_kiq5w"), SubResource("OccluderPolygon2D_0hd6o"), SubResource("OccluderPolygon2D_0g0a3"), SubResource("OccluderPolygon2D_23jr1"), SubResource("OccluderPolygon2D_vxqja"), SubResource("OccluderPolygon2D_tu4va"), SubResource("OccluderPolygon2D_ykw7r"), SubResource("OccluderPolygon2D_jab7g"), SubResource("OccluderPolygon2D_u242p"), SubResource("OccluderPolygon2D_uh7us"), SubResource("OccluderPolygon2D_4e2sx"), SubResource("OccluderPolygon2D_xnm3v")])

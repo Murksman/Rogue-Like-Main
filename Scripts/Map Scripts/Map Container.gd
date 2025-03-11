@@ -19,11 +19,18 @@ var chunk_dimensions : Vector2i = Vector2i.ZERO
 
 var chunk_temp : Array[Array] = []
 
+var boxel_id_list : PackedInt32Array
+var boxel_usage_list : PackedInt32Array
+
 func _ready() -> void:
+	ResetMap()
+
+func ResetMap():
 	ResizeMapBounds()
-	layer_init(layer_groups[0])
-	layer_init(layer_groups[1])
-	layer_init(layer_groups[2])
+	
+	for layer in layer_groups:
+		layer_init(layer)
+	
 	UpdateChunkBackground()
 
 func layer_init(layer_group : CanvasGroup) -> void:
@@ -171,26 +178,26 @@ func CalcAdjacency(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup
 	
 	return adjacency_index
 
-func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, tile_info : TileInfo = null):
-	var adjacent_index : int
-	if !tile_info: 
-		adjacent_index = CalcAdjacency(boxel, tile_pos, layer_group)
-		print(adjacent_index)
-		tile_info = boxel.GetConnectedTile(adjacent_index)
-	
+func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, adjacency : int = -1):
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
 	var prev_tile : Node = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
 	if prev_tile: prev_tile.queue_free()
 	
+	var tile_info : TileInfo
+	
 	var new_tile : Node
 	if boxel is ConnectorBoxel: 
+		if adjacency == -1:
+			adjacency = CalcAdjacency(boxel, tile_pos, layer_group)
+		
+		tile_info = boxel.GetConnectedTile(adjacency)
 		new_tile = wall_object.instantiate()
 		set_editable_instance(new_tile, true)
-		new_tile.get_child(2).occluder = default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacent_index]]
-		print(default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacent_index]].polygon)
+		new_tile.get_child(2).occluder = default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacency]]
 	else: 
+		tile_info = boxel.GetTileInfo()
 		new_tile = tile_object.instantiate()
 		set_editable_instance(new_tile, true)
 	
@@ -209,12 +216,11 @@ func AddTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup) -> N
 	var tile_info : TileInfo
 	var new_tile : Node
 	if boxel is UnitBoxel || boxel is ScatterBoxel:
-		tile_info = boxel.GetTileInfo()
-		new_tile = CreateTile(boxel, tile_pos, layer_group, tile_info)
+		new_tile = CreateTile(boxel, tile_pos, layer_group)
 	elif boxel is ConnectorBoxel:
 		var adjacent_index = CalcAdjacency(boxel, tile_pos, layer_group)
 		tile_info = boxel.GetConnectedTile(adjacent_index)
-		new_tile = CreateTile(boxel, tile_pos, layer_group, tile_info)
+		new_tile = CreateTile(boxel, tile_pos, layer_group, adjacent_index)
 		
 		if adjacent_index & 1: CreateTile(boxel, tile_pos - Vector2i(1,0), layer_group)
 		if adjacent_index & 2: CreateTile(boxel, tile_pos - Vector2i(-1,0), layer_group)
@@ -223,6 +229,24 @@ func AddTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup) -> N
 	else: return null
 	
 	return new_tile
+
+func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedByteArray:
+	var packed_array : PackedByteArray = []
+	
+	packed_array.resize(map_array_length)
+	
+	var increment = 0
+	for chunk_col in layer.layer_array:
+		for chunk in chunk_col:
+			for col in chunk:
+				for val in col:
+					if val:
+						packed_array[increment] = boxel_id_list.find(val.get_meta(&"boxel_id", 0))
+					else: 
+						packed_array[increment] = 0
+					increment += 1
+	
+	return packed_array
 
 func UpdateChunkBackground() -> void:
 	var temp_size = chunk_dimensions * chunk_size * 32

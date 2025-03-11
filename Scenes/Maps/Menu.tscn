@@ -1,15 +1,15 @@
 [gd_scene load_steps=62 format=3 uid="uid://dnw6itssad8gs"]
 
-[ext_resource type="Script" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
+[ext_resource type="Script" uid="uid://btfbsn5x4d33x" path="res://Scripts/Map Scripts/Master_Menu_Script.gd" id="1_tce6k"]
 [ext_resource type="FontFile" uid="uid://ck8d77kbemi26" path="res://Sprites/UI and Menu/Fonts and Text/PixelifySans-VariableFont_wght.ttf" id="2_jt3xa"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/Menu.gd" id="3_72npe"]
-[ext_resource type="Script" path="res://Scripts/Class Scripts/MenuChangeButton.gd" id="4_myeau"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/FileSaveContainer.gd" id="5_0qi48"]
+[ext_resource type="Script" uid="uid://dkiclouylr48y" path="res://Scripts/Class Scripts/Menu.gd" id="3_72npe"]
+[ext_resource type="Script" uid="uid://cvl3hg22btg0s" path="res://Scripts/Class Scripts/MenuChangeButton.gd" id="4_myeau"]
+[ext_resource type="Script" uid="uid://sn4eg1tsfrwe" path="res://Scripts/UI Scripts/FileSaveContainer.gd" id="5_0qi48"]
 [ext_resource type="Texture2D" uid="uid://khpsgfqsjnp5" path="res://Resources/UI/Generic Button.tres" id="5_qneyr"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/Input Mapping Select.gd" id="8_ctsu7"]
-[ext_resource type="Script" path="res://Scripts/UI Scripts/Delete Save.gd" id="8_d4xua"]
-[ext_resource type="Script" path="res://Scripts/Audio/TestingAudioPlayback.gd" id="9_gyfqg"]
+[ext_resource type="Script" uid="uid://kadkcygxsglx" path="res://Scripts/UI Scripts/FileLoadButton.gd" id="6_d01m6"]
+[ext_resource type="Script" uid="uid://dhd4lnockdb46" path="res://Scripts/UI Scripts/Input Mapping Select.gd" id="8_ctsu7"]
+[ext_resource type="Script" uid="uid://diqv87qs3nyie" path="res://Scripts/UI Scripts/Delete Save.gd" id="8_d4xua"]
+[ext_resource type="Script" uid="uid://c5s5sde4ddjr0" path="res://Scripts/Audio/TestingAudioPlayback.gd" id="9_gyfqg"]
 
 [sub_resource type="Gradient" id="Gradient_bqn06"]
 offsets = PackedFloat32Array(0, 0.41791, 0.79602, 0.925373, 1)
