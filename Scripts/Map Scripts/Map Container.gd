@@ -19,8 +19,8 @@ var chunk_dimensions : Vector2i = Vector2i.ZERO
 
 var chunk_temp : Array[Array] = []
 
-var boxel_id_list : PackedInt32Array
-var boxel_usage_list : PackedInt32Array
+var boxel_id_list : PackedInt32Array = []
+var boxel_usage_list : PackedInt32Array = []
 
 func _ready() -> void:
 	ResetMap()
@@ -182,6 +182,8 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
 	var prev_tile : Node = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+	
+	
 	
 	if prev_tile: prev_tile.queue_free()
 	

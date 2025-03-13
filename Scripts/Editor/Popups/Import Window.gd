@@ -21,18 +21,19 @@ extends Window
 @export var normal_image : TextureRect
 @export var normalpath_text : LineEdit
 
-var open_file_paths : Array[String] = []
 var imported_src_image : Image
 var imported_src_normal : Image
 var imported_image_tex : ImageTexture
 var imported_normal_tex : ImageTexture
 
-var full_image : CanvasTexture
-
 var queue_import_time : int = 0
+var importing := true
+var editing_boxel : Boxel = null
 
-#var selected_type : int = 0
+var open_file_paths : Array[String] = []
 var selected_layers : Array[int] = []
+
+@onready var rng = RandomNumberGenerator.new()
 
 func _process(delta: float) -> void:
 	if queue_import_time > 0:
@@ -62,6 +63,8 @@ func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
 		type.set_pressed_no_signal(false)
 	
 	if editing:
+		editing_boxel = edit_boxel
+		
 		importing_label.visible = false
 		editing_label.visible = true
 		
@@ -97,6 +100,8 @@ func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
 		normal_image.texture = null
 		imported_normal_tex = null
 		boxelname_text.text = ""
+	
+	importing = editing
 
 func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 	open_file_paths = files
@@ -173,9 +178,21 @@ func FinishImport():
 	
 	var new_boxel : Boxel
 	
+	if importing:
+		if selected_type == 0: 
+			new_boxel = UnitBoxel.new()
+		elif selected_type == 1: 
+			new_boxel = ConnectorBoxel.new()
+		else: 
+			new_boxel = ScatterBoxel.new()
+		
+		while editor_master.boxel_id_list.has(new_boxel.boxel_id):
+			rng.randomize()
+			new_boxel.boxel_id = rng.randi()
+	
 	if selected_type == 0:
 		var new_tile_info = TileInfo.new()
-		new_boxel = UnitBoxel.new()
+		
 		new_tile_info.image = CanvasTexture.new()
 		new_tile_info.image.diffuse_texture = imported_image_tex
 		new_tile_info.image.normal_texture = imported_normal_tex
@@ -204,15 +221,17 @@ func FinishImport():
 	
 	new_boxel.layers = selected_layers
 	new_boxel.boxel_name = StringName(boxelname_text.text)
-	editor_master.library_grid.AddNewBoxel(new_boxel, filepath_text.text)
 	
 	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "tres")
-	
 	var err = ResourceSaver.save(new_boxel, load_path)
 	
-	visible = false
+	if err == 0:
+		if importing: editor_master.ImporterAddBoxel(new_boxel)
+		editor_master.library_grid.AddNewBoxel(new_boxel, filepath_text.text, importing)
+	else:
+		printerr("Failed to save generated Boxel with code: ", err)
 	
-	print(err)
+	visible = false
 
 func GenerateImages() -> Array[ImageTexture]:
 	var image_array : Array[ImageTexture] = []

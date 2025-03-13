@@ -23,6 +23,8 @@ var editing : bool = false
 var current_level_filepath : String
 var current_level_name : String
 
+var boxel_id_list : PackedInt32Array = []
+
 func _ready() -> void:
 	visible = !editing
 	LevelInfo.editor_ref = self
@@ -95,9 +97,14 @@ func LoadBoxels() -> void:
 	for path in boxel_paths:
 		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
 		var load_result = ResourceLoader.load(load_path, "Boxel")
-		if load_result is Boxel: library_grid.AddNewBoxel(load_result, load_path)
+		
+		if load_result is Boxel:
+			boxel_id_list.append(load_result.boxel_id)
+			library_grid.AddNewBoxel(load_result, load_path, true)
 		else: 
 			print("Boxel Loading Error Code: ", load_result)
+	
+	print("Boxel ID List - ", boxel_id_list)
 	
 	library_grid.ReorderBoxels()
 
@@ -187,9 +194,9 @@ func WriteLevelFile(filepath, filename : String = current_level_name):
 	file.store_buffer(boxel_id_buffer)
 	file.store_string("\n")
 	
-	var map_array_length : int = level_tilemap_root.chunk_dimensions.x * level_tilemap_root.chunk_dimensions.y * level_tilemap_root.chunk_size
+	var map_array_length : int = level_tilemap_root.chunk_dimensions.x * level_tilemap_root.chunk_dimensions.y * level_tilemap_root.chunk_size * level_tilemap_root.chunk_size
 	
-	for layer in level_tilemap_root.group_layers:
+	for layer in level_tilemap_root.layer_groups:
 		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(layer, map_array_length)
 		
 		file.store_64(map_array_length)
@@ -207,6 +214,9 @@ func EditBoxel(boxel : Boxel) -> void:
 	import_window.popup()
 	import_window.visible = true
 	import_window.WindowReady()
+
+func ImporterAddBoxel(boxel : Boxel) -> void:
+	boxel_id_list.append(boxel.boxel_id)
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)
