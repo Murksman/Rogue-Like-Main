@@ -181,11 +181,28 @@ func CalcAdjacency(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup
 func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, adjacency : int = -1):
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
-	var prev_tile : Node = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+	var prev_tile : Node2D = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
+	var boxel_match_index = boxel_id_list.find(boxel.boxel_id)
+	if boxel_match_index == -1:
+		boxel_id_list.append(boxel.boxel_id)
+		boxel_usage_list.append(1)
+	else:
+		boxel_usage_list[boxel_match_index] += 1
 	
-	
-	if prev_tile: prev_tile.queue_free()
+	if prev_tile:
+		var prev_match_index = boxel_id_list.find(prev_tile.boxel.boxel_id)
+		
+		if prev_match_index == -1:
+			printerr("Error: Prev Tile at Position: ", prev_tile.position, " - Boxel ID did not match any in the list.")
+		else:
+			if boxel_usage_list[prev_match_index] <= 1:
+				boxel_id_list.remove_at(prev_match_index)
+				boxel_usage_list.remove_at(prev_match_index)
+			else:
+				boxel_usage_list[prev_match_index] -= 1
+		
+		prev_tile.queue_free()
 	
 	var tile_info : TileInfo
 	
@@ -241,9 +258,9 @@ func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedBy
 	for chunk_col in layer.layer_array:
 		for chunk in chunk_col:
 			for col in chunk:
-				for val in col:
-					if val:
-						packed_array[increment] = boxel_id_list.find(val.get_meta(&"boxel_id", 0))
+				for tile in col:
+					if tile:
+						packed_array[increment] = boxel_id_list.find(tile.boxel_id)
 					else: 
 						packed_array[increment] = 0
 					increment += 1

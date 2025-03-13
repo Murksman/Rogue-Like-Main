@@ -1,7 +1,9 @@
-[gd_scene format=3 uid="uid://d1l0d4uhkyrj2"]
+[gd_scene load_steps=2 format=3 uid="uid://d1l0d4uhkyrj2"]
+
+[ext_resource type="Script" uid="uid://drs5yegwqp67q" path="res://Scripts/Object Scripts/Non Collidable.gd" id="1_1wgbx"]
 
 [node name="Non-Collidable Tile" type="Sprite2D"]
 modulate = Color(1, 1, 1, 0.443137)
 z_index = -100
 z_as_relative = false
-metadata/boxel_id = 0
+script = ExtResource("1_1wgbx")

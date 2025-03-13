@@ -14,7 +14,6 @@ z_index = 100
 z_as_relative = false
 region_filter_clip_enabled = true
 script = ExtResource("1_acy8c")
-metadata/boxel_id = 0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(-16, -16)

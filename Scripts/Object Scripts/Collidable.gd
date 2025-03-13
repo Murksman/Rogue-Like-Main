@@ -4,6 +4,8 @@ extends Sprite2D
 @export var breakable : bool = false
 @export var occluder_child : LightOccluder2D
 
+var boxel_id : int
+
 func TakeDamage(damage):
 	if breakable:
 		if Health - damage <= 0:

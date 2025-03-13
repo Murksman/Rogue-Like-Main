@@ -23,6 +23,7 @@ var editing : bool = false
 var current_level_filepath : String
 var current_level_name : String
 
+var boxel_ref_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
 
 func _ready() -> void:
@@ -41,6 +42,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("Delete") && selected_boxel:
 		selected_boxel.Delete()
+		
+		var boxel_index = boxel_id_list.find(selected_boxel.boxel.boxel_id)
+		boxel_id_list.remove_at(boxel_index)
+		boxel_ref_list.remove_at(boxel_index)
 		selected_boxel = null
 
 func EditToggle(force_toggle : bool):
@@ -100,6 +105,7 @@ func LoadBoxels() -> void:
 		
 		if load_result is Boxel:
 			boxel_id_list.append(load_result.boxel_id)
+			boxel_ref_list.append(path.get_file())
 			library_grid.AddNewBoxel(load_result, load_path, true)
 		else: 
 			print("Boxel Loading Error Code: ", load_result)
@@ -183,8 +189,8 @@ func WriteLevelFile(filepath, filename : String = current_level_name):
 	## Metadata TBD
 	file.store_string("\n")
 	
-	file.store_32(level_tilemap_root.map_size.x)
-	file.store_32(level_tilemap_root.map_size.y)
+	file.store_32(level_tilemap_root.chunk_dimensions.x)
+	file.store_32(level_tilemap_root.chunk_dimensions.y)
 	file.store_string("\n")
 	
 	file.store_32(level_tilemap_root.boxel_id_list.size())
@@ -195,11 +201,12 @@ func WriteLevelFile(filepath, filename : String = current_level_name):
 	file.store_string("\n")
 	
 	var map_array_length : int = level_tilemap_root.chunk_dimensions.x * level_tilemap_root.chunk_dimensions.y * level_tilemap_root.chunk_size * level_tilemap_root.chunk_size
+	file.store_64(map_array_length)
+	file.store_string("\n")
 	
 	for layer in level_tilemap_root.layer_groups:
 		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(layer, map_array_length)
 		
-		file.store_64(map_array_length)
 		file.store_string("\n")
 	file.store_string("\n")
 	
@@ -217,6 +224,7 @@ func EditBoxel(boxel : Boxel) -> void:
 
 func ImporterAddBoxel(boxel : Boxel) -> void:
 	boxel_id_list.append(boxel.boxel_id)
+	boxel_ref_list.append(boxel.resource_path.get_file())
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)

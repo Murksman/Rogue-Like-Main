@@ -186,7 +186,7 @@ func FinishImport():
 		else: 
 			new_boxel = ScatterBoxel.new()
 		
-		while editor_master.boxel_id_list.has(new_boxel.boxel_id):
+		while editor_master.boxel_id_list.has(new_boxel.boxel_id) || new_boxel.boxel_id == 0:
 			rng.randomize()
 			new_boxel.boxel_id = rng.randi()
 	
@@ -222,7 +222,7 @@ func FinishImport():
 	new_boxel.layers = selected_layers
 	new_boxel.boxel_name = StringName(boxelname_text.text)
 	
-	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "tres")
+	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "res")
 	var err = ResourceSaver.save(new_boxel, load_path)
 	
 	if err == 0:
