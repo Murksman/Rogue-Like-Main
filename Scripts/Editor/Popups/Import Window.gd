@@ -57,6 +57,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		editor_master.EditToggle(false)
 
 func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
+	print("SetImporterMode - ", editing)
+	
 	for layer in boxel_layer_selection:
 		layer.set_pressed_no_signal(false)
 	for type in boxel_type_selection:
@@ -101,7 +103,7 @@ func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
 		imported_normal_tex = null
 		boxelname_text.text = ""
 	
-	importing = editing
+	importing = !editing
 
 func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 	open_file_paths = files
@@ -111,7 +113,6 @@ func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 		var filepath = files[0]
 		if filepath.get_extension() == "tres" || filepath.get_extension() == "res":
 			var image_resource = ResourceLoader.load(filepath, "Image")
-			print(image_resource)
 			if image_resource is ImageTexture || image_resource is Image:
 				imported_normal_tex = image_resource
 				pre_load = true
@@ -129,7 +130,6 @@ func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 		var filepath = files[0]
 		if filepath.get_extension() == "tres" || filepath.get_extension() == "res":
 			var image_resource = ResourceLoader.load(filepath, "Image")
-			print(image_resource)
 			if image_resource is ImageTexture:
 				imported_image_tex = image_resource
 				pre_load = true
@@ -190,6 +190,8 @@ func FinishImport():
 			rng.randomize()
 			new_boxel.boxel_id = rng.randi()
 	
+	print("Finish Import - Test boxel id post randomizer: ", new_boxel.boxel_id)
+	
 	if selected_type == 0:
 		var new_tile_info = TileInfo.new()
 		
@@ -199,11 +201,13 @@ func FinishImport():
 		new_boxel.tile_info = new_tile_info
 		new_boxel.boxel_img = new_tile_info.image
 	elif selected_type == 1 || selected_type == 2:
+		print("Finish Import - Test boxel ID pre Boxel info: ", new_boxel.boxel_id)
 		var new_tile_info_array : Array[TileInfo] = []
 		var boxel_image_list = GenerateImages()
 		var boxel_normal_list = GenerateNormalImages()
 		new_tile_info_array.resize(boxel_image_list.size())
 		
+		print("Finish Import - Test boxel ID pre Boxel image array: ", new_boxel.boxel_id)
 		for i in boxel_image_list.size(): 
 			var new_tile_info = TileInfo.new()
 			new_tile_info.image = CanvasTexture.new()
@@ -211,13 +215,11 @@ func FinishImport():
 			new_tile_info.image.normal_texture = boxel_normal_list[i]
 			new_tile_info_array[i] = new_tile_info
 		
-		if selected_type == 1: new_boxel = ConnectorBoxel.new()
-		else: new_boxel = ScatterBoxel.new()
-		
 		new_boxel.boxel_img = CanvasTexture.new()
 		new_boxel.boxel_img.diffuse_texture = new_tile_info_array[0].image.diffuse_texture
 		new_boxel.boxel_img.normal_texture = new_tile_info_array[0].image.normal_texture
 		new_boxel.tile_array = new_tile_info_array
+		print("Finish Import - Test boxel ID post Boxel Info: ", new_boxel.boxel_id)
 	
 	new_boxel.layers = selected_layers
 	new_boxel.boxel_name = StringName(boxelname_text.text)

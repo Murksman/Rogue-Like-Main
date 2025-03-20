@@ -191,7 +191,7 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 		boxel_usage_list[boxel_match_index] += 1
 	
 	if prev_tile:
-		var prev_match_index = boxel_id_list.find(prev_tile.boxel.boxel_id)
+		var prev_match_index = boxel_id_list.find(prev_tile.boxel_id)
 		
 		if prev_match_index == -1:
 			printerr("Error: Prev Tile at Position: ", prev_tile.position, " - Boxel ID did not match any in the list.")

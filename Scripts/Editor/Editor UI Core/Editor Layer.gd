@@ -99,18 +99,17 @@ func LevelPanePressed(event : InputEvent) -> void:
 
 func LoadBoxels() -> void:
 	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.boxel_load_path)
+	
 	for path in boxel_paths:
 		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
-		var load_result = ResourceLoader.load(load_path, "Boxel")
+		var load_result = ResourceLoader.load(load_path)
 		
 		if load_result is Boxel:
 			boxel_id_list.append(load_result.boxel_id)
-			boxel_ref_list.append(path.get_file())
+			boxel_ref_list.append(load_path.get_file())
 			library_grid.AddNewBoxel(load_result, load_path, true)
 		else: 
 			print("Boxel Loading Error Code: ", load_result)
-	
-	print("Boxel ID List - ", boxel_id_list)
 	
 	library_grid.ReorderBoxels()
 
@@ -175,7 +174,8 @@ func LoadLevel(file_path : String) -> void:
 		level_tilemap_root.ResizeMapBounds()
 		level_tilemap_root.ResetMap()
 		print(level_tilemap_root.layer_groups[2].get_child_count(), " - LoadLevel()")
-	else: printerr("LoadLevel Error - ", level_load)
+	else: 
+		printerr("LoadLevel Error - ", level_load)
 
 func WriteLevelFile(filepath, filename : String = current_level_name):
 	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
