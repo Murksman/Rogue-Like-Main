@@ -177,7 +177,7 @@ func LoadLevel(file_path : String) -> void:
 	else: 
 		printerr("LoadLevel Error - ", level_load)
 
-func WriteLevelFile(filepath, filename : String = current_level_name):
+func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
 	file.resize(0)
 	
