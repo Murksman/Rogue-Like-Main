@@ -23,7 +23,7 @@ var editing : bool = false
 var current_level_filepath : String
 var current_level_name : String
 
-var boxel_ref_list : PackedStringArray = []
+var boxel_name_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
 
 func _ready() -> void:
@@ -45,7 +45,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		var boxel_index = boxel_id_list.find(selected_boxel.boxel.boxel_id)
 		boxel_id_list.remove_at(boxel_index)
-		boxel_ref_list.remove_at(boxel_index)
+		boxel_name_list.remove_at(boxel_index)
 		selected_boxel = null
 
 func EditToggle(force_toggle : bool):
@@ -99,17 +99,16 @@ func LevelPanePressed(event : InputEvent) -> void:
 
 func LoadBoxels() -> void:
 	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.boxel_load_path)
+	var map_boxel_list : Array[Boxel] = level_tilemap_root.boxel_list
 	
-	for path in boxel_paths:
-		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
-		var load_result = ResourceLoader.load(load_path)
-		
-		if load_result is Boxel:
-			boxel_id_list.append(load_result.boxel_id)
-			boxel_ref_list.append(load_path.get_file())
-			library_grid.AddNewBoxel(load_result, load_path, true)
-		else: 
-			print("Boxel Loading Error Code: ", load_result)
+	boxel_id_list.resize(map_boxel_list.size())
+	boxel_name_list.resize(map_boxel_list.size())
+	
+	for i in map_boxel_list.size():
+		var boxel = map_boxel_list[i]
+		boxel_id_list[i] = boxel.boxel_id
+		boxel_name_list[i] = boxel.boxel_name + ".res"
+		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.boxel_load_path + "/" + boxel_name_list[i], true)
 	
 	library_grid.ReorderBoxels()
 
@@ -154,13 +153,14 @@ func SaveLevel(filepath : String):
 		
 		var save_err = ResourceSaver.save(new_level_save, filepath)
 
-func LoadLevel(file_path : String) -> void:
-	current_level_filepath = file_path
+func LoadLevel(filepath : String) -> void:
+	current_level_filepath = filepath
+	current_level_name = filepath.get_file().split(".")[0]
 	
-	var level_load = ResourceLoader.load(file_path, "PackedScene")
-	
-	
-	if level_load is PackedScene:
+	if filepath.get_extension() == "dat":
+		ReadLevelFile(filepath)
+	else:
+		var level_load = ResourceLoader.load(filepath, "PackedScene")
 		var new_level = level_load.instantiate()
 		level_tilemap_root.level_save_root.queue_free()
 		
@@ -174,8 +174,36 @@ func LoadLevel(file_path : String) -> void:
 		level_tilemap_root.ResizeMapBounds()
 		level_tilemap_root.ResetMap()
 		print(level_tilemap_root.layer_groups[2].get_child_count(), " - LoadLevel()")
-	else: 
-		printerr("LoadLevel Error - ", level_load)
+
+func ReadLevelFile(filepath : String):
+	var file = FileAccess.open(filepath, FileAccess.READ)
+	var lvl_namesize = file.get_8()
+	var lvl_name = file.get_buffer(lvl_namesize)
+	file.seek(file.get_position() + 2)
+	
+	var chunks_size : Vector2i = Vector2i(0,0)
+	chunks_size.x = file.get_32()
+	chunks_size.y = file.get_32()
+	level_tilemap_root.WipeMapTiles(chunks_size)
+	level_tilemap_root.chunk_origin = Vector2i(0,0)
+	file.seek(file.get_position() + 1)
+	
+	var id_list_size = file.get_32()
+	level_tilemap_root.boxel_id_list.resize(id_list_size >> 2)
+	var id_list_buffer : PackedByteArray = file.get_buffer(id_list_size)
+	
+	for i in id_list_size >> 2:
+		level_tilemap_root.boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
+	
+	file.seek(file.get_position() + 1)
+	
+	var map_array_length = file.get_64()
+	for layer in level_tilemap_root.layer_groups:
+		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
+		file.seek(file.get_position() + 1)
+		
+		var read_result = level_tilemap_root.ReadPackedTileArray(layer, map_array_length)
+		if read_result != "": printerr(read_result)
 
 func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
@@ -196,7 +224,8 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	file.store_32(level_tilemap_root.boxel_id_list.size())
 	
 	var boxel_id_buffer : PackedByteArray = level_tilemap_root.boxel_id_list.to_byte_array()
-	file.store_64(boxel_id_buffer.size())
+	
+	file.store_32(boxel_id_buffer.size())
 	file.store_buffer(boxel_id_buffer)
 	file.store_string("\n")
 	
@@ -207,6 +236,7 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	for layer in level_tilemap_root.layer_groups:
 		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(layer, map_array_length)
 		
+		file.store_buffer(floor_tile_buff)
 		file.store_string("\n")
 	file.store_string("\n")
 	
@@ -224,7 +254,7 @@ func EditBoxel(boxel : Boxel) -> void:
 
 func ImporterAddBoxel(boxel : Boxel) -> void:
 	boxel_id_list.append(boxel.boxel_id)
-	boxel_ref_list.append(boxel.resource_path.get_file())
+	boxel_name_list.append(boxel.resource_path.get_file())
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)

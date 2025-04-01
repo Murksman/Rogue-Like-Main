@@ -21,8 +21,22 @@ var chunk_temp : Array[Array] = []
 
 var boxel_id_list : PackedInt32Array = []
 var boxel_usage_list : PackedInt32Array = []
+var loaded_boxel_list : Array[Boxel]
 
 func _ready() -> void:
+	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.boxel_load_path)
+	
+	for path in boxel_paths:
+		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
+		var load_result = ResourceLoader.load(load_path)
+		
+		if load_result is Boxel:
+			loaded_boxel_list.append(load_result.boxel_id)
+		else:
+			print("Boxel Loading Error Code: ", load_result)
+	
+	loaded_boxel_list.sort_custom(func(b1, b2): return b1.boxel_id > b2.boxel_id)
+	
 	ResetMap()
 
 func ResetMap():
@@ -187,6 +201,7 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 	if boxel_match_index == -1:
 		boxel_id_list.append(boxel.boxel_id)
 		boxel_usage_list.append(1)
+		print("New Boxel Added to ID List: - ", boxel.boxel_id)
 	else:
 		boxel_usage_list[boxel_match_index] += 1
 	
@@ -194,7 +209,7 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 		var prev_match_index = boxel_id_list.find(prev_tile.boxel_id)
 		
 		if prev_match_index == -1:
-			printerr("Error: Prev Tile at Position: ", prev_tile.position, " - Boxel ID did not match any in the list.")
+			printerr("Error: Prev Tile at Position: ", boxel.boxel_id, " - ",prev_tile.position, " - Boxel ID did not match any in the list.")
 		else:
 			if boxel_usage_list[prev_match_index] <= 1:
 				boxel_id_list.remove_at(prev_match_index)
@@ -220,6 +235,7 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 		new_tile = tile_object.instantiate()
 		set_editable_instance(new_tile, true)
 	
+	new_tile.boxel_id = boxel.boxel_id
 	new_tile.texture = tile_info.image
 	layer_group.add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
@@ -267,6 +283,19 @@ func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedBy
 	
 	return packed_array
 
+func ReadPackedTileArray(layer : CanvasGroup, arr : PackedByteArray) -> String:
+	var temp_boxel_load_list : Array[Boxel] = []
+	temp_boxel_load_list.resize(boxel_id_list.size())
+	
+	for i in boxel_id_list:
+		var temp_id = boxel_id_list[i]
+		for boxel in loaded_boxel_list:
+			if boxel.boxel_id == temp_id: 
+				temp_boxel_load_list[i] = boxel
+				break
+	
+	return ""
+
 func UpdateChunkBackground() -> void:
 	var temp_size = chunk_dimensions * chunk_size * 32
 	chunk_background.texture.width = max(temp_size.x, 8)
@@ -282,6 +311,13 @@ func DestroyTile(tile) -> void:
 	add_free_node(tile)
 	query_free_nodes()
 
+func WipeMapTiles(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
+	for layer in layer_groups:
+		for child in layer.get_children():
+			child.queue_free()
+	
+	chunk_dimensions = new_chunk_size
+	ResetMap()
 
 func AssignTileOwner() -> void:
 	for layer in layer_groups:
