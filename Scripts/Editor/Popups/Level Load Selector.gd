@@ -48,8 +48,9 @@ func Unselect():
 		select_path_button = null
 
 func _on_load_level() -> void:
-	editor_overlay.LoadLevel(selected_path)
-	hide()
+	if lvlpath_text.text != "":
+		editor_overlay.LoadLevel(selected_path)
+		hide()
 
 func _on_close_requested() -> void:
 	visible = false

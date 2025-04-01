@@ -1928,6 +1928,7 @@ texture_scale = 1.27
 height = 40.0
 
 [node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar")]
+process_priority = 1
 layer = 20
 visible = false
 script = ExtResource("41_hic17")

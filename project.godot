@@ -24,6 +24,7 @@ LevelInfo="*res://Scripts/Map Scripts/level_info.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/mode=3
 window/size/initial_position_type=2
 
 [editor]
@@ -136,7 +137,7 @@ Delete={
 
 [memory]
 
-limits/message_queue/max_size_mb=8000
+limits/message_queue/max_size_mb=100
 
 [physics]
 

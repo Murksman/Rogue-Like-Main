@@ -188,7 +188,7 @@ func FinishImport():
 		
 		while editor_master.boxel_id_list.has(new_boxel.boxel_id) || new_boxel.boxel_id == 0:
 			rng.randomize()
-			new_boxel.boxel_id = rng.randi()
+			new_boxel.boxel_id = abs(rng.randi())
 	
 	print("Finish Import - Test boxel id post randomizer: ", new_boxel.boxel_id)
 	

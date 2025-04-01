@@ -18,7 +18,6 @@ func _on_exit() -> void:
 
 func _on_save() -> void:
 	if lvlpath_text.text != "":
-		editor_overlay.current_level_filepath = lvlpath_text.text
 		editor_overlay.SaveLevel(lvlpath_text.text)
 		hide()
 

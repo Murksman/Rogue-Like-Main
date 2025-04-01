@@ -25,6 +25,7 @@ var current_level_name : String
 
 var boxel_name_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
+var map_boxel_list : Array[Boxel] = []
 
 func _ready() -> void:
 	visible = !editing
@@ -94,12 +95,13 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	if event.is_pressed(): mouse_position = level_tilemap_root.get_local_mouse_position()
 	
-	if event.is_action("Editor Secondary") && event.is_pressed():
+	if event.is_action_pressed("Editor Secondary"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
 
 func LoadBoxels() -> void:
-	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.boxel_load_path)
-	var map_boxel_list : Array[Boxel] = level_tilemap_root.boxel_list
+	level_tilemap_root.LoadBoxels()
+	
+	map_boxel_list = level_tilemap_root.loaded_boxel_list
 	
 	boxel_id_list.resize(map_boxel_list.size())
 	boxel_name_list.resize(map_boxel_list.size())
@@ -185,25 +187,45 @@ func ReadLevelFile(filepath : String):
 	chunks_size.x = file.get_32()
 	chunks_size.y = file.get_32()
 	level_tilemap_root.WipeMapTiles(chunks_size)
+	
+	var map_size = chunks_size * level_tilemap_root.chunk_size
+	level_tilemap_root.map_size = map_size
 	level_tilemap_root.chunk_origin = Vector2i(0,0)
+	level_tilemap_root.bounds_offset = Vector2i(0,0)
 	file.seek(file.get_position() + 1)
 	
 	var id_list_size = file.get_32()
-	level_tilemap_root.boxel_id_list.resize(id_list_size >> 2)
 	var id_list_buffer : PackedByteArray = file.get_buffer(id_list_size)
+	
+	level_tilemap_root.boxel_id_list.resize(id_list_size >> 2)
+	level_tilemap_root.boxel_usage_list.resize(id_list_size >> 2)
+	level_tilemap_root.boxel_usage_list.fill(0)
 	
 	for i in id_list_size >> 2:
 		level_tilemap_root.boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
 	
 	file.seek(file.get_position() + 1)
 	
+	var temp_boxel_load_list : Array[Boxel] = []
+	temp_boxel_load_list.resize(boxel_id_list.size())
+	
+	for i in boxel_id_list.size():
+		var temp_id = boxel_id_list[i]
+		var dummy_boxel = Boxel.new()
+		dummy_boxel.boxel_id = temp_id
+		var new_index = map_boxel_list.bsearch_custom(dummy_boxel, func(a, b): return a.boxel_id < b.boxel_id)
+		
+		temp_boxel_load_list[i] = map_boxel_list[new_index]
+	
 	var map_array_length = file.get_64()
+	file.seek(file.get_position() + 1)
+	
 	for layer in level_tilemap_root.layer_groups:
 		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
-		file.seek(file.get_position() + 1)
+		var read_result = level_tilemap_root.ReadPackedTileArray(layer, floor_tile_buff, temp_boxel_load_list)
 		
-		var read_result = level_tilemap_root.ReadPackedTileArray(layer, map_array_length)
 		if read_result != "": printerr(read_result)
+		file.seek(file.get_position() + 1)
 
 func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
@@ -220,8 +242,6 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	file.store_32(level_tilemap_root.chunk_dimensions.x)
 	file.store_32(level_tilemap_root.chunk_dimensions.y)
 	file.store_string("\n")
-	
-	file.store_32(level_tilemap_root.boxel_id_list.size())
 	
 	var boxel_id_buffer : PackedByteArray = level_tilemap_root.boxel_id_list.to_byte_array()
 	
@@ -253,6 +273,8 @@ func EditBoxel(boxel : Boxel) -> void:
 	import_window.WindowReady()
 
 func ImporterAddBoxel(boxel : Boxel) -> void:
+	var new_index = map_boxel_list.bsearch_custom(boxel, func(b1,b2): return b1.boxel_id < b2.boxel_id)
+	map_boxel_list.insert(new_index, boxel)
 	boxel_id_list.append(boxel.boxel_id)
 	boxel_name_list.append(boxel.resource_path.get_file())
 
