@@ -7,6 +7,7 @@ extends CanvasLayer
 @export var level_save_window : Window 
 @export var library_grid : GridContainer
 @export var toolbar : Control
+@export var eraser : TextureButton
 
 @onready var player : CharacterBody2D = $"../Player"
 
@@ -97,6 +98,17 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	if event.is_action_pressed("Editor Secondary"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
+
+func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasLayer) -> void:
+	var tool = toolbar.selected_tool
+	
+	if tool == 1:
+		if eraser.pressed:
+			level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
+		else:
+			level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
+	elif tool == 2:
+		pass
 
 func LoadBoxels() -> void:
 	level_tilemap_root.LoadBoxels()

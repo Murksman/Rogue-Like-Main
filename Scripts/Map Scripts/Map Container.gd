@@ -190,7 +190,7 @@ func PixelToTilePosition(pixel_pos : Vector2) -> Vector2i:
 func add_free_node(obj) -> void:
 	free_nodes.append(obj)
 
-func CalcAdjacency(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup) -> int:
+func CalcAdjacency(tile_pos : Vector2i, layer_group : CanvasGroup) -> int:
 	var adjacency_index = 0
 	
 	if GetTile(tile_pos - Vector2i(1,0), layer_group): adjacency_index |= 1
@@ -200,7 +200,12 @@ func CalcAdjacency(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup
 	
 	return adjacency_index
 
-func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, adjacency : int = -1):
+func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = null, adjacency : int = -1) -> Node2D:
+	if !boxel: 
+		var tmp_tile = GetTile(tile_pos, layer_group)
+		if !tmp_tile: return
+		boxel = tmp_tile.boxel
+	
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
 	var prev_tile : Node2D = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
@@ -236,7 +241,7 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 	
 	if boxel is ConnectorBoxel: 
 		if adjacency == -1:
-			adjacency = CalcAdjacency(boxel, tile_pos, layer_group)
+			adjacency = CalcAdjacency(tile_pos, layer_group)
 		
 		tile_info = boxel.GetConnectedTile(adjacency)
 		new_tile = wall_object.instantiate()
@@ -263,16 +268,16 @@ func AddTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup) -> N
 	var tile_info : TileInfo
 	var new_tile : Node
 	if boxel is UnitBoxel || boxel is ScatterBoxel:
-		new_tile = CreateTile(boxel, tile_pos, layer_group)
+		new_tile = CreateTile(tile_pos, layer_group, boxel)
 	elif boxel is ConnectorBoxel:
-		var adjacent_index = CalcAdjacency(boxel, tile_pos, layer_group)
+		var adjacent_index = CalcAdjacency(tile_pos, layer_group)
 		tile_info = boxel.GetConnectedTile(adjacent_index)
-		new_tile = CreateTile(boxel, tile_pos, layer_group, adjacent_index)
+		new_tile = CreateTile(tile_pos, layer_group, boxel, adjacent_index)
 		
-		if adjacent_index & 1: CreateTile(boxel, tile_pos - Vector2i(1,0), layer_group)
-		if adjacent_index & 2: CreateTile(boxel, tile_pos - Vector2i(-1,0), layer_group)
-		if adjacent_index & 4: CreateTile(boxel, tile_pos - Vector2i(0,1), layer_group)
-		if adjacent_index & 8: CreateTile(boxel, tile_pos - Vector2i(0,-1), layer_group)
+		if adjacent_index & 1: CreateTile(tile_pos - Vector2i(1,0), layer_group, boxel)
+		if adjacent_index & 2: CreateTile(tile_pos - Vector2i(-1,0), layer_group, boxel)
+		if adjacent_index & 4: CreateTile(tile_pos - Vector2i(0,1), layer_group, boxel)
+		if adjacent_index & 8: CreateTile(tile_pos - Vector2i(0,-1), layer_group, boxel)
 	else: return null
 	
 	return new_tile
@@ -323,6 +328,20 @@ func UpdateChunkBackground() -> void:
 func ResetLayerVisibility() -> void:
 	for layer in layer_groups:
 		layer.material.set_shader_parameter("is_visible", true)
+
+func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adjacent : bool = true) -> void:
+	var tile = GetTile(tile_pos, layer_group)
+	
+	if !tile: return 
+	
+	DestroyTile(tile)
+	if update_adjacent:
+		var adjacent_index = CalcAdjacency(tile_pos, layer_group)
+		
+		if adjacent_index & 1: CreateTile(tile_pos - Vector2i(1,0), layer_group)
+		if adjacent_index & 2: CreateTile(tile_pos - Vector2i(-1,0), layer_group)
+		if adjacent_index & 4: CreateTile(tile_pos - Vector2i(0,1), layer_group)
+		if adjacent_index & 8: CreateTile(tile_pos - Vector2i(0,-1), layer_group)
 
 func DestroyTile(tile) -> void:
 	tile.queue_free()

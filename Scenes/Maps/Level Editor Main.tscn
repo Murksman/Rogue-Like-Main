@@ -1,4 +1,4 @@
-[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=170 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -497,7 +497,7 @@ shader = ExtResource("41_ewpkx")
 shader_parameter/outline_color = Color(0.501961, 0.513726, 0.494118, 0.6)
 shader_parameter/outline_selected_color = Color(0.878431, 0.878431, 0.878431, 1)
 shader_parameter/outline_width = 3.0
-shader_parameter/corner_radius = 10.8
+shader_parameter/corner_radius = 10.0
 shader_parameter/selected_blend = 0.0
 
 [sub_resource type="Gradient" id="Gradient_nkpgs"]
@@ -511,23 +511,7 @@ shader = ExtResource("41_ewpkx")
 shader_parameter/outline_color = Color(0.501961, 0.513726, 0.494118, 0.6)
 shader_parameter/outline_selected_color = Color(0.878431, 0.878431, 0.878431, 1)
 shader_parameter/outline_width = 3.0
-shader_parameter/corner_radius = 10.8
-shader_parameter/selected_blend = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6a3nm"]
-shader = ExtResource("41_ewpkx")
-shader_parameter/outline_color = Color(0.501961, 0.513726, 0.494118, 0.6)
-shader_parameter/outline_selected_color = Color(0.878431, 0.878431, 0.878431, 1)
-shader_parameter/outline_width = 3.0
-shader_parameter/corner_radius = 10.8
-shader_parameter/selected_blend = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_if8g6"]
-shader = ExtResource("41_ewpkx")
-shader_parameter/outline_color = Color(0.501961, 0.513726, 0.494118, 0.6)
-shader_parameter/outline_selected_color = Color(0.878431, 0.878431, 0.878431, 1)
-shader_parameter/outline_width = 3.0
-shader_parameter/corner_radius = 10.8
+shader_parameter/corner_radius = 10.0
 shader_parameter/selected_blend = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2ln8x"]
@@ -535,8 +519,27 @@ shader = ExtResource("41_ewpkx")
 shader_parameter/outline_color = Color(0.501961, 0.513726, 0.494118, 0.6)
 shader_parameter/outline_selected_color = Color(0.878431, 0.878431, 0.878431, 1)
 shader_parameter/outline_width = 3.0
-shader_parameter/corner_radius = 10.8
+shader_parameter/corner_radius = 10.0
 shader_parameter/selected_blend = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uq885"]
+shader = ExtResource("41_ewpkx")
+shader_parameter/outline_color = Color(0.552941, 0.552941, 0.552941, 1)
+shader_parameter/outline_selected_color = Color(0.91, 0.91, 0.91, 1)
+shader_parameter/outline_width = 5.0
+shader_parameter/corner_radius = 8.0
+shader_parameter/selected_blend = -0.005
+
+[sub_resource type="Gradient" id="Gradient_uq885"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.510345)
+colors = PackedColorArray(0.854484, 0.24332, 0.27154, 1, 0.185351, 0.211722, 0.244071, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a1drd"]
+gradient = SubResource("Gradient_uq885")
+fill = 2
+fill_from = Vector2(0.507177, 0.502392)
+fill_to = Vector2(1, 1)
 
 [sub_resource type="Gradient" id="Gradient_2w2ks"]
 interpolation_mode = 1
@@ -1927,10 +1930,9 @@ texture = SubResource("GradientTexture2D_apqe3")
 texture_scale = 1.27
 height = 40.0
 
-[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar")]
+[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser")]
 process_priority = 1
 layer = 20
-visible = false
 script = ExtResource("41_hic17")
 level_tilemap_root = NodePath("../Level Tilemap Root")
 layer_button_group = ExtResource("48_rkwao")
@@ -1938,7 +1940,8 @@ import_window = NodePath("UI Popups/Import Window")
 level_load_window = NodePath("UI Popups/Level Load Selector")
 level_save_window = NodePath("UI Popups/Level Save Window")
 library_grid = NodePath("Editor UI/Library Container/Library Tray/Library Tray Container/Library Scroller/Library Grid")
-toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Unit Boxel Tools")
+toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar")
+eraser = NodePath("Editor UI/Library Container/Editor Level Pane/Eraser")
 
 [node name="Editor Workspace Shaders" type="Node2D" parent="Editor Overlay Layer"]
 
@@ -2409,7 +2412,7 @@ texture = SubResource("GradientTexture2D_m7t0x")
 [node name="Editor Level Pane" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container"]
 layout_mode = 2
 
-[node name="Boxel Toolbar" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" node_paths=PackedStringArray("editor_main", "connector_boxel_tools", "scatter_boxel_tools", "unit_boxel_tools")]
+[node name="Boxel Toolbar" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" node_paths=PackedStringArray("editor_main")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -2423,28 +2426,12 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("41_0ktbi")
 editor_main = NodePath("../../../..")
-connector_boxel_tools = NodePath("Connector Boxel Tools2")
-scatter_boxel_tools = NodePath("Scatter Boxel Tools3")
-unit_boxel_tools = NodePath("Unit Boxel Tools")
 tool_selection_group = ExtResource("42_hp0j5")
 blend_curve = SubResource("Curve_vxyrk")
 blend_size = 10.825
 blend_speed = 10.0
 
-[node name="Unit Boxel Tools" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
-visible = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -120.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Shape Tool" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Unit Boxel Tools"]
+[node name="Pencil Tool" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
 material = SubResource("ShaderMaterial_nnf16")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -2456,22 +2443,9 @@ texture_disabled = SubResource("GradientTexture2D_yhmi0")
 texture_focused = SubResource("GradientTexture2D_yhmi0")
 stretch_mode = 5
 script = ExtResource("43_erl8j")
-tool_index = 5
+tool_index = 1
 
-[node name="Connector Boxel Tools2" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
-visible = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -120.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Shape Tool" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2"]
+[node name="Shape Tool2" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
 material = SubResource("ShaderMaterial_fjkv2")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -2483,37 +2457,9 @@ texture_disabled = SubResource("GradientTexture2D_yhmi0")
 texture_focused = SubResource("GradientTexture2D_yhmi0")
 stretch_mode = 5
 script = ExtResource("43_erl8j")
-tool_index = 5
+tool_index = 2
 
-[node name="Shape Tool2" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2"]
-material = SubResource("ShaderMaterial_6a3nm")
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-toggle_mode = true
-button_group = ExtResource("42_hp0j5")
-texture_normal = SubResource("GradientTexture2D_yhmi0")
-texture_pressed = SubResource("GradientTexture2D_yhmi0")
-texture_disabled = SubResource("GradientTexture2D_yhmi0")
-texture_focused = SubResource("GradientTexture2D_yhmi0")
-stretch_mode = 5
-script = ExtResource("43_erl8j")
-tool_index = 6
-
-[node name="Shape Tool3" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2"]
-material = SubResource("ShaderMaterial_if8g6")
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-toggle_mode = true
-button_group = ExtResource("42_hp0j5")
-texture_normal = SubResource("GradientTexture2D_yhmi0")
-texture_pressed = SubResource("GradientTexture2D_yhmi0")
-texture_disabled = SubResource("GradientTexture2D_yhmi0")
-texture_focused = SubResource("GradientTexture2D_yhmi0")
-stretch_mode = 5
-script = ExtResource("43_erl8j")
-tool_index = 7
-
-[node name="Shape Tool4" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2"]
+[node name="Hollow Shape Tool4" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
 material = SubResource("ShaderMaterial_2ln8x")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -2525,34 +2471,26 @@ texture_disabled = SubResource("GradientTexture2D_yhmi0")
 texture_focused = SubResource("GradientTexture2D_yhmi0")
 stretch_mode = 5
 script = ExtResource("43_erl8j")
-tool_index = 8
+tool_index = 3
 
-[node name="Scatter Boxel Tools3" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
-visible = false
+[node name="Eraser" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane"]
+material = SubResource("ShaderMaterial_uq885")
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -120.0
-grow_horizontal = 2
+offset_left = 12.0
+offset_top = -80.0
+offset_right = 72.0
+offset_bottom = -20.0
 grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Shape Tool" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Scatter Boxel Tools3"]
-material = SubResource("ShaderMaterial_nnf16")
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
 toggle_mode = true
-button_group = ExtResource("42_hp0j5")
-texture_normal = SubResource("GradientTexture2D_yhmi0")
-texture_pressed = SubResource("GradientTexture2D_yhmi0")
-texture_disabled = SubResource("GradientTexture2D_yhmi0")
-texture_focused = SubResource("GradientTexture2D_yhmi0")
-stretch_mode = 5
-script = ExtResource("43_erl8j")
-tool_index = 5
+action_mode = 0
+texture_normal = SubResource("GradientTexture2D_a1drd")
+texture_pressed = SubResource("GradientTexture2D_a1drd")
+texture_hover = SubResource("GradientTexture2D_a1drd")
+texture_disabled = SubResource("GradientTexture2D_a1drd")
+texture_focused = SubResource("GradientTexture2D_a1drd")
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)
@@ -3440,12 +3378,10 @@ occluder = SubResource("OccluderPolygon2D_voy83")
 [connection signal="dragged" from="Editor Overlay Layer/Editor UI/Library Container" to="Editor Overlay Layer/Editor UI/Library Container" method="_on_dragged"]
 [connection signal="text_changed" from="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" to="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" method="_on_text_changed"]
 [connection signal="gui_input" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" to="Editor Overlay Layer" method="LevelPanePressed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Unit Boxel Tools/Shape Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2/Shape Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2/Shape Tool2" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2/Shape Tool3" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Connector Boxel Tools2/Shape Tool4" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
-[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Scatter Boxel Tools3/Shape Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
+[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Pencil Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
+[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Shape Tool2" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
+[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Hollow Shape Tool4" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
+[connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Eraser" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="SelectEraser"]
 [connection signal="files_dropped" from="Editor Overlay Layer/UI Popups/Import Window" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_files_dropped"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_file_path_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_normal_path_button_pressed"]
