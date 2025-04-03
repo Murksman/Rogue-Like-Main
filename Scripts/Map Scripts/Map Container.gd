@@ -206,14 +206,13 @@ func CreateTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup, a
 	var prev_tile : Node2D = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
 	var boxel_match_index = boxel_id_list.bsearch(boxel.boxel_id)
-	print(boxel_id_list, boxel.boxel_id)
 	if boxel_id_list.size() == 0 || boxel_match_index + 1 > boxel_id_list.size():
 		boxel_id_list.append(boxel.boxel_id)
 		boxel_usage_list.append(1)
+		print("New Boxel Added to ID List: - ", boxel.boxel_id)
 	elif boxel_id_list[boxel_match_index] != boxel.boxel_id:
 		boxel_id_list.insert(boxel_match_index, boxel.boxel_id)
 		boxel_usage_list.insert(boxel_match_index, 1)
-		print(boxel_match_index)
 		print("New Boxel Added to ID List: - ", boxel.boxel_id)
 	else:
 		boxel_usage_list[boxel_match_index] += 1
@@ -283,15 +282,13 @@ func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedBy
 	
 	packed_array.resize(map_array_length)
 	
-	print(layer.name)
-	
 	var n = 0
 	for chunk_col in layer.layer_array:
 		for chunk in chunk_col:
 			for col in chunk:
 				for tile in col:
 					if tile:
-						packed_array[n] = boxel_id_list.find(tile.boxel_id)
+						packed_array[n] = boxel_id_list.find(tile.boxel_id) + 1
 					else: 
 						packed_array[n] = 0
 					n += 1

@@ -175,7 +175,6 @@ func LoadLevel(filepath : String) -> void:
 		
 		level_tilemap_root.ResizeMapBounds()
 		level_tilemap_root.ResetMap()
-		print(level_tilemap_root.layer_groups[2].get_child_count(), " - LoadLevel()")
 
 func ReadLevelFile(filepath : String):
 	var file = FileAccess.open(filepath, FileAccess.READ)
