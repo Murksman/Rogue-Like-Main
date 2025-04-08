@@ -204,7 +204,8 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = 
 	if !boxel: 
 		var tmp_tile = GetTile(tile_pos, layer_group)
 		if !tmp_tile: return
-		boxel = tmp_tile.boxel
+		var boxel_index = loaded_boxel_list.find_custom(func(b): return b.boxel_id == tmp_tile.boxel_id)
+		boxel = loaded_boxel_list[boxel_index]
 	
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
@@ -335,6 +336,11 @@ func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adja
 	if !tile: return 
 	
 	DestroyTile(tile)
+	
+	var tile_array_index = tile_pos % chunk_size
+	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
+	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = null
+	
 	if update_adjacent:
 		var adjacent_index = CalcAdjacency(tile_pos, layer_group)
 		
@@ -342,6 +348,19 @@ func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adja
 		if adjacent_index & 2: CreateTile(tile_pos - Vector2i(-1,0), layer_group)
 		if adjacent_index & 4: CreateTile(tile_pos - Vector2i(0,1), layer_group)
 		if adjacent_index & 8: CreateTile(tile_pos - Vector2i(0,-1), layer_group)
+
+func ShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, boxel : Boxel, hollow : bool = false, update_adjacent : bool = true) -> void:
+	box_dimensions.position.x = maxi(box_dimensions.position.x, bounds_offset.x)
+	box_dimensions.position.y = maxi(box_dimensions.position.y, bounds_offset.y)
+	box_dimensions.size.x = mini(box_dimensions.size.x, map_size.x + bounds_offset.x)
+	box_dimensions.size.y = mini(box_dimensions.size.y, map_size.y + bounds_offset.y)
+	
+	if !hollow && box_dimensions.size.x > 2 && box_dimensions.size.y > 2:
+		for x in box_dimensions.size.x - 2:
+			for y in box_dimensions.size.y - 2:
+				CreateTile(box_dimensions.position + Vector2i(x,y), layer_group, boxel, 15)
+	
+	pass
 
 func DestroyTile(tile) -> void:
 	tile.queue_free()

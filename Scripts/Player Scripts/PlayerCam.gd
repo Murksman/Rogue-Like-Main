@@ -31,8 +31,6 @@ func _process(delta):
 		offset = Vector2.ZERO
 		return
 	
-	
-	
 	var mouse_offset = global_mouse_pos - Vector2(960, 540)
 	offset = (mouse_offset * mousePosCamMultiplier) + Vector2((inventorySpacing if player.ui_open else 0.0), 0.0)
 	
@@ -61,9 +59,9 @@ func _process(delta):
 	
 	$Debug_Visibility_Layer.position = offset
 	
-	
 	vis_mask_cam.global_position = global_position
 	vis_mask_cam.offset = offset
+	
 	$Masked_Entity_Layer.global_position = global_position + offset
 	entity_rendering_cam.global_position = global_position
 	entity_rendering_cam.offset = offset

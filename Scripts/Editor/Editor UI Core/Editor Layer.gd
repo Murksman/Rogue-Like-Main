@@ -12,12 +12,13 @@ extends CanvasLayer
 @onready var player : CharacterBody2D = $"../Player"
 
 var mouse_position : Vector2 = Vector2.ZERO
-var anchor_mouse_point : Vector2
+var anchor_mouse_point : Vector2 = Vector2.ZERO
+var anchor_drag_point : Vector2 = Vector2.ZERO
 
 var selected_boxel : UIBoxel
 var hover_boxel : UIBoxel
 
-var drag_action_tile : Node
+var mouse_pressed : bool
 var drag_action_position : Vector2i
 var editing : bool = false
 
@@ -49,6 +50,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		boxel_id_list.remove_at(boxel_index)
 		boxel_name_list.remove_at(boxel_index)
 		selected_boxel = null
+	
+	if event.is_action_pressed("Eraser Mode"): eraser.set_pressed_no_signal(!eraser.pressed) 
 
 func EditToggle(force_toggle : bool):
 	editing = force_toggle
@@ -72,43 +75,56 @@ func EditorReady():
 	pass
 
 func LevelPanePressed(event : InputEvent) -> void:
-	if event is InputEventMouseMotion || event.is_action("Editor Primary"):
-		var selected_layer : int
-		if layer_button_group.get_pressed_button(): selected_layer = layer_button_group.get_pressed_button().layer_int
-		
-		if Input.is_action_pressed("Editor Secondary"):
-			player.position += (anchor_mouse_point - get_viewport().get_mouse_position()) / 2
-			anchor_mouse_point = get_viewport().get_mouse_position()
-			
-		elif (Input.is_action_pressed("Editor Primary") || Input.is_action_just_pressed("Editor Primary")) && layer_button_group.get_pressed_button() && selected_boxel && selected_boxel.boxel.layers.has(selected_layer):
-			var global_mouse_pos = level_tilemap_root.get_local_mouse_position()
-			var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
-			var tool_index = null
-			
-			var tile_position = level_tilemap_root.PixelToTilePosition(global_mouse_pos)
-			
-			var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-			if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
-			
-			if drag_action_position != tile_position || !drag_action_tile:
-				drag_action_tile = level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
-				drag_action_position = tile_position
-	
-	if event.is_pressed(): mouse_position = level_tilemap_root.get_local_mouse_position()
+	mouse_position = level_tilemap_root.get_local_mouse_position()
 	
 	if event.is_action_pressed("Editor Secondary"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
+	
+	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Secondary"):
+		var tmp_anchor_point = get_viewport().get_mouse_position()
+		player.position += (anchor_mouse_point - tmp_anchor_point) / 2
+		anchor_mouse_point = tmp_anchor_point
+	
+	if !event.is_action("Editor Primary") && !(event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary")): return
+	if !layer_button_group.get_pressed_button(): return
+	
+	var selected_layer = layer_button_group.get_pressed_button().layer_int
+	
+	if (selected_boxel && selected_boxel.boxel.layers.has(selected_layer)) || eraser.button_pressed:
+		var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
+		if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary"): return
+		
+		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
+		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		
+		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
+		
+		if eraser.button_pressed:
+			MapEraserEvent(tile_position, layer_canvas)
+		else:
+			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas)
+		
+		
+		drag_action_position = tile_position
 
-func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasLayer) -> void:
+func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasGroup) -> void:
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
-		if eraser.pressed:
-			level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
-		else:
-			level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
+		level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 	elif tool == 2:
 		pass
+
+func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup) -> void:
+	var tool = toolbar.selected_tool
+	
+	if tool == 1:
+		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
+	elif tool == 2:
+		pass
+	else:
+		pass
+	
 
 func LoadBoxels() -> void:
 	level_tilemap_root.LoadBoxels()
