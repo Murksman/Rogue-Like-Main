@@ -80,6 +80,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 	if event.is_action_pressed("Editor Secondary"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
 	
+	if event.is_action_pressed("Editor Primary"):
+		anchor_drag_point = get_viewport().get_mouse_position()
+	
 	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Secondary"):
 		var tmp_anchor_point = get_viewport().get_mouse_position()
 		player.position += (anchor_mouse_point - tmp_anchor_point) / 2
@@ -100,30 +103,35 @@ func LevelPanePressed(event : InputEvent) -> void:
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
 		if eraser.button_pressed:
-			MapEraserEvent(tile_position, layer_canvas)
+			MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 		else:
-			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas)
-		
+			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 		
 		drag_action_position = tile_position
 
-func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasGroup) -> void:
+func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
 		level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 	elif tool == 2:
-		pass
+		if released:
+			level_tilemap_root.ShapeTool(tile_position, layer_canvas, selected_boxel.boxel)
+	elif tool == 3:
+		if released:
+			pass
 
-func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup) -> void:
+func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
 		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
 	elif tool == 2:
-		pass
-	else:
-		pass
+		if released:
+			level_tilemap_root.EraserShapeTool(tile_position, layer_canvas)
+	elif tool == 3:
+		if released:
+			pass
 	
 
 func LoadBoxels() -> void:

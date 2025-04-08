@@ -1,4 +1,4 @@
-[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=167 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -59,7 +59,6 @@
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
 [ext_resource type="Resource" uid="uid://dkvpkci6r641t" path="res://Resources/Misc Data/default_wall_occluders.tres" id="55_uqdnf"]
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
-[ext_resource type="Texture2D" uid="uid://btf2tat8mjq7u" path="res://Resources/Tileset Source Images/Better Tiles.png" id="60_l7xb5"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -739,9 +738,6 @@ shader_parameter/is_visible = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jvv8s"]
 shader = ExtResource("47_s3dxo")
 shader_parameter/is_visible = true
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_voy83"]
-polygon = PackedVector2Array(-16, -13, 13, -13, 13, 13, -16, 13)
 
 [node name="World" type="Node2D"]
 texture_filter = 1
@@ -3362,15 +3358,6 @@ fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(-48, 16)
-texture = ExtResource("60_l7xb5")
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="Sprite2D"]
-position = Vector2(48, -16)
-occluder = SubResource("OccluderPolygon2D_voy83")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]

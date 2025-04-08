@@ -358,8 +358,17 @@ func ShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, boxel : Boxel
 	if !hollow && box_dimensions.size.x > 2 && box_dimensions.size.y > 2:
 		for x in box_dimensions.size.x - 2:
 			for y in box_dimensions.size.y - 2:
-				CreateTile(box_dimensions.position + Vector2i(x,y), layer_group, boxel, 15)
+				CreateTile(box_dimensions.position + Vector2i(x+1,y+1), layer_group, boxel, 15)
 	
+	for x in box_dimensions.size.x:
+		CreateTile(box_dimensions.position + Vector2i(x,0), layer_group, boxel)
+		CreateTile(box_dimensions.position + Vector2i(x,box_dimensions.size.y), layer_group, boxel)
+	
+	for y in box_dimensions.size.y - 2:
+		CreateTile(box_dimensions.position + Vector2i(0,y+1), layer_group, boxel, 15)
+		CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x,y+1), layer_group, boxel, 15)
+
+func EraserShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, hollow : bool = false, update_adjacent : bool = true):
 	pass
 
 func DestroyTile(tile) -> void:
