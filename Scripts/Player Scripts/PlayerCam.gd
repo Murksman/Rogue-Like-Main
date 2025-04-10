@@ -25,7 +25,7 @@ func _physics_process(delta):
 
 func _process(delta):
 	global_mouse_pos = get_viewport().get_mouse_position()
-	global_position = lerp(global_position, player.global_position, cam_smooth * delta)
+	global_position = lerp(global_position, player.global_position, max(cam_smooth * delta, 0.5))
 	
 	if player.editor_open: 
 		offset = Vector2.ZERO

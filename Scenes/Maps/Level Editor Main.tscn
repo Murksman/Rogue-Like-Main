@@ -1,4 +1,4 @@
-[gd_scene load_steps=167 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -535,6 +535,18 @@ gradient = SubResource("Gradient_uq885")
 fill = 2
 fill_from = Vector2(0.507177, 0.502392)
 fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_t1s4r"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.675159)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uq885"]
+gradient = SubResource("Gradient_t1s4r")
+width = 32
+height = 32
+fill = 2
+fill_from = Vector2(0.502262, 0.502262)
 
 [sub_resource type="Gradient" id="Gradient_2w2ks"]
 interpolation_mode = 1
@@ -1687,7 +1699,7 @@ position = Vector2(100, 100)
 zoom = Vector2(2, 2)
 script = ExtResource("15_5suuv")
 mousePosCamMultiplier = 0.2
-cam_smooth = 120.0
+cam_smooth = 60.0
 ui_effect_smooth = 10.0
 cone_shader = NodePath("../../Shader Layer/Shader Container/Vision Cone Effects/Vision Cone Color Control")
 vis_mask_cone_shader = NodePath("../../Visibility Light Mask/Light Mask Shader")
@@ -1922,7 +1934,7 @@ texture = SubResource("GradientTexture2D_apqe3")
 texture_scale = 1.27
 height = 40.0
 
-[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser")]
+[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline")]
 process_priority = 1
 layer = 20
 script = ExtResource("41_hic17")
@@ -1934,6 +1946,7 @@ level_save_window = NodePath("UI Popups/Level Save Window")
 library_grid = NodePath("Editor UI/Library Container/Library Tray/Library Tray Container/Library Scroller/Library Grid")
 toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar")
 eraser = NodePath("Editor UI/Library Container/Editor Level Pane/Eraser")
+tile_selection_outline = NodePath("Editor UI/Library Container/Editor Level Pane/Tile Selection Outline")
 
 [node name="Editor Workspace Shaders" type="Node2D" parent="Editor Overlay Layer"]
 
@@ -2401,7 +2414,8 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = SubResource("GradientTexture2D_m7t0x")
 
-[node name="Editor Level Pane" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container"]
+[node name="Editor Level Pane" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Library Container"]
+clip_children = 1
 layout_mode = 2
 
 [node name="Boxel Toolbar" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" node_paths=PackedStringArray("editor_main", "eraser", "pencil_tool", "shape_tool", "hollow_shape_tool", "blend_buttons")]
@@ -2491,6 +2505,18 @@ texture_focused = SubResource("GradientTexture2D_a1drd")
 stretch_mode = 5
 script = ExtResource("43_erl8j")
 tool_index = -1
+
+[node name="Tile Selection Outline" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = SubResource("GradientTexture2D_uq885")
+draw_center = false
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)

@@ -201,6 +201,9 @@ func CalcAdjacency(tile_pos : Vector2i, layer_group : CanvasGroup) -> int:
 	return adjacency_index
 
 func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = null, adjacency : int = -1) -> Node2D:
+	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
+		return null
+	
 	if !boxel: 
 		var tmp_tile = GetTile(tile_pos, layer_group)
 		if !tmp_tile: return
@@ -361,17 +364,35 @@ func ShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, boxel : Boxel
 				CreateTile(box_dimensions.position + Vector2i(x+1,y+1), layer_group, boxel, 15)
 	
 	for x in box_dimensions.size.x:
-		CreateTile(box_dimensions.position + Vector2i(x,0), layer_group, boxel)
-		CreateTile(box_dimensions.position + Vector2i(x,box_dimensions.size.y), layer_group, boxel)
+		CreateTile(box_dimensions.position + Vector2i(x,0), layer_group, boxel, 0)
+		CreateTile(box_dimensions.position + Vector2i(x,box_dimensions.size.y-1), layer_group, boxel, 0)
 	
 	for y in box_dimensions.size.y - 2:
-		CreateTile(box_dimensions.position + Vector2i(0,y+1), layer_group, boxel, 15)
-		CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x,y+1), layer_group, boxel, 15)
+		CreateTile(box_dimensions.position + Vector2i(0,y+1), layer_group, boxel, 0)
+		CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x-1,y+1), layer_group, boxel, 0)
+	
+	for x in box_dimensions.size.x + 2:
+		for y in box_dimensions.size.y + 2:
+			CreateTile(box_dimensions.position + Vector2i(x-1,y-1), layer_group)
 
 func EraserShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, hollow : bool = false, update_adjacent : bool = true):
-	pass
+	box_dimensions.position.x = maxi(box_dimensions.position.x, bounds_offset.x)
+	box_dimensions.position.y = maxi(box_dimensions.position.y, bounds_offset.y)
+	box_dimensions.size.x = mini(box_dimensions.size.x, map_size.x + bounds_offset.x)
+	box_dimensions.size.y = mini(box_dimensions.size.y, map_size.y + bounds_offset.y)
+	
+	for x in box_dimensions.size.x:
+		for y in box_dimensions.size.y:
+			EraseAtPosition(box_dimensions.position + Vector2i(x,y), layer_group, false)
+		
+		CreateTile(box_dimensions.position + Vector2i(x, -1), layer_group)
+		CreateTile(box_dimensions.position + Vector2i(x, box_dimensions.size.y), layer_group)
+	
+	for y in box_dimensions.size.y:
+		CreateTile(box_dimensions.position + Vector2i(-1, y), layer_group)
+		CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x, y), layer_group)
 
-func DestroyTile(tile) -> void:
+func DestroyTile(tile : Node2D) -> void:
 	tile.queue_free()
 	add_free_node(tile)
 	query_free_nodes()
