@@ -2,6 +2,8 @@ extends Boxel
 class_name ConnectorBoxel
 
 @export var tile_array : Array[TileInfo]
+@export var breakable : bool = false
+@export var tile_health : int = 0
 
 func GetConnectedTile(tile_index : int):
 	var boxel_index = LevelInfo.connector_boxel_matrix[tile_index]

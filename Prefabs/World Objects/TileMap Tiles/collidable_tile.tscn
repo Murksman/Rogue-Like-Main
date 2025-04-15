@@ -21,6 +21,7 @@ collision_layer = 9
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(0, 0, 0, 32, 32, 32, 32, 0)
+one_way_collision_margin = 0.0
 
 [node name="Vision Occluder" type="LightOccluder2D" parent="."]
 occluder = SubResource("OccluderPolygon2D_mfx3n")

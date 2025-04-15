@@ -2507,6 +2507,7 @@ script = ExtResource("43_erl8j")
 tool_index = -1
 
 [node name="Tile Selection Outline" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane"]
+visible = false
 layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0

@@ -76,8 +76,8 @@ func EditorReady():
 	pass
 
 func LevelPanePressed(event : InputEvent) -> void:
-	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && selected_boxel && toolbar.selected_tool > 0
 	mouse_position = level_tilemap_root.get_local_mouse_position()
+	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && selected_boxel && toolbar.selected_tool > 0
 	
 	if event.is_action_pressed("Editor Secondary"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
@@ -107,8 +107,6 @@ func LevelPanePressed(event : InputEvent) -> void:
 			MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 		else:
 			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
-	
-	tile_selection_outline.visible = false
 
 func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
 	var tool = toolbar.selected_tool
@@ -129,19 +127,23 @@ func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : Canvas
 	tile_selection_outline.size = shape_size * 64
 	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 	
-	print(tile_selection_outline.size, tile_selection_outline.global_position)
-	
 	if tool == 2:
 		if !released: return
 		
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
 		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		check_chunks_err = level_tilemap_root.CheckSetMapSize(anchor_tile_point)
+		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		
 		level_tilemap_root.ShapeTool(shape_rect, layer_canvas, selected_boxel.boxel)
 	elif tool == 3:
 		if !released: return
 		
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
 		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		check_chunks_err = level_tilemap_root.CheckSetMapSize(anchor_tile_point)
+		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		
 		level_tilemap_root.ShapeTool(shape_rect, layer_canvas, selected_boxel.boxel, true)
 
 func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
