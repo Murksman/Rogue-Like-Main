@@ -573,7 +573,7 @@ expand_margin_right = 4.0
 expand_margin_bottom = 4.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_kqhul"]
-font_size = 18
+font_size = 20
 outline_size = 1
 outline_color = Color(0.273873, 0.273873, 0.273873, 1)
 shadow_size = 2
@@ -2534,7 +2534,6 @@ handle_input_locally = false
 title = "Import New Boxels"
 initial_position = 1
 size = Vector2i(1258, 773)
-visible = false
 exclusive = true
 unresizable = true
 borderless = true
@@ -2596,32 +2595,30 @@ grow_horizontal = 2
 color = Color(0.354504, 0.391591, 0.45587, 1)
 
 [node name="Importing Boxel Label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Window Topbar"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 24.0
-offset_top = -11.5
-offset_right = 64.0
-offset_bottom = 11.5
-grow_vertical = 2
-text = "IMPORTING NEW BOXEL
-"
-label_settings = SubResource("LabelSettings_kqhul")
-
-[node name="Editing Boxel Label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Window Topbar"]
 visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 24.0
-offset_top = -11.5
-offset_right = 64.0
-offset_bottom = 11.5
+offset_left = 12.0
+offset_top = -15.0
+offset_right = 245.0
+offset_bottom = 15.0
 grow_vertical = 2
-text = "EDITING BOXEL
-"
+text = "IMPORTING NEW BOXEL"
+label_settings = SubResource("LabelSettings_kqhul")
+
+[node name="Editing Boxel Label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Window Topbar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -15.0
+offset_right = 146.0
+offset_bottom = 15.0
+grow_vertical = 2
+text = "EDITING BOXEL"
 label_settings = SubResource("LabelSettings_kqhul")
 
 [node name="ExitButton" type="Panel" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container"]
