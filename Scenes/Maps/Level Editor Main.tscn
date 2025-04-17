@@ -2418,7 +2418,7 @@ texture = SubResource("GradientTexture2D_m7t0x")
 clip_children = 1
 layout_mode = 2
 
-[node name="Boxel Toolbar" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" node_paths=PackedStringArray("editor_main", "eraser", "pencil_tool", "shape_tool", "hollow_shape_tool", "blend_buttons")]
+[node name="Boxel Toolbar" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" node_paths=PackedStringArray("editor_main", "eraser", "pencil_tool", "shape_tool", "hollow_shape_tool")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -2439,7 +2439,6 @@ shape_tool = NodePath("Shape Tool")
 hollow_shape_tool = NodePath("Hollow Shape Tool4")
 tool_selection_group = ExtResource("42_hp0j5")
 blend_speed = 6.7
-blend_buttons = [NodePath("Pencil Tool"), NodePath("Shape Tool"), NodePath("Hollow Shape Tool4"), NodePath("../Eraser")]
 
 [node name="Pencil Tool" type="TextureButton" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"]
 material = SubResource("ShaderMaterial_nnf16")

@@ -4,7 +4,7 @@ extends Container
 @export var ui_boxel_prefab : PackedScene
 @export var search_box : LineEdit
 
-func AddNewBoxel(boxel_res : Boxel, boxel_res_path, importing):
+func AddNewBoxel(boxel_res : LvlObject, boxel_res_path, importing):
 	if importing:
 		var new_boxel : UIBoxel = ui_boxel_prefab.instantiate()
 		add_child(new_boxel)
@@ -32,7 +32,7 @@ func ReorderBoxels(search_text : String = search_box.text, layer_button : Button
 			child.visible = true
 	elif layer_button:
 		for child in ui_boxels:
-			child.visible = child.boxel.boxel_name.contains(search_text) && child.boxel.ContainsLayer(layer_int)
+			child.visible = child.boxel.name.contains(search_text) && child.boxel.ContainsLayer(layer_int)
 	else:
 		for child in ui_boxels:
-			child.visible = child.boxel.boxel_name.contains(search_text)
+			child.visible = child.boxel.name.contains(search_text)

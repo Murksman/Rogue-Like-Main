@@ -1,6 +1,6 @@
 extends Node
 
-@export var boxel_temp_list : Array[Boxel]
+@export var boxel_temp_list : Array[LvlObject]
 
 var file : FileAccess
 var cursor : int = 0
@@ -18,7 +18,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Use Action"):
 		TestReadFile()
 
-func CalcBoxelIDS(boxel_list : Array[Boxel] = boxel_temp_list, wipe_existing : bool = false):
+func CalcBoxelIDS(boxel_list : Array[LvlObject] = boxel_temp_list, wipe_existing : bool = false):
 	boxel_ids.resize(boxel_list.size())
 	
 	for i in boxel_list.size():

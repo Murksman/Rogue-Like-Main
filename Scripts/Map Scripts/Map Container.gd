@@ -21,7 +21,7 @@ var chunk_temp : Array[Array] = []
 
 var boxel_id_list : PackedInt32Array = []
 var boxel_usage_list : PackedInt32Array = []
-var loaded_boxel_list : Array[Boxel] = []
+var loaded_boxel_list : Array[LvlObject] = []
 
 var root_loaded = false
 
@@ -39,10 +39,10 @@ func LoadBoxels():
 		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
 		var load_result = ResourceLoader.load(load_path)
 		
-		if load_result is Boxel:
+		if load_result is LvlObject:
 			loaded_boxel_list.append(load_result)
 		else:
-			print("Boxel Loading Error Code: ", load_result)
+			print("LvlObject Loading Error Code: ", load_result)
 	
 	root_loaded = true
 
@@ -200,7 +200,7 @@ func CalcAdjacency(tile_pos : Vector2i, layer_group : CanvasGroup) -> int:
 	
 	return adjacency_index
 
-func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = null, adjacency : int = -1) -> Node2D:
+func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObject = null, adjacency : int = -1) -> Node2D:
 	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
 		return null
 	
@@ -218,11 +218,11 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = 
 	if boxel_id_list.size() == 0 || boxel_match_index + 1 > boxel_id_list.size():
 		boxel_id_list.append(boxel.boxel_id)
 		boxel_usage_list.append(1)
-		print("New Boxel Added to ID List: - ", boxel.boxel_id)
+		print("New LvlObject Added to ID List: - ", boxel.boxel_id)
 	elif boxel_id_list[boxel_match_index] != boxel.boxel_id:
 		boxel_id_list.insert(boxel_match_index, boxel.boxel_id)
 		boxel_usage_list.insert(boxel_match_index, 1)
-		print("New Boxel Added to ID List: - ", boxel.boxel_id)
+		print("New LvlObject Added to ID List: - ", boxel.boxel_id)
 	else:
 		boxel_usage_list[boxel_match_index] += 1
 	
@@ -230,7 +230,7 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = 
 		var prev_match_index = boxel_id_list.find(prev_tile.boxel_id)
 		
 		if prev_match_index == -1:
-			printerr("Error: Prev Tile at Position: ", boxel.boxel_id, " - ",prev_tile.position, " - Boxel ID did not match any in the list.")
+			printerr("Error: Prev Tile at Position: ", boxel.boxel_id, " - ",prev_tile.position, " - LvlObject ID did not match any in the list.")
 		else:
 			if boxel_usage_list[prev_match_index] <= 1:
 				boxel_id_list.remove_at(prev_match_index)
@@ -265,7 +265,7 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : Boxel = 
 	
 	return new_tile
 
-func AddTile(boxel : Boxel, tile_pos : Vector2i, layer_group : CanvasGroup) -> Node:
+func AddTile(boxel : LvlObject, tile_pos : Vector2i, layer_group : CanvasGroup) -> Node:
 	if tile_pos.x > map_size.x + bounds_offset.x || tile_pos.y > map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
 		return null
 	
@@ -304,7 +304,7 @@ func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedBy
 	
 	return packed_array
 
-func ReadPackedTileArray(layer : CanvasGroup, arr : PackedByteArray, temp_boxel_load_list : Array[Boxel]) -> String:
+func ReadPackedTileArray(layer : CanvasGroup, arr : PackedByteArray, temp_boxel_load_list : Array[LvlObject]) -> String:
 	var n = 0
 	for a in layer.layer_array.size():
 		var chunk_col = layer.layer_array[a]
@@ -352,7 +352,7 @@ func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adja
 		if adjacent_index & 4: CreateTile(tile_pos - Vector2i(0,1), layer_group)
 		if adjacent_index & 8: CreateTile(tile_pos - Vector2i(0,-1), layer_group)
 
-func ShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, boxel : Boxel, hollow : bool = false, update_adjacent : bool = true) -> void:
+func ShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, boxel : LvlObject, hollow : bool = false, update_adjacent : bool = true) -> void:
 	box_dimensions.position.x = maxi(box_dimensions.position.x, bounds_offset.x)
 	box_dimensions.position.y = maxi(box_dimensions.position.y, bounds_offset.y)
 	box_dimensions.size.x = mini(box_dimensions.size.x, map_size.x + bounds_offset.x)

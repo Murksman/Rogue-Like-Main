@@ -1,4 +1,4 @@
-extends Boxel
+extends LvlObject
 class_name UnitBoxel
 
 @export var tile_info : TileInfo

@@ -1,4 +1,4 @@
-extends Boxel
+extends LvlObject
 class_name ScatterBoxel
 
 @export var tile_array : Array[TileInfo]

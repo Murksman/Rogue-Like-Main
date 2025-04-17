@@ -1,4 +1,4 @@
-extends Boxel
+extends LvlObject
 class_name ConnectorBoxel
 
 @export var tile_array : Array[TileInfo]
@@ -26,7 +26,4 @@ func StitchFullTexture() -> CanvasTexture:
 	new_texture.diffuse_texture = ImageTexture.create_from_image(new_image)
 	new_texture.normal_texture = ImageTexture.create_from_image(new_normal)
 	
-	print(new_texture)
-	
-	#print("StitchFullTexture - TEST - ", new_texture.diffuse_texture.get_image().get_data())
 	return new_texture

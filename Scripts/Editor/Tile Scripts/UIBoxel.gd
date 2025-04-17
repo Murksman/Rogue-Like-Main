@@ -5,7 +5,7 @@ class_name UIBoxel
 @export var name_text : Label
 @export var boxel_image : TextureRect
 @export var grayout : TextureRect
-@export var boxel : Boxel
+@export var boxel : LvlObject
 @export var boxel_res_path : String
 
 func _gui_input(event: InputEvent) -> void:
@@ -35,12 +35,12 @@ func Delete() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(boxel_res_path))
 	queue_free()
 
-func AddBoxel(boxel_res : Boxel, file_path : String) -> void:
+func AddBoxel(boxel_res : LvlObject, file_path : String) -> void:
 	boxel_res_path = file_path
 	
 	boxel = boxel_res
-	boxel_image.texture = boxel.boxel_img
-	name_text.text = boxel.boxel_name
+	boxel_image.texture = boxel.img
+	name_text.text = boxel.name
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	return data is UIBoxel

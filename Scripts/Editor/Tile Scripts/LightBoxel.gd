@@ -1,5 +1,5 @@
 extends LvlObject
-class_name EntityObject
+class_name LightObject
 
-@export var obj_type : int = 0
+@export var light_type : int = 0
 @export var property_list : Dictionary = {}

@@ -28,7 +28,7 @@ var current_level_name : String
 
 var boxel_name_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
-var map_boxel_list : Array[Boxel] = []
+var map_boxel_list : Array[LvlObject] = []
 
 func _ready() -> void:
 	visible = !editing
@@ -108,7 +108,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		else:
 			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 
-func MapEditEvent(boxel : Boxel, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
+func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
@@ -188,7 +188,7 @@ func LoadBoxels() -> void:
 	for i in map_boxel_list.size():
 		var boxel = map_boxel_list[i]
 		boxel_id_list[i] = boxel.boxel_id
-		boxel_name_list[i] = boxel.boxel_name + ".res"
+		boxel_name_list[i] = boxel.name + ".res"
 		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.boxel_load_path + "/" + boxel_name_list[i], true)
 	
 	library_grid.ReorderBoxels()
@@ -284,12 +284,12 @@ func ReadLevelFile(filepath : String):
 	
 	file.seek(file.get_position() + 1)
 	
-	var temp_boxel_load_list : Array[Boxel] = []
+	var temp_boxel_load_list : Array[LvlObject] = []
 	temp_boxel_load_list.resize(boxel_id_list.size())
 	
 	for i in boxel_id_list.size():
 		var temp_id = boxel_id_list[i]
-		var dummy_boxel = Boxel.new()
+		var dummy_boxel = LvlObject.new()
 		dummy_boxel.boxel_id = temp_id
 		var new_index = map_boxel_list.bsearch_custom(dummy_boxel, func(a, b): return a.boxel_id < b.boxel_id)
 		
@@ -344,13 +344,13 @@ func RequestLoadLevel() -> void:
 	level_load_window.visible = true
 	level_load_window.WindowReady()
 
-func EditBoxel(boxel : Boxel) -> void:
+func EditBoxel(boxel : LvlObject) -> void:
 	import_window.SetImporterMode(true, boxel)
 	import_window.popup()
 	import_window.visible = true
 	import_window.WindowReady()
 
-func ImporterAddBoxel(boxel : Boxel) -> void:
+func ImporterAddBoxel(boxel : LvlObject) -> void:
 	var new_index = map_boxel_list.bsearch_custom(boxel, func(b1,b2): return b1.boxel_id < b2.boxel_id)
 	map_boxel_list.insert(new_index, boxel)
 	boxel_id_list.append(boxel.boxel_id)

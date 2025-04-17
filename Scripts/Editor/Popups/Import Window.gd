@@ -5,18 +5,18 @@ extends Window
 @export var error_popup : AcceptDialog
 @export var error_popup_text : Label
 
-@export_group("Boxel Import | Edit Controls")
+@export_group("LvlObject Import | Edit Controls")
 @export var importing_label : Label
 @export var editing_label : Label
-@export_group("Boxel Image Controls")
+@export_group("LvlObject Image Controls")
 @export var filepath_text : LineEdit
 @export var preview_image : TextureRect
-@export_group("Boxel Info Controls")
+@export_group("LvlObject Info Controls")
 @export var boxelname_text : LineEdit
 @export var boxel_type_selection : Array[CheckBox]
 @export var boxel_layer_selection : Array[CheckBox]
 @export var boxel_type_group : ButtonGroup
-@export_group("Boxel Normal Controls")
+@export_group("LvlObject Normal Controls")
 @export var normals_tab_control : Control
 @export var normal_image : TextureRect
 @export var normalpath_text : LineEdit
@@ -28,7 +28,7 @@ var imported_normal_tex : ImageTexture
 
 var queue_import_time : int = 0
 var importing := true
-var editing_boxel : Boxel = null
+var editing_boxel : LvlObject = null
 
 var open_file_paths : Array[String] = []
 var selected_layers : Array[int] = []
@@ -56,7 +56,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		hide()
 		editor_master.EditToggle(false)
 
-func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
+func SetImporterMode(editing : bool = false, edit_boxel : LvlObject = null) -> void:
 	print("SetImporterMode - ", editing)
 	
 	for layer in boxel_layer_selection:
@@ -79,7 +79,7 @@ func SetImporterMode(editing : bool = false, edit_boxel : Boxel = null) -> void:
 		imported_image_tex = full_texture.diffuse_texture
 		normal_image.texture = full_texture.normal_texture
 		imported_normal_tex = full_texture.normal_texture
-		boxelname_text.text = edit_boxel.boxel_name
+		boxelname_text.text = edit_boxel.name
 		print("Full Texture - ", preview_image.texture)
 		
 		for i in edit_boxel.layers:
@@ -121,7 +121,7 @@ func FileImportCatch(files : Array[String], is_normal : bool) -> void:
 			imported_src_normal = Image.load_from_file(filepath)
 		
 		if imported_src_image && imported_src_normal.get_size() != imported_src_image.get_size():
-			ErrorPop("Imported Boxel Image and Normal image must have the same size.")
+			ErrorPop("Imported LvlObject Image and Normal image must have the same size.")
 			imported_src_normal = null
 			return
 		
@@ -176,7 +176,7 @@ func FinishImport():
 	
 	var selected_type = boxel_type_group.get_pressed_button().get_meta("type_index")
 	
-	var new_boxel : Boxel
+	var new_boxel : LvlObject
 	
 	if importing:
 		if selected_type == 0: 
@@ -199,15 +199,15 @@ func FinishImport():
 		new_tile_info.image.diffuse_texture = imported_image_tex
 		new_tile_info.image.normal_texture = imported_normal_tex
 		new_boxel.tile_info = new_tile_info
-		new_boxel.boxel_img = new_tile_info.image
+		new_boxel.img = new_tile_info.image
 	elif selected_type == 1 || selected_type == 2:
-		print("Finish Import - Test boxel ID pre Boxel info: ", new_boxel.boxel_id)
+		print("Finish Import - Test boxel ID pre LvlObject info: ", new_boxel.boxel_id)
 		var new_tile_info_array : Array[TileInfo] = []
 		var boxel_image_list = GenerateImages()
 		var boxel_normal_list = GenerateNormalImages()
 		new_tile_info_array.resize(boxel_image_list.size())
 		
-		print("Finish Import - Test boxel ID pre Boxel image array: ", new_boxel.boxel_id)
+		print("Finish Import - Test boxel ID pre LvlObject image array: ", new_boxel.boxel_id)
 		for i in boxel_image_list.size(): 
 			var new_tile_info = TileInfo.new()
 			new_tile_info.image = CanvasTexture.new()
@@ -215,14 +215,14 @@ func FinishImport():
 			new_tile_info.image.normal_texture = boxel_normal_list[i]
 			new_tile_info_array[i] = new_tile_info
 		
-		new_boxel.boxel_img = CanvasTexture.new()
-		new_boxel.boxel_img.diffuse_texture = new_tile_info_array[0].image.diffuse_texture
-		new_boxel.boxel_img.normal_texture = new_tile_info_array[0].image.normal_texture
+		new_boxel.img = CanvasTexture.new()
+		new_boxel.img.diffuse_texture = new_tile_info_array[0].image.diffuse_texture
+		new_boxel.img.normal_texture = new_tile_info_array[0].image.normal_texture
 		new_boxel.tile_array = new_tile_info_array
-		print("Finish Import - Test boxel ID post Boxel Info: ", new_boxel.boxel_id)
+		print("Finish Import - Test boxel ID post LvlObject Info: ", new_boxel.boxel_id)
 	
 	new_boxel.layers = selected_layers
-	new_boxel.boxel_name = StringName(boxelname_text.text)
+	new_boxel.name = StringName(boxelname_text.text)
 	
 	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "res")
 	var err = ResourceSaver.save(new_boxel, load_path)
@@ -231,7 +231,7 @@ func FinishImport():
 		if importing: editor_master.ImporterAddBoxel(new_boxel)
 		editor_master.library_grid.AddNewBoxel(new_boxel, filepath_text.text, importing)
 	else:
-		printerr("Failed to save generated Boxel with code: ", err)
+		printerr("Failed to save generated LvlObject with code: ", err)
 	
 	visible = false
 

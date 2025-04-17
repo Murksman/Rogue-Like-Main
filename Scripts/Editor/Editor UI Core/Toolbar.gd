@@ -11,7 +11,7 @@ extends Control
 @export var blend_buttons : Array[TextureButton]
 
 var selected_tool : int = -1
-var boxel_type : Boxel
+var boxel_type : LvlObject
 
 func ToolPressed() -> void:
 	if !tool_selection_group.get_pressed_button(): 
@@ -19,11 +19,11 @@ func ToolPressed() -> void:
 		return
 	selected_tool = tool_selection_group.get_pressed_button().tool_index
 
-func SelectedBoxel(boxel : Boxel):
+func SelectedBoxel(boxel : LvlObject):
 	for child in get_children():
 		child.visible = true
 	
-	if boxel is LightBoxel:
+	if boxel is LightObject || boxel is EntityObject:
 		visible = false
 	else:
 		visible = true

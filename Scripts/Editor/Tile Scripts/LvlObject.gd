@@ -1,10 +1,10 @@
 extends Resource
-class_name Boxel
+class_name LvlObject
 
-@export var boxel_img : CanvasTexture
-@export var boxel_name : StringName
+@export var img : CanvasTexture
+@export var name : StringName
 @export var layers : Array[int] = []
-@export var boxel_id : int = 0
+@export var id : int = 0
 
 func GetTileInfo() -> TileInfo:
 	return null
