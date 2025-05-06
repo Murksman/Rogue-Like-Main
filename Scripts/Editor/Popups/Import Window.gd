@@ -156,7 +156,8 @@ func ValidateImport():
 	if boxel_type_group.get_pressed_button(): selected_type = boxel_type_group.get_pressed_button().get_meta("type_index")
 	
 	selected_layers = []
-	for layer_button in boxel_layer_selection: if layer_button.button_pressed: selected_layers.append(layer_button.get_meta("layer_index")) 
+	for layer_button in boxel_layer_selection: 
+		if layer_button.button_pressed && !layer_button.disabled: selected_layers.append(layer_button.get_meta("layer_index")) 
 	
 	if selected_type == -1: return "Select a boxel type."
 	if !imported_image_tex: return "Invalid or missing image."
@@ -183,8 +184,12 @@ func FinishImport():
 			new_boxel = UnitBoxel.new()
 		elif selected_type == 1: 
 			new_boxel = ConnectorBoxel.new()
-		else: 
+		elif selected_type == 2: 
 			new_boxel = ScatterBoxel.new()
+		elif selected_type == 3: 
+			new_boxel = EntityObject.new()
+		else: 
+			new_boxel = LightObject.new()
 		
 		while editor_master.boxel_id_list.has(new_boxel.boxel_id) || new_boxel.boxel_id == 0:
 			rng.randomize()
@@ -201,13 +206,11 @@ func FinishImport():
 		new_boxel.tile_info = new_tile_info
 		new_boxel.img = new_tile_info.image
 	elif selected_type == 1 || selected_type == 2:
-		print("Finish Import - Test boxel ID pre LvlObject info: ", new_boxel.boxel_id)
 		var new_tile_info_array : Array[TileInfo] = []
 		var boxel_image_list = GenerateImages()
 		var boxel_normal_list = GenerateNormalImages()
 		new_tile_info_array.resize(boxel_image_list.size())
 		
-		print("Finish Import - Test boxel ID pre LvlObject image array: ", new_boxel.boxel_id)
 		for i in boxel_image_list.size(): 
 			var new_tile_info = TileInfo.new()
 			new_tile_info.image = CanvasTexture.new()
@@ -219,7 +222,12 @@ func FinishImport():
 		new_boxel.img.diffuse_texture = new_tile_info_array[0].image.diffuse_texture
 		new_boxel.img.normal_texture = new_tile_info_array[0].image.normal_texture
 		new_boxel.tile_array = new_tile_info_array
-		print("Finish Import - Test boxel ID post LvlObject Info: ", new_boxel.boxel_id)
+	elif selected_type == 3:
+		pass
+	else:
+		new_boxel.img = CanvasTexture.new()
+		new_boxel.img.diffuse_texture = imported_image_tex
+		new_boxel.img.normal_texture = imported_normal_tex
 	
 	new_boxel.layers = selected_layers
 	new_boxel.name = StringName(boxelname_text.text)
@@ -266,6 +274,18 @@ func ErrorPop(error_code : String):
 	error_popup.size = Vector2(320,130)
 	error_popup.popup()
 	error_popup.visible = true
+
+func _on_boxeltype_changed() -> void:
+	var selected_type = boxel_type_group.get_pressed_button().get_meta("type_index")
+	if selected_type == 0 || selected_type == 1:
+		for layer in boxel_layer_selection:
+			layer.disabled = false
+		return 
+	
+	for layer in boxel_layer_selection:
+		layer.disabled = true
+	
+	boxel_layer_selection[selected_type].disabled = false
 
 func _on_finish_import_button_pressed() -> void:
 	FinishImport()

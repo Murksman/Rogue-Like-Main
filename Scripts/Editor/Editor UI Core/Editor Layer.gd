@@ -109,6 +109,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 
 func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
+	if boxel is EntityObject || boxel is LightObject:
+		pass
+	
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
@@ -120,9 +123,9 @@ func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : Ca
 		level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 		return
 	
-	var shape_position : Vector2i = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
+	var shape_position = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
 	var shape_size : Vector2i = abs(anchor_tile_point - tile_position) + Vector2i(1,1)
-	var shape_rect = Rect2i(shape_position, shape_size)
+	var shape_rect = Rect2i(shape_position, shape_size) 
 	
 	tile_selection_outline.size = shape_size * 64
 	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
