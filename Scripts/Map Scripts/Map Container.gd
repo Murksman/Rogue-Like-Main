@@ -413,3 +413,23 @@ func AssignTileOwner() -> void:
 		layer.owner = level_save_root
 		for child in layer.get_children():
 			child.owner = level_save_root
+
+func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distance : float, exclusive : bool = false) -> Array:
+	if exclusive:
+		var closest = null
+		var dist := max_distance
+		for obj in object_layer.get_children():
+			var t_dist = obj.global_position.distance_to(t_point)
+			if t_dist < dist:
+				dist = t_dist
+				closest = obj
+		return [closest]
+	
+	var obj_list = []
+	
+	for obj in object_layer.get_children():
+		if obj.global_position.distance_to(t_point) < max_distance:
+			obj_list.append(obj)
+	
+	return obj_list
+	

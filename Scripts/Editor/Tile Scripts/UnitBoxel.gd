@@ -7,4 +7,4 @@ func GetTileInfo() -> TileInfo:
 	return tile_info
 
 func StitchFullTexture() -> CanvasTexture:
-	return tile_info.image
+	return img

@@ -17,6 +17,7 @@ func ToolPressed() -> void:
 	if !tool_selection_group.get_pressed_button(): 
 		selected_tool = -1
 		return
+	
 	selected_tool = tool_selection_group.get_pressed_button().tool_index
 
 func SelectedBoxel(boxel : LvlObject):

@@ -101,12 +101,40 @@ func LevelPanePressed(event : InputEvent) -> void:
 		
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
+		if (event.is_action_pressed("Editor Primary") || event.is_action_released("Editor Primary") && (selected_boxel.boxel is LightObject || selected_boxel.boxel is EntityObject)):
+			MapObjectEvent(selected_boxel.boxel, mouse_position, layer_canvas, event.is_action_released("Editor Primary"))
+			return
+		
 		drag_action_position = tile_position
 		
 		if eraser.button_pressed:
 			MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 		else:
 			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
+
+func MapObjectEvent(boxel : LvlObject, click_position : Vector2, layer_canvas : CanvasGroup, released : bool) -> void:
+	var tool = toolbar.selected_tool
+	
+	if tool == 1:
+		pass
+	elif tool == 4:
+		var check_objects : Array[Node2D]
+		var min_dist = 20.0
+		var selected_obj = null
+		
+		if boxel is EntityObject:
+			check_objects = level_tilemap_root.layer_groups[3]
+		else:
+			check_objects = level_tilemap_root.layer_groups[4]
+		
+		for obj in check_objects:
+			var dist_to_obj = (obj.global_position - mouse_position).length()
+			min_dist = min(dist_to_obj, min_dist)
+			selected_obj = obj
+		
+		if !selected_obj: return
+		
+		
 
 func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
 	if boxel is EntityObject || boxel is LightObject:
@@ -190,7 +218,7 @@ func LoadBoxels() -> void:
 	
 	for i in map_boxel_list.size():
 		var boxel = map_boxel_list[i]
-		boxel_id_list[i] = boxel.boxel_id
+		boxel_id_list[i] = boxel.id
 		boxel_name_list[i] = boxel.name + ".res"
 		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.boxel_load_path + "/" + boxel_name_list[i], true)
 	
