@@ -432,4 +432,3 @@ func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distan
 			obj_list.append(obj)
 	
 	return obj_list
-	

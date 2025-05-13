@@ -30,6 +30,10 @@ var boxel_name_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
 var map_boxel_list : Array[LvlObject] = []
 
+var glove_selection : Object
+var glove_select_pos : Vector2
+
+
 func _ready() -> void:
 	visible = !editing
 	LevelInfo.editor_ref = self
@@ -39,10 +43,10 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"): 
-		if current_level_filepath != "":
-			SaveLevel(current_level_filepath)
-		else:
+		if current_level_filepath == "":
 			RequestSaveLevel()
+		else:
+			SaveLevel(current_level_filepath)
 	
 	if event.is_action_pressed("Delete") && selected_boxel:
 		selected_boxel.Delete()
@@ -118,21 +122,8 @@ func MapObjectEvent(boxel : LvlObject, click_position : Vector2, layer_canvas : 
 	if tool == 1:
 		pass
 	elif tool == 4:
-		var check_objects : Array[Node2D]
-		var min_dist = 20.0
-		var selected_obj = null
-		
-		if boxel is EntityObject:
-			check_objects = level_tilemap_root.layer_groups[3]
-		else:
-			check_objects = level_tilemap_root.layer_groups[4]
-		
-		for obj in check_objects:
-			var dist_to_obj = (obj.global_position - mouse_position).length()
-			min_dist = min(dist_to_obj, min_dist)
-			selected_obj = obj
-		
-		if !selected_obj: return
+		var closest = level_tilemap_root.GetNearestObjects(layer_canvas, mouse_position, 20.0, true)[0]
+		if !closest: return
 		
 		
 
@@ -362,13 +353,17 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	file.store_64(map_array_length)
 	file.store_string("\n")
 	
-	for layer in level_tilemap_root.layer_groups:
-		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(layer, map_array_length)
+	for i in 3:
+		var t_layer = level_tilemap_root.layer_groups[i]
+		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(t_layer, map_array_length)
 		
 		file.store_buffer(floor_tile_buff)
 		file.store_string("\n")
 	file.store_string("\n")
 	
+	for i in 2:
+		var t_layer = level_tilemap_root.layer_groups[i+3]
+		
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()
