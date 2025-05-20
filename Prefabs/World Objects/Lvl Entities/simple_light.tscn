@@ -18,5 +18,6 @@ texture = SubResource("GradientTexture2D_5wdfb")
 texture_scale = 20.67
 height = 17.0
 script = ExtResource("1_6obgh")
+id = 300
 
 [node name="Light Source Texture" type="Sprite2D" parent="."]

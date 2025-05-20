@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://duryafthdfiy5"]
 
 [ext_resource type="Script" uid="uid://bsntp1u26ewnl" path="res://Scripts/Class Scripts/Chest.gd" id="1_expmg"]
-[ext_resource type="Resource" uid="uid://8cuopywwlfq6" path="res://Resources/Loot Tables/Chest Loot Generic Table.tres" id="2_fv5nw"]
+[ext_resource type="Resource" uid="uid://eslqo6tsg3og" path="res://Resources/Loot Tables/Basic Loot Table.res" id="2_expmg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_def8p"]
 custom_solver_bias = 0.069
@@ -24,9 +24,10 @@ monitoring = false
 script = ExtResource("1_expmg")
 inventory_size = Vector2i(5, 5)
 inventory_items = [null, null]
-loot_table = ExtResource("2_fv5nw")
+loot_table = ExtResource("2_expmg")
 quantity_multiplier = 10
 rarity_multiplier = 1
+id = 200
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_def8p")

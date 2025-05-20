@@ -45,8 +45,6 @@ func _ready() -> void:
 	LoadResources()
 
 func _unhandled_input(event: InputEvent) -> void:
-	tool = toolbar.selected_tool
-	
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"): 
 		if current_level_filepath == "":
@@ -90,8 +88,10 @@ func EditorReady():
 	pass
 
 func LevelPanePressed(event : InputEvent) -> void:
+	tool = toolbar.selected_tool
+	
 	mouse_position = level_tilemap_root.get_local_mouse_position()
-	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && selected_boxel && toolbar.selected_tool > 0
+	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && layer_button_group.get_pressed_button().layer_int < 3 && selected_boxel && toolbar.selected_tool > 0
 	
 	if event.is_action_pressed("Editor Secondary"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
@@ -117,8 +117,8 @@ func LevelPanePressed(event : InputEvent) -> void:
 		
 		focus_boxel = false
 		
-		if (event.is_action_pressed("Editor Primary") || event.is_action_released("Editor Primary") && (selected_boxel.boxel is LightObject || selected_boxel.boxel is EntityObject)):
-			MapObjectEvent(selected_boxel.boxel, mouse_position, layer_canvas, event.is_action_released("Editor Primary"))
+		if selected_boxel.boxel is LightObject || selected_boxel.boxel is EntityObject:
+			if event.is_action_pressed("Editor Primary"): MapObjectEvent(selected_boxel.boxel, mouse_position, layer_canvas)
 			return
 		
 		drag_action_position = tile_position
@@ -128,7 +128,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 		else:
 			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 
-func MapObjectEvent(lvl_obj : LvlObject, click_position : Vector2, layer_canvas : CanvasGroup, released : bool) -> void:
+func MapObjectEvent(lvl_obj : LvlObject, click_position : Vector2, layer_canvas : CanvasGroup) -> void:
+	print("MapObjectEvent", )
+	
 	if tool == 1:
 		var entity =  level_tilemap_root.AddEntity(lvl_obj, click_position)
 		SelectObject(entity)
@@ -219,8 +221,6 @@ func LoadResources() -> void:
 	boxel_name_list.resize(map_object_list.size())
 	
 	for i in map_object_list.size():
-		print(i)
-		
 		var boxel = map_object_list[i]
 		boxel_id_list[i] = boxel.id
 		boxel_name_list[i] = boxel.name + ".res"

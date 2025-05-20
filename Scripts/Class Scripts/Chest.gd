@@ -12,16 +12,16 @@ class_name Chest
 @onready var item_container : Control = $"Item Container"
 
 func MapArgs(args : Dictionary) -> int:
-	var tbl = args["tbl"]
+	var tbl = args.get("tbl", null)
 	if tbl: ChangeLootTable(tbl)
 	
-	var size = args["size"]
+	var size = args.get("size")
 	if size: inventory_size = size
 	
-	var quant = args["quant"]
+	var quant = args.get("quant")
 	if quant: quantity_multiplier = quant
 	
-	var rarity = args["rarity"]
+	var rarity = args.get("rarity")
 	if rarity: rarity_multiplier = rarity
 	
 	return 0

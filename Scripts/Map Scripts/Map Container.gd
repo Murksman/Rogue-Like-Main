@@ -39,8 +39,6 @@ func LoadResources(reset : bool = false):
 	
 	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.lvlobject_load_path)
 	
-	print(boxel_paths)
-	
 	for path in boxel_paths:
 		if path.get_extension() == "depren": continue
 		
@@ -423,7 +421,9 @@ func AssignTileOwner() -> void:
 			child.owner = level_save_root
 
 func AddEntity(lvl_obj : LvlObject, pos : Vector2, args : Dictionary = {}) -> Node:
-	var entity = SceneLoadingContainer.loaded_entities[lvl_obj.obj_type].instantiate()
+	print("Adding Entity - ", lvl_obj)
+	var index : int = SceneLoadingContainer.loaded_entities.bsearch_custom(lvl_obj.obj_type, func(a, b): return a.id < b.id)
+	var entity = SceneLoadingContainer.loaded_entities[index].instantiate()
 	
 	if args.size() == 0: args = lvl_obj.property_list
 	

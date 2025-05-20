@@ -16,9 +16,9 @@ var root_loaded := false
 
 func _ready() -> void:
 	if DirAccess.make_dir_absolute(lvlobject_load_path) == null:
-		printerr("Scene Load - successfully created boxel folder")
+		print("Scene Load - successfully created boxel folder")
 	if DirAccess.make_dir_absolute(levels_load_path) == null:
-		printerr("Scene Load - successfully created levels folder")
+		print("Scene Load - successfully created levels folder")
 	
 	LoadResources()
 
@@ -30,24 +30,26 @@ func LoadResources():
 	for path in loot_paths:
 		if path.get_extension() == "depren": continue
 		
-		var load_path = SceneLoadingContainer.lvlobject_load_path + "/" + path
-		var load_result = ResourceLoader.load(load_path)
+		var load_path = loot_tables_path + "/" + path
+		var load_result : Resource = load(load_path)
 		
-		if load_result is LvlObject:
+		if load_result is LootTable:
 			loot_tables.append(load_result)
 		else:
 			printerr("Loot Tables Loading Error Code: ", load_result)
 	
-	var entity_paths = DirAccess.get_files_at(SceneLoadingContainer.entity_load_path)
+	var entity_paths = DirAccess.get_files_at(entity_load_path)
 	
 	for path in entity_paths:
-		var load_path = SceneLoadingContainer.entity_load_path + "/" + path
+		var load_path = entity_load_path + "/" + path
 		var load_result = ResourceLoader.load(load_path)
 		
-		if load_result is Entity:
+		if load_result is PackedScene:
 			loaded_entities.append(load_result)
 		else:
 			printerr("Entity Loading Error Code: ", load_result)
+	
+	loaded_entities.sort_custom(func(a, b): return a.get_local_scene().id < b.get_local_scene().id)
 	
 	root_loaded = true
 
