@@ -11,6 +11,24 @@ class_name Chest
 
 @onready var item_container : Control = $"Item Container"
 
+func MapArgs(args : Dictionary) -> int:
+	var tbl = args["tbl"]
+	if tbl: ChangeLootTable(tbl)
+	
+	var size = args["size"]
+	if size: inventory_size = size
+	
+	var quant = args["quant"]
+	if quant: quantity_multiplier = quant
+	
+	var rarity = args["rarity"]
+	if rarity: rarity_multiplier = rarity
+	
+	return 0
+
+func ChangeLootTable(tbl : int):
+	loot_table = SceneLoadingContainer.loot_tables[tbl]
+
 func _ready():
 	GenerateItems()
 	RecalculateContent()

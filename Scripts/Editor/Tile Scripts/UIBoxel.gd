@@ -12,9 +12,13 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion: LevelInfo.editor_ref.HoverBoxel(self)
 	if event.is_action_pressed("Primary"):
 		if event is InputEventMouseButton && event.double_click:
+			if boxel is LightObject || boxel is EntityObject:
+				print("Error: Object is not an editable instance.")
+				return
+			
 			LevelInfo.editor_ref.EditBoxel(boxel)
 		else:
-			LevelInfo.editor_ref.SelectBoxel(self) 
+			LevelInfo.editor_ref.SelectBoxel(self)
 
 func _on_mouse_exited() -> void:
 	LevelInfo.editor_ref.MouseExit(self)

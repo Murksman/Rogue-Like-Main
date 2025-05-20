@@ -23,24 +23,30 @@ var mouse_pressed : bool
 var drag_action_position : Vector2i
 var editing : bool = false
 
+var focus_boxel : bool = false
+
 var current_level_filepath : String
 var current_level_name : String
 
 var boxel_name_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
-var map_boxel_list : Array[LvlObject] = []
+var map_object_list : Array[LvlObject] = []
 
 var glove_selection : Object
 var glove_select_pos : Vector2
+var selected_world_obj : Node2D
 
+var tool : int = -1
 
 func _ready() -> void:
 	visible = !editing
 	LevelInfo.editor_ref = self
 	
-	LoadBoxels()
+	LoadResources()
 
 func _unhandled_input(event: InputEvent) -> void:
+	tool = toolbar.selected_tool
+	
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"): 
 		if current_level_filepath == "":
@@ -49,12 +55,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			SaveLevel(current_level_filepath)
 	
 	if event.is_action_pressed("Delete") && selected_boxel:
-		selected_boxel.Delete()
-		
-		var boxel_index = boxel_id_list.find(selected_boxel.boxel.boxel_id)
-		boxel_id_list.remove_at(boxel_index)
-		boxel_name_list.remove_at(boxel_index)
-		selected_boxel = null
+		if selected_boxel && focus_boxel:
+			selected_boxel.Delete()
+			
+			var boxel_index = boxel_id_list.find(selected_boxel.boxel.boxel_id)
+			boxel_id_list.remove_at(boxel_index)
+			boxel_name_list.remove_at(boxel_index)
+			selected_boxel = null
+		elif !focus_boxel && selected_world_obj:
+			level_tilemap_root.DeleteEntity(selected_world_obj)
+			selected_world_obj = null
 	
 	if event.is_action_pressed("Eraser Mode"): eraser.set_pressed_no_signal(!eraser.pressed) 
 
@@ -105,6 +115,8 @@ func LevelPanePressed(event : InputEvent) -> void:
 		
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
+		focus_boxel = false
+		
 		if (event.is_action_pressed("Editor Primary") || event.is_action_released("Editor Primary") && (selected_boxel.boxel is LightObject || selected_boxel.boxel is EntityObject)):
 			MapObjectEvent(selected_boxel.boxel, mouse_position, layer_canvas, event.is_action_released("Editor Primary"))
 			return
@@ -116,16 +128,15 @@ func LevelPanePressed(event : InputEvent) -> void:
 		else:
 			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 
-func MapObjectEvent(boxel : LvlObject, click_position : Vector2, layer_canvas : CanvasGroup, released : bool) -> void:
-	var tool = toolbar.selected_tool
-	
+func MapObjectEvent(lvl_obj : LvlObject, click_position : Vector2, layer_canvas : CanvasGroup, released : bool) -> void:
 	if tool == 1:
-		pass
+		var entity =  level_tilemap_root.AddEntity(lvl_obj, click_position)
+		SelectObject(entity)
 	elif tool == 4:
 		var closest = level_tilemap_root.GetNearestObjects(layer_canvas, mouse_position, 20.0, true)[0]
 		if !closest: return
 		
-		
+		SelectObject(closest)
 
 func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
 	if boxel is EntityObject || boxel is LightObject:
@@ -199,19 +210,21 @@ func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, releas
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas, true)
 	
 
-func LoadBoxels() -> void:
-	level_tilemap_root.LoadBoxels()
+func LoadResources() -> void:
+	level_tilemap_root.LoadResources()
 	
-	map_boxel_list = level_tilemap_root.loaded_boxel_list
+	map_object_list = level_tilemap_root.loaded_object_list
 	
-	boxel_id_list.resize(map_boxel_list.size())
-	boxel_name_list.resize(map_boxel_list.size())
+	boxel_id_list.resize(map_object_list.size())
+	boxel_name_list.resize(map_object_list.size())
 	
-	for i in map_boxel_list.size():
-		var boxel = map_boxel_list[i]
+	for i in map_object_list.size():
+		print(i)
+		
+		var boxel = map_object_list[i]
 		boxel_id_list[i] = boxel.id
 		boxel_name_list[i] = boxel.name + ".res"
-		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.boxel_load_path + "/" + boxel_name_list[i], true)
+		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.lvlobject_load_path + "/" + boxel_name_list[i], true)
 	
 	library_grid.ReorderBoxels()
 
@@ -219,7 +232,10 @@ func SelectBoxel(target_boxel : UIBoxel) -> void:
 	if target_boxel == selected_boxel:
 		target_boxel.tile_highlighter.visible = false
 		selected_boxel = null
+		focus_boxel = false
 		return
+	
+	focus_boxel = true
 	
 	if selected_boxel: selected_boxel.tile_highlighter.visible = false
 	
@@ -313,9 +329,9 @@ func ReadLevelFile(filepath : String):
 		var temp_id = boxel_id_list[i]
 		var dummy_boxel = LvlObject.new()
 		dummy_boxel.boxel_id = temp_id
-		var new_index = map_boxel_list.bsearch_custom(dummy_boxel, func(a, b): return a.boxel_id < b.boxel_id)
+		var new_index = map_object_list.bsearch_custom(dummy_boxel, func(a, b): return a.boxel_id < b.boxel_id)
 		
-		temp_boxel_load_list[i] = map_boxel_list[new_index]
+		temp_boxel_load_list[i] = map_object_list[new_index]
 	
 	var map_array_length = file.get_64()
 	file.seek(file.get_position() + 1)
@@ -377,10 +393,23 @@ func EditBoxel(boxel : LvlObject) -> void:
 	import_window.WindowReady()
 
 func ImporterAddBoxel(boxel : LvlObject) -> void:
-	var new_index = map_boxel_list.bsearch_custom(boxel, func(b1,b2): return b1.boxel_id < b2.boxel_id)
-	map_boxel_list.insert(new_index, boxel)
+	var new_index = map_object_list.bsearch_custom(boxel, func(b1,b2): return b1.boxel_id < b2.boxel_id)
+	map_object_list.insert(new_index, boxel)
 	boxel_id_list.append(boxel.boxel_id)
 	boxel_name_list.append(boxel.resource_path.get_file())
+
+func SelectObject(world_object : Node2D) -> void:
+	var lvl_object : LvlObject = map_object_list[world_object.boxel_id]
+	
+	if selected_world_obj == world_object:
+		selected_world_obj = null
+		return
+	
+	if lvl_object is LightObject || lvl_object is EntityObject:
+		selected_world_obj = world_object
+		
+		
+	else: print("Attempting to select an Object of invalid type: ", world_object.name)
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)

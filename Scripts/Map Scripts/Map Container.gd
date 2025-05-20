@@ -21,28 +21,36 @@ var chunk_temp : Array[Array] = []
 
 var boxel_id_list : PackedInt32Array = []
 var boxel_usage_list : PackedInt32Array = []
-var loaded_boxel_list : Array[LvlObject] = []
+var loaded_object_list : Array[LvlObject] = []
 
 var root_loaded = false
 
 func _ready() -> void:
-	LoadBoxels()
+	SceneLoadingContainer.LoadResources()
+	LoadResources()
 	
 	ResetMap()
 
-func LoadBoxels():
-	if root_loaded: return
+func LoadResources(reset : bool = false):
+	if root_loaded && !reset: return
 	
-	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.boxel_load_path)
+	if reset: 
+		loaded_object_list = []
+	
+	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.lvlobject_load_path)
+	
+	print(boxel_paths)
 	
 	for path in boxel_paths:
-		var load_path = SceneLoadingContainer.boxel_load_path + "/" + path
+		if path.get_extension() == "depren": continue
+		
+		var load_path = SceneLoadingContainer.lvlobject_load_path + "/" + path
 		var load_result = ResourceLoader.load(load_path)
 		
 		if load_result is LvlObject:
-			loaded_boxel_list.append(load_result)
+			loaded_object_list.append(load_result)
 		else:
-			print("LvlObject Loading Error Code: ", load_result)
+			print("Boxel Loading Error Code: ", load_result)
 	
 	root_loaded = true
 
@@ -207,8 +215,8 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 	if !boxel: 
 		var tmp_tile = GetTile(tile_pos, layer_group)
 		if !tmp_tile: return
-		var boxel_index = loaded_boxel_list.find_custom(func(b): return b.boxel_id == tmp_tile.boxel_id)
-		boxel = loaded_boxel_list[boxel_index]
+		var boxel_index = loaded_object_list.find_custom(func(b): return b.boxel_id == tmp_tile.boxel_id)
+		boxel = loaded_object_list[boxel_index]
 	
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
@@ -406,13 +414,31 @@ func WipeMapTiles(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
 		layer_init(layer, true)
 
 func SortBoxels():
-	loaded_boxel_list.sort_custom(func(b1, b2): return b1.boxel_id > b2.boxel_id)
+	loaded_object_list.sort_custom(func(b1, b2): return b1.boxel_id > b2.boxel_id)
 
 func AssignTileOwner() -> void:
 	for layer in layer_groups:
 		layer.owner = level_save_root
 		for child in layer.get_children():
 			child.owner = level_save_root
+
+func AddEntity(lvl_obj : LvlObject, pos : Vector2, args : Dictionary = {}) -> Node:
+	var entity = SceneLoadingContainer.loaded_entities[lvl_obj.obj_type].instantiate()
+	
+	if args.size() == 0: args = lvl_obj.property_list
+	
+	entity.MapArgs(args)
+	
+	if lvl_obj is EntityObject: layer_groups[3].add_child(entity)
+	elif lvl_obj is LightObject: layer_groups[4].add_child(entity)
+	else: print("Error Adding Entity - Invalid Type: ", lvl_obj.name)
+	
+	entity.position = pos
+	
+	return entity
+
+func DeleteEntity(entity : Entity) -> void:
+	entity.queue_free()
 
 func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distance : float, exclusive : bool = false) -> Array:
 	if exclusive:

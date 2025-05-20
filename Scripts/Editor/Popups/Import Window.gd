@@ -186,10 +186,6 @@ func FinishImport():
 			new_boxel = ConnectorBoxel.new()
 		elif selected_type == 2: 
 			new_boxel = ScatterBoxel.new()
-		elif selected_type == 3: 
-			new_boxel = EntityObject.new()
-		else: 
-			new_boxel = LightObject.new()
 		
 		while editor_master.boxel_id_list.has(new_boxel.boxel_id) || new_boxel.boxel_id == 0:
 			rng.randomize()
@@ -222,8 +218,6 @@ func FinishImport():
 		new_boxel.img.diffuse_texture = new_tile_info_array[0].image.diffuse_texture
 		new_boxel.img.normal_texture = new_tile_info_array[0].image.normal_texture
 		new_boxel.tile_array = new_tile_info_array
-	elif selected_type == 3:
-		pass
 	else:
 		new_boxel.img = CanvasTexture.new()
 		new_boxel.img.diffuse_texture = imported_image_tex

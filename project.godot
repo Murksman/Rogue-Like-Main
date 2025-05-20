@@ -24,7 +24,6 @@ LevelInfo="*res://Scripts/Map Scripts/level_info.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=3
 window/size/initial_position_type=2
 
 [editor]
@@ -33,7 +32,7 @@ movie_writer/movie_file="C:/Users/snick/Documents/Godot Projects/Rogue-Like Proj
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ai_assistant_hub/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

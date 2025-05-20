@@ -12,9 +12,9 @@ image = ExtResource("2_7nfan")
 [sub_resource type="Resource" id="Resource_2k1dk"]
 script = ExtResource("3_vfwum")
 tile_info = SubResource("Resource_rgtan")
-boxel_img = ExtResource("2_7nfan")
-boxel_name = &""
+name = &""
 layers = Array[int]([])
+id = 0
 
 [sub_resource type="Gradient" id="Gradient_o06ff"]
 offsets = PackedFloat32Array(0.928571, 1)

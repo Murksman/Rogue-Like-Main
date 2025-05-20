@@ -1,4 +1,4 @@
-[gd_scene load_steps=172 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -24,8 +24,7 @@
 [ext_resource type="Shader" uid="uid://buvlom23gqi1h" path="res://Scripts/Shader Scripts/Vision Cone.gdshader" id="22_om1lu"]
 [ext_resource type="Shader" uid="uid://b2trawbhxsph0" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="23_d60xw"]
 [ext_resource type="Script" uid="uid://cs3tw6uh30cga" path="res://Scripts/Map Scripts/Map Container.gd" id="24_e5ldj"]
-[ext_resource type="Script" uid="uid://bsntp1u26ewnl" path="res://Scripts/Class Scripts/Chest.gd" id="32_2682j"]
-[ext_resource type="Resource" uid="uid://8cuopywwlfq6" path="res://Resources/Loot Tables/Chest Loot Generic Table.tres" id="33_ymr75"]
+[ext_resource type="PackedScene" uid="uid://duryafthdfiy5" path="res://Prefabs/World Objects/Lvl Entities/Default Chest.tscn" id="24_uq885"]
 [ext_resource type="Shader" uid="uid://bpju2pddlc286" path="res://Scripts/Shader Scripts/Vis_mask_cone.gdshader" id="35_2wstq"]
 [ext_resource type="FontFile" uid="uid://bnlamhhfpyyse" path="res://Sprites/UI and Menu/Fonts and Text/OpenSans-Light.ttf" id="35_3xe68"]
 [ext_resource type="Script" uid="uid://rpdw86t5puk1" path="res://Scripts/Editor/Editor UI Core/Boxel Tray Frame.gd" id="35_xhdnv"]
@@ -331,25 +330,6 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_mexip"]
 radius = 40.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_def8p"]
-custom_solver_bias = 0.069
-
-[sub_resource type="Gradient" id="Gradient_bnrmk"]
-offsets = PackedFloat32Array(0.616915, 1)
-colors = PackedColorArray(0.662269, 0.402564, 0.287136, 1, 0.160508, 0.0664839, 0.032531, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_c7wk7"]
-gradient = SubResource("Gradient_bnrmk")
-width = 20
-height = 20
-fill = 2
-fill_from = Vector2(0.504274, 0.491453)
-
-[sub_resource type="GDScript" id="GDScript_stsf1"]
-resource_name = "Testing item container"
-script/source = "extends Control
-"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cotiw"]
 shader = ExtResource("35_2wstq")
 shader_parameter/view_angle = 0.419
@@ -389,6 +369,17 @@ height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.491453)
+
+[sub_resource type="Gradient" id="Gradient_a1drd"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.640212, 0.719577, 0.899471, 1)
+colors = PackedColorArray(1, 1, 0, 0.0823529, 1, 1, 0, 1, 1, 1, 0, 0.290196, 1, 1, 0, 0.913725, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_52wul"]
+gradient = SubResource("Gradient_a1drd")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tbkho"]
 load_path = "res://.godot/imported/UI Button Template.png-b05fa7349dad59e824bef5489da0f127.ctex"
@@ -1858,30 +1849,9 @@ zoom = Vector2(2, 2)
 z_index = 300
 z_as_relative = false
 
-[node name="Chest 1" type="Area2D" parent="Entity Rendering Layer/Map Object Container" node_paths=PackedStringArray("inventory_items")]
+[node name="Chest" parent="Entity Rendering Layer/Map Object Container" node_paths=PackedStringArray("inventory_items") instance=ExtResource("24_uq885")]
 position = Vector2(228.198, 110.594)
-collision_layer = 128
-collision_mask = 128
-script = ExtResource("32_2682j")
-inventory_size = Vector2i(5, 5)
-inventory_items = [null, null]
-loot_table = ExtResource("33_ymr75")
-quantity_multiplier = 10
-rarity_multiplier = 1
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entity Rendering Layer/Map Object Container/Chest 1"]
-shape = SubResource("RectangleShape2D_def8p")
-
-[node name="Sprite2D" type="Sprite2D" parent="Entity Rendering Layer/Map Object Container/Chest 1"]
-texture = SubResource("GradientTexture2D_c7wk7")
-
-[node name="Item Container" type="Control" parent="Entity Rendering Layer/Map Object Container/Chest 1"]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = SubResource("GDScript_stsf1")
+inventory_items = []
 
 [node name="Visibility Light Mask" type="SubViewport" parent="."]
 handle_input_locally = false
@@ -1958,7 +1928,11 @@ toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"
 eraser = NodePath("Editor UI/Library Container/Editor Level Pane/Eraser")
 tile_selection_outline = NodePath("Editor UI/Library Container/Editor Level Pane/Tile Selection Outline")
 
-[node name="Editor Workspace Shaders" type="Node2D" parent="Editor Overlay Layer"]
+[node name="Editor Workspace" type="Node2D" parent="Editor Overlay Layer"]
+
+[node name="Editor Object Selection Overlay" type="Sprite2D" parent="Editor Overlay Layer/Editor Workspace"]
+visible = false
+texture = SubResource("GradientTexture2D_52wul")
 
 [node name="Editor UI" type="VBoxContainer" parent="Editor Overlay Layer"]
 anchors_preset = 15
@@ -2535,7 +2509,6 @@ script = ExtResource("43_erl8j")
 tool_index = -1
 
 [node name="Tile Selection Outline" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane"]
-visible = false
 layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0
@@ -2563,6 +2536,7 @@ handle_input_locally = false
 title = "Import New Boxels"
 initial_position = 1
 size = Vector2i(1258, 773)
+visible = false
 exclusive = true
 unresizable = true
 borderless = true
@@ -3446,7 +3420,6 @@ script = ExtResource("43_uy6ih")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]
-[connection signal="child_order_changed" from="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" to="Entity Rendering Layer/Map Object Container/Chest 1/Item Container" method="_on_child_order_changed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Import Button" to="Editor Overlay Layer" method="_on_editor_import_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Save Level Button" to="Editor Overlay Layer" method="_on_save_level"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Load Level Button" to="Editor Overlay Layer" method="_on_load_level_button_pressed"]

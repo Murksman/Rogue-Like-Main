@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6i2bjayvgfov"]
+
+[ext_resource type="Script" uid="uid://biixftsscf1mg" path="res://Scripts/Object Scripts/Level Entities/Basic Light.gd" id="1_6obgh"]
+
+[sub_resource type="Gradient" id="Gradient_jyjsb"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5wdfb"]
+gradient = SubResource("Gradient_jyjsb")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="SimpleLight" type="PointLight2D"]
+scale = Vector2(10, 10)
+texture = SubResource("GradientTexture2D_5wdfb")
+texture_scale = 20.67
+height = 17.0
+script = ExtResource("1_6obgh")
+
+[node name="Light Source Texture" type="Sprite2D" parent="."]

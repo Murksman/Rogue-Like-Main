@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://duryafthdfiy5"]
+
+[ext_resource type="Script" uid="uid://bsntp1u26ewnl" path="res://Scripts/Class Scripts/Chest.gd" id="1_expmg"]
+[ext_resource type="Resource" uid="uid://8cuopywwlfq6" path="res://Resources/Loot Tables/Chest Loot Generic Table.tres" id="2_fv5nw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_def8p"]
+custom_solver_bias = 0.069
+
+[sub_resource type="Gradient" id="Gradient_bnrmk"]
+offsets = PackedFloat32Array(0.616915, 1)
+colors = PackedColorArray(0.662269, 0.402564, 0.287136, 1, 0.160508, 0.0664839, 0.032531, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c7wk7"]
+gradient = SubResource("Gradient_bnrmk")
+width = 20
+height = 20
+fill = 2
+fill_from = Vector2(0.504274, 0.491453)
+
+[node name="Chest" type="Area2D" node_paths=PackedStringArray("inventory_items")]
+collision_layer = 128
+collision_mask = 128
+monitoring = false
+script = ExtResource("1_expmg")
+inventory_size = Vector2i(5, 5)
+inventory_items = [null, null]
+loot_table = ExtResource("2_fv5nw")
+quantity_multiplier = 10
+rarity_multiplier = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_def8p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_c7wk7")
+
+[node name="Item Container" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="child_order_changed" from="Item Container" to="Item Container" method="_on_child_order_changed"]

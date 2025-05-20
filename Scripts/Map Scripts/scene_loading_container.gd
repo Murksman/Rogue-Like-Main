@@ -1,17 +1,55 @@
 extends Node
 
 var load_file_path : String = ""
-var boxel_load_path : String = "res://Resources/Boxels"
+var lvlobject_load_path : String = "res://Resources/Level Objects"
+var entity_load_path : String = "res://Prefabs/World Objects/Lvl Entities"
 var levels_load_path : String = "res://Scenes/Editor Maps"
+var loot_tables_path : String = "res://Resources/Loot Tables"
+
+var loot_tables : Array[LootTable] = []
+var loaded_entities : Array[PackedScene] = []
 
 var player_data : SaveData
 var player : Node2D
 
+var root_loaded := false
+
 func _ready() -> void:
-	if DirAccess.make_dir_absolute(boxel_load_path) == null:
-		print("Scene Load - successfully created boxel folder")
+	if DirAccess.make_dir_absolute(lvlobject_load_path) == null:
+		printerr("Scene Load - successfully created boxel folder")
 	if DirAccess.make_dir_absolute(levels_load_path) == null:
-		print("Scene Load - successfully created levels folder")
+		printerr("Scene Load - successfully created levels folder")
+	
+	LoadResources()
+
+func LoadResources():
+	if root_loaded: return
+	
+	var loot_paths = DirAccess.get_files_at(loot_tables_path)
+	
+	for path in loot_paths:
+		if path.get_extension() == "depren": continue
+		
+		var load_path = SceneLoadingContainer.lvlobject_load_path + "/" + path
+		var load_result = ResourceLoader.load(load_path)
+		
+		if load_result is LvlObject:
+			loot_tables.append(load_result)
+		else:
+			printerr("Loot Tables Loading Error Code: ", load_result)
+	
+	var entity_paths = DirAccess.get_files_at(SceneLoadingContainer.entity_load_path)
+	
+	for path in entity_paths:
+		var load_path = SceneLoadingContainer.entity_load_path + "/" + path
+		var load_result = ResourceLoader.load(load_path)
+		
+		if load_result is Entity:
+			loaded_entities.append(load_result)
+		else:
+			printerr("Entity Loading Error Code: ", load_result)
+	
+	root_loaded = true
 
 func StartGame(player_ref : Node2D):
 	player = player_ref
