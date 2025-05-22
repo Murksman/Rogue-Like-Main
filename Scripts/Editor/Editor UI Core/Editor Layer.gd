@@ -132,8 +132,10 @@ func MapObjectEvent(lvl_obj : LvlObject, click_position : Vector2, layer_canvas 
 	print("MapObjectEvent", )
 	
 	if tool == 1:
-		var entity =  level_tilemap_root.AddEntity(lvl_obj, click_position)
+		var entity = level_tilemap_root.AddEntity(lvl_obj, click_position)
 		SelectObject(entity)
+		
+		print(entity.global_position)
 	elif tool == 4:
 		var closest = level_tilemap_root.GetNearestObjects(layer_canvas, mouse_position, 20.0, true)[0]
 		if !closest: return
@@ -399,17 +401,13 @@ func ImporterAddBoxel(boxel : LvlObject) -> void:
 	boxel_name_list.append(boxel.resource_path.get_file())
 
 func SelectObject(world_object : Node2D) -> void:
-	var lvl_object : LvlObject = map_object_list[world_object.boxel_id]
-	
 	if selected_world_obj == world_object:
 		selected_world_obj = null
 		return
 	
-	if lvl_object is LightObject || lvl_object is EntityObject:
-		selected_world_obj = world_object
-		
-		
-	else: print("Attempting to select an Object of invalid type: ", world_object.name)
+	selected_world_obj = world_object
+	
+	if !(world_object is Entity): print("Attempting to select an Object of invalid type: ", world_object.name)
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)

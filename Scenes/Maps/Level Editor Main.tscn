@@ -764,7 +764,6 @@ texture = SubResource("GradientTexture2D_4xic8")
 current = true
 
 [node name="Global Lighting" type="CanvasModulate" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
@@ -1912,6 +1911,7 @@ height = 40.0
 [node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline")]
 process_priority = 1
 layer = 20
+visible = false
 script = ExtResource("41_hic17")
 level_tilemap_root = NodePath("../Level Tilemap Root")
 layer_button_group = ExtResource("48_rkwao")
@@ -2117,7 +2117,7 @@ action_mode = 0
 button_group = ExtResource("48_rkwao")
 text = "Lighting"
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/testing Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Light Layer")
 layer_int = 4
 
 [node name="Tile Tray" type="Control" parent="Editor Overlay Layer/Editor UI"]
@@ -3375,7 +3375,7 @@ use_native_dialog = true
 navigation_polygon = SubResource("NavigationPolygon_5py3h")
 enabled = false
 script = ExtResource("24_e5ldj")
-layer_groups = [NodePath("Level Save Root/Floor Layer"), NodePath("Level Save Root/Decal Layer"), NodePath("Level Save Root/Wall Layer"), NodePath("Level Save Root/Entity Layer"), NodePath("Level Save Root/testing Layer")]
+layer_groups = [NodePath("Level Save Root/Floor Layer"), NodePath("Level Save Root/Decal Layer"), NodePath("Level Save Root/Wall Layer"), NodePath("Level Save Root/Entity Layer"), NodePath("Level Save Root/Light Layer")]
 chunk_size = 16
 chunk_background = NodePath("../Background")
 level_save_root = NodePath("Level Save Root")
@@ -3404,11 +3404,9 @@ script = ExtResource("43_uy6ih")
 material = SubResource("ShaderMaterial_ccf2s")
 script = ExtResource("43_uy6ih")
 
-[node name="testing Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
-visible = false
+[node name="Light Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_as_relative = false
 material = SubResource("ShaderMaterial_jvv8s")
-position = Vector2(-65, -17)
 fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true

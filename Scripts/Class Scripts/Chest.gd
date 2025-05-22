@@ -26,6 +26,14 @@ func MapArgs(args : Dictionary) -> int:
 	
 	return 0
 
+func GetArgs() -> Dictionary:
+	return {
+		"tbl":0,
+		"size":Vector2(),
+		"quant":0.0,
+		"rarity":0.0
+	}
+
 func ChangeLootTable(tbl : int):
 	loot_table = SceneLoadingContainer.loot_tables[tbl]
 

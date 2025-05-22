@@ -5,3 +5,6 @@ class_name Entity
 
 func MapArgs(args : Dictionary) -> int:
 	return 1
+
+func GetArgs() -> Dictionary:
+	return {}

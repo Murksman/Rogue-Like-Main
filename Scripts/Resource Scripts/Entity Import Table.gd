@@ -16,16 +16,18 @@ class_name EntityImportTable
 
 
 func CompileEntities() -> void:
+	if !Engine.is_editor_hint(): return
+	
 	entities = []
 	entity_ids = []
 	entity_arg_list = []
 	
 	entity_ids
 	
-	var entity_paths = DirAccess.get_files_at(SceneLoadingContainer.entity_load_path)
+	var entity_paths = DirAccess.get_files_at("res://Prefabs/World Objects/Lvl Entities")
 	
 	for path in entity_paths:
-		var load_path = SceneLoadingContainer.entity_load_path + "/" + path
+		var load_path = "res://Prefabs/World Objects/Lvl Entities/" + path
 		var load_result = ResourceLoader.load(load_path)
 		
 		if load_result is PackedScene:

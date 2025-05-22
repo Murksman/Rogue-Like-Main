@@ -422,8 +422,8 @@ func AssignTileOwner() -> void:
 
 func AddEntity(lvl_obj : LvlObject, pos : Vector2, args : Dictionary = {}) -> Node:
 	print("Adding Entity - ", lvl_obj)
-	var index : int = SceneLoadingContainer.loaded_entities.bsearch_custom(lvl_obj.obj_type, func(a, b): return a.id < b.id)
-	var entity = SceneLoadingContainer.loaded_entities[index].instantiate()
+	var index : int =  SceneLoadingContainer.loaded_entities.entity_ids.find(lvl_obj.obj_type)
+	var entity = SceneLoadingContainer.loaded_entities.entities[index].instantiate()
 	
 	if args.size() == 0: args = lvl_obj.property_list
 	
@@ -434,6 +434,8 @@ func AddEntity(lvl_obj : LvlObject, pos : Vector2, args : Dictionary = {}) -> No
 	else: print("Error Adding Entity - Invalid Type: ", lvl_obj.name)
 	
 	entity.position = pos
+	
+	print(layer_groups[4].get_children())
 	
 	return entity
 

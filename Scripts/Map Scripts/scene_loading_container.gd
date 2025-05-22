@@ -2,17 +2,19 @@ extends Node
 
 var load_file_path : String = ""
 var lvlobject_load_path : String = "res://Resources/Level Objects"
-var entity_load_path : String = "res://Prefabs/World Objects/Lvl Entities"
+#var entity_load_path : String = "res://Prefabs/World Objects/Lvl Entities"
+var entity_import_path : String = "res://Resources/Misc Data/Entity Import Table.res"
 var levels_load_path : String = "res://Scenes/Editor Maps"
 var loot_tables_path : String = "res://Resources/Loot Tables"
 
 var loot_tables : Array[LootTable] = []
-var loaded_entities : Array[PackedScene] = []
 
 var player_data : SaveData
 var player : Node2D
 
 var root_loaded := false
+
+@onready var loaded_entities : EntityImportTable = preload("res://Resources/Misc Data/Entity Import Table.res")
 
 func _ready() -> void:
 	if DirAccess.make_dir_absolute(lvlobject_load_path) == null:
@@ -37,19 +39,6 @@ func LoadResources():
 			loot_tables.append(load_result)
 		else:
 			printerr("Loot Tables Loading Error Code: ", load_result)
-	
-	var entity_paths = DirAccess.get_files_at(entity_load_path)
-	
-	for path in entity_paths:
-		var load_path = entity_load_path + "/" + path
-		var load_result = ResourceLoader.load(load_path)
-		
-		if load_result is PackedScene:
-			loaded_entities.append(load_result)
-		else:
-			printerr("Entity Loading Error Code: ", load_result)
-	
-	loaded_entities.sort_custom(func(a, b): return a.get_local_scene().id < b.get_local_scene().id)
 	
 	root_loaded = true
 
