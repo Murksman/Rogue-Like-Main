@@ -9,7 +9,9 @@ class_name Chest
 @export var quantity_multiplier : int
 @export var rarity_multiplier : int
 
-@onready var item_container : Control = $"Item Container"
+@export var item_container : Control
+
+var table_index : int = 0
 
 func MapArgs(args : Dictionary) -> int:
 	var tbl = args.get("tbl", null)
@@ -29,12 +31,13 @@ func MapArgs(args : Dictionary) -> int:
 func GetArgs() -> Dictionary:
 	return {
 		"tbl":0,
-		"size":Vector2(),
-		"quant":0.0,
-		"rarity":0.0
+		"size":Vector2i(5,5),
+		"quant":10,
+		"rarity":1
 	}
 
 func ChangeLootTable(tbl : int):
+	table_index = tbl
 	loot_table = SceneLoadingContainer.loot_tables[tbl]
 
 func _ready():

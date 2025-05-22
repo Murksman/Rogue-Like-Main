@@ -444,7 +444,7 @@ func DeleteEntity(entity : Entity) -> void:
 
 func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distance : float, exclusive : bool = false) -> Array:
 	if exclusive:
-		var closest = null
+		var closest : Node2D = null
 		var dist := max_distance
 		for obj in object_layer.get_children():
 			var t_dist = obj.global_position.distance_to(t_point)

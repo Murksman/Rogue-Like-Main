@@ -22,8 +22,6 @@ func CompileEntities() -> void:
 	entity_ids = []
 	entity_arg_list = []
 	
-	entity_ids
-	
 	var entity_paths = DirAccess.get_files_at("res://Prefabs/World Objects/Lvl Entities")
 	
 	for path in entity_paths:

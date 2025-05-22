@@ -59,6 +59,7 @@
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
 [ext_resource type="Resource" uid="uid://dkvpkci6r641t" path="res://Resources/Misc Data/default_wall_occluders.tres" id="55_uqdnf"]
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
+[ext_resource type="PackedScene" uid="uid://duryafthdfiy5" path="res://Prefabs/World Objects/Lvl Entities/Default Chest.tscn" id="60_uq885"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -299,17 +300,6 @@ load_path = "res://.godot/imported/White_Texture.png-dea4ff7c35de97ac84b80130e4c
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xmfay"]
 radius = 12.0
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_grcqq"]
-viewport_path = NodePath("Visibility Light Mask")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vk563"]
-resource_local_to_scene = true
-shader = ExtResource("16_aa6he")
-shader_parameter/mask_texture = SubResource("ViewportTexture_grcqq")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_5bdvs"]
-viewport_path = NodePath("Entity Rendering Layer")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_jr771"]
 viewport_path = NodePath("Visibility Light Mask")
@@ -743,13 +733,25 @@ shader_parameter/is_visible = true
 shader = ExtResource("47_s3dxo")
 shader_parameter/is_visible = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ccf2s"]
-shader = ExtResource("47_s3dxo")
-shader_parameter/is_visible = true
+[sub_resource type="ViewportTexture" id="ViewportTexture_t1s4r"]
+viewport_path = NodePath("Visibility Light Mask")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jvv8s"]
-shader = ExtResource("47_s3dxo")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ccf2s"]
+resource_local_to_scene = true
+shader = ExtResource("16_aa6he")
+shader_parameter/mask_texture = SubResource("ViewportTexture_t1s4r")
 shader_parameter/is_visible = true
+shader_parameter/is_editing = false
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_a1drd"]
+viewport_path = NodePath("Visibility Light Mask")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_52wul"]
+resource_local_to_scene = true
+shader = ExtResource("16_aa6he")
+shader_parameter/mask_texture = SubResource("ViewportTexture_a1drd")
+shader_parameter/is_visible = true
+shader_parameter/is_editing = true
 
 [node name="World" type="Node2D"]
 texture_filter = 1
@@ -764,6 +766,7 @@ texture = SubResource("GradientTexture2D_4xic8")
 current = true
 
 [node name="Global Lighting" type="CanvasModulate" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
@@ -777,10 +780,9 @@ visibility_layer = 2047
 z_index = 3581
 z_as_relative = false
 
-[node name="Enemy Container" type="Node2D" parent="." node_paths=PackedStringArray("player", "masked_entity_container")]
+[node name="Enemy Container" type="Node2D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("2_6t5k7")
 player = NodePath("../Player")
-masked_entity_container = NodePath("../Entity Rendering Layer/Enemy Rendering Container")
 
 [node name="EnemyBoxSpawner2" type="Node2D" parent="Enemy Container"]
 position = Vector2(174, 356)
@@ -1661,7 +1663,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_g5myo")
 centered = false
 
-[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("inventory_elements", "backpack_inventory", "loadout_inventory", "world_obj_inventory", "obj_inventory_container", "weapon_holder", "usable_entity_area", "usable_area", "projectileContainer", "collision_body")]
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("inventory_elements", "backpack_inventory", "loadout_inventory", "world_obj_inventory", "obj_inventory_container", "weapon_holder", "usable_area", "projectileContainer", "collision_body")]
 light_mask = 0
 z_as_relative = false
 texture_filter = 1
@@ -1679,7 +1681,6 @@ loadout_inventory = NodePath("../UI Layer/Inventory Elements/Weapon Loadout/Load
 world_obj_inventory = NodePath("../UI Layer/Inventory Elements/World Object Inventory/Object Inventory")
 obj_inventory_container = NodePath("../UI Layer/Inventory Elements/World Object Inventory")
 weapon_holder = NodePath("Camera2D/Orientation/Weapon Holder")
-usable_entity_area = NodePath("../Entity Rendering Layer/Use Area (Entity)")
 usable_area = NodePath("Use Area")
 projectileContainer = NodePath("../Projectile Container")
 collision_body = NodePath("Body Collider")
@@ -1687,7 +1688,7 @@ collision_body = NodePath("Body Collider")
 [node name="Body Collider" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CircleShape2D_xmfay")
 
-[node name="Camera2D" type="Camera2D" parent="Player" node_paths=PackedStringArray("cone_shader", "vis_mask_cone_shader", "screen_effects_shader", "vis_mask_cam", "entity_rendering_cam", "flash_light", "wall_flash_light", "Orientation", "player")]
+[node name="Camera2D" type="Camera2D" parent="Player" node_paths=PackedStringArray("cone_shader", "vis_mask_cone_shader", "screen_effects_shader", "vis_mask_cam", "flash_light", "wall_flash_light", "Orientation", "player")]
 process_priority = 10
 process_physics_priority = 10
 top_level = true
@@ -1704,19 +1705,10 @@ cone_shader = NodePath("../../Shader Layer/Shader Container/Vision Cone Effects/
 vis_mask_cone_shader = NodePath("../../Visibility Light Mask/Light Mask Shader")
 screen_effects_shader = NodePath("../../Shader Layer/Shader Container/Screen Effect Controls/Screen Controls")
 vis_mask_cam = NodePath("../../Visibility Light Mask/Mask Cam")
-entity_rendering_cam = NodePath("../../Entity Rendering Layer/Mask Cam")
 flash_light = NodePath("Orientation/Flashlight")
 wall_flash_light = NodePath("Orientation/Flashlight (Wall)")
 Orientation = NodePath("Orientation")
 player = NodePath("..")
-
-[node name="Masked_Entity_Layer" type="Sprite2D" parent="Player/Camera2D"]
-visibility_layer = 3
-z_index = 100
-z_as_relative = false
-material = SubResource("ShaderMaterial_vk563")
-scale = Vector2(0.5, 0.5)
-texture = SubResource("ViewportTexture_5bdvs")
 
 [node name="Debug_Visibility_Layer" type="Sprite2D" parent="Player/Camera2D"]
 visible = false
@@ -1818,34 +1810,6 @@ texture = ExtResource("20_8qlr8")
 
 [node name="Use Area" type="CollisionShape2D" parent="Player/Use Area"]
 shape = SubResource("CircleShape2D_mexip")
-
-[node name="Entity Rendering Layer" type="SubViewport" parent="."]
-disable_3d = true
-transparent_bg = true
-handle_input_locally = false
-canvas_cull_mask = 4294966529
-size = Vector2i(1920, 1080)
-
-[node name="Use Area (Entity)" type="Area2D" parent="Entity Rendering Layer"]
-position = Vector2(100, 100)
-disable_mode = 2
-collision_layer = 128
-collision_mask = 128
-
-[node name="Use Area" type="CollisionShape2D" parent="Entity Rendering Layer/Use Area (Entity)"]
-shape = SubResource("CircleShape2D_mexip")
-
-[node name="Enemy Rendering Container" type="Node2D" parent="Entity Rendering Layer"]
-z_index = -100
-z_as_relative = false
-
-[node name="Mask Cam" type="Camera2D" parent="Entity Rendering Layer"]
-visibility_layer = 256
-zoom = Vector2(2, 2)
-
-[node name="Map Object Container" type="Node2D" parent="Entity Rendering Layer"]
-z_index = 300
-z_as_relative = false
 
 [node name="Visibility Light Mask" type="SubViewport" parent="."]
 handle_input_locally = false
@@ -3401,12 +3365,19 @@ material = SubResource("ShaderMaterial_esbmk")
 script = ExtResource("43_uy6ih")
 
 [node name="Entity Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
+z_index = 110
+z_as_relative = false
 material = SubResource("ShaderMaterial_ccf2s")
+fit_margin = 4.0
+clear_margin = 4.0
 script = ExtResource("43_uy6ih")
 
+[node name="Chest" parent="Level Tilemap Root/Level Save Root/Entity Layer" instance=ExtResource("60_uq885")]
+
 [node name="Light Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
+z_index = 120
 z_as_relative = false
-material = SubResource("ShaderMaterial_jvv8s")
+material = SubResource("ShaderMaterial_52wul")
 fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true

@@ -10,7 +10,6 @@ var time : float = 0.0
 @export var vis_mask_cone_shader : ColorRect
 @export var screen_effects_shader : ColorRect
 @export var vis_mask_cam : Camera2D
-@export var entity_rendering_cam : Camera2D
 @export var flash_light : Light2D
 @export var wall_flash_light : Light2D 
 @export var Orientation : Node2D
@@ -61,7 +60,3 @@ func _process(delta):
 	
 	vis_mask_cam.global_position = global_position
 	vis_mask_cam.offset = offset
-	
-	$Masked_Entity_Layer.global_position = global_position + offset
-	entity_rendering_cam.global_position = global_position
-	entity_rendering_cam.offset = offset
