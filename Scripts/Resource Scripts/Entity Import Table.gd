@@ -20,7 +20,6 @@ func CompileEntities() -> void:
 	
 	entities = []
 	entity_ids = []
-	entity_arg_list = []
 	
 	var entity_paths = DirAccess.get_files_at("res://Prefabs/World Objects/Lvl Entities")
 	
@@ -33,6 +32,5 @@ func CompileEntities() -> void:
 			
 			var tmp_obj = load_result.instantiate()
 			entity_ids.append(tmp_obj.id)
-			entity_arg_list.append({})
 		else:
 			printerr("Entity Loading Error Code: ", load_result)

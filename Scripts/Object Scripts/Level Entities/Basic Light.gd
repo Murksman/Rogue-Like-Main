@@ -19,8 +19,8 @@ func MapArgs(args : Dictionary) -> int:
 
 func GetArgs() -> Dictionary:
 	return {
-		"clr":Color(),
-		"lum":0.0,
-		"height":0.0,
-		"scl":0.0
+		"clr":self.color,
+		"lum":self.energy,
+		"height":self.height,
+		"scl":self.texture_scale
 	}

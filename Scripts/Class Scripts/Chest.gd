@@ -30,10 +30,10 @@ func MapArgs(args : Dictionary) -> int:
 
 func GetArgs() -> Dictionary:
 	return {
-		"tbl":0,
-		"size":Vector2i(5,5),
-		"quant":10,
-		"rarity":1
+		"tbl":table_index,
+		"size":inventory_size,
+		"quant":quantity_multiplier,
+		"rarity":rarity_multiplier
 	}
 
 func ChangeLootTable(tbl : int):
