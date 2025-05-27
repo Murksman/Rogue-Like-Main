@@ -44,6 +44,22 @@ func _ready() -> void:
 	
 	LoadResources()
 
+func LoadResources() -> void:
+	level_tilemap_root.LoadResources()
+	
+	map_object_list = level_tilemap_root.loaded_object_list
+	
+	boxel_id_list.resize(map_object_list.size())
+	boxel_name_list.resize(map_object_list.size())
+	
+	for i in map_object_list.size():
+		var boxel = map_object_list[i]
+		boxel_id_list[i] = boxel.id
+		boxel_name_list[i] = boxel.name + ".res"
+		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.lvlobject_load_path + "/" + boxel_name_list[i], true)
+	
+	library_grid.ReorderBoxels()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"): 
@@ -132,7 +148,7 @@ func MapObjectEvent(lvl_obj : LvlObject, click_position : Vector2, layer_canvas 
 	print("MapObjectEvent", )
 	
 	if tool == 1:
-		var entity = level_tilemap_root.AddEntity(lvl_obj, click_position)
+		var entity = level_tilemap_root.AddEntity(lvl_obj.obj_type, layer_canvas, click_position)
 		SelectObject(entity)
 		
 		print(entity.global_position)
@@ -213,22 +229,6 @@ func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, releas
 		if !released: return
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas, true)
 	
-
-func LoadResources() -> void:
-	level_tilemap_root.LoadResources()
-	
-	map_object_list = level_tilemap_root.loaded_object_list
-	
-	boxel_id_list.resize(map_object_list.size())
-	boxel_name_list.resize(map_object_list.size())
-	
-	for i in map_object_list.size():
-		var boxel = map_object_list[i]
-		boxel_id_list[i] = boxel.id
-		boxel_name_list[i] = boxel.name + ".res"
-		library_grid.AddNewBoxel(boxel, SceneLoadingContainer.lvlobject_load_path + "/" + boxel_name_list[i], true)
-	
-	library_grid.ReorderBoxels()
 
 func SelectBoxel(target_boxel : UIBoxel) -> void:
 	if target_boxel == selected_boxel:
@@ -325,25 +325,59 @@ func ReadLevelFile(filepath : String):
 	file.seek(file.get_position() + 1)
 	
 	var temp_boxel_load_list : Array[LvlObject] = []
-	temp_boxel_load_list.resize(boxel_id_list.size())
 	
-	for i in boxel_id_list.size():
-		var temp_id = boxel_id_list[i]
-		var dummy_boxel = LvlObject.new()
-		dummy_boxel.boxel_id = temp_id
-		var new_index = map_object_list.bsearch_custom(dummy_boxel, func(a, b): return a.boxel_id < b.boxel_id)
-		
-		temp_boxel_load_list[i] = map_object_list[new_index]
+	for boxel_id in level_tilemap_root.boxel_id_list:
+		var new_index = boxel_id_list.bsearch(boxel_id)
+		temp_boxel_load_list.append(map_object_list[new_index])
 	
 	var map_array_length = file.get_64()
 	file.seek(file.get_position() + 1)
 	
-	for layer in level_tilemap_root.layer_groups:
+	for i in 3:
+		var t_layer = level_tilemap_root.layer_groups[i]
 		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
-		var read_result = level_tilemap_root.ReadPackedTileArray(layer, floor_tile_buff, temp_boxel_load_list)
+		var read_result = level_tilemap_root.ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
 		
 		if read_result != "": printerr(read_result)
 		file.seek(file.get_position() + 1)
+	file.seek(file.get_position() + 1)
+	
+	var eid_list_size = file.get_32()
+	var eid_list_buffer : PackedByteArray = file.get_buffer(eid_list_size)
+	
+	level_tilemap_root.entity_id_list.resize(eid_list_size >> 2)
+	level_tilemap_root.entity_usage_list.resize(eid_list_size >> 2)
+	level_tilemap_root.entity_usage_list.fill(0)
+	
+	for i in eid_list_size >> 2:
+		level_tilemap_root.entity_id_list[i] = eid_list_buffer.decode_u32(i << 2)
+	
+	for i in 2:
+		var t_layer = level_tilemap_root.layer_groups[i+3]
+		var entity_count = file.get_32()
+		
+		for n in entity_count:
+			var id = file.get_8()
+			var entity_pos = Vector2()
+			entity_pos.x = file.get_32()
+			entity_pos.y = file.get_32()
+			
+			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(level_tilemap_root.entity_id_list[id])
+			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
+			level_tilemap_root.AddEntity()
+			
+			var entity_arg_flags = file.get_8()
+			var args = {}
+			
+			for k in 8:
+				if entity_arg_flags & 1 << k: 
+			
+			
+		
+		file.seek(file.get_position() + 1)
+	file.seek(file.get_position() + 1)
+	
+	file.close()
 
 func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
@@ -381,7 +415,41 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	
 	for i in 2:
 		var t_layer = level_tilemap_root.layer_groups[i+3]
+		file.store_32(t_layer.get_child_count())
 		
+		for entity in t_layer.get_children():
+			var entity_buff = CompileEntityBytes(entity)
+			file.store_buffer(entity_buff)
+		
+		file.store_string("\n")
+	file.store_string("\n")
+	
+	file.close()
+
+func CompileEntityBytes(entity : Node) -> PackedByteArray:
+	var byte_arr : PackedByteArray = []
+	var id = entity.id
+	byte_arr.encode_u8(0, id)
+	byte_arr.encode_s32(1, entity.pos.x)
+	byte_arr.encode_s32(5, entity.pos.y)
+	
+	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[SceneLoadingContainer.loaded_entities.entity_ids.find(id)]
+	var bit_flags = 0
+	var args : Dictionary = entity.GetArgs()
+	
+	byte_arr.append(0)
+	
+	for i in def_args.size():
+		if args.has(def_args.keys()[i]): bit_flags |= 1 << i
+		elif def_args[i] == args[i]: 
+			byte_arr.encode_var(byte_arr.size(), args[i])
+	
+	byte_arr.encode_u8(9, bit_flags)
+	
+	return byte_arr
+
+func ReadEntity(file : FileAccess):
+	var id = file.get_8()
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()

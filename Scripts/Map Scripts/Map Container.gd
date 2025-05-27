@@ -22,6 +22,8 @@ var chunk_temp : Array[Array] = []
 var boxel_id_list : PackedInt32Array = []
 var boxel_usage_list : PackedInt32Array = []
 var loaded_object_list : Array[LvlObject] = []
+var entity_id_list : PackedInt32Array = []
+var entity_usage_list : PackedInt32Array = []
 
 var root_loaded = false
 
@@ -420,26 +422,31 @@ func AssignTileOwner() -> void:
 		for child in layer.get_children():
 			child.owner = level_save_root
 
-func AddEntity(lvl_obj : LvlObject, pos : Vector2, args : Dictionary = {}) -> Node:
-	print("Adding Entity - ", lvl_obj)
-	var index : int =  SceneLoadingContainer.loaded_entities.entity_ids.find(lvl_obj.obj_type)
+func AddEntity(obj_id : int, layer_group : CanvasGroup, pos : Vector2, args : Dictionary = {}) -> Entity:
+	var index : int = SceneLoadingContainer.loaded_entities.entity_ids.find(obj_id)
 	var entity = SceneLoadingContainer.loaded_entities.entities[index].instantiate()
+	print("Adding Entity - ", entity.name)
 	
-	if args.size() == 0: args = lvl_obj.property_list
-	
-	entity.MapArgs(args)
-	
-	if lvl_obj is EntityObject: layer_groups[3].add_child(entity)
-	elif lvl_obj is LightObject: layer_groups[4].add_child(entity)
-	else: print("Error Adding Entity - Invalid Type: ", lvl_obj.name)
+	if args.size() > 0: entity.MapArgs(args)
+	layer_group.add_child(entity)
 	
 	entity.position = pos
 	
-	print(layer_groups[4].get_children())
+	var id = entity.id
+	var id_index := entity_id_list.bsearch(id)
+	if id == entity_id_list[id_index]: entity_usage_list[id_index] += 1
+	else: 
+		entity_id_list.insert(id_index, id)
+		entity_usage_list.insert(id_index, 1)
 	
 	return entity
 
 func DeleteEntity(entity : Entity) -> void:
+	var id = entity.id
+	var index := entity_id_list.bsearch(id)
+	if id == entity_id_list[index]: entity_usage_list[index] -= 1
+	if entity_usage_list[index] <= 0: entity_usage_list.remove_at(index)
+	
 	entity.queue_free()
 
 func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distance : float, exclusive : bool = false) -> Array:
