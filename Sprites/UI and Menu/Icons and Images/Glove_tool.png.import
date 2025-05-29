@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxlfqgqpa5kmb"
-path="res://.godot/imported/Pencil_tool.png-844bfa92287cf41e620404fa987f88f2.ctex"
+uid="uid://dsyfgiyin4hvx"
+path="res://.godot/imported/Glove_tool.png-6e43db62748b7c6d4c75bc9c32ee5b45.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UI/Tool Icons/Pencil_tool.png"
-dest_files=["res://.godot/imported/Pencil_tool.png-844bfa92287cf41e620404fa987f88f2.ctex"]
+source_file="res://Sprites/UI and Menu/Icons and Images/Glove_tool.png"
+dest_files=["res://.godot/imported/Glove_tool.png-6e43db62748b7c6d4c75bc9c32ee5b45.ctex"]
 
 [params]
 

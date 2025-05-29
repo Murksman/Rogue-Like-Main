@@ -61,6 +61,11 @@ func LoadResources() -> void:
 	library_grid.ReorderBoxels()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Editor Pencil Tool"): set_tool_mode(0)
+	if event.is_action_pressed("Editor Shape Tool"): set_tool_mode(1)
+	if event.is_action_pressed("Editor Hollow Tool"): set_tool_mode(2)
+	if event.is_action_pressed("Editor Glove Tool"): set_tool_mode(3)
+	
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"): 
 		if current_level_filepath == "":
@@ -93,82 +98,87 @@ func EditToggle(force_toggle : bool):
 	player.editor_open = editing
 	player.visible = !editing
 	player.collision_body.disabled = editing
-	
-	if layer_button_group.get_pressed_button(): layer_button_group.get_pressed_button().button_pressed = false
 
 func EditorExit():
 	import_window.notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	level_tilemap_root.ResetLayerVisibility()
 
 func EditorReady(): 
-	pass
+	for layer in level_tilemap_root.layer_groups:
+		layer.material.set_shader_parameter("is_editing", true)
 
 func LevelPanePressed(event : InputEvent) -> void:
 	tool = toolbar.selected_tool
 	
 	mouse_position = level_tilemap_root.get_local_mouse_position()
-	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button() && layer_button_group.get_pressed_button().layer_int < 3 && selected_boxel && toolbar.selected_tool > 0
 	
-	if event.is_action_pressed("Editor Secondary"):
+	if event.is_action_pressed("Editor Grab"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
-	
-	if event.is_action_pressed("Editor Primary"):
+	elif event.is_action_pressed("Editor Primary"):
 		anchor_tile_point = level_tilemap_root.PixelToTilePosition(mouse_position)
 	
-	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Secondary"):
+	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Grab"):
 		var tmp_anchor_point = get_viewport().get_mouse_position()
 		player.position += (anchor_mouse_point - tmp_anchor_point) / 2
 		anchor_mouse_point = tmp_anchor_point
 	
-	if !event.is_action("Editor Primary") && !event.is_action_released("Editor Primary") && !(event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary")) || !layer_button_group.get_pressed_button(): 
-		return
+	if Input.is_action_pressed("Editor Grab") || event.is_action_released("Editor Grab"): return
+	if !layer_button_group.get_pressed_button(): return
 	
-	var selected_layer = layer_button_group.get_pressed_button().layer_int
+	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button().layer_int < 3 && selected_boxel && toolbar.selected_tool > 0
 	
-	if (selected_boxel && selected_boxel.boxel.layers.has(selected_layer)) || eraser.button_pressed:
+	if event is InputEventMouseMotion && Input.is_action_pressed("Eraser Hold") || event.is_action_pressed("Eraser Hold") || event.is_action_released("Eraser Hold"):
+		var selected_layer = layer_button_group.get_pressed_button().layer_int
 		var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
-		if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary") && !event.is_action_released("Editor Primary"): return
+		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
+		focus_boxel = false
+		
+		drag_action_position = tile_position
+		MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Eraser Hold"))
+	
+	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary") || event.is_action("Editor Primary") || event.is_action_released("Editor Primary"):
+		var selected_layer = layer_button_group.get_pressed_button().layer_int
 		
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
-		focus_boxel = false
-		
-		if selected_boxel.boxel is LightObject || selected_boxel.boxel is EntityObject:
-			if event.is_action_pressed("Editor Primary"): MapObjectEvent(selected_boxel.boxel, mouse_position, layer_canvas)
+		if selected_layer > 2:
+			if event.is_action_pressed("Editor Primary"): MapObjectEvent(selected_boxel, mouse_position, layer_canvas)
 			return
 		
-		drag_action_position = tile_position
-		
-		if eraser.button_pressed:
-			MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
-		else:
-			MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
+		if (selected_boxel && selected_boxel.boxel.layers.has(selected_layer)) || eraser.button_pressed:
+			var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
+			if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary") && !event.is_action_released("Editor Primary"): return
+			
+			focus_boxel = false
+			
+			drag_action_position = tile_position
+			
+			if eraser.button_pressed:
+				MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
+			else:
+				MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 
-func MapObjectEvent(lvl_obj : LvlObject, click_position : Vector2, layer_canvas : CanvasGroup) -> void:
-	print("MapObjectEvent", )
-	
+func MapObjectEvent(lvl_obj : UIBoxel, click_position : Vector2, layer_canvas : CanvasGroup) -> void:
+	print(tool)
 	if tool == 1:
-		var entity = level_tilemap_root.AddEntity(lvl_obj.obj_type, layer_canvas, click_position)
-		SelectObject(entity)
-		
-		print(entity.global_position)
+		if lvl_obj:
+			var entity = level_tilemap_root.AddEntity(lvl_obj.boxel.obj_type, layer_canvas, click_position)
+			SelectObject(entity)
 	elif tool == 4:
+		print("test object select")
 		var closest = level_tilemap_root.GetNearestObjects(layer_canvas, mouse_position, 20.0, true)[0]
 		if !closest: return
 		
 		SelectObject(closest)
 
 func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
-	if boxel is EntityObject || boxel is LightObject:
-		pass
-	
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
 		tile_selection_outline.global_position = tile_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 		tile_selection_outline.size = Vector2i(64,64)
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		
 		level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 		return
@@ -184,49 +194,48 @@ func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : Ca
 		if !released: return
 		
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		check_chunks_err = level_tilemap_root.CheckSetMapSize(anchor_tile_point)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		
 		level_tilemap_root.ShapeTool(shape_rect, layer_canvas, selected_boxel.boxel)
 	elif tool == 3:
 		if !released: return
 		
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		check_chunks_err = level_tilemap_root.CheckSetMapSize(anchor_tile_point)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		
 		level_tilemap_root.ShapeTool(shape_rect, layer_canvas, selected_boxel.boxel, true)
 
 func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
-	var shape_position : Vector2i = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
-	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
+		tile_selection_outline.global_position = tile_position
+		
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
+		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		
 		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
 		return
+	
+	var shape_position : Vector2i = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
+	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 	
 	var shape_size : Vector2i = abs(anchor_tile_point - tile_position) + Vector2i(1,1)
 	var shape_rect = Rect2i(shape_position, shape_size)
 	
 	tile_selection_outline.size = shape_size * 64
 	
+	if !released: return
+	if !level_tilemap_root.GetTile(anchor_tile_point, layer_canvas): return
+	if !level_tilemap_root.GetTile(tile_position, layer_canvas): return
+	
 	if tool == 2:
-		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
-		
-		if !released: return
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas)
 	elif tool == 3:
-		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
-		if check_chunks_err != 0: print("Chunk Checker Error - ", check_chunks_err)
-		
-		if !released: return
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas, true)
 	
 
@@ -296,9 +305,16 @@ func LoadLevel(filepath : String) -> void:
 		level_tilemap_root.ResetMap()
 
 func ReadLevelFile(filepath : String):
+	print("Opening Level File (" + filepath + ")")
 	var file = FileAccess.open(filepath, FileAccess.READ)
 	var lvl_namesize = file.get_8()
-	var lvl_name = file.get_buffer(lvl_namesize)
+	var lvl_name = file.get_buffer(lvl_namesize).get_string_from_utf8()
+	file.seek(file.get_position() + 1)
+	
+	var version_size = file.get_8()
+	var version = file.get_buffer(version_size).get_string_from_utf8()
+	
+	print("Level Name: -%s-  version: -%s-" % [lvl_name, version])
 	file.seek(file.get_position() + 2)
 	
 	var chunks_size : Vector2i = Vector2i(0,0)
@@ -364,15 +380,14 @@ func ReadLevelFile(filepath : String):
 			
 			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(level_tilemap_root.entity_id_list[id])
 			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
-			level_tilemap_root.AddEntity()
-			
 			var entity_arg_flags = file.get_8()
 			var args = {}
 			
 			for k in 8:
 				if entity_arg_flags & 1 << k: 
+					args[k + 1] = file.get_var()
 			
-			
+			level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
 		
 		file.seek(file.get_position() + 1)
 	file.seek(file.get_position() + 1)
@@ -386,6 +401,11 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	var filename_buff := filename.to_utf8_buffer()
 	file.store_8(filename_buff.size())
 	file.store_buffer(filename_buff)
+	file.store_string("\n")
+	
+	var version_buff = "v0.1".to_utf8_buffer()
+	file.store_8(version_buff.size())
+	file.store_buffer(version_buff)
 	file.store_string("\n")
 	
 	## Metadata TBD
@@ -450,6 +470,7 @@ func CompileEntityBytes(entity : Node) -> PackedByteArray:
 
 func ReadEntity(file : FileAccess):
 	var id = file.get_8()
+	
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()
@@ -475,7 +496,7 @@ func SelectObject(world_object : Node2D) -> void:
 	
 	selected_world_obj = world_object
 	
-	if !(world_object is Entity): print("Attempting to select an Object of invalid type: ", world_object.name)
+	if !(world_object is Entity): printerr("Attempting to select an Object of invalid type: ", world_object.name)
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)
@@ -491,3 +512,10 @@ func _on_save_level() -> void:
 
 func _on_load_level_button_pressed() -> void:
 	RequestLoadLevel()
+
+func set_tool_mode(idx : int):
+	for i in 4: toolbar.blend_buttons[i].set_pressed_no_signal(false)
+	toolbar.blend_buttons[idx].set_pressed_no_signal(true)
+	toolbar.blend_buttons[idx].toggled.emit()
+	tool = idx + 1
+	print(tool)

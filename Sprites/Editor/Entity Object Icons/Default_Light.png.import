@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsyfgiyin4hvx"
-path="res://.godot/imported/Glove_tool.png-ca0d1df993a5368c4599ec1ea6624a59.ctex"
+uid="uid://ce42v2mmtckor"
+path="res://.godot/imported/Default_Light.png-1c611b9b51656ac74a93467ebf14a92d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UI/Tool Icons/Glove_tool.png"
-dest_files=["res://.godot/imported/Glove_tool.png-ca0d1df993a5368c4599ec1ea6624a59.ctex"]
+source_file="res://Sprites/Editor/Entity Object Icons/Default_Light.png"
+dest_files=["res://.godot/imported/Default_Light.png-1c611b9b51656ac74a93467ebf14a92d.ctex"]
 
 [params]
 

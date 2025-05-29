@@ -47,7 +47,6 @@ func _process(delta):
 		
 		var lightLength = ((mouse_offset * mousePosCamMultiplier) + (mouse_offset / zoom)).length()
 		flash_light.texture_scale = 0.05 + (lightLength / 1200.0)
-		#flash_light.texture_scale = 2.0 + (lightLength / 1000.0)
 		flash_light.energy = 30.0 / sqrt(32 + lightLength)
 		var scale_smooth = lightLength / 96
 		flash_light.scale.y = 0.5 / ((scale_smooth * scale_smooth) + 1) + 0.5
@@ -55,6 +54,7 @@ func _process(delta):
 		wall_flash_light.texture_scale = flash_light.texture_scale
 		wall_flash_light.scale = flash_light.scale
 		wall_flash_light.offset = flash_light.offset
+		wall_flash_light.energy = 256.0 / (22 + lightLength)
 	
 	$Debug_Visibility_Layer.position = offset
 	

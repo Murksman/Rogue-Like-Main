@@ -14,9 +14,10 @@ class_name EntityImportTable
 		compile_entities = false
 		CompileEntities()
 
-
 func CompileEntities() -> void:
 	if !Engine.is_editor_hint(): return
+	var tmp_args_list := entity_arg_list.duplicate()
+	var tmp_args_ids := entity_ids.duplicate()
 	
 	entities = []
 	entity_ids = []
@@ -28,9 +29,9 @@ func CompileEntities() -> void:
 		var load_result = ResourceLoader.load(load_path)
 		
 		if load_result is PackedScene:
-			entities.append(load_result)
-			
 			var tmp_obj = load_result.instantiate()
-			entity_ids.append(tmp_obj.id)
+			var index = entity_ids.bsearch(tmp_obj.id)
+			entity_ids.insert(index, tmp_obj.id)
+			entities.insert(index, load_result)
 		else:
 			printerr("Entity Loading Error Code: ", load_result)

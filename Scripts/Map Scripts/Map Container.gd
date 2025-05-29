@@ -215,30 +215,30 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 	if !boxel: 
 		var tmp_tile = GetTile(tile_pos, layer_group)
 		if !tmp_tile: return
-		var boxel_index = loaded_object_list.find_custom(func(b): return b.boxel_id == tmp_tile.boxel_id)
+		var boxel_index = loaded_object_list.find_custom(func(b): return b.id == tmp_tile.id)
 		boxel = loaded_object_list[boxel_index]
 	
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
 	var prev_tile : Node2D = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
-	var boxel_match_index = boxel_id_list.bsearch(boxel.boxel_id)
+	var boxel_match_index = boxel_id_list.bsearch(boxel.id)
 	if boxel_id_list.size() == 0 || boxel_match_index + 1 > boxel_id_list.size():
-		boxel_id_list.append(boxel.boxel_id)
+		boxel_id_list.append(boxel.id)
 		boxel_usage_list.append(1)
-		print("New LvlObject Added to ID List: - ", boxel.boxel_id)
-	elif boxel_id_list[boxel_match_index] != boxel.boxel_id:
-		boxel_id_list.insert(boxel_match_index, boxel.boxel_id)
+		print("New LvlObject Added to ID List: - ", boxel.id)
+	elif boxel_id_list[boxel_match_index] != boxel.id:
+		boxel_id_list.insert(boxel_match_index, boxel.id)
 		boxel_usage_list.insert(boxel_match_index, 1)
-		print("New LvlObject Added to ID List: - ", boxel.boxel_id)
+		print("New LvlObject Added to ID List: - ", boxel.id)
 	else:
 		boxel_usage_list[boxel_match_index] += 1
 	
 	if prev_tile:
-		var prev_match_index = boxel_id_list.find(prev_tile.boxel_id)
+		var prev_match_index = boxel_id_list.find(prev_tile.id)
 		
 		if prev_match_index == -1:
-			printerr("Error: Prev Tile at Position: ", boxel.boxel_id, " - ",prev_tile.position, " - LvlObject ID did not match any in the list.")
+			printerr("Error: Prev Tile at Position: ", boxel.id, " - ",prev_tile.position, " - LvlObject ID did not match any in the list.")
 		else:
 			if boxel_usage_list[prev_match_index] <= 1:
 				boxel_id_list.remove_at(prev_match_index)
@@ -264,7 +264,7 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 		new_tile = tile_object.instantiate()
 		set_editable_instance(new_tile, true)
 	
-	new_tile.boxel_id = boxel.boxel_id
+	new_tile.id = boxel.id
 	new_tile.texture = tile_info.image
 	layer_group.add_child(new_tile)
 	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
@@ -305,7 +305,7 @@ func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedBy
 			for col in chunk:
 				for tile in col:
 					if tile:
-						packed_array[n] = boxel_id_list.find(tile.boxel_id) + 1
+						packed_array[n] = boxel_id_list.find(tile.id) + 1
 					else: 
 						packed_array[n] = 0
 					n += 1
@@ -340,6 +340,7 @@ func UpdateChunkBackground() -> void:
 func ResetLayerVisibility() -> void:
 	for layer in layer_groups:
 		layer.material.set_shader_parameter("is_visible", true)
+		layer.material.set_shader_parameter("is_editing", false)
 
 func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adjacent : bool = true) -> void:
 	var tile = GetTile(tile_pos, layer_group)
@@ -414,7 +415,7 @@ func WipeMapTiles(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
 		layer_init(layer, true)
 
 func SortBoxels():
-	loaded_object_list.sort_custom(func(b1, b2): return b1.boxel_id > b2.boxel_id)
+	loaded_object_list.sort_custom(func(b1, b2): return b1.id > b2.id)
 
 func AssignTileOwner() -> void:
 	for layer in layer_groups:
@@ -434,7 +435,7 @@ func AddEntity(obj_id : int, layer_group : CanvasGroup, pos : Vector2, args : Di
 	
 	var id = entity.id
 	var id_index := entity_id_list.bsearch(id)
-	if id == entity_id_list[id_index]: entity_usage_list[id_index] += 1
+	if entity_id_list.size() > id_index && id == entity_id_list[id_index]: entity_usage_list[id_index] += 1
 	else: 
 		entity_id_list.insert(id_index, id)
 		entity_usage_list.insert(id_index, 1)
