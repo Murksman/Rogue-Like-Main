@@ -47,5 +47,3 @@ func _physics_process(delta):
 	if hit_charge >= settings.hitInterval:
 		hit_charge -= settings.hitInterval
 		player.TakeDamage(settings.damage)
-	
-	entity_layer_sprite.global_position = global_position
