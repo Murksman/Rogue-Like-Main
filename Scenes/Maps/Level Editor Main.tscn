@@ -1,9 +1,7 @@
-[gd_scene load_steps=169 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=166 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
-[ext_resource type="Script" uid="uid://cq6mc2wmp7f31" path="res://Scripts/Enemy Scripts/Box Spawner.gd" id="3_67nb2"]
-[ext_resource type="Script" uid="uid://bh0kig8ii6b0s" path="res://Scripts/Enemy Scripts/Circle Spawner.gd" id="4_0qi6d"]
 [ext_resource type="Script" uid="uid://78najy7rqvog" path="res://Scripts/UI Scripts/HUD Controls/HUD Elements.gd" id="5_4w1tw"]
 [ext_resource type="Script" uid="uid://udo7btpxmvlh" path="res://Scripts/UI Scripts/Inventory Controls/Inventory Elements.gd" id="6_mw0o8"]
 [ext_resource type="Script" uid="uid://cl107yji6yfib" path="res://Scripts/UI Scripts/UI background input master.gd" id="7_gsku4"]
@@ -61,7 +59,6 @@
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
 [ext_resource type="Resource" uid="uid://dkvpkci6r641t" path="res://Resources/Misc Data/default_wall_occluders.tres" id="55_uqdnf"]
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
-[ext_resource type="PackedScene" uid="uid://duryafthdfiy5" path="res://Prefabs/World Objects/Lvl Entities/Default Chest.tscn" id="60_uq885"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -363,11 +360,13 @@ fill_to = Vector2(1, 0.491453)
 
 [sub_resource type="Gradient" id="Gradient_a1drd"]
 interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.640212, 0.719577, 0.899471, 1)
-colors = PackedColorArray(1, 1, 0, 0.0823529, 1, 1, 0, 1, 1, 1, 0, 0.290196, 1, 1, 0, 0.913725, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.68254, 0.730159, 0.899471, 1)
+colors = PackedColorArray(1, 1, 0, 0, 1, 1, 0, 0.592157, 1, 1, 0, 0.109804, 1, 1, 0, 0.545098, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_52wul"]
 gradient = SubResource("Gradient_a1drd")
+width = 80
+height = 80
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
@@ -756,9 +755,11 @@ shader_parameter/mask_texture = SubResource("ViewportTexture_a1drd")
 shader_parameter/is_visible = true
 shader_parameter/is_editing = true
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" node_paths=PackedStringArray("projectile_container", "enemy_container")]
 texture_filter = 1
 script = ExtResource("1_po503")
+projectile_container = NodePath("Projectile Container")
+enemy_container = NodePath("Enemy Container")
 
 [node name="Background" type="Sprite2D" parent="."]
 z_index = -250
@@ -786,54 +787,6 @@ z_as_relative = false
 [node name="Enemy Container" type="Node2D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("2_6t5k7")
 player = NodePath("../Player")
-
-[node name="EnemyBoxSpawner2" type="Node2D" parent="Enemy Container"]
-position = Vector2(174, 356)
-script = ExtResource("3_67nb2")
-spawning_dimensions = Vector2i(3, 3)
-spawning_random_density = Vector2i(0, 3)
-timePerSpawn = 0.1
-spawnOnStart = false
-
-[node name="EnemyBoxSpawner4" type="Node2D" parent="Enemy Container"]
-position = Vector2(694, 248)
-script = ExtResource("3_67nb2")
-spawning_dimensions = Vector2i(3, 3)
-spawning_random_density = Vector2i(2, 4)
-timePerSpawn = 0.1
-spawnOnStart = false
-
-[node name="EnemyCircleSpawner" type="Node2D" parent="Enemy Container"]
-position = Vector2(1, 224)
-script = ExtResource("4_0qi6d")
-spawning_radius = 1
-spawning_random_density = Vector2i(2, 3)
-timePerSpawn = 0.1
-spawnOnStart = false
-
-[node name="EnemyBoxSpawner3" type="Node2D" parent="Enemy Container"]
-position = Vector2(1033, 652)
-script = ExtResource("3_67nb2")
-spawning_dimensions = Vector2i(4, 2)
-spawning_random_density = Vector2i(3, 4)
-
-[node name="EnemyBoxSpawner6" type="Node2D" parent="Enemy Container"]
-position = Vector2(292, 629)
-script = ExtResource("3_67nb2")
-spawning_dimensions = Vector2i(2, 4)
-spawning_random_density = Vector2i(2, 6)
-
-[node name="EnemyBoxSpawner5" type="Node2D" parent="Enemy Container"]
-position = Vector2(322, 458)
-script = ExtResource("3_67nb2")
-spawning_dimensions = Vector2i(5, 2)
-spawning_random_density = Vector2i(3, 5)
-
-[node name="EnemyBoxSpawner7" type="Node2D" parent="Enemy Container"]
-position = Vector2(1000, 179)
-script = ExtResource("3_67nb2")
-spawning_dimensions = Vector2i(5, 5)
-spawning_random_density = Vector2i(3, 7)
 
 [node name="Shader Layer" type="CanvasLayer" parent="."]
 visible = false
@@ -1788,7 +1741,7 @@ height = 50.0
 [node name="Peripheral lighting (Wall)" type="PointLight2D" parent="Player/Camera2D/Orientation"]
 z_as_relative = false
 color = Color(1, 0.835294, 0.294118, 1)
-energy = 0.3
+energy = 0.6
 range_layer_max = 10
 range_item_cull_mask = 512
 shadow_enabled = true
@@ -1800,16 +1753,19 @@ height = 50.0
 light_mask = 513
 z_index = 4096
 z_as_relative = false
-color = Color(1, 0.835294, 0.294118, 1)
-energy = 0.3
+color = Color(0.893374, 0.851982, 0.714968, 1)
+energy = 0.6
 range_z_min = -100
 range_z_max = 1000
 range_layer_max = 10
 shadow_enabled = true
 shadow_filter_smooth = 3.1
 texture = ExtResource("20_8qlr8")
+texture_scale = 0.4
+height = 30.0
 
 [node name="Use Area" type="Area2D" parent="Player"]
+monitorable = false
 
 [node name="Use Area" type="CollisionShape2D" parent="Player/Use Area"]
 shape = SubResource("CircleShape2D_mexip")
@@ -1875,7 +1831,7 @@ texture = SubResource("GradientTexture2D_apqe3")
 texture_scale = 1.27
 height = 40.0
 
-[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline")]
+[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline")]
 process_priority = 1
 layer = 20
 script = ExtResource("41_hic17")
@@ -1888,12 +1844,17 @@ library_grid = NodePath("Editor UI/Library Container/Library Tray/Library Tray C
 toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar")
 eraser = NodePath("Editor UI/Library Container/Editor Level Pane/Eraser")
 tile_selection_outline = NodePath("Editor UI/Library Container/Editor Level Pane/Tile Selection Outline")
+entity_selection_outline = NodePath("Editor Workspace/Editor Object Selection Overlay")
 
 [node name="Editor Workspace" type="Node2D" parent="Editor Overlay Layer"]
 
 [node name="Editor Object Selection Overlay" type="Sprite2D" parent="Editor Overlay Layer/Editor Workspace"]
-visible = false
 texture = SubResource("GradientTexture2D_52wul")
+
+[node name="Line2D" type="Line2D" parent="Editor Overlay Layer/Editor Workspace/Editor Object Selection Overlay"]
+points = PackedVector2Array(0, 0, 36, 0)
+width = 2.0
+default_color = Color(1, 0.905882, 0, 0.85098)
 
 [node name="Editor UI" type="VBoxContainer" parent="Editor Overlay Layer"]
 anchors_preset = 15
@@ -3382,7 +3343,7 @@ use_native_dialog = true
 title = "Save a Level"
 force_native = true
 access = 2
-filters = PackedStringArray(".dat", "*.scn, *.tscn")
+filters = PackedStringArray("*.dat", "*.scn, *.tscn")
 use_native_dialog = true
 
 [node name="Level Tilemap Root" type="NavigationRegion2D" parent="." node_paths=PackedStringArray("layer_groups", "chunk_background", "level_save_root")]
@@ -3421,8 +3382,6 @@ material = SubResource("ShaderMaterial_ccf2s")
 fit_margin = 4.0
 clear_margin = 4.0
 script = ExtResource("43_uy6ih")
-
-[node name="Chest" parent="Level Tilemap Root/Level Save Root/Entity Layer" instance=ExtResource("60_uq885")]
 
 [node name="Light Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 120

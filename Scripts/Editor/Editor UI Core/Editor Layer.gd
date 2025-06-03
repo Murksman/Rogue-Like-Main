@@ -9,6 +9,7 @@ extends CanvasLayer
 @export var toolbar : Control
 @export var eraser : TextureButton
 @export var tile_selection_outline : NinePatchRect
+@export var entity_selection_outline : Sprite2D
 
 @onready var player : CharacterBody2D = $"../Player"
 
@@ -44,6 +45,10 @@ func _ready() -> void:
 	
 	LoadResources()
 
+func _process(delta: float) -> void:
+	if selected_world_obj && entity_selection_outline.visible: 
+		entity_selection_outline.global_position = Vector2(DisplayServer.window_get_size() / 2) - (player.camera.global_position - selected_world_obj.global_position) * player.camera.zoom
+
 func LoadResources() -> void:
 	level_tilemap_root.LoadResources()
 	
@@ -66,6 +71,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Editor Hollow Tool"): set_tool_mode(2)
 	if event.is_action_pressed("Editor Glove Tool"): set_tool_mode(3)
 	
+	if event.is_action_pressed("Editor Layer Switch") && layer_button_group.get_pressed_button(): 
+		print("testing layer switch")
+		
+		var layer_int = (layer_button_group.get_pressed_button().layer_int + 1) % 5
+		for layer_button in layer_button_group.get_buttons(): 
+			layer_button.set_pressed_no_signal(layer_button.layer_int == layer_int)
+		
+		layer_button_group.get_buttons()[0]._pressed()
+	
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"): 
 		if current_level_filepath == "":
@@ -73,7 +87,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			SaveLevel(current_level_filepath)
 	
-	if event.is_action_pressed("Delete") && selected_boxel:
+	if event.is_action_pressed("Delete"): 
 		if selected_boxel && focus_boxel:
 			selected_boxel.Delete()
 			
@@ -83,9 +97,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			selected_boxel = null
 		elif !focus_boxel && selected_world_obj:
 			level_tilemap_root.DeleteEntity(selected_world_obj)
+			entity_selection_outline.visible = false
 			selected_world_obj = null
 	
-	if event.is_action_pressed("Eraser Mode"): eraser.set_pressed_no_signal(!eraser.pressed) 
+	if event.is_action_pressed("Eraser Mode Toggle"): eraser.set_pressed_no_signal(!eraser.pressed) 
 
 func EditToggle(force_toggle : bool):
 	editing = force_toggle
@@ -114,7 +129,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	if event.is_action_pressed("Editor Grab"):
 		anchor_mouse_point = get_viewport().get_mouse_position()
-	elif event.is_action_pressed("Editor Primary"):
+	elif event.is_action_pressed("Editor Primary") || event.is_action_pressed("Eraser Hold"):
 		anchor_tile_point = level_tilemap_root.PixelToTilePosition(mouse_position)
 	
 	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Grab"):
@@ -122,13 +137,13 @@ func LevelPanePressed(event : InputEvent) -> void:
 		player.position += (anchor_mouse_point - tmp_anchor_point) / 2
 		anchor_mouse_point = tmp_anchor_point
 	
-	if Input.is_action_pressed("Editor Grab") || event.is_action_released("Editor Grab"): return
+	if Input.is_action_pressed("Editor Grab") || (event.is_action_released("Editor Grab") && !event.is_action_released("Editor Primary")): return
 	if !layer_button_group.get_pressed_button(): return
 	
-	tile_selection_outline.visible = Input.is_action_pressed("Editor Primary") && layer_button_group.get_pressed_button().layer_int < 3 && selected_boxel && toolbar.selected_tool > 0
+	var selected_layer = layer_button_group.get_pressed_button().layer_int
+	tile_selection_outline.visible = ((Input.is_action_pressed("Editor Primary") && selected_boxel) || Input.is_action_pressed("Eraser Hold")) && toolbar.selected_tool > 0 && selected_layer < 3
 	
-	if event is InputEventMouseMotion && Input.is_action_pressed("Eraser Hold") || event.is_action_pressed("Eraser Hold") || event.is_action_released("Eraser Hold"):
-		var selected_layer = layer_button_group.get_pressed_button().layer_int
+	if (event is InputEventMouseMotion && Input.is_action_pressed("Eraser Hold")) || event.is_action_pressed("Eraser Hold") || event.is_action_released("Eraser Hold"):
 		var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		focus_boxel = false
@@ -136,9 +151,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		drag_action_position = tile_position
 		MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Eraser Hold"))
 	
-	if event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary") || event.is_action("Editor Primary") || event.is_action_released("Editor Primary"):
-		var selected_layer = layer_button_group.get_pressed_button().layer_int
-		
+	if (event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary")) || event.is_action("Editor Primary") || event.is_action_released("Editor Primary"):
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
 		if selected_layer > 2:
@@ -150,7 +163,6 @@ func LevelPanePressed(event : InputEvent) -> void:
 			if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary") && !event.is_action_released("Editor Primary"): return
 			
 			focus_boxel = false
-			
 			drag_action_position = tile_position
 			
 			if eraser.button_pressed:
@@ -159,14 +171,13 @@ func LevelPanePressed(event : InputEvent) -> void:
 				MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 
 func MapObjectEvent(lvl_obj : UIBoxel, click_position : Vector2, layer_canvas : CanvasGroup) -> void:
-	print(tool)
 	if tool == 1:
-		if lvl_obj:
-			var entity = level_tilemap_root.AddEntity(lvl_obj.boxel.obj_type, layer_canvas, click_position)
-			SelectObject(entity)
+		if !lvl_obj: return
+		
+		var entity = level_tilemap_root.AddEntity(lvl_obj.boxel.obj_type, layer_canvas, click_position - Vector2(16.0, 16.0))
+		SelectObject(entity)
 	elif tool == 4:
-		print("test object select")
-		var closest = level_tilemap_root.GetNearestObjects(layer_canvas, mouse_position, 20.0, true)[0]
+		var closest = level_tilemap_root.GetNearestObjects(layer_canvas, mouse_position, 100.0, true)[0]
 		if !closest: return
 		
 		SelectObject(closest)
@@ -221,17 +232,16 @@ func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, releas
 		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
 		return
 	
-	var shape_position : Vector2i = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
-	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
-	
+	var shape_position = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
 	var shape_size : Vector2i = abs(anchor_tile_point - tile_position) + Vector2i(1,1)
-	var shape_rect = Rect2i(shape_position, shape_size)
+	var shape_rect = Rect2i(shape_position, shape_size) 
 	
 	tile_selection_outline.size = shape_size * 64
+	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 	
 	if !released: return
-	if !level_tilemap_root.GetTile(anchor_tile_point, layer_canvas): return
-	if !level_tilemap_root.GetTile(tile_position, layer_canvas): return
+	if !level_tilemap_root.CheckMapSize(anchor_tile_point): return
+	if !level_tilemap_root.CheckMapSize(tile_position): return
 	
 	if tool == 2:
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas)
@@ -305,31 +315,42 @@ func LoadLevel(filepath : String) -> void:
 		level_tilemap_root.ResetMap()
 
 func ReadLevelFile(filepath : String):
-	print("Opening Level File (" + filepath + ")")
+	print("\n\n=== Opening Level File (" + filepath + ") ===")
 	var file = FileAccess.open(filepath, FileAccess.READ)
+	
+	# Read level name
 	var lvl_namesize = file.get_8()
+	print("Level name size: ", lvl_namesize)
 	var lvl_name = file.get_buffer(lvl_namesize).get_string_from_utf8()
 	file.seek(file.get_position() + 1)
+	print("Level Name: ", lvl_name)
 	
+	# Read version
 	var version_size = file.get_8()
+	print("Version size: ", version_size)
 	var version = file.get_buffer(version_size).get_string_from_utf8()
-	
-	print("Level Name: -%s-  version: -%s-" % [lvl_name, version])
+	print("Version: ", version)
 	file.seek(file.get_position() + 2)
 	
+	# Read chunk dimensions
 	var chunks_size : Vector2i = Vector2i(0,0)
 	chunks_size.x = file.get_32()
 	chunks_size.y = file.get_32()
+	print("Chunk dimensions: ", chunks_size)
 	level_tilemap_root.WipeMapTiles(chunks_size)
 	
 	var map_size = chunks_size * level_tilemap_root.chunk_size
 	level_tilemap_root.map_size = map_size
 	level_tilemap_root.chunk_origin = Vector2i(0,0)
 	level_tilemap_root.bounds_offset = Vector2i(0,0)
+	print("Map size: ", map_size)
 	file.seek(file.get_position() + 1)
 	
+	# Read ID list
 	var id_list_size = file.get_32()
+	print("ID list size: ", id_list_size)
 	var id_list_buffer : PackedByteArray = file.get_buffer(id_list_size)
+	file.seek(file.get_position() + 1)
 	
 	level_tilemap_root.boxel_id_list.resize(id_list_size >> 2)
 	level_tilemap_root.boxel_usage_list.resize(id_list_size >> 2)
@@ -337,29 +358,38 @@ func ReadLevelFile(filepath : String):
 	
 	for i in id_list_size >> 2:
 		level_tilemap_root.boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
+	print("Boxel ID list: ", level_tilemap_root.boxel_id_list)
 	
-	file.seek(file.get_position() + 1)
-	
+	# Load boxels
 	var temp_boxel_load_list : Array[LvlObject] = []
-	
+	print("Loading boxels...")
 	for boxel_id in level_tilemap_root.boxel_id_list:
 		var new_index = boxel_id_list.bsearch(boxel_id)
+		print("Loading boxel ID: ", boxel_id, " at index: ", new_index)
 		temp_boxel_load_list.append(map_object_list[new_index])
 	
+	# Read map array
 	var map_array_length = file.get_64()
+	print("Map array length: ", map_array_length)
 	file.seek(file.get_position() + 1)
 	
+	# Read tile layers
 	for i in 3:
+		print("Reading tile layer ", i)
 		var t_layer = level_tilemap_root.layer_groups[i]
 		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
 		var read_result = level_tilemap_root.ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
 		
-		if read_result != "": printerr(read_result)
+		if read_result != "": 
+			print("Error reading tile layer ", i, ": ", read_result)
 		file.seek(file.get_position() + 1)
 	file.seek(file.get_position() + 1)
 	
+	# Read entity ID list
 	var eid_list_size = file.get_32()
+	print("Entity ID list size: ", eid_list_size)
 	var eid_list_buffer : PackedByteArray = file.get_buffer(eid_list_size)
+	file.seek(file.get_position() + 1)
 	
 	level_tilemap_root.entity_id_list.resize(eid_list_size >> 2)
 	level_tilemap_root.entity_usage_list.resize(eid_list_size >> 2)
@@ -367,16 +397,21 @@ func ReadLevelFile(filepath : String):
 	
 	for i in eid_list_size >> 2:
 		level_tilemap_root.entity_id_list[i] = eid_list_buffer.decode_u32(i << 2)
+	print("Entity ID list: ", level_tilemap_root.entity_id_list)
 	
+	# Read entity layers
 	for i in 2:
+		print("Reading entity layer ", i)
 		var t_layer = level_tilemap_root.layer_groups[i+3]
 		var entity_count = file.get_32()
+		print("Entity count in layer ", i, ": ", entity_count)
 		
 		for n in entity_count:
 			var id = file.get_8()
 			var entity_pos = Vector2()
 			entity_pos.x = file.get_32()
 			entity_pos.y = file.get_32()
+			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos)
 			
 			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(level_tilemap_root.entity_id_list[id])
 			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
@@ -386,15 +421,21 @@ func ReadLevelFile(filepath : String):
 			for k in 8:
 				if entity_arg_flags & 1 << k: 
 					args[k + 1] = file.get_var()
+					print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
 			
 			level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
 		
 		file.seek(file.get_position() + 1)
 	file.seek(file.get_position() + 1)
 	
+	print("Level file reading complete")
 	file.close()
 
 func WriteLevelFile(filepath : String, filename : String = current_level_name):
+	print("\n\n=== Starting Level File Write ===")
+	print("Writing to: ", filepath)
+	print("Level name: ", filename)
+	
 	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
 	file.resize(0)
 	
@@ -403,7 +444,8 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	file.store_buffer(filename_buff)
 	file.store_string("\n")
 	
-	var version_buff = "v0.1".to_utf8_buffer()
+	var version_buff := "v0.1".to_utf8_buffer()
+	print("Version: ", version_buff.get_string_from_utf8())
 	file.store_8(version_buff.size())
 	file.store_buffer(version_buff)
 	file.store_string("\n")
@@ -411,62 +453,87 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	## Metadata TBD
 	file.store_string("\n")
 	
+
+	print("Chunk dimensions: ", level_tilemap_root.chunk_dimensions)
 	file.store_32(level_tilemap_root.chunk_dimensions.x)
 	file.store_32(level_tilemap_root.chunk_dimensions.y)
 	file.store_string("\n")
 	
 	var boxel_id_buffer : PackedByteArray = level_tilemap_root.boxel_id_list.to_byte_array()
-	
+	print("Boxel ID list size: ", boxel_id_buffer.size())
+	print("Boxel ID list: ", level_tilemap_root.boxel_id_list)
 	file.store_32(boxel_id_buffer.size())
 	file.store_buffer(boxel_id_buffer)
 	file.store_string("\n")
 	
 	var map_array_length : int = level_tilemap_root.chunk_dimensions.x * level_tilemap_root.chunk_dimensions.y * level_tilemap_root.chunk_size * level_tilemap_root.chunk_size
+	print("Map array length: ", map_array_length)
 	file.store_64(map_array_length)
 	file.store_string("\n")
 	
 	for i in 3:
+		print("Writing tile layer ", i)
 		var t_layer = level_tilemap_root.layer_groups[i]
 		var floor_tile_buff : PackedByteArray = level_tilemap_root.GetPackedTileArray(t_layer, map_array_length)
-		
+		print("Tile layer ", i, " buffer size: ", floor_tile_buff.size())
 		file.store_buffer(floor_tile_buff)
 		file.store_string("\n")
 	file.store_string("\n")
 	
+	var entity_id_buffer : PackedByteArray = level_tilemap_root.entity_id_list.to_byte_array()
+	print("Entity ID list size: ", entity_id_buffer.size())
+	print("Entity ID list: ", level_tilemap_root.entity_id_list)
+	file.store_32(entity_id_buffer.size())
+	file.store_buffer(entity_id_buffer)
+	file.store_string("\n")
+	
 	for i in 2:
 		var t_layer = level_tilemap_root.layer_groups[i+3]
-		file.store_32(t_layer.get_child_count())
+		var entity_count = t_layer.get_child_count()
+		print("Writing entity layer ", i, " with ", entity_count, " entities")
+		file.store_32(entity_count)
 		
 		for entity in t_layer.get_children():
-			var entity_buff = CompileEntityBytes(entity)
-			file.store_buffer(entity_buff)
+			print("Writing entity: ", entity.name)
+			print("Entity ID: ", entity.id)
+			print("Entity position: ", entity.position)
+			CompileEntityBytes(file, entity)
 		
 		file.store_string("\n")
 	file.store_string("\n")
 	
+	print("=== Level File Write Complete ===")
 	file.close()
 
-func CompileEntityBytes(entity : Node) -> PackedByteArray:
-	var byte_arr : PackedByteArray = []
+func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
+	print("=== Compiling Entity Bytes ===")
+	var file_init = file.get_position()
 	var id = entity.id
-	byte_arr.encode_u8(0, id)
-	byte_arr.encode_s32(1, entity.pos.x)
-	byte_arr.encode_s32(5, entity.pos.y)
+	file.store_8(id)
+	file.store_32(entity.position.x)
+	file.store_32(entity.position.y)
+	print("Entity ID: ", id)
+	print("Entity position: ", entity.position)
 	
 	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[SceneLoadingContainer.loaded_entities.entity_ids.find(id)]
+	print("Default args: ", def_args)
 	var bit_flags = 0
 	var args : Dictionary = entity.GetArgs()
+	print("Entity args: ", args)
 	
-	byte_arr.append(0)
-	
+	var raw_args := PackedByteArray()
 	for i in def_args.size():
-		if args.has(def_args.keys()[i]): bit_flags |= 1 << i
-		elif def_args[i] == args[i]: 
-			byte_arr.encode_var(byte_arr.size(), args[i])
+		if args.has(i+1) && args[i+1] != def_args[i+1]: 
+			bit_flags |= 1 << i
+			print("Setting bit flag for arg ", def_args.keys()[i])
+			raw_args.append_array(PackedByteArray([args[i+1]]))
+			print("Adding arg value: ", args[i])
 	
-	byte_arr.encode_u8(9, bit_flags)
-	
-	return byte_arr
+	file.store_8(bit_flags)
+	file.store_buffer(raw_args)
+	print("Final bit flags: ", bit_flags)
+	print("Final entity bytes: ", file.get_position() - file_init)
+	print("=== Entity Bytes Compilation Complete ===")
 
 func ReadEntity(file : FileAccess):
 	var id = file.get_8()
@@ -482,6 +549,8 @@ func EditBoxel(boxel : LvlObject) -> void:
 	import_window.popup()
 	import_window.visible = true
 	import_window.WindowReady()
+	
+	SelectObject(null)
 
 func ImporterAddBoxel(boxel : LvlObject) -> void:
 	var new_index = map_object_list.bsearch_custom(boxel, func(b1,b2): return b1.boxel_id < b2.boxel_id)
@@ -490,13 +559,17 @@ func ImporterAddBoxel(boxel : LvlObject) -> void:
 	boxel_name_list.append(boxel.resource_path.get_file())
 
 func SelectObject(world_object : Node2D) -> void:
+	focus_boxel = false
+	
 	if selected_world_obj == world_object:
 		selected_world_obj = null
-		return
+	else:
+		selected_world_obj = world_object
+		
+		if world_object && !(world_object is Entity): printerr("Attempting to select an Object of invalid type: ", world_object.name)
 	
-	selected_world_obj = world_object
-	
-	if !(world_object is Entity): printerr("Attempting to select an Object of invalid type: ", world_object.name)
+	entity_selection_outline.visible = selected_world_obj != null
+
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)
@@ -518,4 +591,4 @@ func set_tool_mode(idx : int):
 	toolbar.blend_buttons[idx].set_pressed_no_signal(true)
 	toolbar.blend_buttons[idx].toggled.emit()
 	tool = idx + 1
-	print(tool)
+	toolbar.selected_tool = tool

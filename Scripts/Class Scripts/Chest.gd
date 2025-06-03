@@ -14,16 +14,16 @@ class_name Chest
 var table_index : int = 0
 
 func MapArgs(args : Dictionary) -> int:
-	var tbl = args[1]
+	var tbl = args.get(1)
 	if tbl: ChangeLootTable(tbl)
 	
-	var size = args[2]
+	var size = args.get(2)
 	if size: inventory_size = size
 	
-	var quant = args[3]
+	var quant = args.get(3)
 	if quant: quantity_multiplier = quant
 	
-	var rarity = args[4]
+	var rarity = args.get(4)
 	if rarity: rarity_multiplier = rarity
 	
 	return 0

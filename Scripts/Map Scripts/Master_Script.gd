@@ -1,6 +1,7 @@
 extends Node
 
-@onready var projectile_container : Node2D = $"Projectile Container"
+@export var projectile_container : Node2D
+@export var enemy_container : Node2D
 
 func _ready():
 	SceneLoadingContainer.StartGame($Player)

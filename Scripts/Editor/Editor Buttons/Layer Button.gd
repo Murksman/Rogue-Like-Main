@@ -16,3 +16,5 @@ func _pressed() -> void:
 
 func ChangeLayerVisibility(layer : CanvasGroup, is_visible : bool):
 	layer.material.set_shader_parameter("is_visible", is_visible)
+	
+	$"../../../..".SelectObject($"../../../..".selected_world_obj)

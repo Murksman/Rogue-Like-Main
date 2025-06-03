@@ -50,7 +50,7 @@ func LoadResources(reset : bool = false):
 		if load_result is LvlObject:
 			loaded_object_list.append(load_result)
 		else:
-			print("Boxel Loading Error Code: ", load_result)
+			printerr("Boxel Loading Error Code: ", load_result)
 	
 	root_loaded = true
 
@@ -87,6 +87,9 @@ func layer_init(layer_group : CanvasGroup, ignore_existing = false) -> void:
 		
 	for tile in layer_group.get_children():
 		bind_array_tile(tile, layer_group)
+
+func CheckMapSize(tile_pos : Vector2i) -> bool:
+	return !(tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y)
 
 func CheckSetMapSize(tile_pos : Vector2i) -> int:
 	var chunk_coords : Vector2i = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
@@ -426,7 +429,6 @@ func AssignTileOwner() -> void:
 func AddEntity(obj_id : int, layer_group : CanvasGroup, pos : Vector2, args : Dictionary = {}) -> Entity:
 	var index : int = SceneLoadingContainer.loaded_entities.entity_ids.find(obj_id)
 	var entity = SceneLoadingContainer.loaded_entities.entities[index].instantiate()
-	print("Adding Entity - ", entity.name)
 	
 	if args.size() > 0: entity.MapArgs(args)
 	layer_group.add_child(entity)

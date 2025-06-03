@@ -2,7 +2,6 @@ extends Node
 
 var load_file_path : String = ""
 var lvlobject_load_path : String = "res://Resources/Level Objects"
-#var entity_load_path : String = "res://Prefabs/World Objects/Lvl Entities"
 var entity_import_path : String = "res://Resources/Misc Data/Entity Import Table.res"
 var levels_load_path : String = "res://Scenes/Editor Maps"
 var loot_tables_path : String = "res://Resources/Loot Tables"
@@ -15,6 +14,7 @@ var player : Node2D
 var root_loaded := false
 
 @onready var loaded_entities : EntityImportTable = preload("res://Resources/Misc Data/Entity Import Table.res")
+@onready var enemy_container : Node2D = $"Enemy Container"
 
 func _ready() -> void:
 	if DirAccess.make_dir_absolute(lvlobject_load_path) == null:
