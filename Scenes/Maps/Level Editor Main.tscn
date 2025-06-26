@@ -1,4 +1,4 @@
-[gd_scene load_steps=166 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=175 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -37,6 +37,7 @@
 [ext_resource type="ButtonGroup" uid="uid://dby4g188uui0u" path="res://Resources/UI/Button Elements/Tool Button Group.tres" id="42_hp0j5"]
 [ext_resource type="Script" uid="uid://o5ua13n2tkhh" path="res://Scripts/Editor/Editor UI Core/Tray Grid.gd" id="42_pipfe"]
 [ext_resource type="Texture2D" uid="uid://d2ln57rdgwlhm" path="res://Sprites/UI and Menu/Icons and Images/Hollow_Tool.png" id="43_7201v"]
+[ext_resource type="Script" uid="uid://baj5evteh7him" path="res://Scripts/UI Scripts/PropertyCard.gd" id="43_a1drd"]
 [ext_resource type="Script" uid="uid://2hocptaxtp0n" path="res://Scripts/Editor/Editor Buttons/Boxel Tool Button.gd" id="43_erl8j"]
 [ext_resource type="Texture2D" uid="uid://cxlfqgqpa5kmb" path="res://Sprites/UI and Menu/Icons and Images/Pencil_tool.png" id="43_uq885"]
 [ext_resource type="Script" uid="uid://b203b2ssgo74r" path="res://Scripts/Map Scripts/Layer Group.gd" id="43_uy6ih"]
@@ -371,6 +372,16 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
+[sub_resource type="Gradient" id="Gradient_r7b0r"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.837662, 0.961039, 1)
+colors = PackedColorArray(0.12549, 0.152941, 0.164706, 0.631373, 0.180392, 0.215686, 0.231373, 0.733333, 0.301961, 0.360784, 0.415686, 0.643137, 0.301961, 0.360784, 0.415686, 0.643137)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8uele"]
+gradient = SubResource("Gradient_r7b0r")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tbkho"]
 load_path = "res://.godot/imported/UI Button Template.png-b05fa7349dad59e824bef5489da0f127.ctex"
 
@@ -424,16 +435,6 @@ texture_margin_top = 3.0
 texture_margin_right = 3.0
 texture_margin_bottom = 3.0
 modulate_color = Color(0.39835, 0.403002, 0.390792, 1)
-
-[sub_resource type="Gradient" id="Gradient_r7b0r"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.837662, 0.961039, 1)
-colors = PackedColorArray(0.12549, 0.152941, 0.164706, 0.631373, 0.180392, 0.215686, 0.231373, 0.733333, 0.301961, 0.360784, 0.415686, 0.643137, 0.301961, 0.360784, 0.415686, 0.643137)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_8uele"]
-gradient = SubResource("Gradient_r7b0r")
-fill = 2
-fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_hafb3"]
 interpolation_mode = 2
@@ -539,6 +540,53 @@ width = 32
 height = 32
 fill = 2
 fill_from = Vector2(0.502262, 0.502262)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1s4r"]
+bg_color = Color(0.249128, 0.24308, 0.244595, 1)
+border_width_bottom = 2
+border_color = Color(0.431373, 0.407843, 0.380392, 1)
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Gradient" id="Gradient_52wul"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.477707, 0.611465, 0.955414)
+colors = PackedColorArray(0.952941, 0.952941, 0.952941, 0, 0.886275, 0.87451, 0.819608, 0.403922, 0.952941, 0.952941, 0.952941, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7201v"]
+gradient = SubResource("Gradient_52wul")
+width = 12
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_c5skp"]
+offsets = PackedFloat32Array(0.512, 0.624, 0.864, 0.968)
+colors = PackedColorArray(1, 1, 1, 0, 0.454902, 0.454902, 0.454902, 1, 0.454902, 0.454902, 0.454902, 0.813953, 0.454902, 0.454902, 0.454902, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fofj1"]
+gradient = SubResource("Gradient_c5skp")
+width = 12
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p3ow0"]
+texture = SubResource("GradientTexture2D_fofj1")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+draw_center = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_k550b"]
+font_size = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_7201v"]
+font_size = 12
+font_color = Color(0.435192, 0.435192, 0.435192, 1)
 
 [sub_resource type="Gradient" id="Gradient_2w2ks"]
 interpolation_mode = 1
@@ -1856,200 +1904,23 @@ points = PackedVector2Array(0, 0, 36, 0)
 width = 2.0
 default_color = Color(1, 0.905882, 0, 0.85098)
 
-[node name="Editor UI" type="VBoxContainer" parent="Editor Overlay Layer"]
+[node name="Editor UI" type="Control" parent="Editor Overlay Layer"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
-
-[node name="Top Editor Bar" type="Control" parent="Editor Overlay Layer/Editor UI"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Top Bar Background" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.227651, 0.278204, 0.315184, 1)
-
-[node name="Top Bar Margins" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="Top Bar Settings Area" type="Control" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins"]
-layout_mode = 2
-
-[node name="Editor Import Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
-modulate = Color(0.536232, 0.761034, 0.838759, 1)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 10.0
-offset_top = -13.0
-offset_right = 140.0
-offset_bottom = 13.0
-grow_vertical = 2
-theme = ExtResource("44_am6u2")
-theme_override_font_sizes/font_size = 14
-text = "Import Boxel"
-
-[node name="Save Level Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 152.0
-offset_top = -14.0
-offset_right = 282.0
-offset_bottom = 14.0
-grow_vertical = 2
-theme = ExtResource("44_am6u2")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxTexture_nobhe")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_nobhe")
-theme_override_styles/hover = SubResource("StyleBoxTexture_nobhe")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_ssyku")
-theme_override_styles/normal = SubResource("StyleBoxTexture_nobhe")
-text = "Save Level"
-
-[node name="Load Level Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 294.0
-offset_top = -14.0
-offset_right = 424.0
-offset_bottom = 14.0
-grow_vertical = 2
-theme = ExtResource("44_am6u2")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxTexture_dekd6")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_dekd6")
-theme_override_styles/hover = SubResource("StyleBoxTexture_dekd6")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_c7u6f")
-theme_override_styles/normal = SubResource("StyleBoxTexture_dekd6")
-text = "Load Level"
-
-[node name="Editor Exit Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
-modulate = Color(1, 0.22, 0.22, 1)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -60.0
-offset_top = 6.0
-offset_bottom = 34.0
-grow_horizontal = 0
-theme = ExtResource("44_am6u2")
-theme_override_constants/outline_size = 2
-theme_override_constants/align_to_largest_stylebox = 0
-theme_override_font_sizes/font_size = 17
-action_mode = 0
-text = "X
-"
-icon_alignment = 1
-
-[node name="Layer Bar Container" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
-z_index = 10
-z_as_relative = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -20.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Floor Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
-custom_minimum_size = Vector2(160, 30)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("47_ch65g")
-toggle_mode = true
-action_mode = 0
-button_group = ExtResource("48_rkwao")
-text = "Floor
-"
-script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Floor Layer")
-
-[node name="Decal Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("47_ch65g")
-toggle_mode = true
-action_mode = 0
-button_group = ExtResource("48_rkwao")
-text = "Decals"
-script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Decal Layer")
-layer_int = 1
-
-[node name="Wall Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("47_ch65g")
-toggle_mode = true
-action_mode = 0
-button_group = ExtResource("48_rkwao")
-text = "Walls"
-script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Wall Layer")
-layer_int = 2
-
-[node name="Entity Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("47_ch65g")
-toggle_mode = true
-action_mode = 0
-button_group = ExtResource("48_rkwao")
-text = "Entities
-"
-script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Entity Layer")
-layer_int = 3
-
-[node name="Lighting Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("47_ch65g")
-toggle_mode = true
-action_mode = 0
-button_group = ExtResource("48_rkwao")
-text = "Lighting"
-script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Light Layer")
-layer_int = 4
 
 [node name="Tile Tray" type="Control" parent="Editor Overlay Layer/Editor UI"]
 custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 180.0
+grow_horizontal = 2
 
 [node name="Top Tile Tray Background" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Tile Tray"]
 layout_mode = 1
@@ -2186,8 +2057,202 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Library Container" type="HSplitContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("tray_grid")]
+[node name="Top Editor Bar" type="Control" parent="Editor Overlay Layer/Editor UI"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 70.0
+grow_horizontal = 2
+mouse_filter = 1
+
+[node name="Top Bar Background" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
+z_index = -10
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227651, 0.278204, 0.315184, 1)
+
+[node name="Top Bar Margins" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Top Bar Settings Area" type="Control" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins"]
 layout_mode = 2
+
+[node name="Editor Import Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
+modulate = Color(0.536232, 0.761034, 0.838759, 1)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -13.0
+offset_right = 140.0
+offset_bottom = 13.0
+grow_vertical = 2
+theme = ExtResource("44_am6u2")
+theme_override_font_sizes/font_size = 14
+text = "Import Boxel"
+
+[node name="Save Level Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 152.0
+offset_top = -14.0
+offset_right = 282.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme = ExtResource("44_am6u2")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxTexture_nobhe")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_nobhe")
+theme_override_styles/hover = SubResource("StyleBoxTexture_nobhe")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ssyku")
+theme_override_styles/normal = SubResource("StyleBoxTexture_nobhe")
+text = "Save Level"
+
+[node name="Load Level Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 294.0
+offset_top = -14.0
+offset_right = 424.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme = ExtResource("44_am6u2")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxTexture_dekd6")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_dekd6")
+theme_override_styles/hover = SubResource("StyleBoxTexture_dekd6")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_c7u6f")
+theme_override_styles/normal = SubResource("StyleBoxTexture_dekd6")
+text = "Load Level"
+
+[node name="Editor Exit Button" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area"]
+modulate = Color(1, 0.22, 0.22, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 6.0
+offset_bottom = 34.0
+grow_horizontal = 0
+theme = ExtResource("44_am6u2")
+theme_override_constants/outline_size = 2
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_font_sizes/font_size = 17
+action_mode = 0
+text = "X
+"
+icon_alignment = 1
+
+[node name="Layer Bar Container" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
+z_index = 10
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Floor Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
+custom_minimum_size = Vector2(160, 30)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("47_ch65g")
+toggle_mode = true
+action_mode = 0
+button_group = ExtResource("48_rkwao")
+text = "Floor
+"
+script = ExtResource("44_kbe7g")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Floor Layer")
+
+[node name="Decal Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("47_ch65g")
+toggle_mode = true
+action_mode = 0
+button_group = ExtResource("48_rkwao")
+text = "Decals"
+script = ExtResource("44_kbe7g")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Decal Layer")
+layer_int = 1
+
+[node name="Wall Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("47_ch65g")
+toggle_mode = true
+action_mode = 0
+button_group = ExtResource("48_rkwao")
+text = "Walls"
+script = ExtResource("44_kbe7g")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Wall Layer")
+layer_int = 2
+
+[node name="Entity Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("47_ch65g")
+toggle_mode = true
+action_mode = 0
+button_group = ExtResource("48_rkwao")
+text = "Entities
+"
+script = ExtResource("44_kbe7g")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Entity Layer")
+layer_int = 3
+
+[node name="Lighting Layer" type="Button" parent="Editor Overlay Layer/Editor UI/Top Editor Bar/Layer Bar Container" node_paths=PackedStringArray("select_layer")]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("47_ch65g")
+toggle_mode = true
+action_mode = 0
+button_group = ExtResource("48_rkwao")
+text = "Lighting"
+script = ExtResource("44_kbe7g")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Light Layer")
+layer_int = 4
+
+[node name="Library Container" type="HSplitContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("tray_grid")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 180.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
 theme_override_constants/separation = 0
@@ -2490,6 +2555,91 @@ patch_margin_left = 10
 patch_margin_top = 10
 patch_margin_right = 10
 patch_margin_bottom = 10
+
+[node name="VBoxContainer" type="PanelContainer" parent="Editor Overlay Layer/Editor UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_top = 180.0
+offset_bottom = 380.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_t1s4r")
+
+[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_7201v")
+draw_center = false
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="MarginContainer2" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="BlankPropCard" type="PanelContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" node_paths=PackedStringArray("edit_line", "prop_value", "prop_title")]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_p3ow0")
+script = ExtResource("43_a1drd")
+edit_line = NodePath("HBoxContainer/Line Editor")
+prop_value = NodePath("HBoxContainer/Line Editor/Property Value")
+prop_title = NodePath("HBoxContainer/Property Title")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard"]
+layout_mode = 2
+
+[node name="Property Title" type="Label" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Int Label"
+label_settings = SubResource("LabelSettings_k550b")
+
+[node name="Line Editor" type="LineEdit" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_uneditable_color = Color(0, 0, 0, 0)
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+context_menu_enabled = false
+emoji_menu_enabled = false
+select_all_on_focus = true
+
+[node name="Property Value" type="Label" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "0"
+label_settings = SubResource("LabelSettings_7201v")
+vertical_alignment = 1
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)
@@ -3414,6 +3564,9 @@ script = ExtResource("43_uy6ih")
 [connection signal="mouse_exited" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Glove Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Glove Tool" method="_on_mouse_exited"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Glove Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Eraser" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="SelectEraser"]
+[connection signal="focus_entered" from="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor" to="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard" method="_on_line_editor_focus_entered"]
+[connection signal="focus_exited" from="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor" to="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard" method="_on_line_editor_focus_exited"]
+[connection signal="text_submitted" from="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor" to="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard" method="_on_line_editor_text_submitted"]
 [connection signal="files_dropped" from="Editor Overlay Layer/UI Popups/Import Window" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_files_dropped"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_file_path_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_normal_path_button_pressed"]
