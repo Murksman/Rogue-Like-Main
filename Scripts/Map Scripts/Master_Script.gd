@@ -8,8 +8,9 @@ func _ready():
 	LevelInfo.projectile_container = projectile_container
 
 func _input(event: InputEvent) -> void:
-	if event.is_action("Escape"): 
-		notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	pass
+	#if event.is_action("Escape"): 
+		#notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func _notification(note_event):
 	if note_event == NOTIFICATION_WM_CLOSE_REQUEST:

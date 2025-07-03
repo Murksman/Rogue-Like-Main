@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmku6rq21ynvg"]
+
+[ext_resource type="Script" uid="uid://c4t033i8icm18" path="res://Scripts/UI Scripts/Property Cards/ColorPropertyCard.gd" id="1_k548m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_52wul"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.243814, 0.235621, 0.269948, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.593134, 0.593134, 0.593133, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_7201v"]
+font_size = 14
+font_color = Color(0.808998, 0.808998, 0.808998, 1)
+outline_size = 1
+outline_color = Color(0.295867, 0.295866, 0.295866, 1)
+
+[node name="ColorPropCard" type="PanelContainer" node_paths=PackedStringArray("edit_color", "prop_title")]
+theme_override_styles/panel = SubResource("StyleBoxFlat_52wul")
+script = ExtResource("1_k548m")
+edit_color = NodePath("HBoxContainer/ColorPickerButton")
+prop_title = NodePath("HBoxContainer/Property Title")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Property Title" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Color Label"
+label_settings = SubResource("LabelSettings_7201v")
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[connection signal="color_changed" from="HBoxContainer/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]

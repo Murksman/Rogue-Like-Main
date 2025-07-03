@@ -1,4 +1,4 @@
-[gd_scene load_steps=175 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=174 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -36,18 +36,22 @@
 [ext_resource type="Texture2D" uid="uid://dgl4lvr7henmg" path="res://Sprites/UI and Menu/Icons and Images/Shape_Tool.png" id="42_52wul"]
 [ext_resource type="ButtonGroup" uid="uid://dby4g188uui0u" path="res://Resources/UI/Button Elements/Tool Button Group.tres" id="42_hp0j5"]
 [ext_resource type="Script" uid="uid://o5ua13n2tkhh" path="res://Scripts/Editor/Editor UI Core/Tray Grid.gd" id="42_pipfe"]
+[ext_resource type="PackedScene" uid="uid://bhesou1vs56lk" path="res://Prefabs/UI Objects/Editor Property Boxes/int_prop_card.tscn" id="43_52wul"]
 [ext_resource type="Texture2D" uid="uid://d2ln57rdgwlhm" path="res://Sprites/UI and Menu/Icons and Images/Hollow_Tool.png" id="43_7201v"]
-[ext_resource type="Script" uid="uid://baj5evteh7him" path="res://Scripts/UI Scripts/PropertyCard.gd" id="43_a1drd"]
+[ext_resource type="Script" uid="uid://stj6bcyd15j8" path="res://Scripts/UI Scripts/Property Cards/MasterProperty.gd" id="43_c5skp"]
 [ext_resource type="Script" uid="uid://2hocptaxtp0n" path="res://Scripts/Editor/Editor Buttons/Boxel Tool Button.gd" id="43_erl8j"]
 [ext_resource type="Texture2D" uid="uid://cxlfqgqpa5kmb" path="res://Sprites/UI and Menu/Icons and Images/Pencil_tool.png" id="43_uq885"]
 [ext_resource type="Script" uid="uid://b203b2ssgo74r" path="res://Scripts/Map Scripts/Layer Group.gd" id="43_uy6ih"]
+[ext_resource type="PackedScene" uid="uid://d248h8ge4tpou" path="res://Prefabs/UI Objects/Editor Property Boxes/float_prop_card.tscn" id="44_7201v"]
 [ext_resource type="Theme" uid="uid://cl5mg55mmovrh" path="res://Resources/Theme and Styles/Default Editor Theme.tres" id="44_am6u2"]
 [ext_resource type="Script" uid="uid://dv5kwqtcyg1y0" path="res://Scripts/Editor/Editor Buttons/Layer Button.gd" id="44_kbe7g"]
 [ext_resource type="Texture2D" uid="uid://dsyfgiyin4hvx" path="res://Sprites/UI and Menu/Icons and Images/Glove_tool.png" id="45_a1drd"]
 [ext_resource type="Script" uid="uid://ciljl8m0umdvk" path="res://Scripts/Editor/Popups/Import Window.gd" id="46_0bbil"]
 [ext_resource type="Theme" uid="uid://cmowskftvwg3h" path="res://Resources/Theme and Styles/Editor Popup Theme.tres" id="46_0d38j"]
+[ext_resource type="PackedScene" uid="uid://dmku6rq21ynvg" path="res://Prefabs/UI Objects/Editor Property Boxes/color_prop_card.tscn" id="46_c5skp"]
 [ext_resource type="Script" uid="uid://bx7lh77ukjh6f" path="res://Scripts/Editor/Editor UI Core/Boxel Details Tab Container.gd" id="46_k8w68"]
 [ext_resource type="ButtonGroup" uid="uid://cfov1k3tfhvkx" path="res://Resources/UI/Button Elements/Boxel Type Group.tres" id="46_u00xq"]
+[ext_resource type="PackedScene" uid="uid://mhv7r4mn7vtk" path="res://Prefabs/UI Objects/Editor Property Boxes/string_prop_card.tscn" id="47_c5skp"]
 [ext_resource type="Theme" uid="uid://cf74qdf0p6acc" path="res://Resources/Theme and Styles/Layer Button Theme.tres" id="47_ch65g"]
 [ext_resource type="Shader" uid="uid://b4ot41lplht6f" path="res://Scripts/Shader Scripts/Map Layer.gdshader" id="47_s3dxo"]
 [ext_resource type="Shader" uid="uid://cxfm8uknttc1t" path="res://Scripts/Shader Scripts/import grid lines.gdshader" id="48_r4tcy"]
@@ -560,33 +564,6 @@ height = 12
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
-
-[sub_resource type="Gradient" id="Gradient_c5skp"]
-offsets = PackedFloat32Array(0.512, 0.624, 0.864, 0.968)
-colors = PackedColorArray(1, 1, 1, 0, 0.454902, 0.454902, 0.454902, 1, 0.454902, 0.454902, 0.454902, 0.813953, 0.454902, 0.454902, 0.454902, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_fofj1"]
-gradient = SubResource("Gradient_c5skp")
-width = 12
-height = 12
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p3ow0"]
-texture = SubResource("GradientTexture2D_fofj1")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-draw_center = false
-
-[sub_resource type="LabelSettings" id="LabelSettings_k550b"]
-font_size = 14
-
-[sub_resource type="LabelSettings" id="LabelSettings_7201v"]
-font_size = 12
-font_color = Color(0.435192, 0.435192, 0.435192, 1)
 
 [sub_resource type="Gradient" id="Gradient_2w2ks"]
 interpolation_mode = 1
@@ -2561,9 +2538,9 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -260.0
+offset_left = -217.0
 offset_top = 180.0
-offset_bottom = 380.0
+offset_bottom = 319.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_t1s4r")
 
@@ -2597,49 +2574,20 @@ color = Color(1, 1, 1, 0)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2"]
 layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("43_c5skp")
 
-[node name="BlankPropCard" type="PanelContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" node_paths=PackedStringArray("edit_line", "prop_value", "prop_title")]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_p3ow0")
-script = ExtResource("43_a1drd")
-edit_line = NodePath("HBoxContainer/Line Editor")
-prop_value = NodePath("HBoxContainer/Line Editor/Property Value")
-prop_title = NodePath("HBoxContainer/Property Title")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard"]
+[node name="IntPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("43_52wul")]
 layout_mode = 2
 
-[node name="Property Title" type="Label" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer"]
-custom_minimum_size = Vector2(80, 0)
+[node name="FloatPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("44_7201v")]
 layout_mode = 2
-text = "Int Label"
-label_settings = SubResource("LabelSettings_k550b")
 
-[node name="Line Editor" type="LineEdit" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer"]
+[node name="ColorPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("46_c5skp")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
-theme_override_colors/font_uneditable_color = Color(0, 0, 0, 0)
-theme_override_colors/font_color = Color(0, 0, 0, 0)
-theme_override_font_sizes/font_size = 12
-context_menu_enabled = false
-emoji_menu_enabled = false
-select_all_on_focus = true
 
-[node name="Property Value" type="Label" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_right = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-text = "0"
-label_settings = SubResource("LabelSettings_7201v")
-vertical_alignment = 1
+[node name="StringPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("47_c5skp")]
+layout_mode = 2
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)
@@ -3564,9 +3512,6 @@ script = ExtResource("43_uy6ih")
 [connection signal="mouse_exited" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Glove Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Glove Tool" method="_on_mouse_exited"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Glove Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Eraser" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="SelectEraser"]
-[connection signal="focus_entered" from="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor" to="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard" method="_on_line_editor_focus_entered"]
-[connection signal="focus_exited" from="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor" to="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard" method="_on_line_editor_focus_exited"]
-[connection signal="text_submitted" from="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard/HBoxContainer/Line Editor" to="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer/BlankPropCard" method="_on_line_editor_text_submitted"]
 [connection signal="files_dropped" from="Editor Overlay Layer/UI Popups/Import Window" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_files_dropped"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_file_path_button_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/FilePath Line/FilePath Button" to="Editor Overlay Layer/UI Popups/Import Window" method="_on_normal_path_button_pressed"]

@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://bhesou1vs56lk"]
+
+[ext_resource type="Script" uid="uid://baj5evteh7him" path="res://Scripts/UI Scripts/Property Cards/IntPropertyCard.gd" id="1_rylus"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uq885"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.243814, 0.235621, 0.269948, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.593134, 0.593134, 0.593133, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_a1drd"]
+font_size = 14
+font_color = Color(0.808998, 0.808998, 0.808998, 1)
+outline_size = 1
+outline_color = Color(0.295867, 0.295866, 0.295866, 1)
+
+[node name="IntPropCard" type="PanelContainer" node_paths=PackedStringArray("edit_line", "prop_title")]
+custom_minimum_size = Vector2(0, 28)
+theme_override_styles/panel = SubResource("StyleBoxFlat_uq885")
+script = ExtResource("1_rylus")
+edit_line = NodePath("HBoxContainer/Line Editor")
+prop_title = NodePath("HBoxContainer/Property Title")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Property Title" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Int Label"
+label_settings = SubResource("LabelSettings_a1drd")
+
+[node name="Line Editor" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+placeholder_text = "0"
+context_menu_enabled = false
+emoji_menu_enabled = false
+deselect_on_focus_loss_enabled = false
+select_all_on_focus = true
+
+[connection signal="focus_entered" from="HBoxContainer/Line Editor" to="." method="_on_line_editor_focus_entered"]
+[connection signal="focus_exited" from="HBoxContainer/Line Editor" to="." method="_on_line_editor_focus_exited"]
+[connection signal="text_submitted" from="HBoxContainer/Line Editor" to="." method="_on_line_editor_text_submitted"]
