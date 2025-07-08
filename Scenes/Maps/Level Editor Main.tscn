@@ -1857,7 +1857,7 @@ texture = SubResource("GradientTexture2D_apqe3")
 texture_scale = 1.27
 height = 40.0
 
-[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline")]
+[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline", "property_master")]
 process_priority = 1
 layer = 20
 script = ExtResource("41_hic17")
@@ -1871,8 +1871,10 @@ toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar"
 eraser = NodePath("Editor UI/Library Container/Editor Level Pane/Eraser")
 tile_selection_outline = NodePath("Editor UI/Library Container/Editor Level Pane/Tile Selection Outline")
 entity_selection_outline = NodePath("Editor Workspace/Editor Object Selection Overlay")
+property_master = NodePath("Editor UI/Property Master")
 
 [node name="Editor Workspace" type="Node2D" parent="Editor Overlay Layer"]
+z_as_relative = false
 
 [node name="Editor Object Selection Overlay" type="Sprite2D" parent="Editor Overlay Layer/Editor Workspace"]
 texture = SubResource("GradientTexture2D_52wul")
@@ -1883,6 +1885,8 @@ width = 2.0
 default_color = Color(1, 0.905882, 0, 0.85098)
 
 [node name="Editor UI" type="Control" parent="Editor Overlay Layer"]
+z_index = 10
+z_as_relative = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -2046,7 +2050,6 @@ mouse_filter = 1
 
 [node name="Top Bar Background" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
 z_index = -10
-z_as_relative = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2144,7 +2147,6 @@ icon_alignment = 1
 
 [node name="Layer Bar Container" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Top Editor Bar"]
 z_index = 10
-z_as_relative = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -2547,7 +2549,8 @@ patch_margin_top = 10
 patch_margin_right = 10
 patch_margin_bottom = 10
 
-[node name="VBoxContainer" type="PanelContainer" parent="Editor Overlay Layer/Editor UI"]
+[node name="Property Master" type="PanelContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("editor_layer", "prop_stack")]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -2557,8 +2560,15 @@ offset_top = 180.0
 offset_bottom = 319.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_t1s4r")
+script = ExtResource("43_c5skp")
+editor_layer = NodePath("../..")
+prop_stack = NodePath("MarginContainer2/VBoxContainer")
+int_prop = ExtResource("43_52wul")
+float_prop = ExtResource("44_7201v")
+string_prop = ExtResource("47_c5skp")
+color_prop = ExtResource("46_c5skp")
 
-[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/Property Master"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 3
@@ -2566,7 +2576,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer"]
+[node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer"]
 layout_mode = 2
 texture = SubResource("GradientTexture2D_7201v")
 draw_center = false
@@ -2575,32 +2585,31 @@ patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="MarginContainer2" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/Property Master"]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2"]
+[node name="ColorRect" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2"]
 layout_mode = 2
 color = Color(1, 1, 1, 0)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2"]
 layout_mode = 2
 theme_override_constants/separation = 2
-script = ExtResource("43_c5skp")
 
-[node name="IntPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("43_52wul")]
+[node name="IntPropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("43_52wul")]
 layout_mode = 2
 
-[node name="FloatPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("44_7201v")]
+[node name="FloatPropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("44_7201v")]
 layout_mode = 2
 
-[node name="ColorPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("46_c5skp")]
+[node name="ColorPropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("46_c5skp")]
 layout_mode = 2
 
-[node name="StringPropCard" parent="Editor Overlay Layer/Editor UI/VBoxContainer/MarginContainer2/VBoxContainer" instance=ExtResource("47_c5skp")]
+[node name="StringPropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("47_c5skp")]
 layout_mode = 2
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]

@@ -10,6 +10,7 @@ extends CanvasLayer
 @export var eraser : TextureButton
 @export var tile_selection_outline : NinePatchRect
 @export var entity_selection_outline : Sprite2D
+@export var property_master : Control
 
 @onready var player : CharacterBody2D = $"../Player"
 
@@ -563,11 +564,15 @@ func SelectObject(world_object : Node2D) -> void:
 	
 	if selected_world_obj == world_object:
 		selected_world_obj = null
-	else:
-		selected_world_obj = world_object
 		
+		property_master.visible = false
+	else:
 		if world_object && !(world_object is Entity): printerr("Attempting to select an Object of invalid type: ", world_object.name)
+		else: 
+			selected_world_obj = world_object
+			property_master.visible = true
 	
+	if selected_world_obj: property_master.Reset(selected_world_obj)
 	entity_selection_outline.visible = selected_world_obj != null
 
 
