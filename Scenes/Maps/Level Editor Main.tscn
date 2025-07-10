@@ -1,4 +1,4 @@
-[gd_scene load_steps=175 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=178 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -565,6 +565,23 @@ height = 12
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Gradient_fofj1"]
+offsets = PackedFloat32Array(0, 0.816, 0.912)
+colors = PackedColorArray(0.195554, 0.204637, 0.231908, 1, 0.271658, 0.283199, 0.317822, 1, 0.270222, 0.270222, 0.270222, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p3ow0"]
+gradient = SubResource("Gradient_fofj1")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qyekt"]
+texture = SubResource("GradientTexture2D_p3ow0")
+texture_margin_left = 30.0
+texture_margin_top = 30.0
+texture_margin_right = 30.0
+texture_margin_bottom = 30.0
 
 [sub_resource type="Gradient" id="Gradient_2w2ks"]
 interpolation_mode = 1
@@ -2239,6 +2256,7 @@ select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Light
 layer_int = 5
 
 [node name="Library Container" type="HSplitContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("tray_grid")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2550,7 +2568,6 @@ patch_margin_right = 10
 patch_margin_bottom = 10
 
 [node name="Property Master" type="PanelContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("editor_layer", "prop_stack")]
-visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -2611,6 +2628,23 @@ layout_mode = 2
 
 [node name="StringPropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("47_c5skp")]
 layout_mode = 2
+
+[node name="Enemy Masking UI" type="Control" parent="Editor Overlay Layer/Editor UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Editor Overlay Layer/Editor UI/Enemy Masking UI"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 300.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_qyekt")
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
 custom_minimum_size = Vector2(0, 0.33)
