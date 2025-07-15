@@ -1,4 +1,4 @@
-[gd_scene load_steps=178 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=180 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -65,6 +65,8 @@
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
 [ext_resource type="Resource" uid="uid://dkvpkci6r641t" path="res://Resources/Misc Data/default_wall_occluders.tres" id="55_uqdnf"]
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
+[ext_resource type="Script" uid="uid://b011vefyc7d33" path="res://Scripts/Editor/Popups/Enemy Pool Editor.gd" id="58_p3ow0"]
+[ext_resource type="PackedScene" uid="uid://bcrawwvt3nnfc" path="res://Prefabs/Editor/enemy_preview.scn" id="59_qyekt"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -900,8 +902,10 @@ z_index = 4096
 z_as_relative = false
 layout_mode = 3
 anchors_preset = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+offset_left = 17.0
+offset_top = 126.0
+offset_right = 1937.0
+offset_bottom = 1206.0
 mouse_default_cursor_shape = 3
 
 [node name="HUD Elements" type="Control" parent="UI Layer" node_paths=PackedStringArray("player", "weapon_holder")]
@@ -2256,7 +2260,6 @@ select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Light
 layer_int = 5
 
 [node name="Library Container" type="HSplitContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("tray_grid")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2630,6 +2633,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Enemy Masking UI" type="Control" parent="Editor Overlay Layer/Editor UI"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2652,6 +2656,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 29.0
+offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -3465,6 +3471,160 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="Enemy Pool Editor" type="Window" parent="Editor Overlay Layer/UI Popups"]
+auto_translate_mode = 1
+transparent_bg = true
+title = "Select a level to load"
+initial_position = 4
+size = Vector2i(485, 540)
+visible = false
+transient = true
+exclusive = true
+borderless = true
+transparent = true
+popup_window = true
+extend_to_title = true
+theme = ExtResource("46_0d38j")
+script = ExtResource("58_p3ow0")
+
+[node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Window Styling" type="Panel" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Window Theming"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_7hnnx")
+
+[node name="MarginContainer2" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -44.0
+offset_right = -20.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Delete Pool" type="Button" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2"]
+modulate = Color(0.994349, 0.380639, 0.348092, 1)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.270222, 0.270222, 0.270222, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4wljv")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hipv6")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_g38rd")
+theme_override_styles/normal = SubResource("StyleBoxTexture_hipv6")
+action_mode = 0
+text = "Delete Pool
+"
+
+[node name="Save Pool" type="Button" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2"]
+modulate = Color(0.461939, 0.63299, 0.791514, 1)
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme = ExtResource("44_am6u2")
+theme_override_font_sizes/font_size = 16
+text = "Save
+"
+
+[node name="Exit Button" type="Button" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor"]
+modulate = Color(0.93, 0.28179, 0.1674, 1)
+custom_minimum_size = Vector2(40, 22)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -48.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = 30.0
+grow_horizontal = 0
+theme = ExtResource("44_am6u2")
+theme_override_constants/align_to_largest_stylebox = 0
+text = "X"
+
+[node name="Enemy Content List" type="Control" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 39.0
+offset_right = -22.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Background" type="Panel" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_64kq2")
+
+[node name="File List Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
+custom_minimum_size = Vector2(300, 90)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Level Selection Scroller" type="ScrollContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Level List" type="GridContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller"]
+material = SubResource("ShaderMaterial_5rioj")
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Enemy Preview" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller/Level List" instance=ExtResource("59_qyekt")]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Enemy Preview2" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller/Level List" instance=ExtResource("59_qyekt")]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_qpmiv")
+patch_margin_left = 15
+patch_margin_top = 15
+patch_margin_right = 15
+patch_margin_bottom = 15
+
 [node name="OS dialogs" type="Control" parent="Editor Overlay Layer"]
 layout_mode = 3
 anchors_preset = 0
@@ -3547,6 +3707,15 @@ clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
 
+[node name="Enemy Mask Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
+z_index = 130
+z_as_relative = false
+material = SubResource("ShaderMaterial_52wul")
+fit_margin = 1.0
+clear_margin = 1.0
+use_mipmaps = true
+script = ExtResource("43_uy6ih")
+
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Top Editor Bar/Top Bar Margins/Top Bar Settings Area/Editor Import Button" to="Editor Overlay Layer" method="_on_editor_import_button_pressed"]
@@ -3580,6 +3749,10 @@ script = ExtResource("43_uy6ih")
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Select File Path" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_select_file_path"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Save Level" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_save"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/Exit Button" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_exit"]
+[connection signal="close_requested" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_close_requested"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2/Delete Pool" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_delete_pool_pressed"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2/Save Pool" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_load_level"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Exit Button" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_exit_button_pressed"]
 [connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_file_selected"]
 [connection signal="files_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_files_selected"]
 [connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Level Handler" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_receive_level_path"]

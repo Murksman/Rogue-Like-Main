@@ -62,6 +62,5 @@ func _on_receive_level_path(file_path : String) -> void:
 	selected_path = file_path
 	lvlpath_text.text = selected_path
 
-
 func _on_exit() -> void:
 	notification(NOTIFICATION_WM_CLOSE_REQUEST)
