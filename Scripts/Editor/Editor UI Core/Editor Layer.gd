@@ -37,6 +37,7 @@ var map_object_list : Array[LvlObject] = []
 var glove_selection : Object
 var glove_select_pos : Vector2
 var selected_world_obj : Node2D
+var selected_enemy_pool : 
 
 var tool : int = -1
 

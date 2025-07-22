@@ -1866,8 +1866,8 @@ height = 40.0
 process_priority = 1
 layer = 20
 script = ExtResource("41_hic17")
-level_tilemap_root = NodePath("../Level Tilemap Root")
 layer_button_group = ExtResource("48_rkwao")
+level_tilemap_root = NodePath("../Level Tilemap Root")
 import_window = NodePath("UI Popups/Import Window")
 level_load_window = NodePath("UI Popups/Level Load Selector")
 level_save_window = NodePath("UI Popups/Level Save Window")
@@ -2045,7 +2045,6 @@ patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Tile Tray"]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2061,27 +2060,27 @@ grow_vertical = 2
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="UIBoxel" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0, 0, 1)
 
-[node name="UIBoxel2" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool2" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0.784314, 0, 1)
 
-[node name="UIBoxel3" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool3" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0, 0.784314, 1)
 
-[node name="UIBoxel4" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool4" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0.784314, 0, 1)
 
-[node name="UIBoxel5" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool5" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0, 0.784314, 1)
 
-[node name="UIBoxel6" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool6" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0.784314, 0.784314, 1)
 
