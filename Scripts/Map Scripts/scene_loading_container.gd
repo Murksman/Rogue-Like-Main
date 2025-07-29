@@ -14,7 +14,6 @@ var player : Node2D
 var root_loaded := false
 
 @onready var loaded_entities : EntityImportTable = preload("res://Resources/Misc Data/Entity Import Table.res")
-@onready var enemy_container : Node2D = $"Enemy Container"
 
 func _ready() -> void:
 	if DirAccess.make_dir_absolute(lvlobject_load_path) == null:

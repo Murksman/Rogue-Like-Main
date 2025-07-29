@@ -12,9 +12,7 @@ func _pressed() -> void:
 		for button in button_group.get_buttons():
 			ChangeLayerVisibility(button.select_layer, true)
 	
-	$"../../../..".library_grid.ReorderBoxels()
+	$"../../../..".ChangeLayer(layer_int)
 
 func ChangeLayerVisibility(layer : CanvasGroup, is_visible : bool):
 	layer.material.set_shader_parameter("is_visible", is_visible)
-	
-	$"../../../..".SelectObject($"../../../..".selected_world_obj)

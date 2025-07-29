@@ -28,7 +28,7 @@
 [ext_resource type="Script" uid="uid://rpdw86t5puk1" path="res://Scripts/Editor/Editor UI Core/Boxel Tray Frame.gd" id="35_xhdnv"]
 [ext_resource type="PackedScene" uid="uid://bby1unf3c7sek" path="res://Prefabs/Inventory Items/Ammo Box.tscn" id="36_4baki"]
 [ext_resource type="Script" uid="uid://5mo6ixip0n8d" path="res://Scripts/Editor/Editor UI Core/LibrarySearchBox.gd" id="36_d88y6"]
-[ext_resource type="PackedScene" uid="uid://f5r6biwps2qh" path="res://Prefabs/Editor/ui_enemy_pool.scn" id="36_s3att"]
+[ext_resource type="PackedScene" uid="uid://befaaxkkbnmvk" path="res://Prefabs/Editor/ui_enemy_pool.scn" id="36_s3att"]
 [ext_resource type="Script" uid="uid://c2m7kdvwq4a76" path="res://Scripts/Resource Scripts/Loot Table.gd" id="37_8hfmu"]
 [ext_resource type="PackedScene" uid="uid://ccxacsgbtd7rm" path="res://Prefabs/Editor/ui_boxel.tscn" id="38_67lmj"]
 [ext_resource type="Script" uid="uid://dp8bw784fs3x6" path="res://Scripts/Editor/Editor UI Core/Toolbar.gd" id="41_0ktbi"]
@@ -786,6 +786,7 @@ shader_parameter/is_editing = true
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("projectile_container", "enemy_container")]
 texture_filter = 1
+position = Vector2(-2, 0)
 script = ExtResource("1_po503")
 projectile_container = NodePath("Projectile Container")
 enemy_container = NodePath("Enemy Container")
@@ -1862,21 +1863,26 @@ texture = SubResource("GradientTexture2D_apqe3")
 texture_scale = 1.27
 height = 40.0
 
-[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline", "property_master")]
+[node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "library_tray", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline", "property_master", "tile_tray", "enemy_pool_tray", "enemy_pool_editor")]
 process_priority = 1
 layer = 20
 script = ExtResource("41_hic17")
-layer_button_group = ExtResource("48_rkwao")
+player = NodePath("../Player")
 level_tilemap_root = NodePath("../Level Tilemap Root")
+layer_button_group = ExtResource("48_rkwao")
 import_window = NodePath("UI Popups/Import Window")
 level_load_window = NodePath("UI Popups/Level Load Selector")
 level_save_window = NodePath("UI Popups/Level Save Window")
 library_grid = NodePath("Editor UI/Library Container/Library Tray/Library Tray Container/Library Scroller/Library Grid")
+library_tray = NodePath("Editor UI/Library Container/Library Tray")
 toolbar = NodePath("Editor UI/Library Container/Editor Level Pane/Boxel Toolbar")
 eraser = NodePath("Editor UI/Library Container/Editor Level Pane/Eraser")
 tile_selection_outline = NodePath("Editor UI/Library Container/Editor Level Pane/Tile Selection Outline")
 entity_selection_outline = NodePath("Editor Workspace/Editor Object Selection Overlay")
 property_master = NodePath("Editor UI/Property Master")
+tile_tray = NodePath("Editor UI/Tile Tray/BoxelSeperator")
+enemy_pool_tray = NodePath("Editor UI/Tile Tray/EnemyPoolContainer")
+enemy_pool_editor = NodePath("UI Popups/Enemy Pool Editor")
 
 [node name="Editor Workspace" type="Node2D" parent="Editor Overlay Layer"]
 z_as_relative = false
@@ -1918,7 +1924,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.15953, 0.179914, 0.19457, 1)
 
-[node name="UIBoxelSeperator" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Tile Tray"]
+[node name="BoxelSeperator" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Tile Tray"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1934,7 +1940,7 @@ grow_vertical = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Boxel Frame" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -1945,7 +1951,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame2" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame2" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -1956,7 +1962,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame3" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame3" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -1967,7 +1973,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame4" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame4" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -1978,7 +1984,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame5" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame5" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -1989,7 +1995,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame6" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame6" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -2000,7 +2006,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame7" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame7" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -2011,7 +2017,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame8" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame8" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -2022,7 +2028,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame9" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame9" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -2033,7 +2039,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="Boxel Frame10" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/UIBoxelSeperator"]
+[node name="Boxel Frame10" type="NinePatchRect" parent="Editor Overlay Layer/Editor UI/Tile Tray/BoxelSeperator"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 mouse_filter = 1
@@ -2044,7 +2050,8 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("35_xhdnv")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Tile Tray"]
+[node name="EnemyPoolContainer" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Tile Tray"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2060,27 +2067,27 @@ grow_vertical = 2
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="UIEnemyPool" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0, 0, 1)
 
-[node name="UIEnemyPool2" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool2" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0.784314, 0, 1)
 
-[node name="UIEnemyPool3" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool3" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0, 0.784314, 1)
 
-[node name="UIEnemyPool4" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool4" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0.784314, 0, 1)
 
-[node name="UIEnemyPool5" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool5" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0, 0.784314, 1)
 
-[node name="UIEnemyPool6" parent="Editor Overlay Layer/Editor UI/Tile Tray/HBoxContainer" instance=ExtResource("36_s3att")]
+[node name="UIEnemyPool6" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0.784314, 0.784314, 1)
 
@@ -2663,8 +2670,6 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 29.0
-offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -3484,7 +3489,6 @@ transparent_bg = true
 title = "Select a level to load"
 initial_position = 4
 size = Vector2i(485, 540)
-visible = false
 transient = true
 exclusive = true
 borderless = true
@@ -3641,7 +3645,7 @@ mouse_filter = 2
 
 [node name="Open Image Handler" type="FileDialog" parent="Editor Overlay Layer/OS dialogs"]
 title = "Open File(s)"
-size = Vector2i(350, 180)
+size = Vector2i(351, 180)
 always_on_top = true
 force_native = true
 ok_button_text = "Open"

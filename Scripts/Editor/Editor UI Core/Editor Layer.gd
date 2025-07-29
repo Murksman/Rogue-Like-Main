@@ -1,18 +1,21 @@
 extends CanvasLayer
 
+@export var player : CharacterBody2D
 @export var level_tilemap_root : Node2D
 @export var layer_button_group : ButtonGroup
 @export var import_window : Window
 @export var level_load_window : Window 
 @export var level_save_window : Window 
 @export var library_grid : GridContainer
+@export var library_tray : Control
 @export var toolbar : Control
 @export var eraser : TextureButton
 @export var tile_selection_outline : NinePatchRect
 @export var entity_selection_outline : Sprite2D
 @export var property_master : Control
-
-@onready var player : CharacterBody2D = $"../Player"
+@export var tile_tray : Control
+@export var enemy_pool_tray : Control
+@export var enemy_pool_editor : Window
 
 var mouse_position : Vector2 = Vector2.ZERO
 var anchor_mouse_point : Vector2 = Vector2.ZERO
@@ -37,7 +40,7 @@ var map_object_list : Array[LvlObject] = []
 var glove_selection : Object
 var glove_select_pos : Vector2
 var selected_world_obj : Node2D
-var selected_enemy_pool : 
+var selected_enemy_pool : Control
 
 var tool : int = -1
 
@@ -73,21 +76,23 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Editor Hollow Tool"): set_tool_mode(2)
 	if event.is_action_pressed("Editor Glove Tool"): set_tool_mode(3)
 	
-	if event.is_action_pressed("Editor Layer Switch") && layer_button_group.get_pressed_button(): 
-		print("testing layer switch")
-		
-		var layer_int = (layer_button_group.get_pressed_button().layer_int + 1) % 5
-		for layer_button in layer_button_group.get_buttons(): 
-			layer_button.set_pressed_no_signal(layer_button.layer_int == layer_int)
-		
-		layer_button_group.get_buttons()[0]._pressed()
+	if event.is_action_pressed("Editor Layer Switch"):
+		if layer_button_group.get_pressed_button(): 
+			var layer_int = (layer_button_group.get_pressed_button().layer_int + 1) % 6
+			for layer_button in layer_button_group.get_buttons(): 
+				layer_button.set_pressed_no_signal(layer_button.layer_int == layer_int)
+			
+			layer_button_group.get_buttons()[layer_int]._pressed()
+		else:
+			for layer_button in layer_button_group.get_buttons(): 
+				layer_button.set_pressed_no_signal(layer_button.layer_int == 0)
+			
+			layer_button_group.get_buttons()[0]._pressed()
 	
 	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
-	if event.is_action_pressed("Save Request"): 
-		if current_level_filepath == "":
-			RequestSaveLevel()
-		else:
-			SaveLevel(current_level_filepath)
+	if event.is_action_pressed("Save Request"):
+		if current_level_filepath == "": RequestSaveLevel()
+		else: SaveLevel(current_level_filepath)
 	
 	if event.is_action_pressed("Delete"): 
 		if selected_boxel && focus_boxel:
@@ -576,6 +581,25 @@ func SelectObject(world_object : Node2D) -> void:
 	if selected_world_obj: property_master.Reset(selected_world_obj)
 	entity_selection_outline.visible = selected_world_obj != null
 
+func ChangeLayer(layer_int : int) -> void:
+	print("Change Layer - ", layer_int)
+	var is_enemy_layer = layer_int == 5
+	enemy_pool_tray.visible = is_enemy_layer
+	tile_tray.visible = !is_enemy_layer
+	library_tray.visible = !is_enemy_layer
+	
+	SelectObject(selected_world_obj)
+	library_grid.ReorderBoxels()
+
+func set_tool_mode(idx : int):
+	for i in 4: toolbar.blend_buttons[i].set_pressed_no_signal(false)
+	toolbar.blend_buttons[idx].set_pressed_no_signal(true)
+	toolbar.blend_buttons[idx].toggled.emit()
+	tool = idx + 1
+	toolbar.selected_tool = tool
+
+func OpenEnemyPool(pool : EnemyPool):
+	enemy_pool_editor.Open(pool)
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)
@@ -591,10 +615,3 @@ func _on_save_level() -> void:
 
 func _on_load_level_button_pressed() -> void:
 	RequestLoadLevel()
-
-func set_tool_mode(idx : int):
-	for i in 4: toolbar.blend_buttons[i].set_pressed_no_signal(false)
-	toolbar.blend_buttons[idx].set_pressed_no_signal(true)
-	toolbar.blend_buttons[idx].toggled.emit()
-	tool = idx + 1
-	toolbar.selected_tool = tool
