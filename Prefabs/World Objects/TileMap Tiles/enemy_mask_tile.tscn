@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://csawsd315fil1"]
+
+[ext_resource type="Script" uid="uid://cndmu32dqcabl" path="res://Scripts/Object Scripts/EnemyMaskTile.gd" id="1_qerby"]
+
+[sub_resource type="Gradient" id="Gradient_6j246"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qerby"]
+gradient = SubResource("Gradient_6j246")
+width = 32
+height = 32
+
+[node name="EnemyMaskTile" type="Sprite2D"]
+modulate = Color(1, 1, 1, 0.501961)
+texture = SubResource("GradientTexture2D_qerby")
+script = ExtResource("1_qerby")

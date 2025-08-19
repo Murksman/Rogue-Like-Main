@@ -120,6 +120,7 @@ func EditToggle(force_toggle : bool):
 	player.editor_open = editing
 	player.visible = !editing
 	player.collision_body.disabled = editing
+	level_tilemap_root.layer_groups[5].visible = editing
 
 func EditorExit():
 	import_window.notification(NOTIFICATION_WM_CLOSE_REQUEST)
@@ -150,8 +151,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 	var selected_layer = layer_button_group.get_pressed_button().layer_int
 	tile_selection_outline.visible = ((Input.is_action_pressed("Editor Primary") && selected_boxel) || Input.is_action_pressed("Eraser Hold")) && toolbar.selected_tool > 0 && selected_layer < 3
 	
+	var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
+	
 	if (event is InputEventMouseMotion && Input.is_action_pressed("Eraser Hold")) || event.is_action_pressed("Eraser Hold") || event.is_action_released("Eraser Hold"):
-		var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		focus_boxel = false
 		
@@ -162,11 +164,18 @@ func LevelPanePressed(event : InputEvent) -> void:
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
 		if selected_layer > 2:
-			if event.is_action_pressed("Editor Primary"): MapObjectEvent(selected_boxel, mouse_position, layer_canvas)
-			return
+			if Input.is_action_pressed("Editor Primary") && selected_layer == 5:
+				if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary") && !event.is_action_released("Editor Primary"): return
+				drag_action_position = tile_position
+				
+				MapEnemyMaskEvent(selected_enemy_pool.enemy_pool, tile_position, eraser.button_pressed)
+				return
+			
+			if event.is_action_pressed("Editor Primary"):
+				MapObjectEvent(selected_boxel, mouse_position, layer_canvas)
 		
 		if (selected_boxel && selected_boxel.boxel.layers.has(selected_layer)) || eraser.button_pressed:
-			var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
+			
 			if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary") && !event.is_action_released("Editor Primary"): return
 			
 			focus_boxel = false
@@ -254,7 +263,10 @@ func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, releas
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas)
 	elif tool == 3:
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas, true)
-	
+
+func MapEnemyMaskEvent(enemy_pool : EnemyPool, tile_position : Vector2i, erasing : bool):
+	if erasing: level_tilemap_root.EraseEnemyMaskTile(tile_position)
+	else: level_tilemap_root.AddEnemyMaskTile(tile_position, enemy_pool)
 
 func SelectBoxel(target_boxel : UIBoxel) -> void:
 	if target_boxel == selected_boxel:
@@ -584,6 +596,7 @@ func SelectObject(world_object : Node2D) -> void:
 func ChangeLayer(layer_int : int) -> void:
 	print("Change Layer - ", layer_int)
 	var is_enemy_layer = layer_int == 5
+	
 	enemy_pool_tray.visible = is_enemy_layer
 	tile_tray.visible = !is_enemy_layer
 	library_tray.visible = !is_enemy_layer

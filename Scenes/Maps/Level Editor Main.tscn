@@ -1,4 +1,4 @@
-[gd_scene load_steps=178 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=186 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -22,6 +22,7 @@
 [ext_resource type="Shader" uid="uid://buvlom23gqi1h" path="res://Scripts/Shader Scripts/Vision Cone.gdshader" id="22_om1lu"]
 [ext_resource type="Shader" uid="uid://b2trawbhxsph0" path="res://Scripts/Shader Scripts/Screen Effects.gdshader" id="23_d60xw"]
 [ext_resource type="Script" uid="uid://cs3tw6uh30cga" path="res://Scripts/Map Scripts/Map Container.gd" id="24_e5ldj"]
+[ext_resource type="Script" uid="uid://rfm64kwbx3cc" path="res://Scripts/Editor/Editor Resource Scripts/EnemyPool.gd" id="28_vpoa2"]
 [ext_resource type="Theme" uid="uid://5kt326x2xcdf" path="res://Resources/Theme and Styles/Enemy Layer Button Theme.tres" id="30_fofj1"]
 [ext_resource type="Shader" uid="uid://bpju2pddlc286" path="res://Scripts/Shader Scripts/Vis_mask_cone.gdshader" id="35_2wstq"]
 [ext_resource type="FontFile" uid="uid://bnlamhhfpyyse" path="res://Sprites/UI and Menu/Fonts and Text/OpenSans-Light.ttf" id="35_3xe68"]
@@ -68,10 +69,11 @@
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
 [ext_resource type="Script" uid="uid://b011vefyc7d33" path="res://Scripts/Editor/Popups/Enemy Pool Editor.gd" id="58_p3ow0"]
 [ext_resource type="PackedScene" uid="uid://bcrawwvt3nnfc" path="res://Prefabs/Editor/enemy_preview.scn" id="59_qyekt"]
+[ext_resource type="PackedScene" uid="uid://csawsd315fil1" path="res://Prefabs/World Objects/TileMap Tiles/enemy_mask_tile.tscn" id="66_fnbd0"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
-colors = PackedColorArray(0.11753, 0.136481, 0.149358, 1)
+colors = PackedColorArray(0.233807, 0.264653, 0.285623, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_4xic8"]
 gradient = SubResource("Gradient_laq45")
@@ -389,6 +391,36 @@ colors = PackedColorArray(0.12549, 0.152941, 0.164706, 0.631373, 0.180392, 0.215
 gradient = SubResource("Gradient_r7b0r")
 fill = 2
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Resource" id="Resource_ima7e"]
+script = ExtResource("28_vpoa2")
+id = 1
+metadata/_custom_type_script = "uid://rfm64kwbx3cc"
+
+[sub_resource type="Resource" id="Resource_vpoa2"]
+script = ExtResource("28_vpoa2")
+id = 2
+metadata/_custom_type_script = "uid://rfm64kwbx3cc"
+
+[sub_resource type="Resource" id="Resource_3bfvk"]
+script = ExtResource("28_vpoa2")
+id = 3
+metadata/_custom_type_script = "uid://rfm64kwbx3cc"
+
+[sub_resource type="Resource" id="Resource_2cfjm"]
+script = ExtResource("28_vpoa2")
+id = 4
+metadata/_custom_type_script = "uid://rfm64kwbx3cc"
+
+[sub_resource type="Resource" id="Resource_rhksd"]
+script = ExtResource("28_vpoa2")
+id = 5
+metadata/_custom_type_script = "uid://rfm64kwbx3cc"
+
+[sub_resource type="Resource" id="Resource_8myeh"]
+script = ExtResource("28_vpoa2")
+id = 6
+metadata/_custom_type_script = "uid://rfm64kwbx3cc"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tbkho"]
 load_path = "res://.godot/imported/UI Button Template.png-b05fa7349dad59e824bef5489da0f127.ctex"
@@ -880,6 +912,7 @@ color = Color(0, 0, 0, 0)
 
 [node name="UI Layer" type="CanvasLayer" parent="."]
 layer = 10
+visible = false
 follow_viewport_scale = 0.1
 
 [node name="Mouse Capture" type="Control" parent="UI Layer"]
@@ -1866,6 +1899,7 @@ height = 40.0
 [node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "library_tray", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline", "property_master", "tile_tray", "enemy_pool_tray", "enemy_pool_editor")]
 process_priority = 1
 layer = 20
+visible = false
 script = ExtResource("41_hic17")
 player = NodePath("../Player")
 level_tilemap_root = NodePath("../Level Tilemap Root")
@@ -2070,26 +2104,32 @@ alignment = 1
 [node name="UIEnemyPool" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0, 0, 1)
+enemy_pool = SubResource("Resource_ima7e")
 
 [node name="UIEnemyPool2" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0.784314, 0, 1)
+enemy_pool = SubResource("Resource_vpoa2")
 
 [node name="UIEnemyPool3" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0, 0.784314, 1)
+enemy_pool = SubResource("Resource_3bfvk")
 
 [node name="UIEnemyPool4" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0.784314, 0, 1)
+enemy_pool = SubResource("Resource_2cfjm")
 
 [node name="UIEnemyPool5" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0.784314, 0, 0.784314, 1)
+enemy_pool = SubResource("Resource_rhksd")
 
 [node name="UIEnemyPool6" parent="Editor Overlay Layer/Editor UI/Tile Tray/EnemyPoolContainer" instance=ExtResource("36_s3att")]
 layout_mode = 2
 color = Color(0, 0.784314, 0.784314, 1)
+enemy_pool = SubResource("Resource_8myeh")
 
 [node name="Top Editor Bar" type="Control" parent="Editor Overlay Layer/Editor UI"]
 custom_minimum_size = Vector2(0, 60)
@@ -3676,13 +3716,14 @@ use_native_dialog = true
 navigation_polygon = SubResource("NavigationPolygon_5py3h")
 enabled = false
 script = ExtResource("24_e5ldj")
-layer_groups = [NodePath("Level Save Root/Floor Layer"), NodePath("Level Save Root/Decal Layer"), NodePath("Level Save Root/Wall Layer"), NodePath("Level Save Root/Entity Layer"), NodePath("Level Save Root/Light Layer")]
+layer_groups = [NodePath("Level Save Root/Floor Layer"), NodePath("Level Save Root/Decal Layer"), NodePath("Level Save Root/Wall Layer"), NodePath("Level Save Root/Entity Layer"), NodePath("Level Save Root/Light Layer"), NodePath("Level Save Root/Enemy Mask Layer")]
 chunk_size = 16
 chunk_background = NodePath("../Background")
 level_save_root = NodePath("Level Save Root")
 default_wall_occluders = ExtResource("55_uqdnf")
 tile_object = ExtResource("49_pojje")
 wall_object = ExtResource("58_8eboa")
+enemy_mask_object = ExtResource("66_fnbd0")
 
 [node name="Level Save Root" type="Node2D" parent="Level Tilemap Root"]
 position = Vector2(16, 16)

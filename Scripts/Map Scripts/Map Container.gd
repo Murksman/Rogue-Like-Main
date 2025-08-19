@@ -11,6 +11,7 @@ var free_nodes : Array[Node]
 @export var default_wall_occluders : PackedPolygonArray
 @export var tile_object : PackedScene
 @export var wall_object : PackedScene
+@export var enemy_mask_object : PackedScene
 
 var map_size : Vector2i
 var bounds_offset : Vector2i = Vector2i.ZERO 
@@ -57,8 +58,8 @@ func LoadResources(reset : bool = false):
 func ResetMap():
 	ResizeMapBounds()
 	
-	for layer in layer_groups:
-		layer_init(layer)
+	for i in 6:
+		layer_init(layer_groups[i])
 	
 	UpdateChunkBackground()
 
@@ -147,12 +148,12 @@ func CheckSetMapSize(tile_pos : Vector2i) -> int:
 	UpdateChunkBackground()
 	return 0
 
-func GetTile(tile_position : Vector2i, layer_group : CanvasGroup) -> Node:
-	if tile_position.x >= map_size.x + bounds_offset.x || tile_position.y >= map_size.y + bounds_offset.y || tile_position.x < bounds_offset.x || tile_position.y < bounds_offset.y:
+func GetTile(tile_pos : Vector2i, layer_group : CanvasGroup) -> Node:
+	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
 		return null
 	
-	var tile_array_index = tile_position % chunk_size
-	var tile_chunk_index = Vector2i(floor(Vector2(tile_position) / chunk_size)) - chunk_origin
+	var tile_array_index = tile_pos % chunk_size
+	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
 	
 	return layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 
@@ -182,9 +183,9 @@ func ResizeMapBounds() -> void:
 
 
 func bind_array_tile(tile : Node, layer_group : CanvasGroup) -> void:
-	var tile_position : Vector2i = round(tile.position / 32)
-	var tile_array_index = tile_position % chunk_size
-	var tile_chunk_index = ((tile_position - tile_array_index) / chunk_size) - Vector2i(1,1) - chunk_origin
+	var tile_pos : Vector2i = round(tile.position / 32)
+	var tile_array_index = tile_pos % chunk_size
+	var tile_chunk_index = ((tile_pos - tile_array_index) / chunk_size) - Vector2i(1,1) - chunk_origin
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = tile
 
 func query_free_nodes() -> void:
@@ -297,6 +298,49 @@ func AddTile(boxel : LvlObject, tile_pos : Vector2i, layer_group : CanvasGroup) 
 	
 	return new_tile
 
+func AddEnemyMaskTile(tile_pos : Vector2i, pool : EnemyPool):
+	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
+		return
+	
+	var tile_array_index = tile_pos % chunk_size
+	var tile_chunk_index = Vector2i(tile_pos / chunk_size) - chunk_origin
+	
+	var prev_tile : Node2D = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+	if prev_tile:
+		prev_tile.pool.enemy_mask_tiles.remove_at(prev_tile.pool.enemy_mask_tiles.bsearch(tile_pos))
+		prev_tile.queue_free()
+	
+	
+	var new_tile : Sprite2D = enemy_mask_object.instantiate()
+	layer_groups[5].add_child(new_tile)
+	set_editable_instance(new_tile, true)
+	new_tile.visible = true
+	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
+	new_tile.pool = pool
+	
+	match pool.id:
+		1: new_tile.modulate = Color(1 , 0.3 , 0.3 , 0.4)
+		2: new_tile.modulate = Color(0.3 , 1 , 0.3 , 0.4)
+		3: new_tile.modulate = Color(0.3 , 0.3 , 1 , 0.4)
+		4: new_tile.modulate = Color(1 , 1 , 0.3 , 0.4)
+		5: new_tile.modulate = Color(1 , 0.3 , 1 , 0.4)
+		6: new_tile.modulate = Color(0.3 , 1 , 1 , 0.4)
+	
+	pool.enemy_mask_tiles.insert(pool.enemy_mask_tiles.bsearch(tile_pos), tile_pos)
+	
+	layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
+
+func EraseEnemyMaskTile(tile_pos : Vector2i):
+	var tile_array_index = tile_pos % chunk_size
+	var tile_chunk_index = Vector2i(tile_pos / chunk_size) - chunk_origin
+	
+	var prev_pool : EnemyPool = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y].pool
+	if !prev_pool: return
+	
+	prev_pool.enemy_mask_tiles.remove_at(prev_pool.enemy_mask_tiles.bsearch(tile_pos))
+	
+	layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = null
+
 func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedByteArray:
 	var packed_array : PackedByteArray = []
 	
@@ -346,14 +390,16 @@ func ResetLayerVisibility() -> void:
 		layer.material.set_shader_parameter("is_editing", false)
 
 func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adjacent : bool = true) -> void:
-	var tile = GetTile(tile_pos, layer_group)
-	
-	if !tile: return 
-	
-	DestroyTile(tile)
+	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y: 
+		return
 	
 	var tile_array_index = tile_pos % chunk_size
-	var tile_chunk_index = Vector2i(floor(Vector2(tile_pos) / chunk_size)) - chunk_origin
+	var tile_chunk_index = Vector2i(tile_pos / chunk_size) - chunk_origin
+	var tile = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+	
+	if !tile: return
+	DestroyTile(tile)
+	
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = null
 	
 	if update_adjacent:

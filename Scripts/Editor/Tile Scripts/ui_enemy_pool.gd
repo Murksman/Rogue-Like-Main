@@ -3,9 +3,6 @@ extends Control
 @export var tile_highlighter : Control
 @export var enemy_pool : EnemyPool
 
-func _ready() -> void:
-	enemy_pool = EnemyPool.new()
-
 func _gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Primary") && event is InputEventMouseButton:
 		if event.double_click:
