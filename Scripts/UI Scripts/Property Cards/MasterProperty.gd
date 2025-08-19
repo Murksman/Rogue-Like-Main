@@ -7,6 +7,7 @@ extends PanelContainer
 @export var float_prop : PackedScene
 @export var string_prop : PackedScene
 @export var color_prop : PackedScene
+@export var vec2_prop : PackedScene
 
 func Update(single_prop : Node = null) -> void:
 	if single_prop:
@@ -35,6 +36,7 @@ func Reset(new_obj : Entity):
 		if val is float: new_prop = float_prop.instantiate()
 		if val is String: new_prop = string_prop.instantiate()
 		if val is Color: new_prop = color_prop.instantiate()
+		if val is Vector2i: new_prop = vec2_prop.instantiate()
 		
 		new_prop.Update(val)
 		new_prop.prop_title.text = str(key)

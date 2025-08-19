@@ -1,4 +1,4 @@
-[gd_scene load_steps=186 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=187 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -62,6 +62,7 @@
 [ext_resource type="Script" uid="uid://d003aidk5dqd1" path="res://Scripts/Editor/Popups/Open File Handler.gd" id="49_fqm1k"]
 [ext_resource type="PackedScene" uid="uid://d1l0d4uhkyrj2" path="res://Prefabs/World Objects/TileMap Tiles/non_collidable_tile.tscn" id="49_pojje"]
 [ext_resource type="Script" uid="uid://brkuj2w2mlr7n" path="res://Scripts/Editor/Popups/Level Load Selector.gd" id="51_bpwc7"]
+[ext_resource type="PackedScene" uid="uid://b6wferob7isab" path="res://Prefabs/UI Objects/Editor Property Boxes/vec2_prop_card.tscn" id="51_ima7e"]
 [ext_resource type="Texture2D" uid="uid://4icilf5wpqm7" path="res://Sprites/UI and Menu/UI Elements/UI Button Template.png" id="53_e6j4b"]
 [ext_resource type="Script" uid="uid://8olmgl6a0el1" path="res://Scripts/Editor/Popups/Level Save Window.gd" id="53_wb2ik"]
 [ext_resource type="Texture2D" uid="uid://jvcq712b2ea6" path="res://Sprites/UI and Menu/Generic/Folder Icon.png" id="54_f01av"]
@@ -1899,7 +1900,6 @@ height = 40.0
 [node name="Editor Overlay Layer" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "level_tilemap_root", "import_window", "level_load_window", "level_save_window", "library_grid", "library_tray", "toolbar", "eraser", "tile_selection_outline", "entity_selection_outline", "property_master", "tile_tray", "enemy_pool_tray", "enemy_pool_editor")]
 process_priority = 1
 layer = 20
-visible = false
 script = ExtResource("41_hic17")
 player = NodePath("../Player")
 level_tilemap_root = NodePath("../Level Tilemap Root")
@@ -1922,15 +1922,17 @@ enemy_pool_editor = NodePath("UI Popups/Enemy Pool Editor")
 z_as_relative = false
 
 [node name="Editor Object Selection Overlay" type="Sprite2D" parent="Editor Overlay Layer/Editor Workspace"]
+z_index = 1
+z_as_relative = false
 texture = SubResource("GradientTexture2D_52wul")
 
 [node name="Line2D" type="Line2D" parent="Editor Overlay Layer/Editor Workspace/Editor Object Selection Overlay"]
-points = PackedVector2Array(0, 0, 36, 0)
+points = PackedVector2Array(0, 0, 0, -36)
 width = 2.0
-default_color = Color(1, 0.905882, 0, 0.85098)
+default_color = Color(0.27451, 1, 0, 0.85098)
 
 [node name="Editor UI" type="Control" parent="Editor Overlay Layer"]
-z_index = 10
+z_index = 20
 z_as_relative = false
 layout_mode = 3
 anchors_preset = 15
@@ -2472,6 +2474,7 @@ texture = SubResource("GradientTexture2D_m7t0x")
 
 [node name="Editor Level Pane" type="ColorRect" parent="Editor Overlay Layer/Editor UI/Library Container"]
 clip_children = 1
+z_as_relative = false
 layout_mode = 2
 
 [node name="Boxel Toolbar" type="HBoxContainer" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" node_paths=PackedStringArray("editor_main", "eraser", "pencil_tool", "shape_tool", "hollow_shape_tool", "blend_buttons")]
@@ -2659,6 +2662,7 @@ int_prop = ExtResource("43_52wul")
 float_prop = ExtResource("44_7201v")
 string_prop = ExtResource("47_c5skp")
 color_prop = ExtResource("46_c5skp")
+vec2_prop = ExtResource("51_ima7e")
 
 [node name="MarginContainer" type="MarginContainer" parent="Editor Overlay Layer/Editor UI/Property Master"]
 visible = false
@@ -2702,6 +2706,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="StringPropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("47_c5skp")]
+layout_mode = 2
+
+[node name="Vec2PropCard" parent="Editor Overlay Layer/Editor UI/Property Master/MarginContainer2/VBoxContainer" instance=ExtResource("51_ima7e")]
 layout_mode = 2
 
 [node name="UI Popups" type="Control" parent="Editor Overlay Layer"]
@@ -3523,12 +3530,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Enemy Pool Editor" type="Window" parent="Editor Overlay Layer/UI Popups"]
+[node name="Enemy Pool Editor" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("lvl_list")]
 auto_translate_mode = 1
 transparent_bg = true
 title = "Select a level to load"
 initial_position = 4
 size = Vector2i(485, 540)
+visible = false
 transient = true
 exclusive = true
 borderless = true
@@ -3537,6 +3545,7 @@ popup_window = true
 extend_to_title = true
 theme = ExtResource("46_0d38j")
 script = ExtResource("58_p3ow0")
+lvl_list = NodePath("Enemy Content List/File List Margins/Level Selection Scroller/Level List")
 
 [node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor"]
 anchors_preset = 15
@@ -3568,7 +3577,7 @@ theme_override_constants/separation = 20
 alignment = 1
 
 [node name="Delete Pool" type="Button" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2"]
-modulate = Color(0.994349, 0.380639, 0.348092, 1)
+modulate = Color(1, 0.307206, 0.154822, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
@@ -3582,7 +3591,7 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_hipv6")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_g38rd")
 theme_override_styles/normal = SubResource("StyleBoxTexture_hipv6")
 action_mode = 0
-text = "Delete Pool
+text = "Clear Pool
 "
 
 [node name="Save Pool" type="Button" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2"]
@@ -3657,11 +3666,13 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
+id = 1
 
 [node name="Enemy Preview2" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller/Level List" instance=ExtResource("59_qyekt")]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
+id = 2
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
 layout_mode = 1
@@ -3803,7 +3814,7 @@ script = ExtResource("43_uy6ih")
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/Exit Button" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_exit"]
 [connection signal="close_requested" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_close_requested"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2/Delete Pool" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_delete_pool_pressed"]
-[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2/Save Pool" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_load_level"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/MarginContainer2/Save Pool" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_save_pool_pressed"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Exit Button" to="Editor Overlay Layer/UI Popups/Enemy Pool Editor" method="_on_exit_button_pressed"]
 [connection signal="file_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_file_selected"]
 [connection signal="files_selected" from="Editor Overlay Layer/OS dialogs/Open Image Handler" to="Editor Overlay Layer/OS dialogs/Open Image Handler" method="_on_files_selected"]

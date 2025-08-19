@@ -18,7 +18,7 @@ func MapArgs(args : Dictionary) -> int:
 	if tbl: self.color = tbl
 	
 	var size = args["Size"]
-	if size: self.energy = size
+	if size: self.inventory_size = size
 	
 	var quant = args["Quantity"]
 	if quant: self.height = quant

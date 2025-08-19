@@ -463,7 +463,7 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	file.store_buffer(filename_buff)
 	file.store_string("\n")
 	
-	var version_buff := "v0.1".to_utf8_buffer()
+	var version_buff := "v0.2".to_utf8_buffer()
 	print("Version: ", version_buff.get_string_from_utf8())
 	file.store_8(version_buff.size())
 	file.store_buffer(version_buff)
@@ -521,8 +521,25 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 		file.store_string("\n")
 	file.store_string("\n")
 	
-	print("=== Level File Write Complete ===")
+	for pool_ui in enemy_pool_tray.get_children():
+		var pool : EnemyPool = pool_ui.enemy_pool
+		
+		file.store_8(pool.enemy_ids.size() << 2)
+		file.store_string("\n")
+		file.store_buffer(pool.enemy_ids.to_byte_array())
+		file.store_string("\n")
+		file.store_buffer(pool.enemy_amounts.to_byte_array())
+		file.store_string("\n")
+		file.store_32(pool.enemy_mask_tiles.size() << 3)
+		file.store_string("\n")
+		file.store_buffer(pool.enemy_mask_tiles.to_byte_array())
+		file.store_string("\n")
+	
+	
+	
+	
 	file.close()
+	print("=== Level File Write Complete ===")
 
 func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	print("=== Compiling Entity Bytes ===")
@@ -531,6 +548,7 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	file.store_8(id)
 	file.store_32(entity.position.x)
 	file.store_32(entity.position.y)
+	file.store_32(entity.rotation)
 	print("Entity ID: ", id)
 	print("Entity position: ", entity.position)
 	
@@ -556,6 +574,7 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 
 func ReadEntity(file : FileAccess):
 	var id = file.get_8()
+	SceneLoadingContainer.loaded_entities
 	
 
 func RequestLoadLevel() -> void:
