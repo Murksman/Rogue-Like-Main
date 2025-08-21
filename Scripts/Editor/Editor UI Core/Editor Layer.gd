@@ -334,7 +334,7 @@ func LoadLevel(filepath : String) -> void:
 		level_tilemap_root.ResetMap()
 
 func ReadLevelFile(filepath : String):
-	print("\n\n=== Opening Level File (" + filepath + ") ===")
+	print_rich("\n\n[b]=== Opening Level File (" + filepath + ") ===[/b]")
 	var file = FileAccess.open(filepath, FileAccess.READ)
 	
 	# Read level name
@@ -381,7 +381,7 @@ func ReadLevelFile(filepath : String):
 	
 	# Load boxels
 	var temp_boxel_load_list : Array[LvlObject] = []
-	print("Loading boxels...")
+	print("Loading boxels...\n")
 	for boxel_id in level_tilemap_root.boxel_id_list:
 		var new_index = boxel_id_list.bsearch(boxel_id)
 		print("Loading boxel ID: ", boxel_id, " at index: ", new_index)
@@ -430,6 +430,8 @@ func ReadLevelFile(filepath : String):
 			var entity_pos = Vector2()
 			entity_pos.x = file.get_32()
 			entity_pos.y = file.get_32()
+			var entity_rot = file.get_32()
+			
 			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos)
 			
 			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(level_tilemap_root.entity_id_list[id])
@@ -438,20 +440,57 @@ func ReadLevelFile(filepath : String):
 			var args = {}
 			
 			for k in 8:
-				if entity_arg_flags & 1 << k: 
+				if entity_arg_flags & (1 << k): 
+					
 					args[k + 1] = file.get_var()
 					print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
 			
-			level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
+			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer)
+			new_entity.position = entity_pos
+			new_entity.rotation = entity_rot
+			new_entity.MapArgs(args)
 		
 		file.seek(file.get_position() + 1)
 	file.seek(file.get_position() + 1)
 	
-	print("Level file reading complete")
+	for pool_ui in enemy_pool_tray.get_children():
+		var pool : EnemyPool = pool_ui.enemy_pool
+		
+		print("Reading enemy pool ", pool.id)
+		
+		var eid_size := file.get_32()
+		var eid_buff := file.get_buffer(eid_size << 2)
+		var e_amount_buff := file.get_buffer(eid_size << 2)
+		file.seek(file.get_position() + 1)
+		
+		var new_eids := PackedInt32Array()
+		new_eids.resize(eid_size)
+		var new_e_amount := PackedInt32Array()
+		new_e_amount.resize(eid_size)
+		
+		for i in eid_size:
+			new_eids[i] = eid_buff.decode_s32(i << 2)
+			new_e_amount[i] = e_amount_buff.decode_s32(i << 2)
+		
+		pool.enemy_ids = new_eids
+		pool.enemy_amounts = new_e_amount
+		
+		var etile_size = file.get_32()
+		var etile_buff = file.get_buffer(etile_size << 3)
+		file.seek(file.get_position() + 1)
+		
+		var new_etiles := PackedInt32Array()
+		new_etiles.resize(etile_size)
+		
+		for i in etile_size:
+			new_etiles[i] = etile_buff.decode_s32(i << 3)
+			new_etiles[i] = etile_buff.decode_s32(4 + (i << 3))
+	
+	print_rich("[b]Level file reading complete[/b]")
 	file.close()
 
 func WriteLevelFile(filepath : String, filename : String = current_level_name):
-	print("\n\n=== Starting Level File Write ===")
+	print_rich("\n\n[b]=== Starting Level File Write ===[/b]")
 	print("Writing to: ", filepath)
 	print("Level name: ", filename)
 	
@@ -472,7 +511,6 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	## Metadata TBD
 	file.store_string("\n")
 	
-
 	print("Chunk dimensions: ", level_tilemap_root.chunk_dimensions)
 	file.store_32(level_tilemap_root.chunk_dimensions.x)
 	file.store_32(level_tilemap_root.chunk_dimensions.y)
@@ -509,13 +547,10 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	for i in 2:
 		var t_layer = level_tilemap_root.layer_groups[i+3]
 		var entity_count = t_layer.get_child_count()
-		print("Writing entity layer ", i, " with ", entity_count, " entities")
+		print("Writing entity layer {layer} with {count} entities".format({"layer":t_layer.name, "count":entity_count}))
 		file.store_32(entity_count)
 		
 		for entity in t_layer.get_children():
-			print("Writing entity: ", entity.name)
-			print("Entity ID: ", entity.id)
-			print("Entity position: ", entity.position)
 			CompileEntityBytes(file, entity)
 		
 		file.store_string("\n")
@@ -524,35 +559,39 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	for pool_ui in enemy_pool_tray.get_children():
 		var pool : EnemyPool = pool_ui.enemy_pool
 		
-		file.store_8(pool.enemy_ids.size() << 2)
-		file.store_string("\n")
+		file.store_32(pool.enemy_ids.size())
 		file.store_buffer(pool.enemy_ids.to_byte_array())
-		file.store_string("\n")
 		file.store_buffer(pool.enemy_amounts.to_byte_array())
 		file.store_string("\n")
-		file.store_32(pool.enemy_mask_tiles.size() << 3)
-		file.store_string("\n")
+		file.store_32(pool.enemy_mask_tiles.size())
 		file.store_buffer(pool.enemy_mask_tiles.to_byte_array())
 		file.store_string("\n")
 	
-	
-	
-	
 	file.close()
-	print("=== Level File Write Complete ===")
+	print_rich("[b]=== Level File Write Complete ===")
 
 func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
-	print("=== Compiling Entity Bytes ===")
+	print("=== Compiling Entity Bytes {name} ===".format(entity))
 	var file_init = file.get_position()
 	var id = entity.id
-	file.store_8(id)
+	file.store_32(id)
 	file.store_32(entity.position.x)
 	file.store_32(entity.position.y)
 	file.store_32(entity.rotation)
+	
 	print("Entity ID: ", id)
 	print("Entity position: ", entity.position)
 	
-	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[SceneLoadingContainer.loaded_entities.entity_ids.find(id)]
+	if SceneLoadingContainer.loaded_entities.entity_ids.size() < 1: 
+		file.store_8(0)
+		return
+	
+	var def_arg_idx := SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
+	if SceneLoadingContainer.loaded_entities.entity_ids[def_arg_idx - 1] != id: 
+		file.store_8(0)
+		return
+	
+	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[id]
 	print("Default args: ", def_args)
 	var bit_flags = 0
 	var args : Dictionary = entity.GetArgs()
@@ -561,9 +600,9 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	var raw_args := PackedByteArray()
 	for i in def_args.size():
 		if args.has(i+1) && args[i+1] != def_args[i+1]: 
-			bit_flags |= 1 << i
+			bit_flags |= ( 1 << i )
 			print("Setting bit flag for arg ", def_args.keys()[i])
-			raw_args.append_array(PackedByteArray([args[i+1]]))
+			raw_args.append_array(PackedByteArray([args[ i + 1 ]]))
 			print("Adding arg value: ", args[i])
 	
 	file.store_8(bit_flags)
@@ -572,10 +611,6 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	print("Final entity bytes: ", file.get_position() - file_init)
 	print("=== Entity Bytes Compilation Complete ===")
 
-func ReadEntity(file : FileAccess):
-	var id = file.get_8()
-	SceneLoadingContainer.loaded_entities
-	
 
 func RequestLoadLevel() -> void:
 	level_load_window.popup()

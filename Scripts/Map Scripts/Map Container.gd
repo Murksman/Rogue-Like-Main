@@ -472,7 +472,7 @@ func AssignTileOwner() -> void:
 		for child in layer.get_children():
 			child.owner = level_save_root
 
-func AddEntity(obj_id : int, layer_group : CanvasGroup, pos : Vector2, args : Dictionary = {}) -> Entity:
+func AddEntity(obj_id : int, layer_group : CanvasGroup, pos : Vector2 = Vector2.ZERO, args : Dictionary = {}) -> Entity:
 	var index : int = SceneLoadingContainer.loaded_entities.entity_ids.find(obj_id)
 	var entity = SceneLoadingContainer.loaded_entities.entities[index].instantiate()
 	
