@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmku6rq21ynvg"]
 
-[ext_resource type="Script" uid="uid://c4t033i8icm18" path="res://Scripts/UI Scripts/Property Cards/ColorPropertyCard.gd" id="1_k548m"]
+[ext_resource type="Script" uid="uid://c4t033i8icm18" path="res://Scripts/Editor/Property Cards/ColorPropertyCard.gd" id="1_k548m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_52wul"]
 content_margin_left = 6.0

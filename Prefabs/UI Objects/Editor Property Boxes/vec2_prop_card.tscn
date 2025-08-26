@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://b6wferob7isab"]
 
-[ext_resource type="Script" uid="uid://qgvyfh0bmcda" path="res://Scripts/UI Scripts/Property Cards/Vec2PropertyCard.gd" id="1_tpbv1"]
+[ext_resource type="Script" uid="uid://qgvyfh0bmcda" path="res://Scripts/Editor/Property Cards/Vec2PropertyCard.gd" id="1_tpbv1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uq885"]
 content_margin_left = 6.0

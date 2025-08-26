@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d248h8ge4tpou"]
 
-[ext_resource type="Script" uid="uid://c0o13aadigb14" path="res://Scripts/UI Scripts/Property Cards/FloatPropertyCard.gd" id="1_bjwn4"]
+[ext_resource type="Script" uid="uid://c0o13aadigb14" path="res://Scripts/Editor/Property Cards/FloatPropertyCard.gd" id="1_bjwn4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_52wul"]
 content_margin_left = 6.0

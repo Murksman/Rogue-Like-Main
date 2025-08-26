@@ -501,8 +501,9 @@ fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0.0275229)
 
 [sub_resource type="Gradient" id="Gradient_a1drd"]
-offsets = PackedFloat32Array(0, 0.677249, 0.714286, 0.761905, 0.904762, 0.931217, 1)
-colors = PackedColorArray(1, 1, 0, 0, 1, 1, 0, 0, 0.945098, 0.933333, 0, 0.698039, 1, 1, 0, 0.278431, 1, 1, 0, 0.278431, 0.956863, 0.960784, 0, 0.756863, 1, 1, 1, 0)
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.714286, 0.761905, 0.931217, 1)
+colors = PackedColorArray(1, 1, 0, 0, 0.858824, 0.858824, 0, 0.698039, 1, 1, 0, 0.278431, 0.770081, 0.770081, 0, 0.756863, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_52wul"]
 gradient = SubResource("Gradient_a1drd")
@@ -2361,7 +2362,6 @@ offset_top = 8.0
 offset_right = -20.0
 offset_bottom = 40.0
 grow_horizontal = 2
-focus_mode = 1
 theme_override_colors/font_placeholder_color = Color(0.344076, 0.344076, 0.344076, 1)
 theme_override_colors/font_outline_color = Color(0.344076, 0.344076, 0.344076, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -2476,35 +2476,28 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Selection Overlay" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls" node_paths=PackedStringArray("editor_layer", "rotation_axis")]
-anchors_preset = 0
-offset_right = 96.0
-offset_bottom = 96.0
-script = ExtResource("38_3bfvk")
-editor_layer = NodePath("../../../../..")
-rotation_axis = NodePath("Selection Picture/Rotation Edit")
-
-[node name="Selection Picture" type="TextureRect" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay"]
+[node name="Selection Overlay" type="TextureRect" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls"]
 layout_mode = 0
 offset_right = 64.0
 offset_bottom = 64.0
+mouse_filter = 0
 texture = SubResource("GradientTexture2D_52wul")
+script = ExtResource("38_3bfvk")
 
-[node name="Rotation Edit" type="Line2D" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay/Selection Picture"]
+[node name="Rotation Edit" type="Line2D" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay"]
 position = Vector2(32, 32)
-rotation = -1.5708
-points = PackedVector2Array(30, 0, 0, 0)
+points = PackedVector2Array(0, 0, 0, -30)
 width = 2.0
-default_color = Color(0.0627451, 0.301961, 1, 0.886275)
+default_color = Color(0.0622741, 0.300105, 0.999999, 0.780392)
 
-[node name="X axis" type="Line2D" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay/Selection Picture"]
+[node name="X axis" type="Line2D" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay"]
 position = Vector2(32, 32)
 points = PackedVector2Array(12, 0, 0, 0)
 width = 2.0
 default_color = Color(1, 0, 0, 1)
 round_precision = 4
 
-[node name="Y axis" type="Line2D" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay/Selection Picture"]
+[node name="Y axis" type="Line2D" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay"]
 position = Vector2(32, 32)
 points = PackedVector2Array(0, 0, 0, 12)
 width = 2.0
@@ -2540,7 +2533,6 @@ texture_repeat = 1
 material = SubResource("ShaderMaterial_nnf16")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("42_hp0j5")
 texture_normal = ExtResource("43_uq885")
@@ -2569,7 +2561,6 @@ label_settings = SubResource("LabelSettings_52wul")
 material = SubResource("ShaderMaterial_fjkv2")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("42_hp0j5")
 texture_normal = ExtResource("42_52wul")
@@ -2597,7 +2588,6 @@ label_settings = SubResource("LabelSettings_52wul")
 material = SubResource("ShaderMaterial_2ln8x")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("42_hp0j5")
 texture_normal = ExtResource("43_7201v")
@@ -2627,7 +2617,6 @@ texture_repeat = 1
 material = SubResource("ShaderMaterial_a1drd")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("42_hp0j5")
 texture_normal = ExtResource("45_a1drd")
@@ -2660,7 +2649,6 @@ anchor_bottom = 1.0
 offset_top = -80.0
 offset_right = 64.0
 grow_vertical = 0
-focus_mode = 0
 toggle_mode = true
 action_mode = 0
 texture_normal = SubResource("GradientTexture2D_a1drd")
@@ -3833,6 +3821,7 @@ script = ExtResource("43_uy6ih")
 [connection signal="dragged" from="Editor Overlay Layer/Editor UI/Library Container" to="Editor Overlay Layer/Editor UI/Library Container" method="_on_dragged"]
 [connection signal="text_changed" from="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" to="Editor Overlay Layer/Editor UI/Library Container/Library Tray/Search Box" method="_on_text_changed"]
 [connection signal="gui_input" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane" to="Editor Overlay Layer" method="LevelPanePressed"]
+[connection signal="mouse_exited" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls/Selection Overlay" method="_on_mouse_exited"]
 [connection signal="mouse_entered" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Pencil Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Pencil Tool" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Pencil Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Pencil Tool" method="_on_mouse_exited"]
 [connection signal="pressed" from="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar/Pencil Tool" to="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Boxel Toolbar" method="ToolPressed"]

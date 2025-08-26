@@ -11,7 +11,7 @@ extends CanvasLayer
 @export var toolbar : Control
 @export var eraser : TextureButton
 @export var tile_selection_outline : NinePatchRect
-@export var entity_selection_outline : Sprite2D
+@export var entity_selection_outline : Control
 @export var property_master : Control
 @export var tile_tray : Control
 @export var enemy_pool_tray : Control
@@ -44,15 +44,17 @@ var selected_enemy_pool : Control
 
 var tool : int = -1
 
+@onready var window_center = Vector2(DisplayServer.window_get_size()) / 2 
+
 func _ready() -> void:
 	visible = !editing
 	LevelInfo.editor_ref = self
 	
 	LoadResources()
 
-func _process(delta: float) -> void:
-	if selected_world_obj && entity_selection_outline.visible: 
-		entity_selection_outline.global_position = Vector2(DisplayServer.window_get_size() / 2) - (player.camera.global_position - selected_world_obj.global_position) * player.camera.zoom
+func pseudoProcess(delta):
+	if selected_world_obj && selected_world_obj: 
+		entity_selection_outline.global_position = window_center - Vector2(32,32) + ((selected_world_obj.global_position - player.camera.global_position) * player.camera.zoom)
 
 func LoadResources() -> void:
 	level_tilemap_root.LoadResources()
@@ -71,6 +73,9 @@ func LoadResources() -> void:
 	library_grid.ReorderBoxels()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)	
+	
+	if !editing: return
 	if event.is_action_pressed("Editor Pencil Tool"): set_tool_mode(0)
 	if event.is_action_pressed("Editor Shape Tool"): set_tool_mode(1)
 	if event.is_action_pressed("Editor Hollow Tool"): set_tool_mode(2)
@@ -89,7 +94,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 			layer_button_group.get_buttons()[0]._pressed()
 	
-	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	if event.is_action_pressed("Save Request"):
 		if current_level_filepath == "": RequestSaveLevel()
 		else: SaveLevel(current_level_filepath)
@@ -102,6 +106,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			boxel_id_list.remove_at(boxel_index)
 			boxel_name_list.remove_at(boxel_index)
 			selected_boxel = null
+			focus_boxel = false
 		elif !focus_boxel && selected_world_obj:
 			level_tilemap_root.DeleteEntity(selected_world_obj)
 			entity_selection_outline.visible = false
@@ -145,7 +150,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		player.position += (anchor_mouse_point - tmp_anchor_point) / 2
 		anchor_mouse_point = tmp_anchor_point
 	
-	if Input.is_action_pressed("Editor Grab") || (event.is_action_released("Editor Grab") && !event.is_action_released("Editor Primary")): return
+	if Input.is_action_pressed("Editor Grab") || event.is_action_released("Editor Grab"): return
 	if !layer_button_group.get_pressed_button(): return
 	
 	var selected_layer = layer_button_group.get_pressed_button().layer_int
@@ -161,6 +166,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Eraser Hold"))
 	
 	if (event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary")) || event.is_action("Editor Primary") || event.is_action_released("Editor Primary"):
+		
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
 		if selected_layer > 2:
@@ -184,7 +190,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 			if eraser.button_pressed:
 				MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
 			else:
-				MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary"))
+				MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary") && !Input.is_action_just_released("Editor Grab"))
 
 func MapObjectEvent(lvl_obj : UIBoxel, click_position : Vector2, layer_canvas : CanvasGroup) -> void:
 	if tool == 1:
@@ -648,7 +654,6 @@ func SelectObject(world_object : Node2D) -> void:
 	entity_selection_outline.visible = selected_world_obj != null
 
 func ChangeLayer(layer_int : int) -> void:
-	print("Change Layer - ", layer_int)
 	var is_enemy_layer = layer_int == 5
 	
 	enemy_pool_tray.visible = is_enemy_layer
@@ -657,6 +662,17 @@ func ChangeLayer(layer_int : int) -> void:
 	
 	SelectObject(selected_world_obj)
 	library_grid.ReorderBoxels()
+	
+	if layer_int > 2 && layer_int < 5:
+		if tool == 2 || tool == 3: 
+			tool = -1
+			toolbar.selected_tool = -1
+		
+		toolbar.get_child(1).visible = false
+		toolbar.get_child(2).visible = false
+	else:
+		toolbar.get_child(1).visible = true
+		toolbar.get_child(2).visible = true
 
 func set_tool_mode(idx : int):
 	for i in 4: toolbar.blend_buttons[i].set_pressed_no_signal(false)
