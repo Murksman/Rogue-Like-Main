@@ -3,16 +3,16 @@ extends Entity
 const args_list : Dictionary = {}
 
 func MapArgs(args : Dictionary) -> int:
-	var clr = args["color"]
+	var clr = args.get("color")
 	if clr: self.color = clr
 	
-	var lum = args["energy"]
+	var lum = args.get("energy")
 	if lum: self.energy = lum
 	
-	var vrt = args["height"]
+	var vrt = args.get("height")
 	if vrt: self.height = vrt
 	
-	var scl = args["scale"]
+	var scl = args.get("scale")
 	if scl: self.texture_scale = scl
 	
 	return 0

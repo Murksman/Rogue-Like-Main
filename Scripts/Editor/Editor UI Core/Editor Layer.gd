@@ -140,7 +140,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 	
 	mouse_position = level_tilemap_root.get_local_mouse_position()
 	
-	if event.is_action_pressed("Editor Grab"):
+	if event.is_action_pressed("Editor Grab", false, true):
 		anchor_mouse_point = get_viewport().get_mouse_position()
 	elif event.is_action_pressed("Editor Primary") || event.is_action_pressed("Eraser Hold"):
 		anchor_tile_point = level_tilemap_root.PixelToTilePosition(mouse_position)
@@ -150,8 +150,9 @@ func LevelPanePressed(event : InputEvent) -> void:
 		player.position += (anchor_mouse_point - tmp_anchor_point) / 2
 		anchor_mouse_point = tmp_anchor_point
 	
-	if Input.is_action_pressed("Editor Grab") || event.is_action_released("Editor Grab"): return
+	if Input.is_action_pressed("Editor Grab") || event.is_action_released("Editor Grab", true): return
 	if !layer_button_group.get_pressed_button(): return
+	
 	
 	var selected_layer = layer_button_group.get_pressed_button().layer_int
 	tile_selection_outline.visible = ((Input.is_action_pressed("Editor Primary") && selected_boxel) || Input.is_action_pressed("Eraser Hold")) && toolbar.selected_tool > 0 && selected_layer < 3
@@ -165,8 +166,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		drag_action_position = tile_position
 		MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Eraser Hold"))
 	
-	if (event is InputEventMouseMotion && Input.is_action_pressed("Editor Primary")) || event.is_action("Editor Primary") || event.is_action_released("Editor Primary"):
-		
+	if Input.is_action_pressed("Editor Primary", true) || event.is_action_pressed("Editor Primary", false, true) || event.is_action_released("Editor Primary", true):
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
 		if selected_layer > 2:
@@ -405,6 +405,7 @@ func ReadLevelFile(filepath : String):
 		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
 		var read_result = level_tilemap_root.ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
 		
+		print(read_result)
 		if read_result != "": 
 			print("Error reading tile layer ", i, ": ", read_result)
 		file.seek(file.get_position() + 1)
@@ -432,7 +433,7 @@ func ReadLevelFile(filepath : String):
 		print("Entity count in layer ", i, ": ", entity_count)
 		
 		for n in entity_count:
-			var id = file.get_8()
+			var id = file.get_32()
 			var entity_pos = Vector2()
 			entity_pos.x = file.get_32()
 			entity_pos.y = file.get_32()
@@ -440,7 +441,7 @@ func ReadLevelFile(filepath : String):
 			
 			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos)
 			
-			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(level_tilemap_root.entity_id_list[id])
+			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
 			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
 			var entity_arg_flags = file.get_8()
 			var args = {}
