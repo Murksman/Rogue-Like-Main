@@ -300,20 +300,12 @@ func AddTile(boxel : LvlObject, tile_pos : Vector2i, layer_group : CanvasGroup) 
 	
 	return new_tile
 
-func AddEnemyMaskTile(tile_pos : Vector2i, pool : EnemyPool):
+func AddEnemyMaskTile(tile_pos : Vector2i, pool : EnemyPool, skipCount : bool = false):
 	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y:
 		return
 	
 	var tile_array_index = tile_pos % chunk_size
 	var tile_chunk_index = Vector2i(tile_pos / chunk_size) - chunk_origin
-	
-	var prev_tile : Node2D = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
-	if prev_tile:
-		var idx := pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
-		prev_tile.pool.enemy_mask_tiles_x.remove_at(idx)
-		prev_tile.pool.enemy_mask_tiles_y.remove_at(idx)
-		prev_tile.queue_free()
-	
 	
 	var new_tile : Sprite2D = enemy_mask_object.instantiate()
 	layer_groups[5].add_child(new_tile)
@@ -330,24 +322,31 @@ func AddEnemyMaskTile(tile_pos : Vector2i, pool : EnemyPool):
 		5: new_tile.modulate = Color(1 , 0.3 , 1 , 0.4)
 		6: new_tile.modulate = Color(0.3 , 1 , 1 , 0.4)
 	
-	var idx := pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
-	pool.enemy_mask_tiles_x.insert(idx, tile_pos.x)
-	pool.enemy_mask_tiles_y.insert(idx, tile_pos.y)
-	
+	if !skipCount:
+		var prev_tile : Node2D = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
+		if prev_tile:
+			var prev_pool : EnemyPool = prev_tile.pool
+			var idx_1 := prev_pool.enemy_mask_tiles_x.bsearch(tile_pos.x - 1, false)
+			var idx_2 := prev_pool.enemy_mask_tiles_x.bsearch(tile_pos.x, false)
+			var idx := prev_pool.enemy_mask_tiles_y.slice(idx_1,idx_2).bsearch(tile_pos.y) + idx_1
+			prev_pool.enemy_mask_tiles_x.remove_at(idx)
+			prev_pool.enemy_mask_tiles_y.remove_at(idx)
+			prev_tile.queue_free()
+		
+		var idx_1 := pool.enemy_mask_tiles_x.bsearch(tile_pos.x - 1, false)
+		var idx_2 := pool.enemy_mask_tiles_x.bsearch(tile_pos.x, false)
+		var idx := pool.enemy_mask_tiles_y.slice(idx_1,idx_2).bsearch(tile_pos.y) + idx_1
+		pool.enemy_mask_tiles_x.insert(idx, tile_pos.x)
+		pool.enemy_mask_tiles_y.insert(idx, tile_pos.y)
+		
 	layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
 
-func EraseEnemyMaskTile(tile_pos : Vector2i):
-	var tile_array_index = tile_pos % chunk_size
-	var tile_chunk_index = Vector2i(tile_pos / chunk_size) - chunk_origin
-	
-	var prev_pool : EnemyPool = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y].pool
-	if !prev_pool: return
-	
-	var idx = prev_pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
-	prev_pool.enemy_mask_tiles_x.remove_at(idx)
-	prev_pool.enemy_mask_tiles_Y.remove_at(idx)
-	
-	layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = null
+func EraseEnemyMaskTile(pool : EnemyPool, tile_pos : Vector2i):
+	var idx_1 := pool.enemy_mask_tiles_x.bsearch(tile_pos.x - 1, false)
+	var idx_2 := pool.enemy_mask_tiles_x.bsearch(tile_pos.x, false)
+	var idx := pool.enemy_mask_tiles_y.slice(idx_1,idx_2).bsearch(tile_pos.y) + idx_1
+	pool.enemy_mask_tiles_x.remove_at(idx)
+	pool.enemy_mask_tiles_y.remove_at(idx)
 
 func GetPackedTileArray(layer : CanvasGroup, map_array_length : int) -> PackedByteArray:
 	var packed_array : PackedByteArray = []
@@ -408,6 +407,7 @@ func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adja
 	var tile = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
 	if !tile: return
+	if tile is EnemyMaskTile: EraseEnemyMaskTile(tile.pool, tile_pos)
 	DestroyTile(tile)
 	
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = null
@@ -507,6 +507,23 @@ func DeleteEntity(entity : Entity) -> void:
 	if entity_usage_list[index] <= 0: entity_usage_list.remove_at(index)
 	
 	entity.queue_free()
+
+func GetIndexSpawnTile(pool : EnemyPool, tile_pos : Vector2i) -> int:
+	return 0
+	var mid : int = pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
+	var left : int
+	var right : int
+	for i in pool.enemy_mask_tiles_x.size():
+		if pool.enemy_mask_tiles_x[mid - i] != tile_pos.x: 
+			left = mid - i + 1
+			break
+	
+	for i in pool.enemy_mask_tiles_x.size():
+		if pool.enemy_mask_tiles_x[mid + i] != tile_pos.x: 
+			right = mid + i - 1
+			break
+	
+	
 
 func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distance : float, exclusive : bool = false) -> Array:
 	if exclusive:

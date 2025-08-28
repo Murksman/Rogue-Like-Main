@@ -164,7 +164,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		focus_boxel = false
 		
 		drag_action_position = tile_position
-		MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Eraser Hold"))
+		MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Eraser Hold"), selected_layer == 2)
 	
 	if Input.is_action_pressed("Editor Primary", true) || event.is_action_pressed("Editor Primary", false, true) || event.is_action_released("Editor Primary", true):
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
@@ -188,7 +188,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 			drag_action_position = tile_position
 			
 			if eraser.button_pressed:
-				MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"))
+				MapEraserEvent(tile_position, layer_canvas, event.is_action_released("Editor Primary"), selected_layer == 2)
 			else:
 				MapEditEvent(selected_boxel.boxel, tile_position, layer_canvas, event.is_action_released("Editor Primary") && !Input.is_action_just_released("Editor Grab"))
 
@@ -242,7 +242,7 @@ func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : Ca
 		
 		level_tilemap_root.ShapeTool(shape_rect, layer_canvas, selected_boxel.boxel, true)
 
-func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool) -> void:
+func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, released : bool, update_adjacent : bool = true) -> void:
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
@@ -251,7 +251,7 @@ func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, releas
 		var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
 		if check_chunks_err != 0: printerr("Chunk Checker Error - ", check_chunks_err)
 		
-		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas)
+		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas, update_adjacent)
 		return
 	
 	var shape_position = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
@@ -618,9 +618,14 @@ func ReadLevelFile(filepath : String):
 		
 		pool.enemy_mask_tiles_x = etile_buff_x.to_int32_array()
 		pool.enemy_mask_tiles_y = etile_buff_y.to_int32_array()
+		
+		for i in pool.enemy_mask_tiles_x.size():
+			level_tilemap_root.AddEnemyMaskTile(Vector2i(pool.enemy_mask_tiles_x[i], pool.enemy_mask_tiles_y[i]), pool, true)
+		
 		print("Tile x: ", pool.enemy_mask_tiles_x, "\n")
 		print("Tile y: ", pool.enemy_mask_tiles_y, "\n")
 	
+
 	print_rich("[b]Level file reading complete[/b]")
 	file.close()
 
