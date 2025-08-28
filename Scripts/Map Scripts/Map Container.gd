@@ -53,6 +53,8 @@ func LoadResources(reset : bool = false):
 		else:
 			printerr("Boxel Loading Error Code: ", load_result)
 	
+	loaded_object_list.sort_custom(func(a,b): return a.id < b.id)
+	
 	root_loaded = true
 
 func ResetMap():
@@ -307,7 +309,9 @@ func AddEnemyMaskTile(tile_pos : Vector2i, pool : EnemyPool):
 	
 	var prev_tile : Node2D = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	if prev_tile:
-		prev_tile.pool.enemy_mask_tiles.remove_at(prev_tile.pool.enemy_mask_tiles.bsearch(tile_pos))
+		var idx := pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
+		prev_tile.pool.enemy_mask_tiles_x.remove_at(idx)
+		prev_tile.pool.enemy_mask_tiles_y.remove_at(idx)
 		prev_tile.queue_free()
 	
 	
@@ -326,7 +330,9 @@ func AddEnemyMaskTile(tile_pos : Vector2i, pool : EnemyPool):
 		5: new_tile.modulate = Color(1 , 0.3 , 1 , 0.4)
 		6: new_tile.modulate = Color(0.3 , 1 , 1 , 0.4)
 	
-	pool.enemy_mask_tiles.insert(pool.enemy_mask_tiles.bsearch(tile_pos), tile_pos)
+	var idx := pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
+	pool.enemy_mask_tiles_x.insert(idx, tile_pos.x)
+	pool.enemy_mask_tiles_y.insert(idx, tile_pos.y)
 	
 	layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
 
@@ -337,7 +343,9 @@ func EraseEnemyMaskTile(tile_pos : Vector2i):
 	var prev_pool : EnemyPool = layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y].pool
 	if !prev_pool: return
 	
-	prev_pool.enemy_mask_tiles.remove_at(prev_pool.enemy_mask_tiles.bsearch(tile_pos))
+	var idx = prev_pool.enemy_mask_tiles_x.bsearch(tile_pos.x)
+	prev_pool.enemy_mask_tiles_x.remove_at(idx)
+	prev_pool.enemy_mask_tiles_Y.remove_at(idx)
 	
 	layer_groups[5].layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = null
 
@@ -373,6 +381,8 @@ func ReadPackedTileArray(layer : CanvasGroup, arr : PackedByteArray, temp_boxel_
 						if arr[n] > temp_boxel_load_list.size(): return 'map tile index is out of bounds - ' + str(arr[n])
 						
 						var tile_pos = Vector2i(a, b) * chunk_size + Vector2i(c, d)
+						
+						print(arr[n]-1)
 						AddTile(temp_boxel_load_list[arr[n]-1], tile_pos, layer)
 					n += 1
 	

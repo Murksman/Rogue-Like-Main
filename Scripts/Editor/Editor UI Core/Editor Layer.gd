@@ -339,163 +339,6 @@ func LoadLevel(filepath : String) -> void:
 		level_tilemap_root.ResizeMapBounds()
 		level_tilemap_root.ResetMap()
 
-func ReadLevelFile(filepath : String):
-	print_rich("\n\n[b]=== Opening Level File (" + filepath + ") ===[/b]")
-	var file = FileAccess.open(filepath, FileAccess.READ)
-	
-	# Read level name
-	var lvl_namesize = file.get_8()
-	print("Level name size: ", lvl_namesize)
-	var lvl_name = file.get_buffer(lvl_namesize).get_string_from_utf8()
-	file.seek(file.get_position() + 1)
-	print("Level Name: ", lvl_name)
-	
-	# Read version
-	var version_size = file.get_8()
-	print("Version size: ", version_size)
-	var version = file.get_buffer(version_size).get_string_from_utf8()
-	print("Version: ", version)
-	file.seek(file.get_position() + 2)
-	
-	# Read chunk dimensions
-	var chunks_size : Vector2i = Vector2i(0,0)
-	chunks_size.x = file.get_32()
-	chunks_size.y = file.get_32()
-	print("Chunk dimensions: ", chunks_size)
-	level_tilemap_root.WipeMapTiles(chunks_size)
-	
-	var map_size = chunks_size * level_tilemap_root.chunk_size
-	level_tilemap_root.map_size = map_size
-	level_tilemap_root.chunk_origin = Vector2i(0,0)
-	level_tilemap_root.bounds_offset = Vector2i(0,0)
-	print("Map size: ", map_size)
-	file.seek(file.get_position() + 1)
-	
-	# Read ID list
-	var id_list_size = file.get_32()
-	print("ID list size: ", id_list_size)
-	var id_list_buffer : PackedByteArray = file.get_buffer(id_list_size)
-	file.seek(file.get_position() + 1)
-	
-	level_tilemap_root.boxel_id_list.resize(id_list_size >> 2)
-	level_tilemap_root.boxel_usage_list.resize(id_list_size >> 2)
-	level_tilemap_root.boxel_usage_list.fill(0)
-	
-	for i in id_list_size >> 2:
-		level_tilemap_root.boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
-	print("Boxel ID list: ", level_tilemap_root.boxel_id_list)
-	
-	# Load boxels
-	var temp_boxel_load_list : Array[LvlObject] = []
-	print("Loading boxels...\n")
-	for boxel_id in level_tilemap_root.boxel_id_list:
-		var new_index = boxel_id_list.bsearch(boxel_id)
-		print("Loading boxel ID: ", boxel_id, " at index: ", new_index)
-		temp_boxel_load_list.append(map_object_list[new_index])
-	
-	# Read map array
-	var map_array_length = file.get_64()
-	print("Map array length: ", map_array_length)
-	file.seek(file.get_position() + 1)
-	
-	# Read tile layers
-	for i in 3:
-		print("Reading tile layer ", i)
-		var t_layer = level_tilemap_root.layer_groups[i]
-		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
-		var read_result = level_tilemap_root.ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
-		
-		print(read_result)
-		if read_result != "": 
-			print("Error reading tile layer ", i, ": ", read_result)
-		file.seek(file.get_position() + 1)
-	file.seek(file.get_position() + 1)
-	
-	# Read entity ID list
-	var eid_list_size = file.get_32()
-	print("Entity ID list size: ", eid_list_size)
-	var eid_list_buffer : PackedByteArray = file.get_buffer(eid_list_size)
-	file.seek(file.get_position() + 1)
-	
-	level_tilemap_root.entity_id_list.resize(eid_list_size >> 2)
-	level_tilemap_root.entity_usage_list.resize(eid_list_size >> 2)
-	level_tilemap_root.entity_usage_list.fill(0)
-	
-	for i in eid_list_size >> 2:
-		level_tilemap_root.entity_id_list[i] = eid_list_buffer.decode_u32(i << 2)
-	print("Entity ID list: ", level_tilemap_root.entity_id_list)
-	
-	# Read entity layers
-	for i in 2:
-		print("Reading entity layer ", i)
-		var t_layer = level_tilemap_root.layer_groups[i+3]
-		var entity_count = file.get_32()
-		print("Entity count in layer ", i, ": ", entity_count)
-		
-		for n in entity_count:
-			var id = file.get_32()
-			var entity_pos = Vector2()
-			entity_pos.x = file.get_32()
-			entity_pos.y = file.get_32()
-			var entity_rot = file.get_32()
-			
-			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos)
-			
-			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
-			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
-			var entity_arg_flags = file.get_8()
-			var args = {}
-			
-			for k in 8:
-				if entity_arg_flags & (1 << k): 
-					
-					args[k + 1] = file.get_var()
-					print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
-			
-			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer)
-			new_entity.position = entity_pos
-			new_entity.rotation = entity_rot
-			new_entity.MapArgs(args)
-		
-		file.seek(file.get_position() + 1)
-	file.seek(file.get_position() + 1)
-	
-	for pool_ui in enemy_pool_tray.get_children():
-		var pool : EnemyPool = pool_ui.enemy_pool
-		
-		print("Reading enemy pool ", pool.id)
-		
-		var eid_size := file.get_32()
-		var eid_buff := file.get_buffer(eid_size << 2)
-		var e_amount_buff := file.get_buffer(eid_size << 2)
-		file.seek(file.get_position() + 1)
-		
-		var new_eids := PackedInt32Array()
-		new_eids.resize(eid_size)
-		var new_e_amount := PackedInt32Array()
-		new_e_amount.resize(eid_size)
-		
-		for i in eid_size:
-			new_eids[i] = eid_buff.decode_s32(i << 2)
-			new_e_amount[i] = e_amount_buff.decode_s32(i << 2)
-		
-		pool.enemy_ids = new_eids
-		pool.enemy_amounts = new_e_amount
-		
-		var etile_size = file.get_32()
-		var etile_buff = file.get_buffer(etile_size << 3)
-		file.seek(file.get_position() + 1)
-		
-		var new_etiles := PackedInt32Array()
-		new_etiles.resize(etile_size)
-		
-		for i in etile_size:
-			new_etiles[i] = etile_buff.decode_s32(i << 3)
-			new_etiles[i] = etile_buff.decode_s32(4 + (i << 3))
-	
-	print_rich("[b]Level file reading complete[/b]")
-	file.close()
-
 func WriteLevelFile(filepath : String, filename : String = current_level_name):
 	print_rich("\n\n[b]=== Starting Level File Write ===[/b]")
 	print("Writing to: ", filepath)
@@ -563,19 +406,27 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 		file.store_string("\n")
 	file.store_string("\n")
 	
+	print("FILE POSITION: ", file.get_position(), "\n")
 	for pool_ui in enemy_pool_tray.get_children():
 		var pool : EnemyPool = pool_ui.enemy_pool
 		
+		print("Writing Enemy Pool: ", pool_ui.name)
+		
 		file.store_32(pool.enemy_ids.size())
 		file.store_buffer(pool.enemy_ids.to_byte_array())
+		print("Storing IDs: ", pool.enemy_ids)
 		file.store_buffer(pool.enemy_amounts.to_byte_array())
+		print("Storing enemy amounts: ", pool.enemy_amounts)
 		file.store_string("\n")
-		file.store_32(pool.enemy_mask_tiles.size())
-		file.store_buffer(pool.enemy_mask_tiles.to_byte_array())
+		file.store_32(pool.enemy_mask_tiles_x.size())
+		file.store_buffer(pool.enemy_mask_tiles_x.to_byte_array())
+		file.store_buffer(pool.enemy_mask_tiles_y.to_byte_array())
+		print("Storing Spawn Tiles: ", pool.enemy_mask_tiles_x)
 		file.store_string("\n")
 	
 	file.close()
 	print_rich("[b]=== Level File Write Complete ===")
+
 
 func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	print("=== Compiling Entity Bytes {name} ===".format(entity))
@@ -617,6 +468,161 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	print("Final bit flags: ", bit_flags)
 	print("Final entity bytes: ", file.get_position() - file_init)
 	print("=== Entity Bytes Compilation Complete ===")
+
+func ReadLevelFile(filepath : String):
+	print_rich("\n\n[b]=== Opening Level File (" + filepath + ") ===[/b]")
+	var file = FileAccess.open(filepath, FileAccess.READ)
+	
+	# Read level name
+	var lvl_namesize = file.get_8()
+	print("Level name size: ", lvl_namesize)
+	var lvl_name = file.get_buffer(lvl_namesize).get_string_from_utf8()
+	file.seek(file.get_position() + 1)
+	print("Level Name: ", lvl_name)
+	
+	# Read version
+	var version_size = file.get_8()
+	print("Version size: ", version_size)
+	var version = file.get_buffer(version_size).get_string_from_utf8()
+	print("Version: ", version)
+	file.seek(file.get_position() + 2)
+	
+	# Read chunk dimensions
+	var chunks_size : Vector2i = Vector2i(0,0)
+	chunks_size.x = file.get_32()
+	chunks_size.y = file.get_32()
+	print("Chunk dimensions: ", chunks_size)
+	level_tilemap_root.WipeMapTiles(chunks_size)
+	
+	var map_size = chunks_size * level_tilemap_root.chunk_size
+	level_tilemap_root.map_size = map_size
+	level_tilemap_root.chunk_origin = Vector2i(0,0)
+	level_tilemap_root.bounds_offset = Vector2i(0,0)
+	print("Map size: ", map_size)
+	file.seek(file.get_position() + 1)
+	
+	# Read ID list
+	var id_list_size = file.get_32()
+	print("ID list size: ", id_list_size)
+	var id_list_buffer : PackedByteArray = file.get_buffer(id_list_size)
+	file.seek(file.get_position() + 1)
+	
+	level_tilemap_root.boxel_id_list.resize(id_list_size >> 2)
+	level_tilemap_root.boxel_usage_list.resize(id_list_size >> 2)
+	level_tilemap_root.boxel_usage_list.fill(0)
+	
+	for i in id_list_size >> 2:
+		level_tilemap_root.boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
+	print("Boxel ID list: ", level_tilemap_root.boxel_id_list)
+	
+	# Load boxels
+	var temp_boxel_load_list : Array[LvlObject] = []
+	print("Loading boxels...\n")
+	for boxel_id in level_tilemap_root.boxel_id_list:
+		var new_index = boxel_id_list.bsearch(boxel_id)
+		print("Loading boxel ID: ", boxel_id, " at index: ", new_index)
+		temp_boxel_load_list.append(map_object_list[new_index])
+	
+	# Read map array
+	var map_array_length = file.get_64()
+	print("Map array length: ", map_array_length)
+	file.seek(file.get_position() + 1)
+	
+	# Read tile layers
+	for i in 3:
+		print("Reading tile layer ", i)
+		var t_layer = level_tilemap_root.layer_groups[i]
+		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
+		print(floor_tile_buff, "\n")
+		
+		var read_result = level_tilemap_root.ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
+		
+		if read_result != "": 
+			print("Error reading tile layer ", i, ": ", read_result)
+		file.seek(file.get_position() + 1)
+	file.seek(file.get_position() + 1)
+	
+	# Read entity ID list
+	var eid_list_size = file.get_32()
+	print("Entity ID list size: ", eid_list_size)
+	var eid_list_buffer : PackedByteArray = file.get_buffer(eid_list_size)
+	file.seek(file.get_position() + 1)
+	
+	level_tilemap_root.entity_id_list.resize(eid_list_size >> 2)
+	level_tilemap_root.entity_usage_list.resize(eid_list_size >> 2)
+	level_tilemap_root.entity_usage_list.fill(0)
+	
+	for i in eid_list_size >> 2:
+		level_tilemap_root.entity_id_list[i] = eid_list_buffer.decode_u32(i << 2)
+	print("Entity ID list: ", level_tilemap_root.entity_id_list)
+	
+	# Read entity layers
+	for i in 2:
+		print("Reading entity layer ", i)
+		var t_layer = level_tilemap_root.layer_groups[i+3]
+		var entity_count = file.get_32()
+		print("Entity count in layer ", i, ": ", entity_count)
+		
+		for n in entity_count:
+			var id = file.get_32()
+			var entity_pos = Vector2()
+			entity_pos.x = file.get_32()
+			entity_pos.y = file.get_32()
+			var entity_rot = file.get_32()
+			
+			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos)
+			
+			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
+			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
+			var entity_arg_flags = file.get_8()
+			var args = {}
+			
+			for k in 8:
+				if entity_arg_flags & (1 << k): 
+					
+					args[k + 1] = file.get_var()
+					print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
+			
+			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer)
+			new_entity.position = entity_pos
+			new_entity.rotation = entity_rot
+			new_entity.MapArgs(args)
+		
+		file.seek(file.get_position() + 1)
+	file.seek(file.get_position() + 1)
+	
+	print("FILE POSITION: ", file.get_position(), "\n")
+	
+	for pool_ui in enemy_pool_tray.get_children():
+		var pool : EnemyPool = pool_ui.enemy_pool
+		
+		print("Reading enemy pool ", pool.id)
+		
+		var eid_size := file.get_32()
+		var eid_buff := file.get_buffer(eid_size << 2)
+		var e_amount_buff := file.get_buffer(eid_size << 2)
+		file.seek(file.get_position() + 1)
+		
+		print("Reading EID's (size: ", eid_size, ")")
+		
+		pool.enemy_ids = eid_buff.to_int32_array()
+		pool.enemy_amounts = e_amount_buff.to_int32_array()
+		
+		print("EIDs: ", pool.enemy_ids)
+		print("enemy amounts: ", pool.enemy_ids)
+		
+		var etile_size = file.get_32()
+		var etile_buff_x = file.get_buffer(etile_size << 2)
+		var etile_buff_y = file.get_buffer(etile_size << 2)
+		file.seek(file.get_position() + 1)
+		
+		pool.enemy_mask_tiles_x = etile_buff_x.to_int32_array()
+		pool.enemy_mask_tiles_y = etile_buff_y.to_int32_array()
+		print("Tile x: ", pool.enemy_mask_tiles_x, "\n")
+		print("Tile y: ", pool.enemy_mask_tiles_y, "\n")
+	
+	print_rich("[b]Level file reading complete[/b]")
+	file.close()
 
 
 func RequestLoadLevel() -> void:
