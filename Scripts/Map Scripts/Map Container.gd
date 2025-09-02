@@ -460,6 +460,26 @@ func EraserShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, hollow 
 		CreateTile(box_dimensions.position + Vector2i(-1, y), layer_group)
 		CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x, y), layer_group)
 
+func EnemyMaskShapeTool(box_dimensions : Rect2i, pool : EnemyPool) -> void:
+	box_dimensions.position.x = maxi(box_dimensions.position.x, bounds_offset.x)
+	box_dimensions.position.y = maxi(box_dimensions.position.y, bounds_offset.y)
+	box_dimensions.size.x = mini(box_dimensions.size.x, map_size.x + bounds_offset.x)
+	box_dimensions.size.y = mini(box_dimensions.size.y, map_size.y + bounds_offset.y)
+	
+	for x in box_dimensions.size.x:
+		for y in box_dimensions.size.y:
+			AddEnemyMaskTile(box_dimensions.position + Vector2i(x,y), pool)
+
+func EnemyMaskShapeEraser(box_dimensions : Rect2i):
+	box_dimensions.position.x = maxi(box_dimensions.position.x, bounds_offset.x)
+	box_dimensions.position.y = maxi(box_dimensions.position.y, bounds_offset.y)
+	box_dimensions.size.x = mini(box_dimensions.size.x, map_size.x + bounds_offset.x)
+	box_dimensions.size.y = mini(box_dimensions.size.y, map_size.y + bounds_offset.y)
+	
+	for x in box_dimensions.size.x:
+		for y in box_dimensions.size.y:
+			EraseAtPosition(box_dimensions.position + Vector2i(x,y), layer_groups[5], false)
+
 func DestroyTile(tile : Node2D) -> void:
 	tile.queue_free()
 	add_free_node(tile)
