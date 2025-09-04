@@ -395,8 +395,7 @@ func UpdateChunkBackground() -> void:
 
 func ResetLayerVisibility() -> void:
 	for layer in layer_groups:
-		layer.material.set_shader_parameter("is_visible", true)
-		layer.material.set_shader_parameter("is_editing", false)
+		layer.modulate.a = 1.0
 
 func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adjacent : bool = true) -> void:
 	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y: 

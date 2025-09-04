@@ -1,4 +1,4 @@
-[gd_scene load_steps=188 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=181 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://bo3nabcim6ng2" path="res://Scripts/Class Scripts/Inventory Item.gd" id="13_5quyf"]
 [ext_resource type="Script" uid="uid://b1rcdcjswbmw8" path="res://Scripts/Player Scripts/Player.gd" id="14_ugq71"]
 [ext_resource type="Script" uid="uid://b0lfj58nrmylc" path="res://Scripts/Player Scripts/PlayerCam.gd" id="15_5suuv"]
-[ext_resource type="Shader" uid="uid://oq03bkv6wc7b" path="res://Scripts/Shader Scripts/Entity_Visibility.gdshader" id="16_aa6he"]
 [ext_resource type="Texture2D" uid="uid://6p07snfxg04v" path="res://Sprites/Player Objects/PlayerV2.png" id="17_6cjm7"]
 [ext_resource type="Script" uid="uid://dgv7cc7kthxx2" path="res://Scripts/Player Scripts/Weapon Holder.gd" id="18_5wtcq"]
 [ext_resource type="Script" uid="uid://bpwk1ghs86k6m" path="res://Scripts/Player Scripts/Misc/WeaponSlot.gd" id="19_leonk"]
@@ -783,41 +782,11 @@ parsed_geometry_type = 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 12.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tf405"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3bfvk"]
 shader = ExtResource("47_s3dxo")
-shader_parameter/is_visible = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pxv5g"]
-shader = ExtResource("47_s3dxo")
-shader_parameter/is_visible = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_esbmk"]
-shader = ExtResource("47_s3dxo")
-shader_parameter/is_visible = true
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_t1s4r"]
-viewport_path = NodePath("Visibility Light Mask")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ccf2s"]
-resource_local_to_scene = true
-shader = ExtResource("16_aa6he")
-shader_parameter/mask_texture = SubResource("ViewportTexture_t1s4r")
-shader_parameter/is_visible = true
-shader_parameter/is_editing = false
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_a1drd"]
-viewport_path = NodePath("Visibility Light Mask")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_52wul"]
-resource_local_to_scene = true
-shader = ExtResource("16_aa6he")
-shader_parameter/mask_texture = SubResource("ViewportTexture_a1drd")
-shader_parameter/is_visible = true
-shader_parameter/is_editing = true
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("projectile_container", "enemy_container", "player", "editor_layer")]
 texture_filter = 1
-position = Vector2(-2, 0)
 script = ExtResource("1_po503")
 projectile_container = NodePath("Projectile Container")
 enemy_container = NodePath("Enemy Container")
@@ -2318,7 +2287,7 @@ action_mode = 0
 button_group = ExtResource("48_rkwao")
 text = "Spawn Layer"
 script = ExtResource("44_kbe7g")
-select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Light Layer")
+select_layer = NodePath("../../../../../Level Tilemap Root/Level Save Root/Enemy Mask Layer")
 layer_int = 5
 
 [node name="Library Container" type="HSplitContainer" parent="Editor Overlay Layer/Editor UI" node_paths=PackedStringArray("tray_grid")]
@@ -2477,6 +2446,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Selection Overlay" type="Control" parent="Editor Overlay Layer/Editor UI/Library Container/Editor Level Pane/Editor Object Controls" node_paths=PackedStringArray("editor_layer", "rotation_axis")]
+visible = false
 anchors_preset = 0
 offset_right = 96.0
 offset_bottom = 96.0
@@ -3785,23 +3755,23 @@ enemy_mask_object = ExtResource("66_fnbd0")
 position = Vector2(16, 16)
 
 [node name="Floor Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
-material = SubResource("ShaderMaterial_tf405")
+material = SubResource("ShaderMaterial_3bfvk")
 script = ExtResource("43_uy6ih")
 
 [node name="Decal Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
-material = SubResource("ShaderMaterial_pxv5g")
+material = SubResource("ShaderMaterial_3bfvk")
 script = ExtResource("43_uy6ih")
 
 [node name="Wall Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 100
 z_as_relative = false
-material = SubResource("ShaderMaterial_esbmk")
+material = SubResource("ShaderMaterial_3bfvk")
 script = ExtResource("43_uy6ih")
 
 [node name="Entity Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 110
 z_as_relative = false
-material = SubResource("ShaderMaterial_ccf2s")
+material = SubResource("ShaderMaterial_3bfvk")
 fit_margin = 4.0
 clear_margin = 4.0
 script = ExtResource("43_uy6ih")
@@ -3809,7 +3779,7 @@ script = ExtResource("43_uy6ih")
 [node name="Light Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 120
 z_as_relative = false
-material = SubResource("ShaderMaterial_52wul")
+material = SubResource("ShaderMaterial_3bfvk")
 fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true
@@ -3818,7 +3788,7 @@ script = ExtResource("43_uy6ih")
 [node name="Enemy Mask Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 130
 z_as_relative = false
-material = SubResource("ShaderMaterial_52wul")
+material = SubResource("ShaderMaterial_3bfvk")
 fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true

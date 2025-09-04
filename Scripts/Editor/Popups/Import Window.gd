@@ -187,11 +187,11 @@ func FinishImport():
 		elif selected_type == 2: 
 			new_boxel = ScatterBoxel.new()
 		
-		while editor_master.boxel_id_list.has(new_boxel.boxel_id) || new_boxel.boxel_id == 0:
+		while editor_master.boxel_id_list.has(new_boxel.id) || new_boxel.id == 0:
 			rng.randomize()
-			new_boxel.boxel_id = abs(rng.randi())
+			new_boxel.id = abs(rng.randi())
 	
-	print("Finish Import - Test boxel id post randomizer: ", new_boxel.boxel_id)
+	print("Finish Import - Test boxel id post randomizer: ", new_boxel.id)
 	
 	if selected_type == 0:
 		var new_tile_info = TileInfo.new()

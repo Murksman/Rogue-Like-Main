@@ -7,12 +7,10 @@ func _pressed() -> void:
 	var pressed : Button = button_group.get_pressed_button()
 	if pressed: 
 		for button in button_group.get_buttons():
-			ChangeLayerVisibility(button.select_layer, button == pressed)
+			if button == pressed: button.select_layer.modulate.a = 1.0
+			else: button.select_layer.modulate.a = 0.3
 	else:
 		for button in button_group.get_buttons():
-			ChangeLayerVisibility(button.select_layer, true)
+			button.select_layer.modulate.a = 1.0
 	
 	$"../../../..".ChangeLayer(layer_int)
-
-func ChangeLayerVisibility(layer : CanvasGroup, is_visible : bool):
-	layer.material.set_shader_parameter("is_visible", is_visible)

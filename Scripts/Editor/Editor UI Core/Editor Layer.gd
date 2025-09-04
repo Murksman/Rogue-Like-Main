@@ -44,20 +44,17 @@ var selected_enemy_pool : Control
 
 var tool : int = -1
 
-@onready var window_center = Vector2(DisplayServer.window_get_size()) / 2 
+@onready var window_center = Vector2(DisplayServer.window_get_size()) / 2
 
 func _ready() -> void:
-	visible = !editing
+	visible = editing
 	LevelInfo.editor_ref = self
 	
 	LoadResources()
 
 func pseudoProcess(delta):
-	if selected_world_obj && selected_world_obj: 
+	if selected_world_obj: 
 		entity_selection_outline.global_position = window_center - Vector2(32,32) + ((selected_world_obj.global_position - player.camera.global_position) * player.camera.zoom)
-	
-	print(tile_selection_outline.global_position)
-	print(tile_selection_outline.visible)
 
 func LoadResources() -> void:
 	level_tilemap_root.LoadResources()
@@ -135,8 +132,7 @@ func EditorExit():
 	level_tilemap_root.ResetLayerVisibility()
 
 func EditorReady(): 
-	for layer in level_tilemap_root.layer_groups:
-		layer.material.set_shader_parameter("is_editing", true)
+	pass
 
 func LevelPanePressed(event : InputEvent) -> void:
 	tool = toolbar.selected_tool
@@ -157,7 +153,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 	if !layer_button_group.get_pressed_button(): return
 	
 	var selected_layer = layer_button_group.get_pressed_button().layer_int
-	tile_selection_outline.visible = (((Input.is_action_pressed("Editor Primary") && selected_boxel) || Input.is_action_pressed("Eraser Hold")) && toolbar.selected_tool > 0 && selected_layer < 3) || (selected_layer == 5 && toolbar.selected_tool > 0) 
+	tile_selection_outline.visible = (Input.is_action_pressed("Editor Primary") || Input.is_action_pressed("Eraser Hold")) && ((selected_boxel && toolbar.selected_tool > 0 && selected_layer < 3) || (selected_layer == 5 && toolbar.selected_tool > 0)) 
 	
 	var tile_position = level_tilemap_root.PixelToTilePosition(mouse_position)
 	
@@ -172,7 +168,7 @@ func LevelPanePressed(event : InputEvent) -> void:
 		var layer_canvas : CanvasGroup = level_tilemap_root.layer_groups[selected_layer]
 		
 		if selected_layer > 2:
-			if Input.is_action_pressed("Editor Primary") && selected_layer == 5:
+			if (Input.is_action_pressed("Editor Primary") || event.is_action_released("Primary", true)) && selected_layer == 5:
 				if drag_action_position == tile_position && !Input.is_action_just_pressed("Editor Primary") && !event.is_action_released("Editor Primary"): return
 				drag_action_position = tile_position
 				
@@ -220,14 +216,13 @@ func MapEditEvent(boxel : LvlObject, tile_position : Vector2i, layer_canvas : Ca
 		level_tilemap_root.AddTile(selected_boxel.boxel, tile_position, layer_canvas)
 		return
 	
-	if !released: return
-	
 	var shape_position = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
 	var shape_size : Vector2i = abs(anchor_tile_point - tile_position) + Vector2i(1,1)
 	var shape_rect = Rect2i(shape_position, shape_size)
-	
 	tile_selection_outline.size = shape_size * 64
 	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
+	
+	if !released: return
 	
 	var check_chunks_err : int = level_tilemap_root.CheckSetMapSize(tile_position)
 	if check_chunks_err != 0: 
@@ -254,15 +249,15 @@ func MapEraserEvent(tile_position : Vector2i, layer_canvas : CanvasGroup, releas
 		level_tilemap_root.EraseAtPosition(tile_position, layer_canvas, update_adjacent)
 		return
 	
-	if !released: return
-	if !level_tilemap_root.CheckMapSize(anchor_tile_point): return
-	if !level_tilemap_root.CheckMapSize(tile_position): return
-	
 	var shape_position = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
 	var shape_size : Vector2i = abs(anchor_tile_point - tile_position) + Vector2i(1,1)
 	var shape_rect = Rect2i(shape_position, shape_size)
 	tile_selection_outline.size = shape_size * 64
 	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
+	
+	if !released: return
+	if !level_tilemap_root.CheckMapSize(anchor_tile_point): return
+	if !level_tilemap_root.CheckMapSize(tile_position): return
 	
 	if tool == 2:
 		level_tilemap_root.EraserShapeTool(shape_rect, layer_canvas)
@@ -273,7 +268,7 @@ func MapEnemyMaskEvent(enemy_pool : EnemyPool, tile_position : Vector2i, erasing
 	var tool = toolbar.selected_tool
 	
 	if tool == 1:
-		tile_selection_outline.global_position = tile_position
+		tile_selection_outline.global_position = tile_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 		
 		if erasing: 
 			if !level_tilemap_root.CheckMapSize(tile_position): return
@@ -283,13 +278,7 @@ func MapEnemyMaskEvent(enemy_pool : EnemyPool, tile_position : Vector2i, erasing
 			level_tilemap_root.AddEnemyMaskTile(tile_position, enemy_pool)
 		return
 	
-	if !released: return
-	if erasing:
-		if !level_tilemap_root.CheckMapSize(anchor_tile_point): return
-		if !level_tilemap_root.CheckMapSize(tile_position): return
-	else:
-		if level_tilemap_root.CheckSetMapSize(anchor_tile_point) != 0: return
-		if level_tilemap_root.CheckSetMapSize(tile_position) != 0: return
+	if tool != 2 && tool != 3: return
 	
 	var shape_position = Vector2i(min(anchor_tile_point.x, tile_position.x), min(anchor_tile_point.y, tile_position.y))
 	var shape_size : Vector2i = abs(anchor_tile_point - tile_position) + Vector2i(1,1)
@@ -297,7 +286,16 @@ func MapEnemyMaskEvent(enemy_pool : EnemyPool, tile_position : Vector2i, erasing
 	tile_selection_outline.size = shape_size * 64
 	tile_selection_outline.global_position = shape_position * 64 - Vector2i(player.camera.global_position * 2) + Vector2i(get_viewport().get_visible_rect().size / 2)
 	
-	if tool == 2 || tool == 3:
+	if !released: return
+	
+	print("test")
+	if erasing:
+		if !level_tilemap_root.CheckMapSize(anchor_tile_point): return
+		if !level_tilemap_root.CheckMapSize(tile_position): return
+		level_tilemap_root.EnemyMaskShapeEraser(shape_rect)
+	else:
+		if level_tilemap_root.CheckSetMapSize(anchor_tile_point) != 0: return
+		if level_tilemap_root.CheckSetMapSize(tile_position) != 0: return
 		level_tilemap_root.EnemyMaskShapeTool(shape_rect, enemy_pool)
 
 func SelectBoxel(target_boxel : UIBoxel) -> void:
