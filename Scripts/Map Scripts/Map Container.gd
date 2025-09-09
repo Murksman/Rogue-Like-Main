@@ -390,7 +390,6 @@ func ReadPackedTileArray(layer : CanvasGroup, arr : PackedByteArray, temp_boxel_
 						
 						var tile_pos = Vector2i(a, b) * chunk_size + Vector2i(c, d)
 						
-						print(arr[n]-1)
 						AddTile(temp_boxel_load_list[arr[n]-1], tile_pos, layer)
 					n += 1
 	

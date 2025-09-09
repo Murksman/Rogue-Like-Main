@@ -10,6 +10,7 @@ extends PanelContainer
 @export var vec2_prop : PackedScene
 
 func Update(single_prop : Node = null) -> void:
+	if !editor_layer.selected_world_obj: return
 	if single_prop:
 		editor_layer.selected_world_obj.MapArgs({ single_prop.prop_title.text : single_prop.val })
 	else:

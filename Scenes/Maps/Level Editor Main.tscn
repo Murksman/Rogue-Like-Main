@@ -1,4 +1,4 @@
-[gd_scene load_steps=186 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=185 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -780,7 +780,11 @@ font_size = 14
 font_color = Color(1, 0.529867, 0.497942, 1)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5py3h"]
+vertices = PackedVector2Array(2101.32, 1207.88, -174.453, 1187.11, -118.508, -60.2266, 2029.65, -104.75)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-130, -72, -187, 1199, 2114, 1220, 2041, -117)])
 parsed_geometry_type = 1
+parsed_collision_mask = 4294967041
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 12.0
 
@@ -797,9 +801,6 @@ shader = ExtResource("71_3bfvk")
 shader_parameter/mask_texture = SubResource("ViewportTexture_2cfjm")
 shader_parameter/is_visible = true
 shader_parameter/is_editing = false
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_3bfvk"]
-viewport_path = NodePath("Visibility Light Mask")
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("projectile_container", "enemy_container", "player", "editor_layer", "vision_occluder_container")]
 texture_filter = 1
@@ -3791,10 +3792,6 @@ fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-texture = SubResource("ViewportTexture_3bfvk")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]

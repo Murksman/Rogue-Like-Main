@@ -612,10 +612,9 @@ func ReadLevelFile(filepath : String):
 						args[k + 1] = file.get_var()
 						print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
 			
-			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer)
-			new_entity.position = entity_pos
+			print(t_layer)
+			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
 			new_entity.rotation = entity_rot
-			new_entity.MapArgs(args)
 		
 		file.seek(file.get_position() + 1)
 	file.seek(file.get_position() + 1)
