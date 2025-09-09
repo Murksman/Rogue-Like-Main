@@ -1,12 +1,13 @@
-extends Node
+extends Node2D
 
 @export var projectile_container : Node2D
 @export var enemy_container : Node2D
 @export var player : Node2D
 @export var editor_layer : CanvasLayer
+@export var vision_occluder_container : Node2D
 
 func _ready():
-	SceneLoadingContainer.StartGame($Player)
+	SceneLoadingContainer.StartGame(self)
 	LevelInfo.projectile_container = projectile_container
 
 func _process(delta: float) -> void:

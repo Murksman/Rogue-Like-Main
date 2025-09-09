@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var agent : NavigationAgent2D
 
 @onready var currentHealth : float = settings.baseHealth
+@onready var player := SceneLoadingContainer.player
 
 var aggression : float = 0.0 
 var hit_charge : float = 0.0 
@@ -19,7 +20,6 @@ func TakeDamage(inDamage):
 	if currentHealth <= 0: queue_free()
 
 func _physics_process(delta):
-	var player = get_parent().player
 	spaceState = get_world_2d().direct_space_state
 	query = PhysicsRayQueryParameters2D.create(global_position, player.global_position, 1)
 	var hit = spaceState.intersect_ray(query)

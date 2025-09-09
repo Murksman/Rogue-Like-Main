@@ -1,4 +1,4 @@
-[gd_scene load_steps=181 format=3 uid="uid://cvnqsyhp8tci1"]
+[gd_scene load_steps=186 format=3 uid="uid://cvnqsyhp8tci1"]
 
 [ext_resource type="Script" uid="uid://8vwgpbkjhd3c" path="res://Scripts/Map Scripts/Master_Script.gd" id="1_po503"]
 [ext_resource type="Script" uid="uid://b872d3mi5yig0" path="res://Scripts/Object Scripts/Global Enemy Data Holder.gd" id="2_6t5k7"]
@@ -69,8 +69,10 @@
 [ext_resource type="Resource" uid="uid://dkvpkci6r641t" path="res://Resources/Misc Data/default_wall_occluders.tres" id="55_uqdnf"]
 [ext_resource type="PackedScene" uid="uid://bbeifspcue10f" path="res://Prefabs/World Objects/TileMap Tiles/collidable_tile.tscn" id="58_8eboa"]
 [ext_resource type="Script" uid="uid://b011vefyc7d33" path="res://Scripts/Editor/Popups/Enemy Pool Editor.gd" id="58_p3ow0"]
-[ext_resource type="PackedScene" uid="uid://bcrawwvt3nnfc" path="res://Prefabs/Editor/enemy_preview.scn" id="59_qyekt"]
+[ext_resource type="PackedScene" uid="uid://bcrawwvt3nnfc" path="res://Prefabs/Editor/enemy_preview.scn" id="63_ima7e"]
 [ext_resource type="PackedScene" uid="uid://csawsd315fil1" path="res://Prefabs/World Objects/TileMap Tiles/enemy_mask_tile.tscn" id="66_fnbd0"]
+[ext_resource type="PackedScene" uid="uid://dw38hjbdq1gnv" path="res://Prefabs/World Objects/TileMap Tiles/light_mask_occluder.tscn" id="70_3bfvk"]
+[ext_resource type="Shader" uid="uid://oq03bkv6wc7b" path="res://Scripts/Shader Scripts/Entity_Visibility.gdshader" id="71_3bfvk"]
 
 [sub_resource type="Gradient" id="Gradient_laq45"]
 offsets = PackedFloat32Array(0.753247)
@@ -332,10 +334,10 @@ radius = 40.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cotiw"]
 shader = ExtResource("35_2wstq")
-shader_parameter/view_angle = 0.419
+shader_parameter/view_angle = 0.608
 shader_parameter/vision_fade_length = 0.479
 shader_parameter/vision_horizontal_offset = 0.01
-shader_parameter/peripheral_radius = 0.0
+shader_parameter/peripheral_radius = 0.03
 shader_parameter/peripheral_cutoff = 0.116
 shader_parameter/look_direction = Vector2(0, 1)
 shader_parameter/player_offset = Vector2(0, 0)
@@ -783,15 +785,30 @@ source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 12.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3bfvk"]
+resource_local_to_scene = true
 shader = ExtResource("47_s3dxo")
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("projectile_container", "enemy_container", "player", "editor_layer")]
+[sub_resource type="ViewportTexture" id="ViewportTexture_2cfjm"]
+viewport_path = NodePath("Visibility Light Mask")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2cfjm"]
+resource_local_to_scene = true
+shader = ExtResource("71_3bfvk")
+shader_parameter/mask_texture = SubResource("ViewportTexture_2cfjm")
+shader_parameter/is_visible = true
+shader_parameter/is_editing = false
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3bfvk"]
+viewport_path = NodePath("Visibility Light Mask")
+
+[node name="World" type="Node2D" node_paths=PackedStringArray("projectile_container", "enemy_container", "player", "editor_layer", "vision_occluder_container")]
 texture_filter = 1
 script = ExtResource("1_po503")
 projectile_container = NodePath("Projectile Container")
 enemy_container = NodePath("Enemy Container")
 player = NodePath("Player")
 editor_layer = NodePath("Editor Overlay Layer")
+vision_occluder_container = NodePath("Visibility Light Mask/Occluder Container")
 
 [node name="Background" type="Sprite2D" parent="."]
 z_index = -250
@@ -2759,8 +2776,8 @@ editing_label = NodePath("Window Margins/UI Container/Window Topbar/Editing Boxe
 filepath_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/FilePath Line/FilePath Text")
 preview_image = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Image Preview/Imported Image BG/Imported Image")
 boxelname_text = NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Name/Boxel Text Edit")
-boxel_type_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Single Boxels"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Connected Boxel"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Scatter Boxel"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Entity Object"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer/Light Object")]
-boxel_layer_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Floor"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Decals"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Walls"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Objects"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer/Lights")]
+boxel_type_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types/Single Boxels"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types/Connected Boxel"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types/Scatter Boxel"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types/Entity Object"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types/Light Object")]
+boxel_layer_selection = [NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2/Floor"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2/Decals"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2/Walls"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2/Objects"), NodePath("Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2/Lights")]
 boxel_type_group = ExtResource("46_u00xq")
 normals_tab_control = NodePath("Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures")
 normal_image = NodePath("Window Margins/UI Container/Import Preview Margins/Advanced Settings Tabs/Normal Textures/VBoxContainer/Normal Preview/Imported Normal BG/Imported Image")
@@ -2856,9 +2873,9 @@ grow_horizontal = 2
 [node name="Preview Details Pane" type="VBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins"]
 layout_mode = 1
 offset_left = 10.0
-offset_right = 290.0
-offset_bottom = 480.0
-theme_override_constants/separation = 16
+offset_right = 435.0
+offset_bottom = 599.0
+theme_override_constants/separation = 12
 
 [node name="Image Preview" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
 custom_minimum_size = Vector2(264, 290)
@@ -2867,10 +2884,8 @@ layout_mode = 2
 [node name="Imported Image BG" type="ColorRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Image Preview"]
 custom_minimum_size = Vector2(264, 264)
 layout_mode = 2
-offset_left = -10.0
-offset_top = 16.0
-offset_right = 254.0
-offset_bottom = 280.0
+offset_right = 264.0
+offset_bottom = 264.0
 color = Color(0.211975, 0.226078, 0.265919, 1)
 
 [node name="Imported Image" type="TextureRect" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Image Preview/Imported Image BG"]
@@ -2963,16 +2978,11 @@ offset_bottom = 32.23
 text = "Boxel Type:"
 label_settings = SubResource("LabelSettings_cmlad")
 
-[node name="Boxel Selection" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
-custom_minimum_size = Vector2(200, 52)
+[node name="Boxel Types" type="HFlowContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
+custom_minimum_size = Vector2(425, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HFlowContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection"]
-layout_mode = 1
-offset_right = 489.0
-offset_bottom = 31.0
-
-[node name="Single Boxels" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer"]
+[node name="Single Boxels" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types"]
 layout_mode = 2
 focus_mode = 0
 button_group = ExtResource("46_u00xq")
@@ -2981,7 +2991,7 @@ flat = true
 icon_alignment = 2
 metadata/type_index = 0
 
-[node name="Connected Boxel" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer"]
+[node name="Connected Boxel" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types"]
 layout_mode = 2
 focus_mode = 0
 button_group = ExtResource("46_u00xq")
@@ -2990,7 +3000,8 @@ flat = true
 icon_alignment = 2
 metadata/type_index = 1
 
-[node name="Scatter Boxel" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer"]
+[node name="Scatter Boxel" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types"]
+visible = false
 layout_mode = 2
 focus_mode = 0
 button_group = ExtResource("46_u00xq")
@@ -3000,7 +3011,8 @@ flat = true
 icon_alignment = 2
 metadata/type_index = 2
 
-[node name="Entity Object" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer"]
+[node name="Entity Object" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types"]
+visible = false
 layout_mode = 2
 focus_mode = 0
 button_group = ExtResource("46_u00xq")
@@ -3010,7 +3022,8 @@ flat = true
 icon_alignment = 2
 metadata/type_index = 3
 
-[node name="Light Object" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Selection/HBoxContainer"]
+[node name="Light Object" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Boxel Types"]
+visible = false
 layout_mode = 2
 focus_mode = 0
 button_group = ExtResource("46_u00xq")
@@ -3021,7 +3034,7 @@ icon_alignment = 2
 metadata/type_index = 4
 
 [node name="Layers Label" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 18.585)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layers Label"]
@@ -3032,42 +3045,37 @@ offset_bottom = 32.23
 text = "Layers:"
 label_settings = SubResource("LabelSettings_cmlad")
 
-[node name="Layer Selection" type="Control" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection"]
-layout_mode = 1
-offset_right = 225.0
-offset_bottom = 31.0
-
-[node name="Floor" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer"]
+[node name="Floor" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2"]
 layout_mode = 2
 focus_mode = 0
 text = "Floor"
 metadata/layer_index = 0
 
-[node name="Decals" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer"]
+[node name="Decals" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2"]
 layout_mode = 2
 focus_mode = 0
 text = "Decals"
 icon_alignment = 2
 metadata/layer_index = 1
 
-[node name="Walls" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer"]
+[node name="Walls" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2"]
 layout_mode = 2
 focus_mode = 0
 text = "Walls"
 icon_alignment = 2
 metadata/layer_index = 2
 
-[node name="Objects" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer"]
+[node name="Objects" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2"]
 layout_mode = 2
 focus_mode = 0
 text = "Objects"
 icon_alignment = 2
 metadata/layer_index = 3
 
-[node name="Lights" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/Layer Selection/HBoxContainer"]
+[node name="Lights" type="CheckBox" parent="Editor Overlay Layer/UI Popups/Import Window/Window Margins/UI Container/Import Preview Margins/Preview Details Pane/HBoxContainer2"]
 layout_mode = 2
 focus_mode = 0
 text = "Lights"
@@ -3545,7 +3553,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Enemy Pool Editor" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("lvl_list")]
+[node name="Enemy Pool Editor" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("enemy_list")]
 auto_translate_mode = 1
 transparent_bg = true
 title = "Select a level to load"
@@ -3560,7 +3568,8 @@ popup_window = true
 extend_to_title = true
 theme = ExtResource("46_0d38j")
 script = ExtResource("58_p3ow0")
-lvl_list = NodePath("Enemy Content List/File List Margins/Level Selection Scroller/Level List")
+enemy_list = NodePath("Enemy Content List/Enemy List Margins/Enemy Selection Scroller/Enemy List")
+enemy_preview_resource = ExtResource("63_ima7e")
 
 [node name="Window Theming" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor"]
 anchors_preset = 15
@@ -3655,7 +3664,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_64kq2")
 
-[node name="File List Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
+[node name="Enemy List Margins" type="MarginContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
 custom_minimum_size = Vector2(300, 90)
 layout_mode = 1
 anchors_preset = 15
@@ -3668,26 +3677,14 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Level Selection Scroller" type="ScrollContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins"]
+[node name="Enemy Selection Scroller" type="ScrollContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/Enemy List Margins"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Level List" type="GridContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller"]
+[node name="Enemy List" type="GridContainer" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/Enemy List Margins/Enemy Selection Scroller"]
 material = SubResource("ShaderMaterial_5rioj")
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="Enemy Preview" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller/Level List" instance=ExtResource("59_qyekt")]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-size_flags_horizontal = 3
-id = 1
-
-[node name="Enemy Preview2" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List/File List Margins/Level Selection Scroller/Level List" instance=ExtResource("59_qyekt")]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-size_flags_horizontal = 3
-id = 2
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Editor Overlay Layer/UI Popups/Enemy Pool Editor/Enemy Content List"]
 layout_mode = 1
@@ -3750,6 +3747,7 @@ default_wall_occluders = ExtResource("55_uqdnf")
 tile_object = ExtResource("49_pojje")
 wall_object = ExtResource("58_8eboa")
 enemy_mask_object = ExtResource("66_fnbd0")
+vision_occluder = ExtResource("70_3bfvk")
 
 [node name="Level Save Root" type="Node2D" parent="Level Tilemap Root"]
 position = Vector2(16, 16)
@@ -3771,7 +3769,7 @@ script = ExtResource("43_uy6ih")
 [node name="Entity Layer" type="CanvasGroup" parent="Level Tilemap Root/Level Save Root"]
 z_index = 110
 z_as_relative = false
-material = SubResource("ShaderMaterial_3bfvk")
+material = SubResource("ShaderMaterial_2cfjm")
 fit_margin = 4.0
 clear_margin = 4.0
 script = ExtResource("43_uy6ih")
@@ -3793,6 +3791,10 @@ fit_margin = 1.0
 clear_margin = 1.0
 use_mipmaps = true
 script = ExtResource("43_uy6ih")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("ViewportTexture_3bfvk")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_entered_tree" from="UI Layer/Inventory Elements/World Object Inventory/Control" to="UI Layer/Inventory Elements/World Object Inventory/Control" method="_on_child_entered_tree"]

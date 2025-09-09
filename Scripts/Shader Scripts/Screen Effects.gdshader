@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 render_mode unshaded;
-uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D screen_texture : hint_screen_texture, filter_nearest_mipmap;
 
 uniform float ui_effects: hint_range(0.0, 1.0);
 

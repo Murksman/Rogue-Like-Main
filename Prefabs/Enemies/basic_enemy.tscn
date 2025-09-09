@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://bvyemdc74njma"]
+
+[ext_resource type="Script" uid="uid://ix2xuinwvb7x" path="res://Scripts/Enemy Scripts/Enemy.gd" id="1_ht1g8"]
+[ext_resource type="Script" uid="uid://d0a4is4uioajx" path="res://Scripts/Resource Scripts/Enemy Settings.gd" id="2_l0pcp"]
+[ext_resource type="Texture2D" uid="uid://qhlyvw0biw1l" path="res://Sprites/Enemy/Generic Static Enemy.png" id="3_l0pcp"]
+
+[sub_resource type="Resource" id="Resource_pp7hr"]
+script = ExtResource("2_l0pcp")
+baseHealth = 100.0
+accel = 10.0
+drag = 0.0
+aggroLevel = 0.0
+autoAlertRadius = 0.0
+damage = 0.0
+hitInterval = 0.0
+hitRange = 0.0
+metadata/_custom_type_script = "uid://d0a4is4uioajx"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y2nlk"]
+radius = 8.92317
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yqi7u"]
+radius = 16.0
+
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("agent")]
+light_mask = 0
+scale = Vector2(1.00861, 1)
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_ht1g8")
+settings = SubResource("Resource_pp7hr")
+agent = NodePath("NavigationAgent2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_l0pcp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_y2nlk")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 5.0
+target_desired_distance = 32.0
+path_max_distance = 10.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CircleShape2D_yqi7u")

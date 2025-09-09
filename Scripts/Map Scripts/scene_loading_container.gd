@@ -10,6 +10,7 @@ var loot_tables : Array[LootTable] = []
 
 var player_data : SaveData
 var player : Node2D
+var occluder_container : Node2D
 
 var root_loaded := false
 
@@ -41,8 +42,9 @@ func LoadResources():
 	
 	root_loaded = true
 
-func StartGame(player_ref : Node2D):
-	player = player_ref
+func StartGame(master_node : Node2D):
+	player = master_node.player
+	occluder_container = master_node.vision_occluder_container
 	
 	if !ResourceLoader.exists(load_file_path):
 		return

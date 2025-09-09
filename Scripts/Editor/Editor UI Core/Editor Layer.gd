@@ -132,7 +132,7 @@ func EditorExit():
 	level_tilemap_root.ResetLayerVisibility()
 
 func EditorReady(): 
-	pass
+	level_tilemap_root.layer_groups[3].material.set_shader_parameter("is_editing", true)
 
 func LevelPanePressed(event : InputEvent) -> void:
 	tool = toolbar.selected_tool
@@ -288,7 +288,6 @@ func MapEnemyMaskEvent(enemy_pool : EnemyPool, tile_position : Vector2i, erasing
 	
 	if !released: return
 	
-	print("test")
 	if erasing:
 		if !level_tilemap_root.CheckMapSize(anchor_tile_point): return
 		if !level_tilemap_root.CheckMapSize(tile_position): return
@@ -348,7 +347,13 @@ func LoadLevel(filepath : String) -> void:
 	
 	if filepath.get_extension() == "dat":
 		ReadLevelFile(filepath)
+		
+		for pool in enemy_pool_tray.get_children():
+			level_tilemap_root.SpawnAllEnemiesInPool(pool.enemy_pool)
 	else:
+		printerr("Level Loading Error - Invalid file type.")
+		return
+		
 		var level_load = ResourceLoader.load(filepath, "PackedScene")
 		var new_level = level_load.instantiate()
 		level_tilemap_root.level_save_root.queue_free()
@@ -516,7 +521,7 @@ func ReadLevelFile(filepath : String):
 	chunks_size.x = file.get_32()
 	chunks_size.y = file.get_32()
 	print("Chunk dimensions: ", chunks_size)
-	level_tilemap_root.WipeMapTiles(chunks_size)
+	level_tilemap_root.WipeMap(chunks_size)
 	
 	var map_size = chunks_size * level_tilemap_root.chunk_size
 	level_tilemap_root.map_size = map_size
@@ -594,18 +599,18 @@ func ReadLevelFile(filepath : String):
 			entity_pos.y = file.get_32()
 			var entity_rot = file.get_32()
 			
-			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos)
-			
 			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
 			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
 			var entity_arg_flags = file.get_8()
-			var args = {}
+			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos, " - args: ", entity_arg_flags)
 			
-			for k in 8:
-				if entity_arg_flags & (1 << k): 
-					
-					args[k + 1] = file.get_var()
-					print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
+			var args = {}
+			if entity_arg_flags > 0:
+				for k in 8:
+					if entity_arg_flags & (1 << k): 
+						
+						args[k + 1] = file.get_var()
+						print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
 			
 			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer)
 			new_entity.position = entity_pos

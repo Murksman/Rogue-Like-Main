@@ -86,11 +86,13 @@ func SetImporterMode(editing : bool = false, edit_boxel : LvlObject = null) -> v
 			boxel_layer_selection[i].set_pressed_no_signal(true)
 		
 		if edit_boxel is UnitBoxel: 
-			boxel_type_selection[0].set_pressed_no_signal(false)
+			print("UnitBoxel")
+			boxel_type_selection[0].set_pressed_no_signal(true)
+			print(boxel_type_selection[0].button_pressed)
 		elif edit_boxel is ConnectorBoxel: 
-			boxel_type_selection[1].set_pressed_no_signal(false)
+			boxel_type_selection[1].set_pressed_no_signal(true)
 		elif edit_boxel is ScatterBoxel: 
-			boxel_type_selection[2].set_pressed_no_signal(false)
+			boxel_type_selection[2].set_pressed_no_signal(true)
 	else:
 		importing_label.visible = true
 		editing_label.visible = false
@@ -179,19 +181,19 @@ func FinishImport():
 	
 	var new_boxel : LvlObject
 	
+	if selected_type == 0: 
+		new_boxel = UnitBoxel.new()
+	elif selected_type == 1: 
+		new_boxel = ConnectorBoxel.new()
+	elif selected_type == 2: 
+		new_boxel = ScatterBoxel.new()
+	
 	if importing:
-		if selected_type == 0: 
-			new_boxel = UnitBoxel.new()
-		elif selected_type == 1: 
-			new_boxel = ConnectorBoxel.new()
-		elif selected_type == 2: 
-			new_boxel = ScatterBoxel.new()
-		
 		while editor_master.boxel_id_list.has(new_boxel.id) || new_boxel.id == 0:
 			rng.randomize()
 			new_boxel.id = abs(rng.randi())
-	
-	print("Finish Import - Test boxel id post randomizer: ", new_boxel.id)
+	else:
+		new_boxel.id = editing_boxel.id
 	
 	if selected_type == 0:
 		var new_tile_info = TileInfo.new()
@@ -226,8 +228,16 @@ func FinishImport():
 	new_boxel.layers = selected_layers
 	new_boxel.name = StringName(boxelname_text.text)
 	
-	var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.boxel_load_path + "/" + boxelname_text.text, "res")
-	var err = ResourceSaver.save(new_boxel, load_path)
+	var err
+	
+	if importing:
+		var load_path = SceneLoadingContainer.SearchGenerateDirPath(SceneLoadingContainer.lvlobject_load_path + "/" + new_boxel.name, "res")
+		err = ResourceSaver.save(new_boxel, load_path)
+	else:
+		var old_path = SceneLoadingContainer.lvlobject_load_path + "/" + editing_boxel.name + ".res"
+		var new_path = SceneLoadingContainer.lvlobject_load_path + "/" + new_boxel.name + ".res"
+		err = DirAccess.rename_absolute(old_path, new_path)
+		err |= ResourceSaver.save(new_boxel, new_path)
 	
 	if err == 0:
 		if importing: editor_master.ImporterAddBoxel(new_boxel)

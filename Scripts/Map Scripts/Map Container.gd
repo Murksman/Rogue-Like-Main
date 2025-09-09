@@ -12,6 +12,7 @@ var free_nodes : Array[Node]
 @export var tile_object : PackedScene
 @export var wall_object : PackedScene
 @export var enemy_mask_object : PackedScene
+@export var vision_occluder : PackedScene
 
 var map_size : Vector2i
 var bounds_offset : Vector2i = Vector2i.ZERO 
@@ -263,17 +264,25 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 		
 		tile_info = boxel.GetConnectedTile(adjacency)
 		new_tile = wall_object.instantiate()
+		var new_occluder = vision_occluder.instantiate()
 		set_editable_instance(new_tile, true)
-		new_tile.get_child(2).occluder = default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacency]]
+		var polygon := default_wall_occluders.polygon_data[LevelInfo.connector_boxel_matrix[adjacency]]
+		new_tile.get_child(2).occluder = polygon
+		new_occluder.occluder = polygon
+		SceneLoadingContainer.occluder_container.add_child(new_occluder)
+		
+		layer_group.add_child(new_tile)
+		new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
+		new_occluder.global_position = new_tile.global_position
 	else: 
 		tile_info = boxel.GetTileInfo()
 		new_tile = tile_object.instantiate()
 		set_editable_instance(new_tile, true)
+		layer_group.add_child(new_tile)
+		new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
 	
 	new_tile.id = boxel.id
 	new_tile.texture = tile_info.image
-	layer_group.add_child(new_tile)
-	new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
 	
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = new_tile
 	
@@ -396,6 +405,8 @@ func UpdateChunkBackground() -> void:
 func ResetLayerVisibility() -> void:
 	for layer in layer_groups:
 		layer.modulate.a = 1.0
+	
+	layer_groups[3].material.set_shader_parameter("is_editing", false)
 
 func EraseAtPosition(tile_pos : Vector2i, layer_group : CanvasGroup, update_adjacent : bool = true) -> void:
 	if tile_pos.x >= map_size.x + bounds_offset.x || tile_pos.y >= map_size.y + bounds_offset.y || tile_pos.x < bounds_offset.x || tile_pos.y < bounds_offset.y: 
@@ -448,16 +459,19 @@ func EraserShapeTool(box_dimensions : Rect2i, layer_group : CanvasGroup, hollow 
 	box_dimensions.size.x = mini(box_dimensions.size.x, map_size.x + bounds_offset.x)
 	box_dimensions.size.y = mini(box_dimensions.size.y, map_size.y + bounds_offset.y)
 	
+	
 	for x in box_dimensions.size.x:
 		for y in box_dimensions.size.y:
 			EraseAtPosition(box_dimensions.position + Vector2i(x,y), layer_group, false)
 		
-		CreateTile(box_dimensions.position + Vector2i(x, -1), layer_group)
-		CreateTile(box_dimensions.position + Vector2i(x, box_dimensions.size.y), layer_group)
+		if update_adjacent:
+			CreateTile(box_dimensions.position + Vector2i(x, -1), layer_group)
+			CreateTile(box_dimensions.position + Vector2i(x, box_dimensions.size.y), layer_group)
 	
-	for y in box_dimensions.size.y:
-		CreateTile(box_dimensions.position + Vector2i(-1, y), layer_group)
-		CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x, y), layer_group)
+	if update_adjacent:
+		for y in box_dimensions.size.y:
+			CreateTile(box_dimensions.position + Vector2i(-1, y), layer_group)
+			CreateTile(box_dimensions.position + Vector2i(box_dimensions.size.x, y), layer_group)
 
 func EnemyMaskShapeTool(box_dimensions : Rect2i, pool : EnemyPool) -> void:
 	box_dimensions.position.x = maxi(box_dimensions.position.x, bounds_offset.x)
@@ -484,7 +498,7 @@ func DestroyTile(tile : Node2D) -> void:
 	add_free_node(tile)
 	query_free_nodes()
 
-func WipeMapTiles(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
+func WipeMap(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
 	chunk_dimensions = new_chunk_size
 	for layer in layer_groups:
 		for child in layer.get_children():
@@ -541,8 +555,6 @@ func GetIndexSpawnTile(pool : EnemyPool, tile_pos : Vector2i) -> int:
 		if pool.enemy_mask_tiles_x[mid + i] != tile_pos.x: 
 			right = mid + i - 1
 			break
-	
-	
 
 func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distance : float, exclusive : bool = false) -> Array:
 	if exclusive:
@@ -562,3 +574,23 @@ func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distan
 			obj_list.append(obj)
 	
 	return obj_list
+
+func SpawnAllEnemiesInPool(pool : EnemyPool):
+	for i in pool.enemy_ids.size():
+		var e_id : int = pool.enemy_ids[i]
+		var amount : int = pool.enemy_amounts[i]
+		var enemy_prefab : PackedScene = SceneLoadingContainer.loaded_entities.entities[SceneLoadingContainer.loaded_entities.entity_ids.find(e_id)]
+		
+		var spawn_candidates : Array[Vector2i] = []
+		var rng = RandomNumberGenerator.new()
+		
+		for n in amount:
+			var idx = rng.randi_range(0, pool.enemy_mask_tiles_x.size() - 1)
+			var new_pos = Vector2i(pool.enemy_mask_tiles_x[idx], pool.enemy_mask_tiles_y[idx])
+			if spawn_candidates.find(new_pos) == -1:
+				spawn_candidates.append(new_pos)
+		
+		for pos in spawn_candidates:
+			var new_enemy = enemy_prefab.instantiate()
+			layer_groups[3].add_child(new_enemy)
+			new_enemy.position = Vector2(pos * 32) + Vector2(0.5,0.5)

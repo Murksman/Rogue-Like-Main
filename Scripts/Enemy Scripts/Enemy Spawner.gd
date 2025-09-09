@@ -5,7 +5,7 @@ class_name Spawner
 @export var spawning : bool = false
 @export var spawnOnStart : bool = true
 
-@onready var enemyObject : Object = preload("res://Prefabs/Enemies/enemy.tscn")
+@onready var enemyObject : Object = preload("res://Prefabs/Enemies/basic_enemy.tscn")
 var spawnTime : float
 
 @export var id : int = 0
