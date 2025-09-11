@@ -433,6 +433,7 @@ func WriteLevelFile(filepath : String, filename : String = current_level_name):
 			CompileEntityBytes(file, entity)
 		
 		file.store_string("\n")
+		print("FILE POSITION: ", file.get_position())
 	file.store_string("\n")
 	
 	print("FILE POSITION: ", file.get_position(), "\n")
@@ -469,16 +470,13 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	print("Entity ID: ", id)
 	print("Entity position: ", entity.position)
 	
-	if SceneLoadingContainer.loaded_entities.entity_ids.size() < 1: 
+	var def_idx := SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
+	if SceneLoadingContainer.loaded_entities.entity_ids[def_idx] != id: 
 		file.store_8(0)
+		print("No valid ID.\n")
 		return
 	
-	var def_arg_idx := SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
-	if SceneLoadingContainer.loaded_entities.entity_ids[def_arg_idx - 1] != id: 
-		file.store_8(0)
-		return
-	
-	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[id]
+	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[def_idx]
 	print("Default args: ", def_args)
 	var bit_flags = 0
 	var args : Dictionary = entity.GetArgs()
@@ -486,11 +484,12 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	
 	var raw_args := PackedByteArray()
 	for i in def_args.size():
-		if args.has(i+1) && args[i+1] != def_args[i+1]: 
+		var key = def_args.keys()[i]
+		if args[key] && args[key] != def_args[key]: 
 			bit_flags |= ( 1 << i )
-			print("Setting bit flag for arg ", def_args.keys()[i])
-			raw_args.append_array(PackedByteArray([args[ i + 1 ]]))
-			print("Adding arg value: ", args[i])
+			print("Setting bit flag for arg ", key)
+			raw_args.append_array(PackedByteArray([args[key]]))
+			print("Adding arg value: ", args[key])
 	
 	file.store_8(bit_flags)
 	file.store_buffer(raw_args)
@@ -609,14 +608,15 @@ func ReadLevelFile(filepath : String):
 				for k in 8:
 					if entity_arg_flags & (1 << k): 
 						
-						args[k + 1] = file.get_var()
-						print("Entity ", n, " - Arg ", k + 1, ": ", args[k + 1])
+						args[ref_args.keys()[k]] = file.get_var()
+						print("Entity ", n, " - Arg ", ref_args.keys()[k], ": ", args[ref_args.keys()[k]])
 			
 			print(t_layer)
 			var new_entity = level_tilemap_root.AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
 			new_entity.rotation = entity_rot
 		
 		file.seek(file.get_position() + 1)
+		print(file.get_position())
 	file.seek(file.get_position() + 1)
 	
 	print("FILE POSITION: ", file.get_position(), "\n")

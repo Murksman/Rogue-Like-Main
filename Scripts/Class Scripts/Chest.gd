@@ -14,17 +14,17 @@ class_name Chest
 var table_index : int = 0
 
 func MapArgs(args : Dictionary) -> int:
-	var tbl = args["Table"]
-	if tbl: self.color = tbl
+	var tbl = args.get("Table")
+	if tbl: self.table_index = tbl
 	
-	var size = args["Size"]
+	var size = args.get("Size")
 	if size: self.inventory_size = size
 	
-	var quant = args["Quantity"]
-	if quant: self.height = quant
+	var quant = args.get("Quantity")
+	if quant: self.quantity_multiplier = quant
 	
-	var rarity = args["Rarity"]
-	if rarity: self.texture_scale = rarity
+	var rarity = args.get("Rarity")
+	if rarity: self.rarity_multiplier = rarity
 	
 	return 0
 
