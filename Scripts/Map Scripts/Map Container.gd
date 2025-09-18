@@ -505,6 +505,254 @@ func WipeMap(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
 		
 		layer_init(layer, true)
 
+func WriteLevelFile(filepath : String, filename : String, enemy_pool_tray : Control):
+	print_rich("\n\n[b]=== Starting Level File Write ===[/b]")
+	print("Writing to: ", filepath)
+	print("Level name: ", filename)
+	
+	var file = FileAccess.open(filepath, FileAccess.WRITE_READ)
+	file.resize(0)
+	
+	var filename_buff := filename.to_utf8_buffer()
+	file.store_8(filename_buff.size())
+	file.store_buffer(filename_buff)
+	file.store_string("\n")
+	
+	var version_buff := "v0.2.1".to_utf8_buffer()
+	print("Version: ", version_buff.get_string_from_utf8())
+	file.store_8(version_buff.size())
+	file.store_buffer(version_buff)
+	file.store_string("\n")
+	
+	## Metadata TBD
+	file.store_string("\n")
+	
+	file.store_32(chunk_dimensions.x)
+	file.store_32(chunk_dimensions.y)
+	file.store_string("\n")
+	
+	var boxel_id_buffer : PackedByteArray = boxel_id_list.to_byte_array()
+	file.store_32(boxel_id_buffer.size())
+	file.store_buffer(boxel_id_buffer)
+	file.store_string("\n")
+	
+	var map_array_length : int = chunk_dimensions.x * chunk_dimensions.y * chunk_size * chunk_size
+	file.store_64(map_array_length)
+	file.store_string("\n")
+	
+	for i in 3:
+		var t_layer = layer_groups[i]
+		var floor_tile_buff : PackedByteArray = GetPackedTileArray(t_layer, map_array_length)
+		file.store_buffer(floor_tile_buff)
+		file.store_string("\n")
+	file.store_string("\n")
+	
+	var entity_id_buffer : PackedByteArray = entity_id_list.to_byte_array()
+	#print("Entity ID list size: ", entity_id_buffer.size())
+	#print("Entity ID list: ", entity_id_list)
+	file.store_32(entity_id_buffer.size())
+	file.store_buffer(entity_id_buffer)
+	file.store_string("\n")
+	
+	for i in 2:
+		var t_layer = layer_groups[i+3]
+		var entity_count = t_layer.get_child_count()
+		#print("Writing entity layer {layer} with {count} entities".format({"layer":t_layer.name, "count":entity_count}))
+		file.store_32(entity_count)
+		
+		for entity in t_layer.get_children():
+			CompileEntityBytes(file, entity)
+		
+		file.store_string("\n")
+	file.store_string("\n")
+	
+	for pool_ui in enemy_pool_tray.get_children():
+		var pool : EnemyPool = pool_ui.enemy_pool
+		
+		file.store_32(pool.enemy_ids.size())
+		file.store_buffer(pool.enemy_ids.to_byte_array())
+		file.store_buffer(pool.enemy_amounts.to_byte_array())
+		file.store_string("\n")
+		file.store_32(pool.enemy_mask_tiles_x.size())
+		file.store_buffer(pool.enemy_mask_tiles_x.to_byte_array())
+		file.store_buffer(pool.enemy_mask_tiles_y.to_byte_array())
+		file.store_string("\n")
+	
+	file.close()
+	print_rich("[b]=== Level File Write Complete ===")
+
+
+func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
+	print("=== Compiling Entity Bytes {name} ===".format(entity))
+	var file_init = file.get_position()
+	var id = entity.id
+	file.store_32(id)
+	file.store_32(entity.position.x)
+	file.store_32(entity.position.y)
+	file.store_32(entity.rotation)
+
+	
+	var def_idx := SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
+	if SceneLoadingContainer.loaded_entities.entity_ids[def_idx] != id: 
+		file.store_8(0)
+		print("No valid ID.\n")
+		return
+	
+	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[def_idx]
+	print("Default args: ", def_args)
+	var bit_flags = 0
+	var args : Dictionary = entity.GetArgs()
+	print("Entity args: ", args)
+	
+	var init_pointer := file.get_position()
+	file.store_8(0)
+	for i in def_args.size():
+		var key = def_args.keys()[i]
+		var value = args[key]
+		if value && value != def_args[key]: 
+			bit_flags |= ( 1 << i )
+			file.store_var(value)
+	
+	var after_pointer := file.get_position()
+	file.seek(init_pointer)
+	file.store_8(bit_flags)
+	file.seek(after_pointer)
+	#print("Final bit flags: ", bit_flags)
+	#print("Final entity bytes: ", file.get_position() - file_init)
+	#print("=== Entity Bytes Compilation Complete ===")
+
+func ReadLevelFile(filepath : String):
+	print_rich("\n\n[b]=== Opening Level File (" + filepath + ") ===[/b]")
+	var file = FileAccess.open(filepath, FileAccess.READ)
+	
+	# Read level name
+	var lvl_namesize = file.get_8()
+	var lvl_name = file.get_buffer(lvl_namesize).get_string_from_utf8()
+	file.seek(file.get_position() + 1)
+	print("Level Name: ", lvl_name)
+	
+	# Read version
+	var version_size = file.get_8()
+	var version = file.get_buffer(version_size).get_string_from_utf8()
+	print("Version: ", version)
+	file.seek(file.get_position() + 2)
+	
+	# Read chunk dimensions
+	var chunks_size : Vector2i = Vector2i(0,0)
+	chunks_size.x = file.get_32()
+	chunks_size.y = file.get_32()
+	WipeMap(chunks_size)
+	
+	var map_size = chunks_size * chunk_size
+	map_size = map_size
+	chunk_origin = Vector2i(0,0)
+	bounds_offset = Vector2i(0,0)
+	file.seek(file.get_position() + 1)
+	
+	# Read ID list
+	var id_list_size = file.get_32()
+	var id_list_buffer : PackedByteArray = file.get_buffer(id_list_size)
+	file.seek(file.get_position() + 1)
+	
+	boxel_id_list.resize(id_list_size >> 2)
+	boxel_usage_list.resize(id_list_size >> 2)
+	boxel_usage_list.fill(0)
+	
+	for i in id_list_size >> 2:
+		boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
+	
+	# Load boxels
+	var temp_boxel_load_list : Array[LvlObject] = []
+	for boxel_id in boxel_id_list:
+		var new_index = boxel_id_list.bsearch(boxel_id)
+		temp_boxel_load_list.append(loaded_object_list[new_index])
+	
+	# Read map array
+	var map_array_length = file.get_64()
+	file.seek(file.get_position() + 1)
+	
+	# Read tile layers
+	for i in 3:
+		var t_layer = layer_groups[i]
+		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
+		
+		var read_result = ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
+		
+		if read_result != "": 
+			print("Error reading tile layer ", i, ": ", read_result)
+		file.seek(file.get_position() + 1)
+	file.seek(file.get_position() + 1)
+	
+	# Read entity ID list
+	var eid_list_size = file.get_32()
+	var eid_list_buffer : PackedByteArray = file.get_buffer(eid_list_size)
+	file.seek(file.get_position() + 1)
+	
+	entity_id_list.resize(eid_list_size >> 2)
+	entity_usage_list.resize(eid_list_size >> 2)
+	entity_usage_list.fill(0)
+	
+	for i in eid_list_size >> 2:
+		entity_id_list[i] = eid_list_buffer.decode_u32(i << 2)
+	
+	print("")
+	# Read entity layers
+	for i in 2:
+		print("Reading entity layer ", i)
+		var t_layer = layer_groups[i+3]
+		var entity_count = file.get_32()
+		print("Entity count in layer ", i, ": ", entity_count)
+		
+		for n in entity_count:
+			var id = file.get_32()
+			var entity_pos = Vector2()
+			entity_pos.x = file.get_32()
+			entity_pos.y = file.get_32()
+			var entity_rot = file.get_32()
+			
+			var index = SceneLoadingContainer.loaded_entities.entity_ids.bsearch(id)
+			var ref_args = SceneLoadingContainer.loaded_entities.entity_arg_list[index]
+			var entity_arg_flags = file.get_8()
+			print("Entity ", n, " - ID: ", id, " Position: ", entity_pos, " - args: ", entity_arg_flags)
+			
+			var args = {}
+			if entity_arg_flags > 0:
+				for k in 8:
+					if entity_arg_flags & (1 << k): 
+						
+						args[ref_args.keys()[k]] = file.get_var()
+			
+			var new_entity = AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
+			new_entity.rotation = entity_rot
+		
+		file.seek(file.get_position() + 1)
+	file.seek(file.get_position() + 1)
+	
+	for n in 6:
+		var pool : EnemyPool = EnemyPool.new()
+		
+		var eid_size := file.get_32()
+		var eid_buff := file.get_buffer(eid_size << 2)
+		var e_amount_buff := file.get_buffer(eid_size << 2)
+		file.seek(file.get_position() + 1)
+		
+		pool.enemy_ids = eid_buff.to_int32_array()
+		pool.enemy_amounts = e_amount_buff.to_int32_array()
+		
+		var etile_size = file.get_32()
+		var etile_buff_x = file.get_buffer(etile_size << 2)
+		var etile_buff_y = file.get_buffer(etile_size << 2)
+		file.seek(file.get_position() + 1)
+		
+		pool.enemy_mask_tiles_x = etile_buff_x.to_int32_array()
+		pool.enemy_mask_tiles_y = etile_buff_y.to_int32_array()
+		
+		for i in pool.enemy_mask_tiles_x.size():
+			AddEnemyMaskTile(Vector2i(pool.enemy_mask_tiles_x[i], pool.enemy_mask_tiles_y[i]), pool, true)
+	
+	print_rich("[b]Level file reading complete[/b]")
+	file.close()
+
 func SortBoxels():
 	loaded_object_list.sort_custom(func(b1, b2): return b1.id > b2.id)
 

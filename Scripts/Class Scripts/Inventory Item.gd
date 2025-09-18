@@ -2,6 +2,7 @@ extends TextureRect
 
 class_name InventoryItem
 
+var id
 var item_owner : Node
 @export var inv_position : int
 

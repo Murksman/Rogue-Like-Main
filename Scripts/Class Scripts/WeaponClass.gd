@@ -61,7 +61,6 @@ var reloadTime : float = 0.0
 @onready var t_total_ammo_capacity : int = totalAmmoCapacity
 @onready var t_starting_ammo : int = startingAmmo
 @onready var t_bullets_per_reload : int = bulletsPerReload
-
 @onready var t_projectileObjectResource : Resource = projectileObjectResource
 @onready var t_projectileHitObjectResource : Resource = projectileHitObjectResource
 
@@ -108,9 +107,11 @@ func InputActions(delta):
 	if triggerHeld && !preFiring && currentMagAmmo > 0 && !reloading:
 		if t_fire_mode == "Full Auto" && fireTime <= 0:
 			Shoot()
+			return
 		if t_fire_mode == "Semi Auto" && triggerPressed:
 			if fireTime <= 0:
 				Shoot()
+				return
 			elif fireTime <= 0.2 * t_fire_rate:
 				preFiring = true
 	else:
@@ -124,7 +125,7 @@ func Shoot():
 	fireTime += t_fire_rate
 	for i in t_projectiles:
 		var lookTheta = orientation.transform.x.angle_to(Vector2(1, 0))
-		var theta
+		var theta : float
 		if t_is_spread_random:
 			theta = PI * rng.randf_range(-t_spread_range, t_spread_range) - lookTheta
 		else:
