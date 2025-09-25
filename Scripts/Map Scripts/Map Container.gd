@@ -1,6 +1,4 @@
-extends NavigationRegion2D
-
-var free_nodes : Array[Node]
+extends Node2D
 
 @export var layer_groups : Array[CanvasGroup]
 @export var chunk_size : int
@@ -28,6 +26,8 @@ var loaded_object_list : Array[LvlObject] = []
 var loaded_object_ids : PackedInt32Array = []
 var entity_id_list : PackedInt32Array = []
 var entity_usage_list : PackedInt32Array = []
+
+var nav_grid : AStarGrid2D = AStarGrid2D.new()
 
 var root_loaded = false
 
@@ -68,6 +68,9 @@ func ResetMap():
 	
 	for i in 6:
 		layer_init(layer_groups[i])
+	
+	nav_grid.size = Vector2i(0,0)
+	nav_grid.clear()
 	
 	UpdateChunkBackground()
 
@@ -196,19 +199,8 @@ func bind_array_tile(tile : Node, layer_group : CanvasGroup) -> void:
 	var tile_chunk_index = ((tile_pos - tile_array_index) / chunk_size) - Vector2i(1,1) - chunk_origin
 	layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y] = tile
 
-func query_free_nodes() -> void:
-	var list_size = free_nodes.size()
-	for n in list_size:
-		var wr = weakref(free_nodes[list_size - n - 1])
-		if !wr.get_ref():
-			bake_navigation_polygon(false)
-			free_nodes.remove_at(list_size - n - 1)
-
 func PixelToTilePosition(pixel_pos : Vector2) -> Vector2i:
 	return floor(pixel_pos / 32)
-
-func add_free_node(obj) -> void:
-	free_nodes.append(obj)
 
 func CalcAdjacency(tile_pos : Vector2i, layer_group : CanvasGroup) -> int:
 	var adjacency_index = 0
@@ -263,11 +255,7 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 	var tile_info : TileInfo
 	var new_tile : Node2D
 	
-	if boxel is ConnectorBoxel: 
-		if adjacency == -1:
-			adjacency = CalcAdjacency(tile_pos, layer_group)
-		
-		tile_info = boxel.GetConnectedTile(adjacency)
+	if layer_group == layer_groups[2]:
 		new_tile = wall_object.instantiate()
 		var new_occluder = vision_occluder.instantiate()
 		set_editable_instance(new_tile, true)
@@ -275,14 +263,19 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 		new_tile.get_child(2).occluder = polygon
 		new_occluder.occluder = polygon
 		SceneLoadingContainer.occluder_container.add_child(new_occluder)
+		new_occluder.global_position = tile_pos * 32 + Vector2i(16,16)
+	else:
+		new_tile = tile_object.instantiate()
+	
+	if boxel is ConnectorBoxel: 
+		if adjacency == -1:
+			adjacency = CalcAdjacency(tile_pos, layer_group)
 		
+		tile_info = boxel.GetConnectedTile(adjacency)
 		layer_group.add_child(new_tile)
 		new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
-		new_occluder.global_position = new_tile.global_position
 	else: 
 		tile_info = boxel.GetTileInfo()
-		new_tile = tile_object.instantiate()
-		set_editable_instance(new_tile, true)
 		layer_group.add_child(new_tile)
 		new_tile.global_position = tile_pos * 32 + Vector2i(16,16)
 	
@@ -311,8 +304,6 @@ func AddTile(boxel : LvlObject, tile_pos : Vector2i, layer_group : CanvasGroup) 
 		if adjacent_index & 4: CreateTile(tile_pos - Vector2i(0,1), layer_group, boxel)
 		if adjacent_index & 8: CreateTile(tile_pos - Vector2i(0,-1), layer_group, boxel)
 	else: return null
-	
-	
 	
 	return new_tile
 
@@ -500,9 +491,8 @@ func EnemyMaskShapeEraser(box_dimensions : Rect2i):
 			EraseAtPosition(box_dimensions.position + Vector2i(x,y), layer_groups[5], false)
 
 func DestroyTile(tile : Node2D) -> void:
+	nav_grid.set_point_solid(PixelToTilePosition(tile.position), false)
 	tile.queue_free()
-	add_free_node(tile)
-	query_free_nodes()
 
 func WipeMap(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
 	chunk_dimensions = new_chunk_size
@@ -761,6 +751,8 @@ func ReadLevelFile(filepath : String):
 		
 		for i in pool.enemy_mask_tiles_x.size():
 			AddEnemyMaskTile(Vector2i(pool.enemy_mask_tiles_x[i], pool.enemy_mask_tiles_y[i]), pool, true)
+	
+	nav_grid.region = Rect2i(chunk_origin * chunk_size, chunk_dimensions * chunk_size)
 	
 	print_rich("[b]Level file reading complete[/b]")
 	file.close()
