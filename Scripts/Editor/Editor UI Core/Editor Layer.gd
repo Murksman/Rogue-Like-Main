@@ -30,8 +30,8 @@ var editing : bool = false
 
 var focus_boxel : bool = false
 
-var current_level_filepath : String
-var current_level_name : String
+var current_level_filepath : String = ""
+var current_level_name : String = ""
 
 var boxel_name_list : PackedStringArray = []
 var boxel_id_list : PackedInt32Array = []
@@ -53,7 +53,7 @@ func _ready() -> void:
 	LoadResources()
 
 func pseudoProcess(delta):
-	if selected_world_obj: 
+	if selected_world_obj:
 		entity_selection_outline.global_position = window_center - Vector2(32,32) + ((selected_world_obj.global_position - player.camera.global_position) * player.camera.zoom)
 
 func LoadResources() -> void:
@@ -73,7 +73,7 @@ func LoadResources() -> void:
 	library_grid.ReorderBoxels()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)	
+	if event.is_action_pressed("Edit Mode"): EditToggle(!editing)
 	
 	if !editing: return
 	if event.is_action_pressed("Editor Pencil Tool"): set_tool_mode(0)
@@ -114,25 +114,39 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("Eraser Mode Toggle"): eraser.set_pressed_no_signal(!eraser.pressed) 
 
-func EditToggle(force_toggle : bool):
-	editing = force_toggle
+func EditToggle(toggle : bool):
+	if toggle: EditorReady()
+	else: 
+		if EditorExit(): return
 	
+	editing = toggle
 	$"../Global Lighting".visible = !editing
-	if editing: EditorReady()
-	else: EditorExit()
-	
 	visible = editing
 	player.editor_open = editing
 	player.visible = !editing
 	player.collision_body.disabled = editing
 	level_tilemap_root.layer_groups[5].visible = editing
 
-func EditorExit():
+func EditorExit() -> bool:
+	if current_level_filepath != "":
+		SaveLevel(current_level_filepath)
+	else:
+		RequestSaveLevel()
+		return true
+	
 	import_window.notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	level_tilemap_root.ResetLayerVisibility()
+	
+	if current_level_filepath != "":
+		level_tilemap_root.SpawnAllEnemies()
+	
+	return false
 
 func EditorReady(): 
 	level_tilemap_root.layer_groups[3].material.set_shader_parameter("is_editing", true)
+	level_tilemap_root.WipeMap()
+	if current_level_filepath != "":
+		LoadLevel(current_level_filepath)
 
 func LevelPanePressed(event : InputEvent) -> void:
 	tool = toolbar.selected_tool
@@ -323,7 +337,6 @@ func HoverBoxel(hover_target : UIBoxel):
 	hover_target.name_text.visible = true
 
 func RequestSaveLevel():
-	print("test")
 	level_save_window.popup()
 	level_save_window.visible = true
 	level_save_window.WindowReady(current_level_filepath)
@@ -342,15 +355,16 @@ func SaveLevel(filepath : String):
 		
 		var save_err = ResourceSaver.save(new_level_save, filepath)
 
-func LoadLevel(filepath : String) -> void:
+func LoadLevel(filepath : String, instant_start : bool = false) -> void:
 	current_level_filepath = filepath
 	current_level_name = filepath.get_file().split(".")[0]
 	
 	if filepath.get_extension() == "dat":
 		level_tilemap_root.ReadLevelFile(filepath)
 		
-		for pool in enemy_pool_tray.get_children():
-			level_tilemap_root.SpawnAllEnemiesInPool(pool.enemy_pool)
+		if instant_start:
+			for pool in enemy_pool_tray.get_children():
+				level_tilemap_root.SpawnAllEnemiesInPool(pool.enemy_pool)
 	else:
 		printerr("Level Loading Error - Invalid file type.")
 		return
@@ -411,7 +425,7 @@ func ChangeLayer(layer_int : int) -> void:
 	tile_tray.visible = !is_enemy_layer
 	library_tray.visible = !is_enemy_layer
 	
-	SelectObject(selected_world_obj)
+	if selected_world_obj: SelectObject(selected_world_obj)
 	library_grid.ReorderBoxels()
 	
 	if layer_int > 2 && layer_int < 5:
@@ -434,6 +448,14 @@ func set_tool_mode(idx : int):
 
 func OpenEnemyPool(pool : EnemyPool):
 	enemy_pool_editor.Open(pool)
+
+func NewLevel(filepath : String = ""):
+	level_tilemap_root.WipeMap()
+	current_level_filepath = filepath
+	current_level_name = filepath.get_file().split(".")[0]
+	
+	if filepath != "":
+		SaveLevel(filepath)
 
 func _on_editor_import_button_pressed() -> void:
 	import_window.SetImporterMode(false)

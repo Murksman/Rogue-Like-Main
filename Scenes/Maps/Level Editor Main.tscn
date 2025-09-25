@@ -780,9 +780,9 @@ font_size = 14
 font_color = Color(1, 0.529867, 0.497942, 1)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5py3h"]
-vertices = PackedVector2Array(2101.32, 1207.88, -174.453, 1187.11, -118.508, -60.2266, 2029.65, -104.75)
+vertices = PackedVector2Array(2092.31, 1174.2, -26, 1211.78, -26, -40.0313, 2125.66, -46.9609)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-130, -72, -187, 1199, 2114, 1220, 2041, -117)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-38, -52, 2138, -59, 2104, 1186, -38, 1224)])
 parsed_geometry_type = 1
 parsed_collision_mask = 4294967041
 source_geometry_group_name = &"navigation_polygon_source_group"
@@ -3401,6 +3401,17 @@ theme = ExtResource("44_am6u2")
 theme_override_constants/align_to_largest_stylebox = 0
 text = "X"
 
+[node name="New Level Button" type="Button" parent="Editor Overlay Layer/UI Popups/Level Load Selector"]
+modulate = Color(0.479527, 0.868, 0.497228, 1)
+custom_minimum_size = Vector2(40, 22)
+offset_left = 25.0
+offset_top = 16.71
+offset_right = 142.725
+offset_bottom = 42.71
+theme = ExtResource("44_am6u2")
+theme_override_constants/align_to_largest_stylebox = 0
+text = "New Level"
+
 [node name="Level Save Window" type="Window" parent="Editor Overlay Layer/UI Popups" node_paths=PackedStringArray("editor_overlay", "lvlpath_text", "save_handler")]
 transparent_bg = true
 initial_position = 1
@@ -3823,6 +3834,7 @@ script = ExtResource("43_uy6ih")
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Import External" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_import_external"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/MarginContainer2/Load Level" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_load_level"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/Exit Button" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_exit"]
+[connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Load Selector/New Level Button" to="Editor Overlay Layer/UI Popups/Level Load Selector" method="_on_new_level"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Select File Path" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_select_file_path"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/MarginContainer2/Save Level" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_save"]
 [connection signal="pressed" from="Editor Overlay Layer/UI Popups/Level Save Window/Exit Button" to="Editor Overlay Layer/UI Popups/Level Save Window" method="_on_exit"]

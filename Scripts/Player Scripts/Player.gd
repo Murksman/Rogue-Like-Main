@@ -36,9 +36,6 @@ func _physics_process(delta):
 func _input(event):
 	if editor_open: return
 	
-	if event.is_action_pressed("Save"):
-		SceneLoadingContainer.SaveGame()
-	
 	if event.is_action_pressed("Use Action"):
 		UseAction()
 	

@@ -20,10 +20,12 @@ var chunk_origin : Vector2i = Vector2i.ZERO  # Defines the top left chunk's posi
 var chunk_dimensions : Vector2i = Vector2i.ZERO
 
 var chunk_temp : Array[Array] = []
+var loaded_enemy_pools : Array[EnemyPool] = []
 
 var boxel_id_list : PackedInt32Array = []
 var boxel_usage_list : PackedInt32Array = []
 var loaded_object_list : Array[LvlObject] = []
+var loaded_object_ids : PackedInt32Array = []
 var entity_id_list : PackedInt32Array = []
 var entity_usage_list : PackedInt32Array = []
 
@@ -40,6 +42,7 @@ func LoadResources(reset : bool = false):
 	
 	if reset: 
 		loaded_object_list = []
+		loaded_object_ids = []
 	
 	var boxel_paths = DirAccess.get_files_at(SceneLoadingContainer.lvlobject_load_path)
 	
@@ -51,10 +54,12 @@ func LoadResources(reset : bool = false):
 		
 		if load_result is LvlObject:
 			loaded_object_list.append(load_result)
+			loaded_object_ids.append(load_result.id)
 		else:
 			printerr("Boxel Loading Error Code: ", load_result)
 	
 	loaded_object_list.sort_custom(func(a,b): return a.id < b.id)
+	loaded_object_ids.sort()
 	
 	root_loaded = true
 
@@ -230,7 +235,7 @@ func CreateTile(tile_pos : Vector2i, layer_group : CanvasGroup, boxel : LvlObjec
 	var prev_tile : Node2D = layer_group.layer_array[tile_chunk_index.x][tile_chunk_index.y][tile_array_index.x][tile_array_index.y]
 	
 	var boxel_match_index = boxel_id_list.bsearch(boxel.id)
-	if boxel_id_list.size() == 0 || boxel_match_index + 1 > boxel_id_list.size():
+	if boxel_id_list.size() == 0 || boxel_match_index >= boxel_id_list.size():
 		boxel_id_list.append(boxel.id)
 		boxel_usage_list.append(1)
 		print("New LvlObject Added to ID List: - ", boxel.id)
@@ -306,6 +311,8 @@ func AddTile(boxel : LvlObject, tile_pos : Vector2i, layer_group : CanvasGroup) 
 		if adjacent_index & 4: CreateTile(tile_pos - Vector2i(0,1), layer_group, boxel)
 		if adjacent_index & 8: CreateTile(tile_pos - Vector2i(0,-1), layer_group, boxel)
 	else: return null
+	
+	
 	
 	return new_tile
 
@@ -504,6 +511,9 @@ func WipeMap(new_chunk_size : Vector2i = Vector2i(0,0)) -> void:
 			child.queue_free()
 		
 		layer_init(layer, true)
+	
+	for occluder in SceneLoadingContainer.occluder_container.get_children():
+		occluder.queue_free()
 
 func WriteLevelFile(filepath : String, filename : String, enemy_pool_tray : Control):
 	print_rich("\n\n[b]=== Starting Level File Write ===[/b]")
@@ -545,6 +555,7 @@ func WriteLevelFile(filepath : String, filename : String, enemy_pool_tray : Cont
 		var floor_tile_buff : PackedByteArray = GetPackedTileArray(t_layer, map_array_length)
 		file.store_buffer(floor_tile_buff)
 		file.store_string("\n")
+		print("Storing Map Level: ", i+1, " - ", floor_tile_buff)
 	file.store_string("\n")
 	
 	var entity_id_buffer : PackedByteArray = entity_id_list.to_byte_array()
@@ -583,7 +594,6 @@ func WriteLevelFile(filepath : String, filename : String, enemy_pool_tray : Cont
 
 
 func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
-	print("=== Compiling Entity Bytes {name} ===".format(entity))
 	var file_init = file.get_position()
 	var id = entity.id
 	file.store_32(id)
@@ -599,10 +609,8 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 		return
 	
 	var def_args = SceneLoadingContainer.loaded_entities.entity_arg_list[def_idx]
-	print("Default args: ", def_args)
 	var bit_flags = 0
 	var args : Dictionary = entity.GetArgs()
-	print("Entity args: ", args)
 	
 	var init_pointer := file.get_position()
 	file.store_8(0)
@@ -617,9 +625,6 @@ func CompileEntityBytes(file : FileAccess, entity : Node) -> void:
 	file.seek(init_pointer)
 	file.store_8(bit_flags)
 	file.seek(after_pointer)
-	#print("Final bit flags: ", bit_flags)
-	#print("Final entity bytes: ", file.get_position() - file_init)
-	#print("=== Entity Bytes Compilation Complete ===")
 
 func ReadLevelFile(filepath : String):
 	print_rich("\n\n[b]=== Opening Level File (" + filepath + ") ===[/b]")
@@ -634,7 +639,7 @@ func ReadLevelFile(filepath : String):
 	# Read version
 	var version_size = file.get_8()
 	var version = file.get_buffer(version_size).get_string_from_utf8()
-	print("Version: ", version)
+	print("Version: ", version, "\n")
 	file.seek(file.get_position() + 2)
 	
 	# Read chunk dimensions
@@ -660,12 +665,16 @@ func ReadLevelFile(filepath : String):
 	
 	for i in id_list_size >> 2:
 		boxel_id_list[i] = id_list_buffer.decode_u32(i << 2)
+	print("Boxel ID list: ", boxel_id_list)
 	
 	# Load boxels
+	print("Loaded Boxel list: ", loaded_object_list)
 	var temp_boxel_load_list : Array[LvlObject] = []
 	for boxel_id in boxel_id_list:
-		var new_index = boxel_id_list.bsearch(boxel_id)
-		temp_boxel_load_list.append(loaded_object_list[new_index])
+		var idx := loaded_object_ids.bsearch(boxel_id)
+		if idx >= 0 && loaded_object_ids[idx] == boxel_id:
+			temp_boxel_load_list.append(loaded_object_list[idx])
+	print("Temp Boxel list: ", temp_boxel_load_list)
 	
 	# Read map array
 	var map_array_length = file.get_64()
@@ -675,6 +684,7 @@ func ReadLevelFile(filepath : String):
 	for i in 3:
 		var t_layer = layer_groups[i]
 		var floor_tile_buff : PackedByteArray = file.get_buffer(map_array_length)
+		print("Boxel Tilemap: ", floor_tile_buff)
 		
 		var read_result = ReadPackedTileArray(t_layer, floor_tile_buff, temp_boxel_load_list)
 		
@@ -719,7 +729,6 @@ func ReadLevelFile(filepath : String):
 			if entity_arg_flags > 0:
 				for k in 8:
 					if entity_arg_flags & (1 << k): 
-						
 						args[ref_args.keys()[k]] = file.get_var()
 			
 			var new_entity = AddEntity(SceneLoadingContainer.loaded_entities.entity_ids[index], t_layer, entity_pos, args)
@@ -728,8 +737,11 @@ func ReadLevelFile(filepath : String):
 		file.seek(file.get_position() + 1)
 	file.seek(file.get_position() + 1)
 	
+	var new_pool_arr : Array[EnemyPool] = []
+	
 	for n in 6:
 		var pool : EnemyPool = EnemyPool.new()
+		new_pool_arr.append(pool)
 		
 		var eid_size := file.get_32()
 		var eid_buff := file.get_buffer(eid_size << 2)
@@ -822,7 +834,11 @@ func GetNearestObjects(object_layer : CanvasGroup, t_point : Vector2, max_distan
 	
 	return obj_list
 
-func SpawnAllEnemiesInPool(pool : EnemyPool):
+func SpawnAllEnemies() -> void:
+	for pool in loaded_enemy_pools:
+		SpawnAllEnemiesInPool(pool)
+
+func SpawnAllEnemiesInPool(pool : EnemyPool) -> void:
 	for i in pool.enemy_ids.size():
 		var e_id : int = pool.enemy_ids[i]
 		var amount : int = pool.enemy_amounts[i]

@@ -64,3 +64,7 @@ func _on_receive_level_path(file_path : String) -> void:
 
 func _on_exit() -> void:
 	notification(NOTIFICATION_WM_CLOSE_REQUEST)
+
+func _on_new_level() -> void:
+	editor_overlay.NewLevel()
+	hide()
